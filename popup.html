@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maitrog's EQ Toolkit</title>
+  <link rel="stylesheet" href="resources/styles/popup.css">
+  </link>
+</head>
+
+<body>
+  <h1>EQ Toolkit</h1>
+  <div class="equalizer-curve-container">
+    <canvas id="eq-canvas"></canvas>
+  </div>
+  <div class="controls">
+    <div class="volume-control">
+      <label for="master-volume">Gain:</label>
+      <input type="range" id="master-volume" name="master-volume" min="-24" max="24" value="0">
+      <div class="volume-scale">
+        <span>-24</span>
+        <span>-12</span>
+        <span>0</span>
+        <span>12</span>
+        <span>24</span>
+      </div>
+    </div>
+    <button type="button" id="reset">Reset</button>
+    <button type="button" id="reset-volume">Save preset</button>
+    <button type="button" id="change-eq">Enable eq in this tab</button>
+  </div>
+  <script src="scripts/drawPeakingFilter.js"></script>
+  <script src="scripts/drawFilters.js"></script>
+  <script src="scripts/drawFrequensyAxis.js"></script>
+  <script src="scripts/popup.js"></script>
+</body>
+
+</html>

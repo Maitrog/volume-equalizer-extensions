@@ -1,0 +1,68 @@
+body {
+  position: relative;
+  width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #fafafa;
+}
+h1 {
+  position: absolute;
+  top: 10px;
+  left: 18px;
+  margin: 5px 0;
+}
+.equalizer-curve-container {
+  width: 100%;
+  max-width: 800px;
+  height: 300px;
+  background: #e0e0e0;
+  border: 1px solid #ccc;
+  position: relative;
+  cursor: crosshair;
+  margin-top: 30px;
+  cursor: default;
+}
+#eq-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.controls {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.volume-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+.controls label {
+  font-weight: bold;
+}
+.controls input[type="range"] {
+  width: 200px;
+}
+.volume-scale {
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9em;
+}
+button {
+  padding: 8px 16px;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:active {
+  background: #0056b3;
+}

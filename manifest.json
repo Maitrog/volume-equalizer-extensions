@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "EQ Toolkit",
+    "description": "Best Volume Equalizer",
+    "author": "maitrog",
+    "version": "0.1",
+    "permissions": [ "storage", "scripting" ],
+    "host_permissions": [ "*://*/*" ],
+    "action": {
+        "_execute_action": {
+        },
+        "default_popup": "popup.html"
+    },
+    "icons": {
+        "16": "hello_extensions.png",
+        "48": "hello_extensions.png"
+    },
+    "background": {
+        "service_worker": "scripts/background.js"
+    }
+  }
