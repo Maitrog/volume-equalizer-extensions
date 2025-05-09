@@ -12,6 +12,11 @@
         "default_popup": "popup.html"
     },
     "icons": {
+        "16": "resources/icons/eq_toolkit_16.png",
+        "32": "resources/icons/eq_toolkit_32.png",
+        "64": "resources/icons/eq_toolkit_64.png",
+        "128": "resources/icons/eq_toolkit_128.png",
+        "256": "resources/icons/eq_toolkit_256.png",
         "512": "resources/icons/eq_toolkit_512.png"
     },
     "background": {
