@@ -54,7 +54,12 @@ function mainResize() {
 async function mainLoad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   resizeCanvas();
-  const result = await chrome.storage.local.get(["filters", "gain"]);
+  const result = await chrome.storage.local.get([
+    "filters",
+    "gain",
+    "presetNames",
+    "enabled",
+  ]);
   if (
     result.filters == null ||
     result.filters == undefined ||
@@ -67,6 +72,17 @@ async function mainLoad() {
     document.getElementById("master-volume").value = result.gain;
 
   drawFilter();
+
+  setEnableBtnText(result.enabled ?? false);
+
+  if (!result.presetNames) return;
+
+  result.presetNames.forEach((name) => {
+    var option = document.createElement("option");
+    option.text = name;
+    option.value = name;
+    document.getElementById("presets").add(option);
+  });
 }
 
 window.addEventListener("resize", mainResize);
@@ -120,12 +136,7 @@ document.getElementById("change-eq").addEventListener("click", () => {
 });
 
 chrome.storage.onChanged.addListener((ps) => {
-  if (ps.enabled)
-    if (!ps.enabled.newValue)
-      document.getElementById("change-eq").textContent =
-        "Enable eq on this tab";
-    else
-      document.getElementById("change-eq").textContent = "Stop eq on this tab";
+  if (ps.enabled) setEnableBtnText(ps.enabled.newValue);
 });
 
 document.getElementById("reset").addEventListener("click", () => {
@@ -135,7 +146,7 @@ document.getElementById("reset").addEventListener("click", () => {
   pointsToFilters(points);
   chrome.storage.local.set({
     volume: 1,
-    gain: 1,
+    gain: 0,
     filters: pointsToFilters(points),
   });
 });
@@ -149,3 +160,46 @@ slider.oninput = () => {
     enabled: true,
   });
 };
+
+document.getElementById("save-preset").addEventListener("click", () => {
+  const nameInput = document.getElementById("preset-name");
+  const name = nameInput.value;
+
+  if (name.length == 0) return;
+
+  chrome.storage.local
+    .get(["filters", "presets", "presetNames"])
+    .then((prefs) => {
+      const presets = prefs.presets ?? {};
+      const presetNames = prefs.presetNames ?? [];
+      presets[name] = prefs.filters;
+      presetNames.push(name);
+      chrome.storage.local.set({ presets: presets, presetNames: presetNames });
+    });
+
+  var option = document.createElement("option");
+  option.text = name;
+  option.value = name;
+  document.getElementById("presets").add(option);
+  nameInput.value = "";
+});
+
+document.getElementById("presets").addEventListener("change", (e) => {
+  chrome.storage.local.get(["presets"]).then((prefs) => {
+    if (!prefs.presets) return;
+
+    const presets = prefs.presets;
+    chrome.storage.local.set({
+      filters: presets[e.target.value],
+      enabled: true,
+    });
+    setPoints(presets[e.target.value]);
+    mainResize();
+  });
+});
+
+function setEnableBtnText(enabled) {
+  if (!enabled)
+    document.getElementById("change-eq").textContent = "Enable eq on this tab";
+  else document.getElementById("change-eq").textContent = "Stop eq on this tab";
+}
