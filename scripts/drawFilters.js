@@ -5,13 +5,12 @@ function drawPoints() {
   points.forEach((p) => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, pointRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#fff";
+    ctx.fillStyle = panelBg;
     ctx.fill();
-    ctx.strokeStyle = "#007bff";
+    ctx.strokeStyle = accentMid;
     ctx.lineWidth = 2;
     ctx.stroke();
   });
-  ctx.fillStyle = "#000";
 }
 
 function drawFilter() {

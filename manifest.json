@@ -12,8 +12,7 @@
         "default_popup": "popup.html"
     },
     "icons": {
-        "16": "hello_extensions.png",
-        "48": "hello_extensions.png"
+        "512": "resources/icons/eq_toolkit_512.png"
     },
     "background": {
         "service_worker": "scripts/background.js"

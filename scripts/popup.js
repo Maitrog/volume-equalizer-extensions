@@ -115,14 +115,17 @@ canvas.addEventListener("mousemove", (e) => {
 
 document.getElementById("change-eq").addEventListener("click", () => {
   chrome.storage.local.get(["enabled"]).then((result) => {
-    if (!result.enabled)
-      document.getElementById("change-eq").textContent = "Stop eq in this tab";
-    else
-      document.getElementById("change-eq").textContent =
-        "Enable eq in this tab";
-
     chrome.storage.local.set({ enabled: !result.enabled });
   });
+});
+
+chrome.storage.onChanged.addListener((ps) => {
+  if (ps.enabled)
+    if (!ps.enabled.newValue)
+      document.getElementById("change-eq").textContent =
+        "Enable eq on this tab";
+    else
+      document.getElementById("change-eq").textContent = "Stop eq on this tab";
 });
 
 document.getElementById("reset").addEventListener("click", () => {

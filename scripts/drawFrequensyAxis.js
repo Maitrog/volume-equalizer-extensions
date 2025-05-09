@@ -21,6 +21,8 @@ function drawAxis() {
   const freqs = [5, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
   const canvasWidth = canvas.width - 10;
 
+  ctx.strokeStyle = axis;
+  ctx.fillStyle = axis;
   freqs.forEach((f) => {
     const x = ((Math.log10(f) - logMin) / (logMax - logMin)) * canvasWidth;
     ctx.beginPath();

@@ -1,3 +1,10 @@
+const css = getComputedStyle(document.documentElement);
+const accentStart = css.getPropertyValue("--accent-start").trim();
+const accentMid = css.getPropertyValue("--accent-mid").trim();
+const accentEnd = css.getPropertyValue("--accent-end").trim();
+const panelBg = css.getPropertyValue("--panel-bg").trim();
+const axis = css.getPropertyValue("--axis").trim();
+
 function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
@@ -24,7 +31,11 @@ function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
 
   filter.getFrequencyResponse(frequencies, magResponse, phaseResponse);
 
-  ctx.strokeStyle = "#007acc";
+  const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
+  grad.addColorStop(0, accentStart);
+  grad.addColorStop(0.5, accentMid);
+  grad.addColorStop(1, accentEnd);
+  ctx.strokeStyle = grad;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let i = 0; i < numPoints; i++) {

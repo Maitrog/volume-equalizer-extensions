@@ -12,12 +12,12 @@
 <body>
   <h1>EQ Toolkit</h1>
   <div class="equalizer-curve-container">
-    <canvas id="eq-canvas"></canvas>
+    <canvas class="eq-canvas" id="eq-canvas"></canvas>
   </div>
-  <div class="controls">
+  <div class="controls first-row">
     <div class="volume-control">
       <label for="master-volume">Gain:</label>
-      <input type="range" id="master-volume" name="master-volume" min="-24" max="24" value="0">
+      <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
       <div class="volume-scale">
         <span>-24</span>
         <span>-12</span>
@@ -26,9 +26,15 @@
         <span>24</span>
       </div>
     </div>
-    <button type="button" id="reset">Reset</button>
-    <button type="button" id="reset-volume">Save preset</button>
-    <button type="button" id="change-eq">Enable eq in this tab</button>
+    <button type="button" id="reset" class="reset-btn">Reset</button>
+    <button type="button" id="change-eq">Enable eq on this tab</button>
+  </div>
+  <div class="controls second-row">
+    <select class="presets" id="presets">
+      <option value="none">none</option>
+    </select>
+    <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
+    <button type="button" id="save-preset">Save preset</button>
   </div>
   <script src="scripts/drawPeakingFilter.js"></script>
   <script src="scripts/drawFilters.js"></script>
