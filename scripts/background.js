@@ -27,19 +27,14 @@ const register = async () => {
 chrome.runtime.onStartup.addListener(register);
 chrome.runtime.onInstalled.addListener(register);
 
-const prefs = {
-  enabled: false,
-  persist: false,
-};
+chrome.storage.local.get(["enabled"], async (ps) => {
+  const id = await getCurrentTabId();
 
-chrome.storage.local.get(prefs, (ps) => {
-  Object.assign(prefs, ps);
-
-  if (prefs.persist === false && prefs.enabled) {
+  if (ps.enabled) {
     const onStartup = () => {
-      prefs.enabled = false;
+      ps.enabled[id] = false;
       chrome.storage.local.set({
-        enabled: false,
+        ["enabled." + id]: false,
       });
     };
     chrome.runtime.onStartup.addListener(onStartup);
@@ -49,8 +44,8 @@ chrome.storage.local.get(prefs, (ps) => {
 
 chrome.runtime.onMessage.addListener((request, sender, response) => {
   const tabId = sender.tab.id;
-  if (request.method === "me") {
-    response(sender.tab.url);
+  if (request.method === "getTabId") {
+    response(sender.tab.id);
   } else if (request.method === "connected") {
     chrome.action.setBadgeText({
       text: "ON",
@@ -62,4 +57,11 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       tabId,
     });
   }
+  return true;
 });
+
+async function getCurrentTabId() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab.id;
+}

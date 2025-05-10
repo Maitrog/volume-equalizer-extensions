@@ -54,26 +54,27 @@ function mainResize() {
 async function mainLoad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   resizeCanvas();
+  const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
-    "filters",
-    "gain",
+    "filters." + id,
+    "gain." + id,
     "presetNames",
-    "enabled",
+    "enabled." + id,
   ]);
   if (
-    result.filters == null ||
-    result.filters == undefined ||
-    result.filters.length == 0
+    result["filters." + id] == null ||
+    result["filters." + id] == undefined ||
+    result["filters." + id].length == 0
   )
     initPoints();
-  else setPoints(result.filters);
+  else setPoints(result["filters." + id]);
 
-  if (result.gain != null && result.gain != undefined)
-    document.getElementById("master-volume").value = result.gain;
+  if (result["gain." + id] != null && result["gain." + id] != undefined)
+    document.getElementById("master-volume").value = result["gain." + id];
 
   drawFilter();
 
-  setEnableBtnText(result.enabled ?? false);
+  setEnableBtnText(result["enabled." + id] ?? false);
 
   if (!result.presetNames) return;
 
@@ -111,7 +112,7 @@ function pointsToFilters(points) {
   return filters;
 }
 
-canvas.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", async (e) => {
   if (dragIndex !== null) {
     const rect = canvas.getBoundingClientRect();
     let mx = e.clientX - rect.left;
@@ -121,60 +122,72 @@ canvas.addEventListener("mousemove", (e) => {
       my = Math.max(0, Math.min(canvas.height, my));
       points[dragIndex] = { x: mx, y: my };
       mainResize();
+      var tabId = await getCurrentTabId();
       chrome.storage.local.set({
-        filters: pointsToFilters(points),
-        enabled: true,
+        ["filters." + tabId]: pointsToFilters(points),
+        ["enabled." + tabId]: true,
       });
     }
   }
 });
 
-document.getElementById("change-eq").addEventListener("click", () => {
-  chrome.storage.local.get(["enabled"]).then((result) => {
-    chrome.storage.local.set({ enabled: !result.enabled });
+document.getElementById("change-eq").addEventListener("click", async () => {
+  const tabId = await getCurrentTabId();
+  chrome.storage.local.get(["enabled." + tabId]).then((result) => {
+    chrome.storage.local.set({
+      ["enabled." + tabId]: !result["enabled." + tabId],
+    });
   });
 });
 
-chrome.storage.onChanged.addListener((ps) => {
-  if (ps.enabled) setEnableBtnText(ps.enabled.newValue);
+chrome.storage.onChanged.addListener(async (ps) => {
+  const tabId = await getCurrentTabId();
+  if (ps["enabled." + tabId]) setEnableBtnText(ps["enabled." + tabId].newValue);
 });
 
-document.getElementById("reset").addEventListener("click", () => {
+document.getElementById("reset").addEventListener("click", async () => {
   document.getElementById("master-volume").value = 0;
   initPoints();
   mainResize();
   pointsToFilters(points);
+
+  const tabId = await getCurrentTabId();
   chrome.storage.local.set({
-    volume: 1,
-    gain: 0,
-    filters: pointsToFilters(points),
+    ["volume." + tabId]: 1,
+    ["gain." + tabId]: 0,
+    ["filters." + tabId]: pointsToFilters(points),
   });
 });
 
 const slider = document.getElementById("master-volume");
-slider.oninput = () => {
+slider.oninput = async () => {
   let volume = dbToGain(slider.value);
+  const tabId = await getCurrentTabId();
   chrome.storage.local.set({
-    volume: volume,
-    gain: slider.value,
-    enabled: true,
+    ["volume." + tabId]: volume,
+    ["gain." + tabId]: slider.value,
+    ["enabled." + tabId]: true,
   });
 };
 
-document.getElementById("save-preset").addEventListener("click", () => {
+document.getElementById("save-preset").addEventListener("click", async () => {
   const nameInput = document.getElementById("preset-name");
   const name = nameInput.value;
 
   if (name.length == 0) return;
 
+  const tabId = await getCurrentTabId();
   chrome.storage.local
-    .get(["filters", "presets", "presetNames"])
+    .get(["filters." + tabId, "presets", "presetNames"])
     .then((prefs) => {
       const presets = prefs.presets ?? {};
       const presetNames = prefs.presetNames ?? [];
-      presets[name] = prefs.filters;
+      presets[name] = prefs["filters." + tabId];
       presetNames.push(name);
-      chrome.storage.local.set({ presets: presets, presetNames: presetNames });
+      chrome.storage.local.set({
+        presets: presets,
+        presetNames: presetNames,
+      });
     });
 
   var option = document.createElement("option");
@@ -185,13 +198,14 @@ document.getElementById("save-preset").addEventListener("click", () => {
 });
 
 document.getElementById("presets").addEventListener("change", (e) => {
-  chrome.storage.local.get(["presets"]).then((prefs) => {
+  chrome.storage.local.get(["presets"]).then(async (prefs) => {
     if (!prefs.presets) return;
 
     const presets = prefs.presets;
+    const tabId = await getCurrentTabId();
     chrome.storage.local.set({
-      filters: presets[e.target.value],
-      enabled: true,
+      ["filters." + tabId]: presets[e.target.value],
+      ["enabled." + tabId]: true,
     });
     setPoints(presets[e.target.value]);
     mainResize();
@@ -202,4 +216,11 @@ function setEnableBtnText(enabled) {
   if (!enabled)
     document.getElementById("change-eq").textContent = "Enable eq on this tab";
   else document.getElementById("change-eq").textContent = "Stop eq on this tab";
+}
+
+async function getCurrentTabId() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  let [tab] = await chrome.tabs.query(queryOptions);
+  console.log(tab.id);
+  return tab.id;
 }

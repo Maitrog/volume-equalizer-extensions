@@ -21,9 +21,7 @@ port.remove();
       ? 1
       : Number(port.dataset.preamp);
     source.connect(filters.preamp);
-    filters.balance.pan.value = isNaN(port.dataset.pan)
-      ? 0
-      : Number(port.dataset.pan);
+    filters.balance.pan.value = 0;
     filters.preamp.connect(filters.balance);
     map.set(source, filters);
 
@@ -157,11 +155,6 @@ port.remove();
         filters[i].gain.value = Number(filter.gain);
         filters[i].frequency.value = Number(filter.frequency);
       });
-    })
-  );
-  port.addEventListener("pan-changed", () =>
-    map.forEach((filters) => {
-      filters.balance.pan.value = Number(port.dataset.pan);
     })
   );
   port.addEventListener("preamp-changed", () =>
