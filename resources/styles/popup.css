@@ -26,13 +26,14 @@ body {
   color: var(--text);
 }
 
-h1 {
-  position: absolute;
+.header text {
   top: 10px;
   left: 18px;
-  margin: 5px 0;
   letter-spacing: 0.1em;
   color: var(--text);
+  font-size: 2em;
+  font-weight: 700;
+  margin: 0;
 }
 
 .equalizer-curve-container {
@@ -42,7 +43,6 @@ h1 {
   background: var(--panel-bg);
   border: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
-  margin-top: 30px;
   cursor: default;
   overflow: hidden;
   border-radius: 8px;
@@ -177,4 +177,15 @@ button:active {
   background: var(--panel-bg);
   color: var(--text);
   padding: 4px 8px;
+}
+
+.header {
+  display: flex;
+  margin-bottom: 5px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.icon-donation {
+  width: 30px;
 }

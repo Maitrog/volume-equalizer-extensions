@@ -3,7 +3,7 @@
     "name": "EQ Toolkit",
     "description": "Best Volume Equalizer",
     "author": "maitrog",
-    "version": "1.1",
+    "version": "1.1.1",
     "permissions": [ "storage", "scripting" ],
     "host_permissions": [ "*://*/*" ],
     "action": {
