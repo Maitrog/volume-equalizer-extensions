@@ -58,14 +58,12 @@ chrome.storage.onChanged.addListener((ps) => {
 
 self.start = () => {
   port.dataset.enabled = false;
-  chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
-    chrome.storage.local.set({ ["enabled." + tabId]: false });
+  chrome.runtime.sendMessage({ method: "getTabId" }, async (tabId) => {
+    await chrome.storage.local.set({ ["enabled." + tabId]: false });
   });
+
+  setTimeout(async () => {
+    chrome.runtime.sendMessage({ method: "clearStorage" });
+  }, 1000);
 };
 self.start();
-
-async function getCurrentTabId() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
-  return tab.id;
-}

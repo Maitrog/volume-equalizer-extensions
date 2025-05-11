@@ -42,9 +42,16 @@ chrome.storage.local.get(["enabled"], async (ps) => {
   }
 });
 
-chrome.runtime.onMessage.addListener((request, sender, response) => {
+chrome.runtime.onMessage.addListener(async (request, sender, response) => {
   const tabId = sender.tab.id;
   if (request.method === "getTabId") {
+    chrome.storage.session.get(["tabs"], (prefs) => {
+      const tabs = prefs?.tabs ?? [];
+      if (!tabs.includes(tabId)) {
+        tabs.push(tabId);
+        chrome.storage.session.set({ tabs: tabs });
+      }
+    });
     response(sender.tab.id);
   } else if (request.method === "connected") {
     chrome.action.setBadgeText({
@@ -56,6 +63,25 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       text: "OFF",
       tabId,
     });
+  } else if (request.method === "log") {
+    console.log(request.message);
+  } else if (request.method === "clearStorage") {
+    const constParamNames = ["presets", "presetNames", "gain", "filters"];
+    const tabIds = (await chrome.storage.session.get(["tabs"])).tabs;
+
+    chrome.storage.local.getKeys((keys) =>
+      keys.forEach((key) => {
+        const keySplited = key.split(".");
+        if (
+          !constParamNames.includes(key) &&
+          !(
+            keySplited.length == 2 &&
+            tabIds.includes(Number.parseInt(keySplited[1]))
+          )
+        )
+          chrome.storage.local.remove(key);
+      })
+    );
   }
   return true;
 });

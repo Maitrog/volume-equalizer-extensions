@@ -221,6 +221,5 @@ function setEnableBtnText(enabled) {
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
-  console.log(tab.id);
   return tab.id;
 }
