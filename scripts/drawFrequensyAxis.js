@@ -24,7 +24,8 @@ function drawAxis() {
   ctx.strokeStyle = axis;
   ctx.fillStyle = axis;
   freqs.forEach((f) => {
-    const x = ((Math.log10(f) - logMin) / (logMax - logMin)) * canvasWidth;
+    const x =
+      Math.pow((Math.log10(f) - logMin) / (logMax - logMin), 2) * canvasWidth;
     ctx.beginPath();
     ctx.moveTo(x, yPos - 10);
     ctx.lineTo(x, yPos);
@@ -64,7 +65,8 @@ function drawAxis() {
   ctx.textBaseline = "bottom";
   ctx.textAlign = "center";
   freqs.forEach((f) => {
-    const x = ((Math.log10(f) - logMin) / (logMax - logMin)) * canvasWidth;
+    const x =
+      Math.pow((Math.log10(f) - logMin) / (logMax - logMin), 2) * canvasWidth;
     ctx.beginPath();
     ctx.moveTo(x, zeroY - 5);
     ctx.lineTo(x, zeroY + 5);

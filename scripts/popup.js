@@ -4,12 +4,16 @@ const ctx = canvas.getContext("2d");
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const logMin = Math.log10(1);
-const logMax = Math.log10(20000);
+const logMax = Math.log10(22000);
 const pointCount = 5;
 
 function xToFrequency(x, canvasWidth = null) {
   canvasWidth ??= canvas.width - 10;
-  return Math.pow(10, (x / canvasWidth) * (logMax - logMin) + logMin);
+  const freq = Math.pow(
+    10,
+    Math.sqrt(x / canvasWidth) * (logMax - logMin) + logMin
+  );
+  return freq > 24000 ? 24000 : freq;
 }
 
 function yToDb(y, canvasHeight = null) {
@@ -107,7 +111,7 @@ window.addEventListener("mouseup", () => {
 
 function pointsToFilters(points) {
   const filters = points.map((p) => {
-    return { freq: xToFrequency(p.x), gain: yToDb(p.y) / 2, x: p.x, y: p.y };
+    return { freq: xToFrequency(p.x), gain: yToDb(p.y), x: p.x, y: p.y };
   });
   return filters;
 }

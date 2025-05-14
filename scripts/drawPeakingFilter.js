@@ -5,7 +5,14 @@ const accentEnd = css.getPropertyValue("--accent-end").trim();
 const panelBg = css.getPropertyValue("--panel-bg").trim();
 const axis = css.getPropertyValue("--axis").trim();
 
-function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
+function drawPeakingFilter(
+  canvas,
+  audioCtx,
+  freq,
+  Q = 1,
+  gainDb = 0,
+  gamma = 0.5
+) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
@@ -25,7 +32,12 @@ function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   const fMax = audioCtx.sampleRate / 2;
 
   for (let i = 0; i < numPoints; i++) {
-    const logF = Math.log(fMin) + (i / (numPoints - 1)) * Math.log(fMax / fMin);
+    // исходный нормированный параметр 0…1
+    const t = i / (numPoints - 1);
+    // γ-коррекция
+    const tGamma = Math.pow(t, gamma);
+    // лог-интерполяция с учётом γ
+    const logF = Math.log(fMin) + tGamma * (Math.log(fMax) - Math.log(fMin));
     frequencies[i] = Math.exp(logF);
   }
 
