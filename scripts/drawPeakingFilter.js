@@ -32,11 +32,8 @@ function drawPeakingFilter(
   const fMax = audioCtx.sampleRate / 2;
 
   for (let i = 0; i < numPoints; i++) {
-    // исходный нормированный параметр 0…1
     const t = i / (numPoints - 1);
-    // γ-коррекция
     const tGamma = Math.pow(t, gamma);
-    // лог-интерполяция с учётом γ
     const logF = Math.log(fMin) + tGamma * (Math.log(fMax) - Math.log(fMin));
     frequencies[i] = Math.exp(logF);
   }

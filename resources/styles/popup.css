@@ -11,6 +11,7 @@
   --reset-btn: #ff4d4db6;
   --reset-btn-hover: #ff4d4de5;
   --reset-btn-active: #ff4d4d;
+  --btn-bg: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -135,7 +136,7 @@ button {
   height: 40px;
   padding: 4px 16px;
   border: none;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--btn-bg);
   color: var(--text);
   border-radius: 4px;
   cursor: pointer;
@@ -162,8 +163,7 @@ button:active {
 }
 
 .presets {
-  padding: 4px 2px;
-  background: #2a2a3a;
+  background: var(--btn-bg);
   color: var(--text);
   border: none;
   border-radius: 4px;
@@ -188,4 +188,53 @@ button:active {
 
 .icon-donation {
   width: 30px;
+}
+
+.dropdown {
+  position: relative;
+  font-size: 1.1em;
+}
+
+.dropdown-toggle {
+  padding: 11px 8px;
+  background: #2a2a3a;
+  color: var(--text);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  width: 80px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  bottom: 110%;
+  right: 0;
+  background: var(--panel-bg);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  display: none;
+  min-width: 150px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.dropdown-item {
+  padding: 6px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text);
+}
+
+.dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dropdown-item .close-btn {
+  cursor: pointer;
+  padding: 2px 4px;
+  font-weight: bold;
 }

@@ -35,9 +35,12 @@
     <button type="button" id="change-eq">Enable eq on this tab</button>
   </div>
   <div class="controls second-row">
-    <select class="presets" id="presets">
-      <option value="none">none</option>
-    </select>
+    <div class="dropdown" id="presets">
+      <div class="dropdown-toggle" id="presets-toggle">none</div>
+      <div class="dropdown-menu" id="presets-menu">
+        <div class="dropdown-item" data-value="none">none</div>
+      </div>
+    </div>
     <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
     <button type="button" id="save-preset">Save preset</button>
   </div>

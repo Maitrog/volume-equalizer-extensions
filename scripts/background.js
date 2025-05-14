@@ -43,6 +43,11 @@ chrome.storage.local.get(["enabled"], async (ps) => {
 });
 
 chrome.runtime.onMessage.addListener(async (request, sender, response) => {
+  if (request.method === "log") {
+    console.log(request.message);
+    return;
+  }
+
   const tabId = sender.tab.id;
   if (request.method === "getTabId") {
     chrome.storage.session.get(["tabs"], (prefs) => {
@@ -63,8 +68,6 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
       text: "OFF",
       tabId,
     });
-  } else if (request.method === "log") {
-    console.log(request.message);
   } else if (request.method === "clearStorage") {
     const constParamNames = ["presets", "presetNames", "gain", "filters"];
     const tabIds = (await chrome.storage.session.get(["tabs"])).tabs;
