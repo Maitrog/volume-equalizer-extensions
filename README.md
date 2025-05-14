@@ -5,6 +5,7 @@ Works with ANY audio on ANY website :)
 
 ## Features
 - Audio amplification.
+- Ease graphic equalizer.
 - Modify audio across multiple bands while media is playing.
 - Create your own equalizer presets.
 - User friendly interface.
