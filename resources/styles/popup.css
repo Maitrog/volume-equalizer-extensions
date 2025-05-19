@@ -134,7 +134,7 @@ label {
 button {
   width: 110px;
   height: 40px;
-  padding: 4px 16px;
+  padding: 4px 10px;
   border: none;
   background: var(--btn-bg);
   color: var(--text);

@@ -212,8 +212,11 @@ document.getElementById("save-preset").addEventListener("click", async () => {
 
 function setEnableBtnText(enabled) {
   if (!enabled)
-    document.getElementById("change-eq").textContent = "Enable eq on this tab";
-  else document.getElementById("change-eq").textContent = "Stop eq on this tab";
+    document.getElementById("change-eq").textContent =
+      chrome.i18n.getMessage("enable_eq");
+  else
+    document.getElementById("change-eq").textContent =
+      chrome.i18n.getMessage("stop_eq");
 }
 
 async function getCurrentTabId() {

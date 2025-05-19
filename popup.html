@@ -21,7 +21,7 @@
   </div>
   <div class="controls first-row">
     <div class="volume-control">
-      <label for="master-volume">Gain:</label>
+      <label for="master-volume" id="master-volume-label">Gain:</label>
       <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
       <div class="volume-scale">
         <span>-24</span>
@@ -38,7 +38,7 @@
     <div class="dropdown" id="presets">
       <div class="dropdown-toggle" id="presets-toggle">none</div>
       <div class="dropdown-menu" id="presets-menu">
-        <div class="dropdown-item" data-value="none">none</div>
+        <div class="dropdown-item" data-value="none" id="none-item">none</div>
       </div>
     </div>
     <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
@@ -47,6 +47,7 @@
   <script src="scripts/drawPeakingFilter.js"></script>
   <script src="scripts/drawFilters.js"></script>
   <script src="scripts/drawFrequensyAxis.js"></script>
+  <script src="scripts/localization.js"></script>
   <script src="scripts/popup.js"></script>
 </body>
 

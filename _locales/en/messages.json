@@ -1,0 +1,29 @@
+{
+    "ext_name": {
+        "message": "Audio equalizer"
+    },
+    "ext_description": {
+        "message": "Volume up, bass boost, tune frequencies – easy all in one extension."
+    },
+    "gain": {
+        "message":"Gain:"
+    },
+    "reset": {
+        "message":"Reset"
+    },
+    "enable_eq": {
+        "message":"Enable eq on this tab"
+    },
+    "stop_eq": {
+        "message":"Stop eq on this tab"
+    },
+    "none": {
+        "message":"None"
+    },
+    "save": {
+        "message":"Save preset"
+    },
+    "enter_preset_name": {
+        "message":"Enter name"
+    }
+}
