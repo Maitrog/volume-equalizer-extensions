@@ -60,6 +60,7 @@ async function mainLoad() {
   resizeCanvas();
   const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
+    "filters",
     "filters." + id,
     "gain." + id,
     "presetNames",
@@ -67,12 +68,18 @@ async function mainLoad() {
     "mute." + id,
   ]);
   if (
-    result["filters." + id] == null ||
-    result["filters." + id] == undefined ||
-    result["filters." + id].length == 0
+    result["filters." + id] != null &&
+    result["filters." + id] != undefined &&
+    result["filters." + id].length != 0
   )
-    initPoints();
-  else setPoints(result["filters." + id]);
+    setPoints(result["filters." + id]);
+  else if (
+    result["filters"] != null &&
+    result["filters"] != undefined &&
+    result["filters"].length != 0
+  )
+    setPoints(result["filters"]);
+  else initPoints();
 
   if (result["gain." + id] != null && result["gain." + id] != undefined)
     document.getElementById("master-volume").value = result["gain." + id];
@@ -139,8 +146,10 @@ canvas.addEventListener("mousemove", async (e) => {
       points[dragIndex] = { x: mx, y: my };
       mainResize();
       var tabId = await getCurrentTabId();
+      var newFilters = pointsToFilters(points);
       chrome.storage.local.set({
-        ["filters." + tabId]: pointsToFilters(points),
+        ["filters." + tabId]: newFilters,
+        ["filters"]: newFilters,
         ["enabled." + tabId]: true,
       });
     }
