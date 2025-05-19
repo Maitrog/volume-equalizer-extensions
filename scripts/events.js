@@ -47,11 +47,17 @@ chrome.storage.onChanged.addListener((ps) => {
 
     if (ps["volume." + tabId]) {
       port.dataset.preamp = ps["volume." + tabId].newValue;
-      port.dispatchEvent(new Event("preamp-changed"));
+      if (!port.dataset.mute) port.dispatchEvent(new Event("preamp-changed"));
     }
     if (ps["enabled." + tabId]) {
       port.dataset.enabled = ps["enabled." + tabId].newValue;
       port.dispatchEvent(new Event("enabled-changed"));
+    }
+    if (ps["mute." + tabId]) {
+      port.dataset.mute = ps["mute." + tabId].newValue;
+      if (ps["mute." + tabId].newValue)
+        port.dispatchEvent(new Event("mute-enabled"));
+      else port.dispatchEvent(new Event("mute-disabled"));
     }
   });
 });

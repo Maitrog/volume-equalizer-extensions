@@ -64,6 +64,7 @@ async function mainLoad() {
     "gain." + id,
     "presetNames",
     "enabled." + id,
+    "mute." + id,
   ]);
   if (
     result["filters." + id] == null ||
@@ -79,6 +80,7 @@ async function mainLoad() {
   drawFilter();
 
   setEnableBtnText(result["enabled." + id] ?? false);
+  setMuteBtnClass(result["mute." + id] ?? false);
 
   if (!result.presetNames) return;
 
@@ -272,3 +274,25 @@ menu.addEventListener("click", (e) => {
     menu.style.display = "none";
   }
 });
+
+document.getElementById("volume-mute").addEventListener("click", async () => {
+  const tabId = await getCurrentTabId();
+  chrome.storage.local.set({ ["enabled." + tabId]: true }).then(() =>
+    chrome.storage.local.get(["mute." + tabId]).then((result) => {
+      chrome.storage.local.set({
+        ["mute." + tabId]: !result["mute." + tabId],
+      });
+    })
+  );
+});
+
+chrome.storage.onChanged.addListener(async (ps) => {
+  const tabId = await getCurrentTabId();
+  if (ps["mute." + tabId]) setMuteBtnClass(ps["mute." + tabId].newValue);
+});
+
+function setMuteBtnClass(newValue) {
+  var elem = document.getElementById("volume-mute");
+  if (newValue) elem.className = "volume-mute-active";
+  else elem.className = "volume-mute";
+}

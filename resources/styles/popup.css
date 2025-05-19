@@ -183,7 +183,12 @@ button:active {
   display: flex;
   margin-bottom: 5px;
   width: 100%;
-  justify-content: space-between;
+  gap: 10px;
+}
+
+.donation {
+  right: 20px;
+  position: fixed;
 }
 
 .icon-donation {
@@ -237,4 +242,16 @@ button:active {
   cursor: pointer;
   padding: 2px 4px;
   font-weight: bold;
+}
+
+.volume-mute {
+  width: 26px;
+  filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
+  cursor: pointer;
+}
+
+.volume-mute-active {
+  width: 26px;
+  filter: brightness(0) saturate(100%) invert(30%) sepia(93%) saturate(1203%) hue-rotate(334deg) brightness(85%) contrast(85%);
+  cursor: pointer;
 }

@@ -162,6 +162,16 @@ port.remove();
       filters.preamp.gain.value = Number(port.dataset.preamp);
     })
   );
+  port.addEventListener("mute-enabled", () =>
+    map.forEach((filters) => {
+      filters.preamp.gain.value = Number(0);
+    })
+  );
+  port.addEventListener("mute-disabled", () =>
+    map.forEach((filters) => {
+      filters.preamp.gain.value = Number(port.dataset.preamp);
+    })
+  );
   port.addEventListener("enabled-changed", () => {
     if (port.dataset.enabled === "false") {
       detach();
