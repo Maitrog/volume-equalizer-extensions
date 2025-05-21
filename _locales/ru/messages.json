@@ -1,8 +1,8 @@
 {
-    "ext_name": {
-        "message": "Аудио эквалайзер"
+    "extName": {
+        "message": "EQ Toolkit - Аудио эквалайзер"
     },
-    "ext_description": {
+    "extDescription": {
         "message": "Увеличение громкости, басс буст, тонкая настрока частот – легко и просто всё в одном расширении."
     },
     "gain": {

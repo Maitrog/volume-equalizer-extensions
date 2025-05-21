@@ -1,8 +1,8 @@
 {
-    "ext_name": {
-        "message": "Audio equalizer"
+    "extName": {
+        "message": "EQ Toolkit - Audio equalizer"
     },
-    "ext_description": {
+    "extDescription": {
         "message": "Volume up, bass boost, tune frequencies – easy all in one extension."
     },
     "gain": {
