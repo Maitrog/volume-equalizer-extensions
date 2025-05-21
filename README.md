@@ -13,7 +13,7 @@ Works with ANY audio on ANY website :)
 
 ## Installation
 ### Chrome Extentions
-[EQ Toolkit](https://chromewebstore.google.com/detail/eq-toolkit/dlilpinpaihdcfdjnofegabgoijmmoja)
+[EQ Toolkit](https://chromewebstore.google.com/detail/dlilpinpaihdcfdjnofegabgoijmmoja?utm_source=github)
 
 ### Opera Add-ons
 Available soon
