@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "EQ 툴킷 - 오디오 이퀄라이저"
+  },
+  "extDescription": {
+    "message": "볼륨 높이기, 베이스 부스트, 주파수 조정 – 하나의 확장 프로그램으로 간편하게"
+  },
+  "gain": {
+    "message": "확대:"
+  },
+  "reset": {
+    "message": "재설정"
+  },
+  "enable_eq": {
+    "message": "이 탭에서 이퀄라이저 활성화"
+  },
+  "stop_eq": {
+    "message": "이 탭에서 이퀄라이저 중지"
+  },
+  "none": {
+    "message": "없음"
+  },
+  "save": {
+    "message": "프리셋 저장"
+  },
+  "enter_preset_name": {
+    "message": "이름 입력"
+  }
+}

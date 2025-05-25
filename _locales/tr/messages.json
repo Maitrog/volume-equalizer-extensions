@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "EQ Araç Seti - Ses eşitleyici"
+  },
+  "extDescription": {
+    "message": "Sesi açın, bası güçlendirin, frekansları ayarlayın – hepsi tek bir eklentide kolayca."
+  },
+  "gain": {
+    "message": "Amplifikasyon:"
+  },
+  "reset": {
+    "message": "Sıfırla"
+  },
+  "enable_eq": {
+    "message": "Bu sekmede eşitleyiciyi etkinleştir"
+  },
+  "stop_eq": {
+    "message": "Bu sekmede eşitleyiciyi durdur"
+  },
+  "none": {
+    "message": "Yok"
+  },
+  "save": {
+    "message": "Ön ayarı kaydet"
+  },
+  "enter_preset_name": {
+    "message": "Ad girin"
+  }
+}

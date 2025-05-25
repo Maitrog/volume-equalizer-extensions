@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "Bộ công cụ EQ - Bộ cân bằng âm thanh"
+  },
+  "extDescription": {
+    "message": "Tăng âm lượng, tăng bass, điều chỉnh tần số – mọi thứ dễ dàng trong một tiện ích mở rộng."
+  },
+  "gain": {
+    "message": "Khuếch đại:"
+  },
+  "reset": {
+    "message": "Đặt lại"
+  },
+  "enable_eq": {
+    "message": "Bật eq trên tab này"
+  },
+  "stop_eq": {
+    "message": "Tắt eq trên tab này"
+  },
+  "none": {
+    "message": "Không"
+  },
+  "save": {
+    "message": "Lưu thiết lập trước"
+  },
+  "enter_preset_name": {
+    "message": "Nhập tên"
+  }
+}

@@ -1,0 +1,30 @@
+{
+    "extName": {
+      "message": "Toolkit EQ - Equalizzatore audio"
+    },
+    "extDescription": {
+      "message": "Aumenta il volume, potenzia i bassi, regola le frequenze – tutto in un’unica estensione facile."
+    },
+    "gain": {
+      "message": "Amplificazione:"
+    },
+    "reset": {
+      "message": "Ripristina"
+    },
+    "enable_eq": {
+      "message": "Attiva eq in questa scheda"
+    },
+    "stop_eq": {
+      "message": "Disattiva eq in questa scheda"
+    },
+    "none": {
+      "message": "Nessuno"
+    },
+    "save": {
+      "message": "Salva preset"
+    },
+    "enter_preset_name": {
+      "message": "Inserisci nome"
+    }
+  }
+  

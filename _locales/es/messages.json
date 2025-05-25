@@ -1,0 +1,29 @@
+{
+    "extName": {
+        "message": "EQ Toolkit - Ecualizador de audio"
+    },
+    "extDescription": {
+        "message": "Sube el volumen, refuerza los graves, ajusta frecuencias – todo en una extensión fácil de usar."
+    },
+    "gain": {
+        "message":"Amplificación:"
+    },
+    "reset": {
+        "message":"Restablecer"
+    },
+    "enable_eq": {
+        "message":"Activar EQ en esta pestaña"
+    },
+    "stop_eq": {
+        "message":"Detener EQ en esta pestaña"
+    },
+    "none": {
+        "message":"Ninguno"
+    },
+    "save": {
+        "message":"Guardar preset"
+    },
+    "enter_preset_name": {
+        "message":"Ingrese nombre"
+    }
+}

@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "EQ Toolkit - Equalizer audio"
+  },
+  "extDescription": {
+    "message": "Tingkatkan volume, perkuat bass, atur frekuensi – mudah semuanya dalam satu ekstensi."
+  },
+  "gain": {
+    "message": "Amplifikasi:"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "enable_eq": {
+    "message": "Aktifkan eq di tab ini"
+  },
+  "stop_eq": {
+    "message": "Hentikan eq di tab ini"
+  },
+  "none": {
+    "message": "Tidak ada"
+  },
+  "save": {
+    "message": "Simpan preset"
+  },
+  "enter_preset_name": {
+    "message": "Masukkan nama"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "EQ Toolkit - Audio-Equalizer"
+  },
+  "extDescription": {
+    "message": "Lautstärke erhöhen, Bass verstärken, Frequenzen anpassen – alles einfach in einer Erweiterung."
+  },
+  "gain": {
+    "message": "Verstärkung:"
+  },
+  "reset": {
+    "message": "Zurücksetzen"
+  },
+  "enable_eq": {
+    "message": "Equalizer in diesem Tab aktivieren"
+  },
+  "stop_eq": {
+    "message": "Equalizer in diesem Tab stoppen"
+  },
+  "none": {
+    "message": "Keine"
+  },
+  "save": {
+    "message": "Preset speichern"
+  },
+  "enter_preset_name": {
+    "message": "Name eingeben"
+  }
+}

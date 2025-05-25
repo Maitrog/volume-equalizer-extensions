@@ -1,0 +1,30 @@
+{
+    "extName": {
+      "message": "EQ ツールキット - オーディオイコライザー"
+    },
+    "extDescription": {
+      "message": "音量アップ、低音ブースト、周波数調整 – これ一つで簡単拡張機能"
+    },
+    "gain": {
+      "message": "増幅"
+    },
+    "reset": {
+      "message": "リセット"
+    },
+    "enable_eq": {
+      "message": "このタブでイコライザーを有効にする"
+    },
+    "stop_eq": {
+      "message": "このタブでイコライザーを停止する"
+    },
+    "none": {
+      "message": "なし"
+    },
+    "save": {
+      "message": "プリセットを保存"
+    },
+    "enter_preset_name": {
+      "message": "名前を入力"
+    }
+  }
+  

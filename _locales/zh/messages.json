@@ -1,0 +1,30 @@
+{
+    "extName": {
+      "message": "EQ 工具 - 音频均衡器"
+    },
+    "extDescription": {
+      "message": "提高音量、低音增强、调节频率 – 一款集多功能于一体的扩展"
+    },
+    "gain": {
+      "message": "放大"
+    },
+    "reset": {
+      "message": "重置"
+    },
+    "enable_eq": {
+      "message": "在此标签页启用均衡器"
+    },
+    "stop_eq": {
+      "message": "在此标签页停止均衡器"
+    },
+    "none": {
+      "message": "无"
+    },
+    "save": {
+      "message": "保存预设"
+    },
+    "enter_preset_name": {
+      "message": "输入名称"
+    }
+  }
+  

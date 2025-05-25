@@ -1,0 +1,29 @@
+{
+  "extName": {
+    "message": "EQ Toolkit - Audio-equalizer"
+  },
+  "extDescription": {
+    "message": "Verhoog het volume, versterk de bas, stem frequenties af – alles eenvoudig in één extensie."
+  },
+  "gain": {
+    "message": "Versterking:"
+  },
+  "reset": {
+    "message": "Reset"
+  },
+  "enable_eq": {
+    "message": "Equalizer inschakelen op dit tabblad"
+  },
+  "stop_eq": {
+    "message": "Equalizer uitschakelen op dit tabblad"
+  },
+  "none": {
+    "message": "Geen"
+  },
+  "save": {
+    "message": "Preset opslaan"
+  },
+  "enter_preset_name": {
+    "message": "Voer naam in"
+  }
+}
