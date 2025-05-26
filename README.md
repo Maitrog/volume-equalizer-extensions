@@ -5,9 +5,10 @@ Works with ANY audio on ANY website :)
 
 ## Features
 - Audio amplification.
-- Easy graphic equalizer.
+- Mute audio on the tab.
 - Modify audio across multiple bands while media is playing.
 - Create your own equalizer presets.
+- Easy graphic equalizer.
 - User friendly interface.
 - Works with any audio on any website.
 
