@@ -12,6 +12,10 @@ document.getElementById("presets-toggle").textContent =
 document.getElementById("none-item").textContent =
   chrome.i18n.getMessage("none");
 
+document
+  .getElementById("none-item")
+  .setAttribute("data-value", chrome.i18n.getMessage("none"));
+
 document.getElementById("save-preset").textContent =
   chrome.i18n.getMessage("save");
 

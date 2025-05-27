@@ -3,7 +3,7 @@
     "name": "__MSG_extName__",
     "description": "__MSG_extDescription__",
     "author": "maitrog",
-    "version": "1.2.2",
+    "version": "1.2.3",
     "permissions": [ "storage", "scripting" ],
     "host_permissions": [ "*://*/*" ],
     "action": {
