@@ -47,7 +47,8 @@ chrome.storage.onChanged.addListener((ps) => {
 
     if (ps["volume." + tabId]) {
       port.dataset.preamp = ps["volume." + tabId].newValue;
-      if (!port.dataset.mute) port.dispatchEvent(new Event("preamp-changed"));
+      if (port.dataset.mute != "true")
+        port.dispatchEvent(new Event("preamp-changed"));
     }
     if (ps["enabled." + tabId]) {
       port.dataset.enabled = ps["enabled." + tabId].newValue;
