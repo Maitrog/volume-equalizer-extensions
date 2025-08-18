@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "ใส่ชื่อ"
+  },
+  "settings": {
+    "message": "การตั้งค่า"
+  },
+  "import_presets": {
+    "message": "นำเข้าพรีเซ็ต"
+  },
+  "export_presets": {
+    "message": "ส่งออกพรีเซ็ต"
+  },
+  "enable_spectrum": {
+    "message": "เปิดใช้งานการแสดงผลสเปกตรัม ต้องโหลดหน้าใหม่ (ใช้ CPU สูง)"
   }
 }

@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Nhập tên"
+  },
+  "settings": {
+    "message": "Cài đặt"
+  },
+  "import_presets": {
+    "message": "Nhập preset"
+  },
+  "export_presets": {
+    "message": "Xuất preset"
+  },
+  "enable_spectrum": {
+    "message": "Bật hiển thị phổ, cần tải lại trang (tốn CPU cao)"
   }
 }

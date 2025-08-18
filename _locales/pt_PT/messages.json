@@ -1,30 +1,41 @@
 {
-    "extName": {
-      "message": "EQ Toolkit - Equalizador de áudio"
-    },
-    "extDescription": {
-      "message": "Controle seu som: reforço de graves e amplificação de volume em qualquer site"
-    },
-    "gain": {
-      "message": "Amplificação:"
-    },
-    "reset": {
-      "message": "Redefinir"
-    },
-    "enable_eq": {
-      "message": "Ativar equalizador nesta guia"
-    },
-    "stop_eq": {
-      "message": "Desativar equalizador nesta guia"
-    },
-    "none": {
-      "message": "Nenhum"
-    },
-    "save": {
-      "message": "Salvar predefinição"
-    },
-    "enter_preset_name": {
-      "message": "Insira o nome"
-    }
+  "extName": {
+    "message": "EQ Toolkit - Equalizador de áudio"
+  },
+  "extDescription": {
+    "message": "Controle seu som: reforço de graves e amplificação de volume em qualquer site"
+  },
+  "gain": {
+    "message": "Amplificação:"
+  },
+  "reset": {
+    "message": "Redefinir"
+  },
+  "enable_eq": {
+    "message": "Ativar equalizador nesta guia"
+  },
+  "stop_eq": {
+    "message": "Desativar equalizador nesta guia"
+  },
+  "none": {
+    "message": "Nenhum"
+  },
+  "save": {
+    "message": "Salvar predefinição"
+  },
+  "enter_preset_name": {
+    "message": "Insira o nome"
+  },
+  "settings": {
+    "message": "Definições"
+  },
+  "import_presets": {
+    "message": "Importar predefinições"
+  },
+  "export_presets": {
+    "message": "Exportar predefinições"
+  },
+  "enable_spectrum": {
+    "message": "Ativar a visualização do espectro; é necessário recarregar a página (elevada carga de CPU)"
   }
-  
+}

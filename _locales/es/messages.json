@@ -6,24 +6,36 @@
         "message": "Controla tu sonido: refuerzo de graves y amplificación de volumen en cualquier sitio"
     },
     "gain": {
-        "message":"Amplificación:"
+        "message": "Amplificación:"
     },
     "reset": {
-        "message":"Restablecer"
+        "message": "Restablecer"
     },
     "enable_eq": {
-        "message":"Activar EQ en esta pestaña"
+        "message": "Activar EQ en esta pestaña"
     },
     "stop_eq": {
-        "message":"Detener EQ en esta pestaña"
+        "message": "Detener EQ en esta pestaña"
     },
     "none": {
-        "message":"Ninguno"
+        "message": "Ninguno"
     },
     "save": {
-        "message":"Guardar preset"
+        "message": "Guardar preset"
     },
     "enter_preset_name": {
-        "message":"Ingrese nombre"
+        "message": "Ingrese nombre"
+    },
+    "settings": {
+        "message": "Configuración"
+    },
+    "import_presets": {
+        "message": "Importar preajustes"
+    },
+    "export_presets": {
+        "message": "Exportar preajustes"
+    },
+    "enable_spectrum": {
+        "message": "Activar la visualización del espectro; es necesario recargar la página (alto uso de CPU)"
     }
 }

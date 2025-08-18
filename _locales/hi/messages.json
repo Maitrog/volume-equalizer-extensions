@@ -1,30 +1,41 @@
 {
-    "extName": {
-      "message": "EQ Toolkit - ऑडियो इक्वलाइज़र"
-    },
-    "extDescription": {
-      "message": "अपनी ध्वनि नियंत्रित करें: किसी भी साइट पर बेस बूस्ट और वॉल्यूम एम्प्लीफिकेशन"
-    },
-    "gain": {
-      "message": "विस्तारण:"
-    },
-    "reset": {
-      "message": "रीसेट"
-    },
-    "enable_eq": {
-      "message": "इस टैब पर इक्वलाइज़र सक्षम करें"
-    },
-    "stop_eq": {
-      "message": "इस टैब पर इक्वलाइज़र बंद करें"
-    },
-    "none": {
-      "message": "कोई नहीं"
-    },
-    "save": {
-      "message": "प्रसेट सहेजें"
-    },
-    "enter_preset_name": {
-      "message": "नाम दर्ज करें"
-    }
+  "extName": {
+    "message": "EQ Toolkit - ऑडियो इक्वलाइज़र"
+  },
+  "extDescription": {
+    "message": "अपनी ध्वनि नियंत्रित करें: किसी भी साइट पर बेस बूस्ट और वॉल्यूम एम्प्लीफिकेशन"
+  },
+  "gain": {
+    "message": "विस्तारण:"
+  },
+  "reset": {
+    "message": "रीसेट"
+  },
+  "enable_eq": {
+    "message": "इस टैब पर इक्वलाइज़र सक्षम करें"
+  },
+  "stop_eq": {
+    "message": "इस टैब पर इक्वलाइज़र बंद करें"
+  },
+  "none": {
+    "message": "कोई नहीं"
+  },
+  "save": {
+    "message": "प्रसेट सहेजें"
+  },
+  "enter_preset_name": {
+    "message": "नाम दर्ज करें"
+  },
+  "settings": {
+    "message": "सेटिंग्स"
+  },
+  "import_presets": {
+    "message": "प्रीसेट आयात करें"
+  },
+  "export_presets": {
+    "message": "प्रीसेट निर्यात करें"
+  },
+  "enable_spectrum": {
+    "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें, पेज को फिर से लोड करना होगा (उच्च CPU लोड)"
   }
-  
+}

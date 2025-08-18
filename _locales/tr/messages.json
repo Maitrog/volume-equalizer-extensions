@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Ad girin"
+  },
+  "settings": {
+    "message": "Ayarlar"
+  },
+  "import_presets": {
+    "message": "Ön ayarları içe aktar"
+  },
+  "export_presets": {
+    "message": "Ön ayarları dışa aktar"
+  },
+  "enable_spectrum": {
+    "message": "Spektrum görselleştirmesini etkinleştir; sayfayı yeniden yüklemek gerekir (yüksek CPU kullanımı)"
   }
 }

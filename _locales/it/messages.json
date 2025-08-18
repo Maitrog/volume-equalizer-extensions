@@ -1,30 +1,41 @@
 {
-    "extName": {
-      "message": "EQ Toolkit - Equalizzatore audio"
-    },
-    "extDescription": {
-      "message": "Controlla il tuo suono: potenziamento dei bassi e amplificazione del volume su qualsiasi sito"
-    },
-    "gain": {
-      "message": "Amplificazione:"
-    },
-    "reset": {
-      "message": "Ripristina"
-    },
-    "enable_eq": {
-      "message": "Attiva eq in questa scheda"
-    },
-    "stop_eq": {
-      "message": "Disattiva eq in questa scheda"
-    },
-    "none": {
-      "message": "Nessuno"
-    },
-    "save": {
-      "message": "Salva preset"
-    },
-    "enter_preset_name": {
-      "message": "Inserisci nome"
-    }
+  "extName": {
+    "message": "EQ Toolkit - Equalizzatore audio"
+  },
+  "extDescription": {
+    "message": "Controlla il tuo suono: potenziamento dei bassi e amplificazione del volume su qualsiasi sito"
+  },
+  "gain": {
+    "message": "Amplificazione:"
+  },
+  "reset": {
+    "message": "Ripristina"
+  },
+  "enable_eq": {
+    "message": "Attiva eq in questa scheda"
+  },
+  "stop_eq": {
+    "message": "Disattiva eq in questa scheda"
+  },
+  "none": {
+    "message": "Nessuno"
+  },
+  "save": {
+    "message": "Salva preset"
+  },
+  "enter_preset_name": {
+    "message": "Inserisci nome"
+  },
+  "settings": {
+    "message": "Impostazioni"
+  },
+  "import_presets": {
+    "message": "Importa preset"
+  },
+  "export_presets": {
+    "message": "Esporta preset"
+  },
+  "enable_spectrum": {
+    "message": "Abilita la visualizzazione dello spettro, è necessario ricaricare la pagina (carico CPU elevato)"
   }
-  
+}

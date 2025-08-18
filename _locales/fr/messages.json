@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Entrez le nom"
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "import_presets": {
+    "message": "Importer des préréglages"
+  },
+  "export_presets": {
+    "message": "Exporter des préréglages"
+  },
+  "enable_spectrum": {
+    "message": "Activer la visualisation du spectre; il faut recharger la page (utilisation élevée du CPU)"
   }
 }

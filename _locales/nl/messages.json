@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Voer naam in"
+  },
+  "settings": {
+    "message": "Instellingen"
+  },
+  "import_presets": {
+    "message": "Voorinstellingen importeren"
+  },
+  "export_presets": {
+    "message": "Voorinstellingen exporteren"
+  },
+  "enable_spectrum": {
+    "message": "Spectrumvisualisatie inschakelen; pagina opnieuw laden vereist (hoge CPU-belasting)"
   }
 }

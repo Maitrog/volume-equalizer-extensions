@@ -1,30 +1,41 @@
 {
-    "extName": {
-      "message": "EQ Toolkit - 音频均衡器"
-    },
-    "extDescription": {
-      "message": "控制您的声音：在任何网站上增强低音和放大音量"
-    },
-    "gain": {
-      "message": "放大"
-    },
-    "reset": {
-      "message": "重置"
-    },
-    "enable_eq": {
-      "message": "在此标签页启用均衡器"
-    },
-    "stop_eq": {
-      "message": "在此标签页停止均衡器"
-    },
-    "none": {
-      "message": "无"
-    },
-    "save": {
-      "message": "保存预设"
-    },
-    "enter_preset_name": {
-      "message": "输入名称"
-    }
+  "extName": {
+    "message": "EQ Toolkit - 音频均衡器"
+  },
+  "extDescription": {
+    "message": "控制您的声音：在任何网站上增强低音和放大音量"
+  },
+  "gain": {
+    "message": "放大"
+  },
+  "reset": {
+    "message": "重置"
+  },
+  "enable_eq": {
+    "message": "在此标签页启用均衡器"
+  },
+  "stop_eq": {
+    "message": "在此标签页停止均衡器"
+  },
+  "none": {
+    "message": "无"
+  },
+  "save": {
+    "message": "保存预设"
+  },
+  "enter_preset_name": {
+    "message": "输入名称"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "import_presets": {
+    "message": "导入预设"
+  },
+  "export_presets": {
+    "message": "导出预设"
+  },
+  "enable_spectrum": {
+    "message": "启用频谱可视化，需要重新加载页面（CPU 负载较高）"
   }
-  
+}

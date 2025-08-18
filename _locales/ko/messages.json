@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "이름 입력"
+  },
+  "settings": {
+    "message": "설정"
+  },
+  "import_presets": {
+    "message": "프리셋 가져오기"
+  },
+  "export_presets": {
+    "message": "프리셋 내보내기"
+  },
+  "enable_spectrum": {
+    "message": "스펙트럼 시각화 활성화, 페이지를 다시 로드해야 함(높은 CPU 부하)"
   }
 }

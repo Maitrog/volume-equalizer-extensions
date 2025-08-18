@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "নাম লিখুন"
+  },
+  "settings": { 
+    "message": "সেটিংস"
+  },
+  "import_presets": { 
+    "message": "প্রিসেট আমদানি করুন" 
+  },
+  "export_presets": { 
+    "message": "প্রিসেট রপ্তানি করুন" 
+  },
+  "enable_spectrum": { 
+    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন, পৃষ্ঠা পুনরায় লোড করতে হবে (উচ্চ CPU ব্যবহার)" 
   }
 }

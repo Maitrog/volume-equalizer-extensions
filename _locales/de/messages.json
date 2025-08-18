@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Name eingeben"
+  },
+  "settings": {
+    "message": "Einstellungen"
+  },
+  "import_presets": {
+    "message": "Voreinstellungen importieren"
+  },
+  "export_presets": {
+    "message": "Voreinstellungen exportieren"
+  },
+  "enable_spectrum": {
+    "message": "Spektrumvisualisierung aktivieren, Seite muss neu geladen werden (hohe CPU-Last)"
   }
 }

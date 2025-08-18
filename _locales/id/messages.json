@@ -25,5 +25,17 @@
   },
   "enter_preset_name": {
     "message": "Masukkan nama"
+  },
+  "settings": {
+    "message": "Pengaturan"
+  },
+  "import_presets": {
+    "message": "Impor preset"
+  },
+  "export_presets": {
+    "message": "Ekspor preset"
+  },
+  "enable_spectrum": {
+    "message": "Aktifkan visualisasi spektrum, perlu memuat ulang halaman (beban CPU tinggi)"
   }
 }
