@@ -332,7 +332,7 @@ window.onclick = function (event) {
   }
 };
 
-document.getElementById("experimental-mode").addEventListener("click", () => {
-  window.close();
-  chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
-});
+// document.getElementById("experimental-mode").addEventListener("click", () => {
+//   window.close();
+//   chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
+// });
