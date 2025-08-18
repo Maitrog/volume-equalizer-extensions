@@ -90,11 +90,6 @@ port.remove();
       connect.call(source, source.context.destination);
       port.dispatchEvent(new Event("disconnected"));
     });
-
-    if (spectrumTimer) {
-      clearInterval(spectrumTimer);
-      spectrumTimer = null;
-    }
   };
 
   const reattach = () => {
@@ -200,13 +195,6 @@ port.remove();
         }
         convert.caches.clear();
       }
-    }
-  });
-
-  port.addEventListener("stop-spectrum", () => {
-    if (spectrumTimer) {
-      clearInterval(spectrumTimer);
-      spectrumTimer = null;
     }
   });
 
