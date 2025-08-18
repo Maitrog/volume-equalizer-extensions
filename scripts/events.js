@@ -24,6 +24,7 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
       ["freqs." + tabId]: freqs.map((freq, i) => {
         return { frequency: freq, gain: 0, type: "peaking" };
       }),
+      ["enableSpectrum"]: false,
     },
     (prefs) => {
       const newF = prefs["freqs." + tabId];
@@ -31,6 +32,7 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
       port.dataset.pan = prefs["pan." + tabId];
       port.dataset.preamp = prefs["volume" + tabId];
       port.dataset.enabled = false;
+      port.dataset.enableSpectrum = prefs["enableSpectrum"];
     }
   );
 });
@@ -61,6 +63,10 @@ chrome.storage.onChanged.addListener((ps) => {
       else port.dispatchEvent(new Event("mute-disabled"));
     }
   });
+});
+
+port.addEventListener("spectrum-frame", (e) => {
+  chrome.runtime.sendMessage({ method: "spectrum-frame", payload: e.detail });
 });
 
 self.start = () => {

@@ -48,8 +48,17 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
     return;
   }
 
+  if (request.method === "enableExperimentalMode") {
+    toggleToolkitWindow();
+    return;
+  }
+
   const tabId = sender.tab.id;
-  if (request.method === "getTabId") {
+  if (request.method == "spectrum-frame") {
+    chrome.storage.local.set({
+      ["spectrum." + tabId]: request.payload,
+    });
+  } else if (request.method === "getTabId") {
     chrome.storage.session.get(["tabs"], (prefs) => {
       const tabs = prefs?.tabs ?? [];
       if (!tabs.includes(tabId)) {
@@ -69,7 +78,13 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
       tabId,
     });
   } else if (request.method === "clearStorage") {
-    const constParamNames = ["presets", "presetNames", "gain", "filters"];
+    const constParamNames = [
+      "presets",
+      "presetNames",
+      "gain",
+      "filters",
+      "enableSpectrum",
+    ];
     const tabIds = (await chrome.storage.session.get(["tabs"])).tabs;
 
     chrome.storage.local.getKeys((keys) =>
@@ -93,4 +108,54 @@ async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab.id;
+}
+
+const WINDOW_KEY = "toolkitWindowId"; // ключ, под которым хранится id окна
+
+async function toggleToolkitWindow() {
+  let id = await getWindowId();
+
+  if (id) {
+    // Если id сохранён, пробуем закрыть
+    await closeToolkitWindow(id);
+    return;
+  }
+
+  // Окно не сохранено — создаём
+  await createToolkitWindow();
+}
+
+async function getWindowId() {
+  const obj = await chrome.storage.session.get(WINDOW_KEY);
+  return obj[WINDOW_KEY] ?? null;
+}
+
+async function setWindowId(id) {
+  await chrome.storage.session.set({ [WINDOW_KEY]: id });
+}
+
+async function clearWindowId() {
+  await chrome.storage.session.remove(WINDOW_KEY);
+}
+
+async function createToolkitWindow() {
+  const w = await chrome.windows.create({
+    url: chrome.runtime.getURL("popup.html"),
+    type: "popup", // компактное окно без вкладок
+    width: 420, // подгоните под ваш UI
+    height: 640,
+    focused: true,
+  });
+  await setWindowId(w.id);
+  return w.id;
+}
+
+async function closeToolkitWindow(windowId) {
+  try {
+    await chrome.windows.remove(windowId);
+  } catch (e) {
+    // окно уже могло быть закрыто пользователем — игнорируем
+  } finally {
+    await clearWindowId();
+  }
 }

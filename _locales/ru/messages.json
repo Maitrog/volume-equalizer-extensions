@@ -25,5 +25,17 @@
     },
     "enter_preset_name": {
         "message":"Введите название"
+    },
+    "settings": {
+        "message": "Настройки"
+    },
+    "import_presets": {
+        "message": "Импорт пресетов"
+    },
+    "export_presets": {
+        "message": "Экспорт пресетов"
+    },
+    "enable_spectrum": {
+        "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
     }
 }

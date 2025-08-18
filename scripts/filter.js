@@ -3,6 +3,10 @@ port.remove();
 
 {
   const map = new Map();
+  let currentAudioCtx = null;
+  let currentSourceNode = null;
+  let analyser = null;
+  let spectrumTimer = null;
 
   const { connect } = AudioNode.prototype;
 
@@ -40,6 +44,11 @@ port.remove();
       }
     });
 
+    if (port.dataset.enableSpectrum === "true") {
+      currentSourceNode = filters[newF.length - 1];
+      startSpectrum();
+    }
+
     port.dispatchEvent(new Event("connected"));
     return connect.call(filters[newF.length - 1], context.destination);
   };
@@ -51,6 +60,7 @@ port.remove();
       const next = () => {
         try {
           const source = context.createMediaElementSource(target);
+          setCurrentAudioGraph(context, source);
           resolve(source);
         } catch (e) {
           reject(e);
@@ -74,12 +84,18 @@ port.remove();
       });
     });
 
-  const detach = () =>
+  const detach = () => {
     map.forEach((filters, source) => {
       source.disconnect();
       connect.call(source, source.context.destination);
       port.dispatchEvent(new Event("disconnected"));
     });
+
+    if (spectrumTimer) {
+      clearInterval(spectrumTimer);
+      spectrumTimer = null;
+    }
+  };
 
   const reattach = () => {
     map.forEach((filters, source) => {
@@ -186,4 +202,80 @@ port.remove();
       }
     }
   });
+
+  port.addEventListener("stop-spectrum", () => {
+    if (spectrumTimer) {
+      clearInterval(spectrumTimer);
+      spectrumTimer = null;
+    }
+  });
+
+  function ensureAnalyser(audioCtx, sourceNode) {
+    if (!audioCtx || !sourceNode) return null;
+    if (analyser) return analyser;
+
+    analyser = audioCtx.createAnalyser();
+    analyser.connect(audioCtx.destination);
+    analyser.fftSize = 4096;
+    analyser.smoothingTimeConstant = 0.5;
+
+    try {
+      sourceNode.connect(analyser);
+    } catch (e) {}
+    return analyser;
+  }
+
+  function setCurrentAudioGraph(audioCtx, sourceNode) {
+    currentAudioCtx = audioCtx;
+    currentSourceNode = sourceNode;
+    analyser = null;
+  }
+
+  function startSpectrum() {
+    {
+      const ac = currentAudioCtx;
+      const src = currentSourceNode;
+      const an = ensureAnalyser(ac, src);
+
+      if (!ac || !src || !an) {
+        return;
+      }
+
+      let payload = {
+        type: "meta",
+        sampleRate: ac.sampleRate,
+        fftSize: an.fftSize,
+        minDb: an.minDecibels,
+        maxDb: an.maxDecibels,
+        frequencyBinCount: an.frequencyBinCount,
+      };
+      port.dispatchEvent(
+        new CustomEvent("spectrum-frame", {
+          detail: { ...payload },
+          bubbles: true,
+          composed: true,
+        })
+      );
+
+      if (spectrumTimer) clearInterval(spectrumTimer);
+      spectrumTimer = setInterval(() => {
+        if (!an) return;
+        const n = an.frequencyBinCount;
+        const f32 = new Float32Array(n);
+        an.getFloatFrequencyData(f32);
+
+        payload = {
+          type: "spectrum",
+          buffer: f32,
+        };
+        port.dispatchEvent(
+          new CustomEvent("spectrum-frame", {
+            detail: { ...payload },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      }, 40);
+    }
+  }
 }

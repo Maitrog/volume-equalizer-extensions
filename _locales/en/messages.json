@@ -25,5 +25,17 @@
     },
     "enter_preset_name": {
         "message":"Enter name"
+    },
+    "settings": {
+        "message": "Settings"
+    },
+    "import_presets": {
+        "message": "Import presets"
+    },
+    "export_presets": {
+        "message": "Export presets"
+    },
+    "enable_spectrum": {
+        "message": "Enable spectrum visualisation, need to restart page (high CPU load)"
     }
 }

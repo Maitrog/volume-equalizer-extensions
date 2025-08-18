@@ -12,13 +12,16 @@
 <body>
   <div class="header">
     <text>EQ Toolkit</text>
+    <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
     <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
     <a class="donation" href="https://www.donationalerts.com/r/maitrog" target="_blank">
+      <span id="support-me" class="support-me-text">Support me</span>
       <img class="icon-donation" src="/resources/images/donation_144.png">
     </a>
   </div>
   <div class="equalizer-curve-container">
     <canvas class="eq-canvas" id="eq-canvas"></canvas>
+    <canvas class="spectrum-canvas" id="spectrum-canvas"></canvas>
   </div>
   <div class="controls first-row">
     <div class="volume-control">
@@ -35,6 +38,7 @@
     <button type="button" id="reset" class="reset-btn">Reset</button>
     <button type="button" id="change-eq">Enable eq on this tab</button>
   </div>
+  <!-- <button type="button" id="experimental-mode">Experimental mode</button> -->
   <div class="controls second-row">
     <div class="dropdown" id="presets">
       <div class="dropdown-toggle" id="presets-toggle">none</div>
@@ -45,10 +49,31 @@
     <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
     <button type="button" id="save-preset">Save preset</button>
   </div>
+
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-settings" class="close">&times;</span>
+      <h2 id="settings-header">Settings</h2>
+      <label>
+        <input type="checkbox" id="enable-spectrum">
+        <text id="enable-spectrum-label">
+          Enable spectrum visualisation (high CPU load)
+        </text>
+      </label>
+      <div class="settings-actions">
+        <input type="file" id="import-input" hidden>
+        <button type="input" id="import-presets">Import presets</button>
+        <button type="button" id="export-presets">Export presets</button>
+      </div>
+    </div>
+  </div>
+
   <script src="scripts/drawPeakingFilter.js"></script>
   <script src="scripts/drawFilters.js"></script>
   <script src="scripts/drawFrequensyAxis.js"></script>
+  <script src="scripts/drawFrequensies.js"></script>
   <script src="scripts/localization.js"></script>
+  <script src="scripts/settings.js"></script>
   <script src="scripts/popup.js"></script>
 </body>
 

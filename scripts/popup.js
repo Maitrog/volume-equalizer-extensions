@@ -1,6 +1,6 @@
 let dragIndex = null;
 const canvas = document.getElementById("eq-canvas");
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext("2d", { alpha: true });
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const logMin = Math.log10(1);
@@ -14,6 +14,14 @@ function xToFrequency(x, canvasWidth = null) {
     Math.sqrt(x / canvasWidth) * (logMax - logMin) + logMin
   );
   return freq > 24000 ? 24000 : freq;
+}
+
+function frequencyToX(freq, canvasWidth = null) {
+  freq = freq > 24000 ? 24000 : freq;
+  canvasWidth ??= canvas.width - 10;
+  const x =
+    Math.pow((Math.log10(freq) - logMin) / (logMax - logMin), 2) * canvasWidth;
+  return x;
 }
 
 function yToDb(y, canvasHeight = null) {
@@ -66,6 +74,7 @@ async function mainLoad() {
     "presetNames",
     "enabled." + id,
     "mute." + id,
+    "enableSpectrum",
   ]);
   if (
     result["filters." + id] != null &&
@@ -94,6 +103,10 @@ async function mainLoad() {
   result.presetNames.forEach((name) => {
     addPresetToDropdown(name);
   });
+
+  if (result["enableSpectrum"] === true) {
+    document.getElementById("enable-spectrum").checked = true;
+  }
 }
 
 window.addEventListener("resize", mainResize);
@@ -167,7 +180,9 @@ document.getElementById("change-eq").addEventListener("click", async () => {
 
 chrome.storage.onChanged.addListener(async (ps) => {
   const tabId = await getCurrentTabId();
+  if (tabId == null || tabId == undefined) return;
   if (ps["enabled." + tabId]) setEnableBtnText(ps["enabled." + tabId].newValue);
+  if (ps["mute." + tabId]) setMuteBtnClass(ps["mute." + tabId].newValue);
 });
 
 document.getElementById("reset").addEventListener("click", async () => {
@@ -233,7 +248,7 @@ function setEnableBtnText(enabled) {
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
-  return tab.id;
+  return tab?.id;
 }
 
 const dropdown = document.getElementById("presets");
@@ -295,13 +310,29 @@ document.getElementById("volume-mute").addEventListener("click", async () => {
   );
 });
 
-chrome.storage.onChanged.addListener(async (ps) => {
-  const tabId = await getCurrentTabId();
-  if (ps["mute." + tabId]) setMuteBtnClass(ps["mute." + tabId].newValue);
-});
-
 function setMuteBtnClass(newValue) {
   var elem = document.getElementById("volume-mute");
   if (newValue) elem.className = "volume-mute-active";
   else elem.className = "volume-mute";
 }
+
+const modal = document.getElementById("settings-modal");
+const btn = document.getElementById("settings-btn");
+const span = document.getElementById("close-settings");
+
+btn.onclick = function () {
+  modal.style.display = "block";
+};
+span.onclick = function () {
+  modal.style.display = "none";
+};
+window.onclick = function (event) {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+};
+
+document.getElementById("experimental-mode").addEventListener("click", () => {
+  window.close();
+  chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
+});
