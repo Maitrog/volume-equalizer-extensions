@@ -98,14 +98,14 @@ async function mainLoad() {
   setEnableBtnText(result["enabled." + id] ?? false);
   setMuteBtnClass(result["mute." + id] ?? false);
 
-  if (!result.presetNames) return;
-
-  result.presetNames.forEach((name) => {
-    addPresetToDropdown(name);
-  });
-
   if (result["enableSpectrum"] === true) {
     document.getElementById("enable-spectrum").checked = true;
+  }
+
+  if (result.presetNames) {
+    result.presetNames.forEach((name) => {
+      addPresetToDropdown(name);
+    });
   }
 }
 

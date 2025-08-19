@@ -93,10 +93,10 @@ port.remove();
   };
 
   const reattach = () => {
+    var newF = JSON.parse(port.dataset.freqs);
     map.forEach((filters, source) => {
       source.disconnect();
       source.connect(filters.preamp);
-      var newF = JSON.parse(port.dataset.freqs);
       connect.call(filters[newF.length - 1], source.context.destination);
       port.dispatchEvent(new Event("connected"));
     });
@@ -204,7 +204,8 @@ port.remove();
 
     analyser = audioCtx.createAnalyser();
     analyser.connect(audioCtx.destination);
-    analyser.fftSize = 4096;
+    analyser.sampleRate = 48000;
+    analyser.fftSize = 512;
     analyser.smoothingTimeConstant = 0.5;
 
     try {
@@ -264,6 +265,13 @@ port.remove();
           })
         );
       }, 40);
+    }
+  }
+
+  function stopSpectrum() {
+    if (spectrumTimer) {
+      clearInterval(spectrumTimer);
+      spectrumTimer = null;
     }
   }
 }

@@ -8,7 +8,7 @@ let meta = {
   fftSize: 4096,
   minDb: -100,
   maxDb: -30,
-  frequencyBinCount: 4096,
+  frequencyBinCount: 512,
 };
 let lastBuffer = null;
 let rafScheduled = false;
@@ -27,6 +27,7 @@ function drawSpectrum(buffer) {
   const bufferLength = meta.frequencyBinCount;
 
   const H = spectrumCanvas.height;
+  const W = spectrumCanvas.width;
   const points = [];
   for (let i = 0; i < bufferLength; i++) {
     const hz = (i * meta.sampleRate) / meta.fftSize;
@@ -39,22 +40,20 @@ function drawSpectrum(buffer) {
     points.push({ x, y });
   }
 
-  const sp = smoothPoints(points, 5);
-
   spectrumCtx.clearRect(0, 0, spectrumCanvas.width, spectrumCanvas.height);
 
   spectrumCtx.beginPath();
   spectrumCtx.moveTo(0, H);
-  spectrumCtx.lineTo(sp[0].x, sp[0].y);
+  spectrumCtx.lineTo(points[0].x, points[0].y);
 
-  for (let i = 1; i < sp.length - 1; i++) {
-    const xc = (sp[i].x + sp[i + 1].x) / 2;
-    const yc = (sp[i].y + sp[i + 1].y) / 2;
-    spectrumCtx.quadraticCurveTo(sp[i].x, sp[i].y, xc, yc);
+  for (let i = 1; i < points.length - 1; i++) {
+    const xc = (points[i].x + points[i + 1].x) / 2;
+    const yc = (points[i].y + points[i + 1].y) / 2;
+    spectrumCtx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
   }
 
-  spectrumCtx.lineTo(sp[sp.length - 1].x, sp[sp.length - 1].y);
-  spectrumCtx.lineTo(spectrumCanvas.width, H);
+  spectrumCtx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+  spectrumCtx.lineTo(W, H);
   spectrumCtx.closePath();
 
   spectrumCtx.fillStyle = "#555566";
@@ -63,22 +62,6 @@ function drawSpectrum(buffer) {
   spectrumCtx.strokeStyle = "#aaaaaa";
   spectrumCtx.lineWidth = 0.1;
   spectrumCtx.stroke();
-}
-
-function smoothPoints(pts, win = 5) {
-  const half = (win - 1) / 2;
-  const out = [];
-  for (let i = 0; i < pts.length; i++) {
-    let sum = 0,
-      cnt = 0;
-    for (let j = i - half; j <= i + half; j++) {
-      const k = Math.min(pts.length - 1, Math.max(0, j));
-      sum += pts[k].y;
-      cnt++;
-    }
-    out.push({ x: pts[i].x, y: sum / cnt });
-  }
-  return out;
 }
 
 chrome.storage.onChanged.addListener(async (ps) => {
@@ -95,8 +78,6 @@ chrome.storage.onChanged.addListener(async (ps) => {
       meta.minDb = msg.minDb;
       meta.maxDb = msg.maxDb;
       meta.frequencyBinCount = msg.frequencyBinCount;
-
-      columnToBin = null;
       return;
     }
     if (msg.type === "spectrum" && msg.buffer) {
