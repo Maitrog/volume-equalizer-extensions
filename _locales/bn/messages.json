@@ -12,10 +12,10 @@
     "message": "রিসেট"
   },
   "enable_eq": {
-    "message": "এই ট্যাবে ইকুয়ালাইজার চালু করুন"
+    "message": "এই ট্যাবে EQ চালু করুন"
   },
   "stop_eq": {
-    "message": "এই ট্যাবে ইকুয়ালাইজার বন্ধ করুন"
+    "message": "এই ট্যাবে EQ বন্ধ করুন"
   },
   "none": {
     "message": "কোনোটিই না"
@@ -26,16 +26,16 @@
   "enter_preset_name": {
     "message": "নাম লিখুন"
   },
-  "settings": { 
+  "settings": {
     "message": "সেটিংস"
   },
-  "import_presets": { 
-    "message": "প্রিসেট আমদানি করুন" 
+  "import_presets": {
+    "message": "প্রিসেট আমদানি করুন"
   },
-  "export_presets": { 
-    "message": "প্রিসেট রপ্তানি করুন" 
+  "export_presets": {
+    "message": "প্রিসেট রপ্তানি করুন"
   },
-  "enable_spectrum": { 
-    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন, পৃষ্ঠা পুনরায় লোড করতে হবে (উচ্চ CPU ব্যবহার)" 
+  "enable_spectrum": {
+    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন, পৃষ্ঠা পুনরায় লোড করতে হবে (উচ্চ CPU ব্যবহার)"
   }
 }

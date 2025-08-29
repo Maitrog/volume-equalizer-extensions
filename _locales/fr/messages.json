@@ -12,10 +12,10 @@
     "message": "Réinitialiser"
   },
   "enable_eq": {
-    "message": "Activer l'égaliseur sur cet onglet"
+    "message": "Activer EQ sur cet onglet"
   },
   "stop_eq": {
-    "message": "Désactiver l'égaliseur sur cet onglet"
+    "message": "Désactiver EQ sur cet onglet"
   },
   "none": {
     "message": "Aucun"

@@ -12,10 +12,10 @@
     "message": "Sıfırla"
   },
   "enable_eq": {
-    "message": "Bu sekmede eşitleyiciyi etkinleştir"
+    "message": "Bu sekmede EQ yi etkinleştir"
   },
   "stop_eq": {
-    "message": "Bu sekmede eşitleyiciyi durdur"
+    "message": "Bu sekmede EQ yi durdur"
   },
   "none": {
     "message": "Yok"

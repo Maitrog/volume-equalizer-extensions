@@ -12,10 +12,10 @@
     "message": "Reset"
   },
   "enable_eq": {
-    "message": "Equalizer inschakelen op dit tabblad"
+    "message": "EQ inschakelen op dit tabblad"
   },
   "stop_eq": {
-    "message": "Equalizer uitschakelen op dit tabblad"
+    "message": "EQ uitschakelen op dit tabblad"
   },
   "none": {
     "message": "Geen"

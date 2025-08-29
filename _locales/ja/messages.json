@@ -12,16 +12,16 @@
     "message": "リセット"
   },
   "enable_eq": {
-    "message": "このタブでイコライザーを有効にする"
+    "message": "このタブで EQ を有効にする"
   },
   "stop_eq": {
-    "message": "このタブでイコライザーを停止する"
+    "message": "このタブで EQ を停止する"
   },
   "none": {
     "message": "なし"
   },
   "save": {
-    "message": "プリセットを保存"
+    "message": "設定を保存"
   },
   "enter_preset_name": {
     "message": "名前を入力"

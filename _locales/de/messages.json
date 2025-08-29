@@ -12,10 +12,10 @@
     "message": "Zurücksetzen"
   },
   "enable_eq": {
-    "message": "Equalizer in diesem Tab aktivieren"
+    "message": "EQ in diesem Tab aktivieren"
   },
   "stop_eq": {
-    "message": "Equalizer in diesem Tab stoppen"
+    "message": "EQ in diesem Tab stoppen"
   },
   "none": {
     "message": "Keine"

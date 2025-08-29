@@ -12,10 +12,10 @@
     "message": "Redefinir"
   },
   "enable_eq": {
-    "message": "Ativar equalizador nesta guia"
+    "message": "Ativar EQ nesta guia"
   },
   "stop_eq": {
-    "message": "Desativar equalizador nesta guia"
+    "message": "Desativar EQ nesta guia"
   },
   "none": {
     "message": "Nenhum"
