@@ -17,22 +17,27 @@ port.addEventListener("disconnected", () =>
 
 let name = "";
 chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
+  const defaultFilters = freqs.map((freq) => {
+    return { freq: freq, gain: 0 };
+  });
   chrome.storage.local.get(
     {
-      ["volume" + tabId]: 1,
+      ["volume." + tabId]: 1,
       ["pan." + tabId]: 0,
-      ["freqs." + tabId]: freqs.map((freq, i) => {
-        return { frequency: freq, gain: 0, type: "peaking" };
-      }),
-      ["enableSpectrum"]: false,
+      ["filters." + tabId]: defaultFilters,
+      enableSpectrum: false,
     },
     (prefs) => {
-      const newF = prefs["freqs." + tabId];
-      port.dataset.freqs = JSON.stringify(newF);
+      const filters = prefs["filters." + tabId] ?? defaultFilters;
+      const freqsMapped = filters.map((filter) => {
+        const frequency = filter.freq ?? filter.frequency;
+        return { frequency: frequency, gain: filter.gain, type: "peaking" };
+      });
+      port.dataset.freqs = JSON.stringify(freqsMapped);
       port.dataset.pan = prefs["pan." + tabId];
-      port.dataset.preamp = prefs["volume" + tabId];
+      port.dataset.preamp = prefs["volume." + tabId];
       port.dataset.enabled = false;
-      port.dataset.enableSpectrum = prefs["enableSpectrum"];
+      port.dataset.enableSpectrum = prefs.enableSpectrum;
     }
   );
 });

@@ -172,8 +172,12 @@ canvas.addEventListener("mousemove", async (e) => {
 document.getElementById("change-eq").addEventListener("click", async () => {
   const tabId = await getCurrentTabId();
   chrome.storage.local.get(["enabled." + tabId]).then((result) => {
+    var newFilters = pointsToFilters(points);
+    const slider = document.getElementById("master-volume");
     chrome.storage.local.set({
       ["enabled." + tabId]: !result["enabled." + tabId],
+      ["filters." + tabId]: newFilters,
+      ["gain." + tabId]: slider.value,
     });
   });
 });
@@ -189,7 +193,6 @@ document.getElementById("reset").addEventListener("click", async () => {
   document.getElementById("master-volume").value = 0;
   initPoints();
   mainResize();
-  pointsToFilters(points);
 
   const tabId = await getCurrentTabId();
   chrome.storage.local.set({
