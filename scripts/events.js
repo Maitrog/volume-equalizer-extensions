@@ -26,6 +26,8 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
       ["pan." + tabId]: 0,
       ["filters." + tabId]: defaultFilters,
       enableSpectrum: false,
+      ["enabled." + tabId]: false,
+      ["mute." + tabId]: false,
     },
     (prefs) => {
       const filters = prefs["filters." + tabId] ?? defaultFilters;
@@ -36,8 +38,16 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
       port.dataset.freqs = JSON.stringify(freqsMapped);
       port.dataset.pan = prefs["pan." + tabId];
       port.dataset.preamp = prefs["volume." + tabId];
-      port.dataset.enabled = false;
+      port.dataset.enabled = prefs["enabled." + tabId];
+      port.dataset.mute = prefs["mute." + tabId];
       port.dataset.enableSpectrum = prefs.enableSpectrum;
+
+      if (prefs["mute." + tabId]) {
+        port.dispatchEvent(new Event("mute-enabled"));
+      }
+      if (prefs["enabled." + tabId]) {
+        port.dispatchEvent(new Event("enabled-changed"));
+      }
     }
   );
 });
