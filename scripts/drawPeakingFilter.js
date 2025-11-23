@@ -1,9 +1,19 @@
-const css = getComputedStyle(document.documentElement);
-const accentStart = css.getPropertyValue("--accent-start").trim();
-const accentMid = css.getPropertyValue("--accent-mid").trim();
-const accentEnd = css.getPropertyValue("--accent-end").trim();
-const panelBg = css.getPropertyValue("--panel-bg").trim();
-const axis = css.getPropertyValue("--axis").trim();
+let accentStart;
+let accentMid;
+let accentEnd;
+let panelBg;
+let axis;
+
+function loadColors() {
+  const css = getComputedStyle(document.documentElement);
+  accentStart = css.getPropertyValue("--accent-start").trim();
+  accentMid = css.getPropertyValue("--accent-mid").trim();
+  accentEnd = css.getPropertyValue("--accent-end").trim();
+  panelBg = css.getPropertyValue("--panel-bg").trim();
+  axis = css.getPropertyValue("--axis").trim();
+}
+
+loadColors();
 
 function drawPeakingFilter(
   canvas,

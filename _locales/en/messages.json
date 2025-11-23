@@ -55,5 +55,11 @@
     },
     "cancel": {
         "message": "Cancel"
+    },
+    "theme_label": {
+        "message": "Theme"
+    },
+    "theme_dark": {
+        "message": "Dark"
     }
 }

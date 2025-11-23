@@ -1,17 +1,84 @@
 :root {
-  --bg: #0f0f1a;
-  --panel-bg: #1a1a2a;
-  --accent-start: #00ffd8;
-  --accent-mid: #9d00ff;
-  --accent-end: #ff7700;
-  --text: #e0e0e0;
-  --slider-track: rgba(255, 255, 255, 0.1);
-  --slider-thumb: #3a3a5e;
-  --axis: rgba(224, 224, 224, 0.699);
-  --reset-btn: #ff4d4db6;
-  --reset-btn-hover: #ff4d4de5;
-  --reset-btn-active: #ff4d4d;
-  --btn-bg: rgba(255, 255, 255, 0.1);
+  /* Dark theme palette */
+  --dark-bg: #0f0f1a;
+  --dark-panel-bg: #1a1a2a;
+  --dark-accent-start: #00ffd8;
+  --dark-accent-mid: #9d00ff;
+  --dark-accent-end: #ff7700;
+  --dark-text: #e0e0e0;
+  --dark-slider-track: rgba(255, 255, 255, 0.1);
+  --dark-slider-thumb: #3a3a5e;
+  --dark-axis: rgba(224, 224, 224, 0.699);
+  --dark-border: rgba(255, 255, 255, 0.1);
+  --dark-surface-alt: #2a2a3a;
+  --dark-text-placeholder: rgba(224, 224, 224, 0.5);
+  --dark-text-muted: rgba(224, 224, 224, 0.6);
+  --dark-hover-bg: rgba(255, 255, 255, 0.2);
+  --dark-active-bg: rgba(255, 255, 255, 0.3);
+  --dark-menu-hover: rgba(255, 255, 255, 0.05);
+  --dark-overlay: rgba(15, 15, 26, 0.8);
+  --dark-shadow-soft: rgba(0, 0, 0, 0.5);
+  --dark-shadow-strong: rgba(0, 0, 0, 0.7);
+  --dark-donation: #f79518;
+  --dark-slider-glow: rgba(0, 255, 216, 0.5);
+  --dark-reset-btn: #ff4d4db6;
+  --dark-reset-btn-hover: #ff4d4de5;
+  --dark-reset-btn-active: #ff4d4d;
+  --dark-btn-bg: rgba(255, 255, 255, 0.1);
+  
+  /* Light theme palette */
+  --light-bg: #f5f5fa;
+  --light-panel-bg: #ffffff;
+  --light-accent-start: #00ffd8;
+  --light-accent-mid: #9d00ff;
+  --light-accent-end: #ff7700;
+  --light-text: #1a1a2a;
+  --light-slider-track: rgba(0, 0, 0, 0.08);
+  --light-slider-thumb: #d0d0e6;
+  --light-axis: rgba(26, 26, 42, 0.7);
+  --light-border: rgba(0, 0, 0, 0.08);
+  --light-surface-alt: #f0f0fb;
+  --light-text-placeholder: rgba(26, 26, 42, 0.4);
+  --light-text-muted: rgba(26, 26, 42, 0.6);
+  --light-hover-bg: rgba(0, 0, 0, 0.04);
+  --light-active-bg: rgba(0, 0, 0, 0.08);
+  --light-menu-hover: rgba(0, 0, 0, 0.03);
+  --light-overlay: rgba(15, 15, 26, 0.4);
+  --light-shadow-soft: rgba(15, 15, 26, 0.08);
+  --light-shadow-strong: rgba(15, 15, 26, 0.16);
+  --light-donation: #e27c10;
+  --light-slider-glow: rgba(0, 255, 216, 0.35);
+  --light-reset-btn: #ff4d4dcc;
+  --light-reset-btn-hover: #ff4d4de6;
+  --light-reset-btn-active: #ff4d4d;
+  --light-btn-bg: rgba(0, 0, 0, 0.04);
+
+  /* Active theme bindings */
+  --bg: var(--dark-bg);
+  --panel-bg: var(--dark-panel-bg);
+  --accent-start: var(--dark-accent-start);
+  --accent-mid: var(--dark-accent-mid);
+  --accent-end: var(--dark-accent-end);
+  --text: var(--dark-text);
+  --slider-track: var(--dark-slider-track);
+  --slider-thumb: var(--dark-slider-thumb);
+  --axis: var(--dark-axis);
+  --border: var(--dark-border);
+  --surface-alt: var(--dark-surface-alt);
+  --text-placeholder: var(--dark-text-placeholder);
+  --text-muted: var(--dark-text-muted);
+  --hover-bg: var(--dark-hover-bg);
+  --active-bg: var(--dark-active-bg);
+  --menu-hover: var(--dark-menu-hover);
+  --overlay: var(--dark-overlay);
+  --shadow-soft: var(--dark-shadow-soft);
+  --shadow-strong: var(--dark-shadow-strong);
+  --donation: var(--dark-donation);
+  --slider-glow: var(--dark-slider-glow);
+  --reset-btn: var(--dark-reset-btn);
+  --reset-btn-hover: var(--dark-reset-btn-hover);
+  --reset-btn-active: var(--dark-reset-btn-active);
+  --btn-bg: var(--dark-btn-bg);
 }
 
 body {
@@ -25,6 +92,13 @@ body {
   padding: 20px;
   background: var(--bg);
   color: var(--text);
+}
+
+.header {
+  display: flex;
+  margin-bottom: 5px;
+  width: 100%;
+  gap: 10px;
 }
 
 .header text {
@@ -42,7 +116,7 @@ body {
   max-width: 800px;
   height: 300px;
   background: var(--panel-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   position: relative;
   cursor: default;
   overflow: hidden;
@@ -75,7 +149,6 @@ body {
   width: 100%;
 }
 
-
 .controls.second-row {
   justify-content: flex-end;
 }
@@ -101,30 +174,22 @@ label {
   outline: none;
 }
 
-.master-volume::-webkit-slider-thumb {
+.master-volume::-webkit-slider-thumb,
+.master-volume::-moz-range-thumb {
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
   border-radius: 50%;
   background: var(--slider-thumb);
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 255, 216, 0.5);
-}
-
-.master-volume::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--slider-thumb);
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(0, 255, 216, 0.5);
+  box-shadow: 0 0 8px var(--slider-glow);
 }
 
 .preset-name {
   padding: 4px 8px;
   border: none;
   border-radius: 4px;
-  background: #2a2a3a;
+  background: var(--surface-alt);
   color: var(--text);
   outline: none;
   height: 30px;
@@ -132,7 +197,7 @@ label {
 }
 
 .preset-name::placeholder {
-  color: rgba(224, 224, 224, 0.5);
+  color: var(--text-placeholder);
 }
 
 .volume-scale {
@@ -140,7 +205,7 @@ label {
   width: 253px;
   display: flex;
   justify-content: space-between;
-  color: rgba(224, 224, 224, 0.6);
+  color: var(--text-muted);
 }
 
 button {
@@ -155,11 +220,11 @@ button {
 }
 
 button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--hover-bg);
 }
 
 button:active {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--active-bg);
 }
 
 .reset-btn {
@@ -174,30 +239,6 @@ button:active {
   background: var(--reset-btn-active);
 }
 
-.presets {
-  background: var(--btn-bg);
-  color: var(--text);
-  border: none;
-  border-radius: 4px;
-  outline: none;
-  cursor: pointer;
-  height: 38px;
-  width: 96px;
-}
-
-.presets option {
-  background: var(--panel-bg);
-  color: var(--text);
-  padding: 4px 8px;
-}
-
-.header {
-  display: flex;
-  margin-bottom: 5px;
-  width: 100%;
-  gap: 10px;
-}
-
 .donation {
   right: 20px;
   position: fixed;
@@ -209,11 +250,11 @@ button:active {
 }
 
 .donation:link {
-  color: #F79518;
+  color: var(--donation);
 }
 
 .donation:visited {
-  color: #F79518;
+  color: var(--donation);
 }
 
 .icon-donation {
@@ -227,7 +268,7 @@ button:active {
 
 .dropdown-toggle {
   padding: 11px 8px;
-  background: #2a2a3a;
+  background: var(--surface-alt);
   color: var(--text);
   border: none;
   border-radius: 4px;
@@ -241,9 +282,9 @@ button:active {
   bottom: 110%;
   right: 0;
   background: var(--panel-bg);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 8px var(--shadow-soft);
   display: none;
   min-width: 150px;
   max-height: 200px;
@@ -260,7 +301,7 @@ button:active {
 }
 
 .dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--menu-hover);
 }
 
 .dropdown-item .close-btn {
@@ -269,22 +310,24 @@ button:active {
   font-weight: bold;
 }
 
-.volume-mute {
+.volume-mute,
+.volume-mute-active,
+.settings-btn {
   width: 26px;
-  filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
   cursor: pointer;
 }
 
-.volume-mute-active {
-  width: 26px;
-  filter: brightness(0) saturate(100%) invert(30%) sepia(93%) saturate(1203%) hue-rotate(334deg) brightness(85%) contrast(85%);
-  cursor: pointer;
+.volume-mute,
+.settings-btn {
+  filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
 }
 
 .settings-btn {
   width: 25px;
-  filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
-  cursor: pointer;
+}
+
+.volume-mute-active {
+  filter: brightness(0) saturate(100%) invert(30%) sepia(93%) saturate(1203%) hue-rotate(334deg) brightness(85%) contrast(85%);
 }
 
 .modal {
@@ -295,7 +338,7 @@ button:active {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(15, 15, 26, 0.8);
+  background-color: var(--overlay);
   backdrop-filter: blur(4px);
 }
 
@@ -306,17 +349,23 @@ button:active {
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 4px 16px var(--shadow-strong);
   color: var(--text);
   animation: fadeIn 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
 }
 
 .modal-content h2 {
   margin-top: 0;
-  font-size: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border);
   padding-bottom: 10px;
+  color: var(--text);
+  font-size: 18px;
+}
+
+.modal-content h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
   color: var(--text);
 }
 
@@ -358,9 +407,9 @@ button:active {
 }
 
 .settings-select {
-  background: #2a2a3a;
+  background: var(--surface-alt);
   color: var(--text);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border);
   border-radius: 4px;
   padding: 6px 10px;
   min-width: 110px;
@@ -372,10 +421,6 @@ button:active {
 
 .confirm-modal {
   max-width: 360px;
-}
-
-.confirm-modal h3 {
-  margin: 0 0 10px;
 }
 
 .confirm-modal p {
@@ -425,11 +470,11 @@ button:active {
 }
 
 .settings-actions button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--hover-bg);
 }
 
 .settings-actions button:active {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--active-bg);
 }
 
 @keyframes fadeIn {

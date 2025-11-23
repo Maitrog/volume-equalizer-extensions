@@ -47,3 +47,7 @@ document.getElementById("points-reset-cancel").textContent =
   chrome.i18n.getMessage("cancel");
 document.getElementById("points-reset-confirm").textContent =
   chrome.i18n.getMessage("ok");
+document.getElementById("theme-label").textContent =
+  chrome.i18n.getMessage("theme_label");
+document.getElementById("theme-dark-option").textContent =
+  chrome.i18n.getMessage("theme_dark");

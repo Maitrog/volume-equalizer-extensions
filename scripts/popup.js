@@ -8,6 +8,8 @@ const logMax = Math.log10(22000);
 const MIN_POINT_COUNT = 5;
 const MAX_POINT_COUNT = 9;
 let pointCount = getSavedPointCount();
+const THEME_KEY = "theme";
+let currentTheme = getSavedTheme();
 const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
 let pendingPointCount = null;
 
@@ -21,8 +23,16 @@ function getSavedPointCount() {
   return MIN_POINT_COUNT;
 }
 
+function getSavedTheme() {
+  return localStorage.getItem(THEME_KEY) ?? "dark";
+}
+
 function savePointCount(count) {
   localStorage.setItem("pointCount", clampPointCount(count));
+}
+
+function saveTheme(theme) {
+  localStorage.setItem(THEME_KEY, theme);
 }
 
 function updatePointCountSelect(count) {
@@ -96,6 +106,7 @@ async function mainLoad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   resizeCanvas();
   updatePointCountSelect(pointCount);
+  applyTheme(currentTheme);
   const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
     "filters",
@@ -176,6 +187,18 @@ function pointsToFilters(points) {
     return { freq: xToFrequency(p.x), gain: yToDb(p.y), x: p.x, y: p.y };
   });
   return filters;
+}
+
+function applyTheme(theme) {
+  const chosen = themes[theme] ?? themes.dark;
+  Object.entries(chosen).forEach(([key, value]) => {
+    document.documentElement.style.setProperty(`--${key}`, value);
+  });
+  currentTheme = theme in themes ? theme : "dark";
+  const select = document.getElementById("theme-select");
+  if (select) select.value = currentTheme;
+  if (typeof loadColors === "function") loadColors();
+  mainResize();
 }
 
 function shouldSkipPointsResetConfirm() {
@@ -369,6 +392,16 @@ function setMuteBtnClass(newValue) {
   var elem = document.getElementById("volume-mute");
   if (newValue) elem.className = "volume-mute-active";
   else elem.className = "volume-mute";
+}
+
+const themeSelect = document.getElementById("theme-select");
+if (themeSelect) {
+  themeSelect.value = currentTheme;
+  themeSelect.addEventListener("change", (e) => {
+    const theme = e.target.value || "dark";
+    applyTheme(theme);
+    saveTheme(theme);
+  });
 }
 
 const pointsCountSelect = document.getElementById("points-count");
