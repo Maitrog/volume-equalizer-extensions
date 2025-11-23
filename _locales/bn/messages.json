@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন, পৃষ্ঠা পুনরায় লোড করতে হবে (উচ্চ CPU ব্যবহার)"
+  },
+  "points_count": {
+    "message": "EQ পয়েন্টের সংখ্যা"
+  },
+  "points_reset_title": {
+    "message": "EQ পয়েন্টের সংখ্যা পরিবর্তন করবেন?"
+  },
+  "points_reset_message": {
+    "message": "পয়েন্টের সংখ্যা পরিবর্তন করলে বর্তমান EQ সেটিংস রিসেট হয়ে যাবে।"
+  },
+  "points_reset_skip": {
+    "message": "আবার দেখাবেন না"
+  },
+  "ok": {
+    "message": "ঠিক আছে"
+  },
+  "cancel": {
+    "message": "বাতিল"
   }
 }

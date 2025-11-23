@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "启用频谱可视化，需要重新加载页面（CPU 负载较高）"
+  },
+  "points_count": {
+    "message": "EQ点数"
+  },
+  "points_reset_title": {
+    "message": "更改 EQ 点数？"
+  },
+  "points_reset_message": {
+    "message": "更改点数将重置当前的 EQ 设置。"
+  },
+  "points_reset_skip": {
+    "message": "不再显示"
+  },
+  "ok": {
+    "message": "确定"
+  },
+  "cancel": {
+    "message": "取消"
   }
 }

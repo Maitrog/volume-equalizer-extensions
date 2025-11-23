@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "Bật hiển thị phổ, cần tải lại trang (tốn CPU cao)"
+  },
+  "points_count": {
+    "message": "Số điểm EQ"
+  },
+  "points_reset_title": {
+    "message": "Thay đổi số điểm EQ?"
+  },
+  "points_reset_message": {
+    "message": "Việc thay đổi số điểm sẽ đặt lại các thiết lập EQ hiện tại."
+  },
+  "points_reset_skip": {
+    "message": "Không hiển thị lại"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Hủy"
   }
 }

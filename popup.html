@@ -60,10 +60,37 @@
           Enable spectrum visualisation (high CPU load)
         </text>
       </label>
+      <div class="settings-row">
+        <span id="points-count-label">EQ points</span>
+        <select id="points-count" class="settings-select">
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+        </select>
+      </div>
       <div class="settings-actions">
         <input type="file" id="import-input" hidden>
         <button type="input" id="import-presets">Import presets</button>
         <button type="button" id="export-presets">Export presets</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="points-reset-modal" class="modal">
+    <div class="modal-content confirm-modal">
+      <h3 id="points-reset-title">Change points count?</h3>
+      <p id="points-reset-message">
+        Changing the number of points will reset the current EQ settings.
+      </p>
+      <label class="checkbox-row">
+        <input type="checkbox" id="skip-reset-confirm">
+        <span id="skip-reset-label">Don't show again</span>
+      </label>
+      <div class="confirm-actions">
+        <button type="button" id="points-reset-cancel">Cancel</button>
+        <button type="button" id="points-reset-confirm">Ok</button>
       </div>
     </div>
   </div>

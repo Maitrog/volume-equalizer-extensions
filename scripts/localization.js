@@ -34,3 +34,16 @@ document.getElementById("enable-spectrum-label").textContent =
 
 document.getElementById("settings-header").textContent =
   chrome.i18n.getMessage("settings");
+
+document.getElementById("points-count-label").textContent =
+  chrome.i18n.getMessage("points_count");
+document.getElementById("points-reset-title").textContent =
+  chrome.i18n.getMessage("points_reset_title");
+document.getElementById("points-reset-message").textContent =
+  chrome.i18n.getMessage("points_reset_message");
+document.getElementById("skip-reset-label").textContent =
+  chrome.i18n.getMessage("points_reset_skip");
+document.getElementById("points-reset-cancel").textContent =
+  chrome.i18n.getMessage("cancel");
+document.getElementById("points-reset-confirm").textContent =
+  chrome.i18n.getMessage("ok");

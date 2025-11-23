@@ -37,5 +37,23 @@
     },
     "enable_spectrum": {
         "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
+    },
+    "points_count": {
+        "message": "Количество точек эквалайзера"
+    },
+    "points_reset_title": {
+        "message": "Изменить количество точек эквалайзера?"
+    },
+    "points_reset_message": {
+        "message": "Изменение количества точек сбросит текущие настройки эквалайзера."
+    },
+    "points_reset_skip": {
+        "message": "Больше не показывать"
+    },
+    "ok": {
+        "message": "ОК"
+    },
+    "cancel": {
+        "message": "Отмена"
     }
 }

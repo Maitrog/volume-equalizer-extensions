@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "Abilita la visualizzazione dello spettro, è necessario ricaricare la pagina (carico CPU elevato)"
+  },
+  "points_count": {
+    "message": "Numero di punti EQ"
+  },
+  "points_reset_title": {
+    "message": "Cambiare il numero di punti EQ?"
+  },
+  "points_reset_message": {
+    "message": "La modifica del numero di punti ripristinerà le impostazioni EQ correnti."
+  },
+  "points_reset_skip": {
+    "message": "Non mostrare più"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Annulla"
   }
 }

@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "스펙트럼 시각화 활성화, 페이지를 다시 로드해야 함(높은 CPU 부하)"
+  },
+  "points_count": {
+    "message": "EQ 포인트 수"
+  },
+  "points_reset_title": {
+    "message": "EQ 포인트 수를 변경하시겠습니까?"
+  },
+  "points_reset_message": {
+    "message": "포인트 수를 변경하면 현재 EQ 설정이 초기화됩니다."
+  },
+  "points_reset_skip": {
+    "message": "다시 표시하지 않기"
+  },
+  "ok": {
+    "message": "확인"
+  },
+  "cancel": {
+    "message": "취소"
   }
 }

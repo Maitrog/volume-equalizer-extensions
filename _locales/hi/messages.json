@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें, पेज को फिर से लोड करना होगा (उच्च CPU लोड)"
+  },
+  "points_count": {
+    "message": "EQ बिंदुओं की संख्या"
+  },
+  "points_reset_title": {
+    "message": "EQ बिंदुओं की संख्या बदलें?"
+  },
+  "points_reset_message": {
+    "message": "बिंदुओं की संख्या बदलने से वर्तमान EQ सेटिंग्स रीसेट हो जाएँगी।"
+  },
+  "points_reset_skip": {
+    "message": "दोबारा न दिखाएँ"
+  },
+  "ok": {
+    "message": "ठीक है"
+  },
+  "cancel": {
+    "message": "रद्द करें"
   }
 }

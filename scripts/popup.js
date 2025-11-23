@@ -5,7 +5,30 @@ const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const logMin = Math.log10(1);
 const logMax = Math.log10(22000);
-const pointCount = 5;
+const MIN_POINT_COUNT = 5;
+const MAX_POINT_COUNT = 9;
+let pointCount = getSavedPointCount();
+const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
+let pendingPointCount = null;
+
+function clampPointCount(value) {
+  return Math.max(MIN_POINT_COUNT, Math.min(MAX_POINT_COUNT, value));
+}
+
+function getSavedPointCount() {
+  const saved = parseInt(localStorage.getItem("pointCount"), 10);
+  if (!Number.isNaN(saved)) return clampPointCount(saved);
+  return MIN_POINT_COUNT;
+}
+
+function savePointCount(count) {
+  localStorage.setItem("pointCount", clampPointCount(count));
+}
+
+function updatePointCountSelect(count) {
+  const select = document.getElementById("points-count");
+  if (select) select.value = clampPointCount(count).toString();
+}
 
 function xToFrequency(x, canvasWidth = null) {
   canvasWidth ??= canvas.width - 10;
@@ -40,18 +63,24 @@ function dbToGain(db) {
   return gain;
 }
 
-function initPoints() {
+function createCenteredPoints(count = pointCount) {
+  const actualCount = clampPointCount(count);
   const centerY = canvas.height / 2;
-  points = Array.from({ length: pointCount }, (_, i) => {
-    const point = {
-      x: (canvas.width / (pointCount + 1)) * (i + 1),
-      y: centerY,
-    };
-    return point;
+  const pointStep = canvas.width / (actualCount + 1);
+  return Array.from({ length: actualCount }, (_, i) => {
+    return { x: pointStep * (i + 1), y: centerY };
   });
 }
 
+function initPoints(count = pointCount) {
+  pointCount = clampPointCount(count);
+  points = createCenteredPoints(pointCount);
+}
+
 function setPoints(filters) {
+  pointCount = clampPointCount(filters.length);
+  savePointCount(pointCount);
+  updatePointCountSelect(pointCount);
   points = filters.map((filter) => {
     return { x: filter.x, y: filter.y };
   });
@@ -66,6 +95,7 @@ function mainResize() {
 async function mainLoad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   resizeCanvas();
+  updatePointCountSelect(pointCount);
   const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
     "filters",
@@ -146,6 +176,28 @@ function pointsToFilters(points) {
     return { freq: xToFrequency(p.x), gain: yToDb(p.y), x: p.x, y: p.y };
   });
   return filters;
+}
+
+function shouldSkipPointsResetConfirm() {
+  return localStorage.getItem(SKIP_POINTS_CONFIRM_KEY) === "true";
+}
+
+function setSkipPointsResetConfirm(value) {
+  localStorage.setItem(SKIP_POINTS_CONFIRM_KEY, value);
+}
+
+async function applyPointCountChange(newCount) {
+  savePointCount(newCount);
+  initPoints(newCount);
+  mainResize();
+  const tabId = await getCurrentTabId();
+  if (tabId == null || tabId == undefined) return;
+  const newFilters = pointsToFilters(points);
+  chrome.storage.local.set({
+    ["filters." + tabId]: newFilters,
+    ["filters"]: newFilters,
+    ["enabled." + tabId]: true,
+  });
 }
 
 canvas.addEventListener("mousemove", async (e) => {
@@ -319,6 +371,25 @@ function setMuteBtnClass(newValue) {
   else elem.className = "volume-mute";
 }
 
+const pointsCountSelect = document.getElementById("points-count");
+if (pointsCountSelect) {
+  pointsCountSelect.addEventListener("change", async (e) => {
+    const newCount = clampPointCount(parseInt(e.target.value, 10));
+    if (Number.isNaN(newCount)) return;
+    if (shouldSkipPointsResetConfirm()) {
+      applyPointCountChange(newCount);
+      return;
+    }
+    pendingPointCount = newCount;
+    const skipCheckbox = document.getElementById("skip-reset-confirm");
+    if (skipCheckbox) {
+      skipCheckbox.checked = shouldSkipPointsResetConfirm();
+    }
+    const modalElem = document.getElementById("points-reset-modal");
+    if (modalElem) modalElem.style.display = "block";
+  });
+}
+
 const modal = document.getElementById("settings-modal");
 const btn = document.getElementById("settings-btn");
 const span = document.getElementById("close-settings");
@@ -334,6 +405,46 @@ window.onclick = function (event) {
     modal.style.display = "none";
   }
 };
+
+const pointsResetModal = document.getElementById("points-reset-modal");
+const pointsResetConfirmBtn = document.getElementById("points-reset-confirm");
+const pointsResetCancelBtn = document.getElementById("points-reset-cancel");
+const skipResetCheckbox = document.getElementById("skip-reset-confirm");
+
+function closePointsResetModal() {
+  if (pointsResetModal) pointsResetModal.style.display = "none";
+}
+
+if (pointsResetConfirmBtn) {
+  pointsResetConfirmBtn.addEventListener("click", async () => {
+    if (skipResetCheckbox) {
+      setSkipPointsResetConfirm(skipResetCheckbox.checked);
+    }
+    if (pendingPointCount != null) {
+      await applyPointCountChange(pendingPointCount);
+    }
+    pendingPointCount = null;
+    closePointsResetModal();
+  });
+}
+
+if (pointsResetCancelBtn) {
+  pointsResetCancelBtn.addEventListener("click", () => {
+    updatePointCountSelect(pointCount);
+    pendingPointCount = null;
+    closePointsResetModal();
+  });
+}
+
+if (pointsResetModal) {
+  pointsResetModal.addEventListener("click", (event) => {
+    if (event.target === pointsResetModal) {
+      updatePointCountSelect(pointCount);
+      pendingPointCount = null;
+      closePointsResetModal();
+    }
+  });
+}
 
 // document.getElementById("experimental-mode").addEventListener("click", () => {
 //   window.close();

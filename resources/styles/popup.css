@@ -345,6 +345,66 @@ button:active {
   accent-color: var(--accent-mid);
 }
 
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.settings-row span {
+  font-weight: bold;
+}
+
+.settings-select {
+  background: #2a2a3a;
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 6px 10px;
+  min-width: 110px;
+}
+
+.settings-select:focus {
+  outline: 1px solid var(--accent-mid);
+}
+
+.confirm-modal {
+  max-width: 360px;
+}
+
+.confirm-modal h3 {
+  margin: 0 0 10px;
+}
+
+.confirm-modal p {
+  margin: 6px 0 14px;
+  line-height: 1.4;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 14px;
+}
+
+.checkbox-row input[type="checkbox"] {
+  accent-color: var(--accent-mid);
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-actions button {
+  width: auto;
+  min-width: 80px;
+}
+
 .settings-actions {
   margin-top: 20px;
   display: flex;

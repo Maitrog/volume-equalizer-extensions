@@ -37,5 +37,23 @@
   },
   "enable_spectrum": {
     "message": "Aktifkan visualisasi spektrum, perlu memuat ulang halaman (beban CPU tinggi)"
+  },
+  "points_count": {
+    "message": "Jumlah titik EQ"
+  },
+  "points_reset_title": {
+    "message": "Ubah jumlah titik EQ?"
+  },
+  "points_reset_message": {
+    "message": "Mengubah jumlah titik akan mengatur ulang pengaturan EQ saat ini."
+  },
+  "points_reset_skip": {
+    "message": "Jangan tampilkan lagi"
+  },
+  "ok": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Batal"
   }
 }
