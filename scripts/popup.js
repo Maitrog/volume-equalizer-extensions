@@ -3,36 +3,30 @@ const canvas = document.getElementById("eq-canvas");
 const ctx = canvas.getContext("2d", { alpha: true });
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+const THEME_KEY = "theme";
+const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
+const POINT_COUNT_KEY = "pointCount";
+const DEFAULT_THEME = "ny";
+
 const logMin = Math.log10(1);
 const logMax = Math.log10(22000);
 const MIN_POINT_COUNT = 5;
 const MAX_POINT_COUNT = 9;
-let pointCount = getSavedPointCount();
-const THEME_KEY = "theme";
-let currentTheme = getSavedTheme();
-const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
+let pointCount = MIN_POINT_COUNT;
+let currentTheme = DEFAULT_THEME;
+let skipPointsResetConfirm = false;
 let pendingPointCount = null;
 
 function clampPointCount(value) {
   return Math.max(MIN_POINT_COUNT, Math.min(MAX_POINT_COUNT, value));
 }
 
-function getSavedPointCount() {
-  const saved = parseInt(localStorage.getItem("pointCount"), 10);
-  if (!Number.isNaN(saved)) return clampPointCount(saved);
-  return MIN_POINT_COUNT;
-}
-
-function getSavedTheme() {
-  return localStorage.getItem(THEME_KEY) ?? "dark";
-}
-
 function savePointCount(count) {
-  localStorage.setItem("pointCount", clampPointCount(count));
+  return chrome.storage.local.set({ pointCount: clampPointCount(count) });
 }
 
 function saveTheme(theme) {
-  localStorage.setItem(THEME_KEY, theme);
+  return chrome.storage.local.set({ [THEME_KEY]: theme });
 }
 
 function updatePointCountSelect(count) {
@@ -105,6 +99,19 @@ function mainResize() {
 async function mainLoad() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   resizeCanvas();
+  const stored = await chrome.storage.local.get([
+    POINT_COUNT_KEY,
+    THEME_KEY,
+    SKIP_POINTS_CONFIRM_KEY,
+  ]);
+  const savedPointCount = parseInt(stored.pointCount, 10);
+  if (!Number.isNaN(savedPointCount)) {
+    pointCount = clampPointCount(savedPointCount);
+  }
+  currentTheme = stored[THEME_KEY] ?? DEFAULT_THEME;
+  skipPointsResetConfirm =
+    stored[SKIP_POINTS_CONFIRM_KEY] === true ||
+    stored[SKIP_POINTS_CONFIRM_KEY] === "true";
   updatePointCountSelect(pointCount);
   applyTheme(currentTheme);
   const id = await getCurrentTabId();
@@ -194,7 +201,7 @@ function applyTheme(theme) {
   Object.entries(chosen).forEach(([key, value]) => {
     document.documentElement.style.setProperty(`--${key}`, value);
   });
-  currentTheme = theme in themes ? theme : "dark";
+  currentTheme = theme in themes ? theme : DEFAULT_THEME;
   const select = document.getElementById("theme-select");
   if (select) select.value = currentTheme;
   if (typeof loadColors === "function") loadColors();
@@ -202,15 +209,18 @@ function applyTheme(theme) {
 }
 
 function shouldSkipPointsResetConfirm() {
-  return localStorage.getItem(SKIP_POINTS_CONFIRM_KEY) === "true";
+  return skipPointsResetConfirm;
 }
 
 function setSkipPointsResetConfirm(value) {
-  localStorage.setItem(SKIP_POINTS_CONFIRM_KEY, value);
+  skipPointsResetConfirm = Boolean(value);
+  return chrome.storage.local.set({
+    [SKIP_POINTS_CONFIRM_KEY]: skipPointsResetConfirm,
+  });
 }
 
 async function applyPointCountChange(newCount) {
-  savePointCount(newCount);
+  await savePointCount(newCount);
   initPoints(newCount);
   mainResize();
   const tabId = await getCurrentTabId();
@@ -398,7 +408,7 @@ const themeSelect = document.getElementById("theme-select");
 if (themeSelect) {
   themeSelect.value = currentTheme;
   themeSelect.addEventListener("change", (e) => {
-    const theme = e.target.value || "dark";
+    const theme = e.target.value || DEFAULT_THEME;
     applyTheme(theme);
     saveTheme(theme);
   });

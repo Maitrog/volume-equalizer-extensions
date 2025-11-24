@@ -2,17 +2,19 @@
   /* Dark theme palette */
   --dark-bg: #0f0f1a;
   --dark-panel-bg: #1a1a2a;
+  --dark-settings-bg: #1a1a2a;
   --dark-accent-start: #00ffd8;
   --dark-accent-mid: #9d00ff;
   --dark-accent-end: #ff7700;
   --dark-text: #e0e0e0;
-  --dark-slider-track: rgba(255, 255, 255, 0.1);
+  --dark-text-header: #e0e0e0;
+  --dark-slider-track-bg: rgba(255, 255, 255, 0.1);
   --dark-slider-thumb: #3a3a5e;
   --dark-axis: rgba(224, 224, 224, 0.699);
   --dark-border: rgba(255, 255, 255, 0.1);
   --dark-surface-alt: #2a2a3a;
   --dark-text-placeholder: rgba(224, 224, 224, 0.5);
-  --dark-text-muted: rgba(224, 224, 224, 0.6);
+  --dark-text-volume-scale: rgba(224, 224, 224, 0.6);
   --dark-hover-bg: rgba(255, 255, 255, 0.2);
   --dark-active-bg: rgba(255, 255, 255, 0.3);
   --dark-menu-hover: rgba(255, 255, 255, 0.05);
@@ -29,17 +31,19 @@
   /* Light theme palette */
   --light-bg: #f5f5fa;
   --light-panel-bg: #ffffff;
+  --light-settings-bg: #ffffff;
   --light-accent-start: #00ffd8;
   --light-accent-mid: #9d00ff;
   --light-accent-end: #ff7700;
   --light-text: #1a1a2a;
-  --light-slider-track: rgba(0, 0, 0, 0.08);
+  --light-text-header: #1a1a2a;
+  --light-slider-track-bg: rgba(0, 0, 0, 0.08);
   --light-slider-thumb: #d0d0e6;
   --light-axis: rgba(26, 26, 42, 0.7);
   --light-border: rgba(0, 0, 0, 0.08);
   --light-surface-alt: #f0f0fb;
   --light-text-placeholder: rgba(26, 26, 42, 0.4);
-  --light-text-muted: rgba(26, 26, 42, 0.6);
+  --light-text-volume-scale: rgba(26, 26, 42, 0.6);
   --light-hover-bg: rgba(0, 0, 0, 0.04);
   --light-active-bg: rgba(0, 0, 0, 0.08);
   --light-menu-hover: rgba(0, 0, 0, 0.03);
@@ -53,32 +57,63 @@
   --light-reset-btn-active: #ff4d4d;
   --light-btn-bg: rgba(0, 0, 0, 0.04);
 
+  /* Christmas theme palette */
+  --ny-bg: #27355a;
+  --ny-panel-bg: url("/resources/images/ny_panel_bg_300.jpg");
+  --ny-settings-bg: #f7f0de;
+  --ny-surface-alt: #f3e5c5;
+  --ny-accent-start: #f1d9a8;
+  --ny-accent-mid: #e4b654;
+  --ny-accent-end: #f1d9a8;
+  --ny-text: #1f2745;
+  --ny-text-header: #e4b654;
+  --ny-text-placeholder: rgba(31, 39, 69, 0.45);
+  --ny-text-volume-scale: #f1d9a8;
+  --ny-slider-track-bg: #f1d9a8;
+  --ny-slider-thumb: #e4b654;
+  --ny-slider-glow: rgba(228, 182, 84, 0.7);
+  --ny-axis: rgba(31, 39, 69, 0.7);
+  --ny-border: rgba(228, 182, 84, 0.45);
+  --ny-hover-bg: #e7d7b2;
+  --ny-active-bg: #f3e5c5;
+  --ny-menu-hover: #e7d7b2;
+  --ny-overlay: rgba(13, 18, 36, 0.8);
+  --ny-shadow-soft: rgba(0, 0, 0, 0.18);
+  --ny-shadow-strong: rgba(0, 0, 0, 0.35);
+  --ny-donation: #e4b654;
+  --ny-reset-btn: #e4b654cc;
+  --ny-reset-btn-hover: #e4b654e6;
+  --ny-reset-btn-active: #e4b654;
+  --ny-btn-bg: #f3e5c5;
+
   /* Active theme bindings */
-  --bg: var(--dark-bg);
-  --panel-bg: var(--dark-panel-bg);
-  --accent-start: var(--dark-accent-start);
-  --accent-mid: var(--dark-accent-mid);
-  --accent-end: var(--dark-accent-end);
-  --text: var(--dark-text);
-  --slider-track: var(--dark-slider-track);
-  --slider-thumb: var(--dark-slider-thumb);
-  --axis: var(--dark-axis);
-  --border: var(--dark-border);
-  --surface-alt: var(--dark-surface-alt);
-  --text-placeholder: var(--dark-text-placeholder);
-  --text-muted: var(--dark-text-muted);
-  --hover-bg: var(--dark-hover-bg);
-  --active-bg: var(--dark-active-bg);
-  --menu-hover: var(--dark-menu-hover);
-  --overlay: var(--dark-overlay);
-  --shadow-soft: var(--dark-shadow-soft);
-  --shadow-strong: var(--dark-shadow-strong);
-  --donation: var(--dark-donation);
-  --slider-glow: var(--dark-slider-glow);
-  --reset-btn: var(--dark-reset-btn);
-  --reset-btn-hover: var(--dark-reset-btn-hover);
-  --reset-btn-active: var(--dark-reset-btn-active);
-  --btn-bg: var(--dark-btn-bg);
+  --bg: var(--ny-bg);
+  --panel-bg: var(--ny-panel-bg);
+  --settings-bg: var(--ny-settings-bg);
+  --accent-start: var(--ny-accent-start);
+  --accent-mid: var(--ny-accent-mid);
+  --accent-end: var(--ny-accent-end);
+  --text: var(--ny-text);
+  --text-header: var(--ny-text-header);
+  --slider-track-bg: var(--ny-slider-track-bg);
+  --slider-thumb: var(--ny-slider-thumb);
+  --axis: var(--ny-axis);
+  --border: var(--ny-border);
+  --surface-alt: var(--ny-surface-alt);
+  --text-placeholder: var(--ny-text-placeholder);
+  --text-volume-scale: var(--ny-text-volume-scale);
+  --hover-bg: var(--ny-hover-bg);
+  --active-bg: var(--ny-active-bg);
+  --menu-hover: var(--ny-menu-hover);
+  --overlay: var(--ny-overlay);
+  --shadow-soft: var(--ny-shadow-soft);
+  --shadow-strong: var(--ny-shadow-strong);
+  --donation: var(--ny-donation);
+  --slider-glow: var(--ny-slider-glow);
+  --reset-btn: var(--ny-reset-btn);
+  --reset-btn-hover: var(--ny-reset-btn-hover);
+  --reset-btn-active: var(--ny-reset-btn-active);
+  --btn-bg: var(--ny-btn-bg);
 }
 
 body {
@@ -105,7 +140,7 @@ body {
   top: 10px;
   left: 18px;
   letter-spacing: 0.1em;
-  color: var(--text);
+  color: var(--text-header);
   font-size: 2em;
   font-weight: 700;
   margin: 0;
@@ -160,6 +195,11 @@ body {
   gap: 5px;
 }
 
+.volume-control label {
+  color: var(--text-header);
+  font-weight: bold;
+}
+
 label {
   color: var(--text);
   font-weight: bold;
@@ -169,7 +209,7 @@ label {
   -webkit-appearance: none;
   width: 245px;
   height: 4px;
-  background: var(--slider-track);
+  background: var(--slider-track-bg);
   border-radius: 2px;
   outline: none;
 }
@@ -205,7 +245,7 @@ label {
   width: 253px;
   display: flex;
   justify-content: space-between;
-  color: var(--text-muted);
+  color: var(--text-volume-scale);
 }
 
 button {
@@ -281,7 +321,7 @@ button:active {
   position: absolute;
   bottom: 110%;
   right: 0;
-  background: var(--panel-bg);
+  background: var(--settings-bg);
   border: 1px solid var(--border);
   border-radius: 4px;
   box-shadow: 0 2px 8px var(--shadow-soft);
@@ -343,7 +383,7 @@ button:active {
 }
 
 .modal-content {
-  background: var(--panel-bg);
+  background: var(--settings-bg);
   margin: 10% auto;
   padding: 20px;
   border-radius: 8px;
