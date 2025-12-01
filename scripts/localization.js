@@ -37,17 +37,24 @@ document.getElementById("settings-header").textContent =
 
 document.getElementById("points-count-label").textContent =
   chrome.i18n.getMessage("points_count");
+
 document.getElementById("points-reset-title").textContent =
   chrome.i18n.getMessage("points_reset_title");
+
 document.getElementById("points-reset-message").textContent =
   chrome.i18n.getMessage("points_reset_message");
+
 document.getElementById("skip-reset-label").textContent =
   chrome.i18n.getMessage("points_reset_skip");
+
 document.getElementById("points-reset-cancel").textContent =
   chrome.i18n.getMessage("cancel");
+
 document.getElementById("points-reset-confirm").textContent =
   chrome.i18n.getMessage("ok");
+
 document.getElementById("theme-label").textContent =
   chrome.i18n.getMessage("theme_label");
-document.getElementById("theme-dark-option").textContent =
-  chrome.i18n.getMessage("theme_dark");
+
+document.getElementById("support-me").textContent =
+  chrome.i18n.getMessage("support_me");

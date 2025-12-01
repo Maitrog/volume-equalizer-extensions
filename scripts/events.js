@@ -3,20 +3,50 @@ port.id = "eq-tools-port";
 document.documentElement.append(port);
 
 const freqs = [5, 30, 180, 800, 5000];
+let currentTabId = null;
 
-port.addEventListener("connected", () =>
+const withTabId = (callback) => {
+  if (currentTabId !== null) {
+    callback(currentTabId);
+    return;
+  }
+
+  chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
+    currentTabId = tabId;
+    callback(tabId);
+  });
+};
+
+const setCaptureError = (message) =>
+  withTabId((tabId) => {
+    chrome.storage.local.set({
+      ["captureError." + tabId]: message,
+    });
+  });
+
+const clearCaptureError = () =>
+  withTabId((tabId) => {
+    chrome.storage.local.remove("captureError." + tabId);
+  });
+
+port.addEventListener("connected", () => {
+  clearCaptureError();
   chrome.runtime.sendMessage({
     method: "connected",
-  })
-);
+  });
+});
 port.addEventListener("disconnected", () =>
   chrome.runtime.sendMessage({
     method: "disconnected",
   })
 );
+port.addEventListener("capture-error", (e) => {
+  const message = e?.detail?.message ?? "Audio capture failed";
+  setCaptureError(message);
+});
 
-let name = "";
 chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
+  currentTabId = tabId;
   const defaultFilters = freqs.map((freq) => {
     return { freq: freq, gain: 0 };
   });
@@ -53,7 +83,7 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
 });
 
 chrome.storage.onChanged.addListener((ps) => {
-  chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
+  withTabId((tabId) => {
     if (ps["filters." + tabId]) {
       var newF = ps["filters." + tabId].newValue.map((filter, i) => {
         return { frequency: filter.freq, gain: filter.gain, type: "peaking" };

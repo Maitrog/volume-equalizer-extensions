@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "キャンセル"
+  },
+  "theme_label": {
+    "message": "テーマ"
+  },
+  "capture_error_prefix": {
+    "message": "おっと… このサイトの所有者も音声キャプチャを使用しているようです。このような状況では動作できません。"
+  },
+  "support_me": {
+    "message": "私を支援する"
   }
 }

@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "Annuler"
+  },
+  "theme_label": {
+    "message": "Thème"
+  },
+  "capture_error_prefix": {
+    "message": "Oups... Il semble que le propriétaire de ce site utilise également la capture audio. Il est impossible de travailler dans ces conditions."
+  },
+  "support_me": {
+    "message": "Soutenez-moi"
   }
 }

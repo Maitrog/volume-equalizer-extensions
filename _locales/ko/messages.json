@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "취소"
+  },
+  "theme_label": {
+    "message": "테마"
+  },
+  "capture_error_prefix": {
+    "message": "이런... 이 사이트의 소유자도 오디오 캡처를 사용 중인 것 같습니다. 이런 환경에서는 작동할 수 없습니다."
+  },
+  "support_me": {
+    "message": "나를 후원하기"
   }
 }

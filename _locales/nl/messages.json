@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "Annuleren"
+  },
+  "theme_label": {
+    "message": "Thema"
+  },
+  "capture_error_prefix": {
+    "message": "Oeps... Het lijkt erop dat de eigenaar van deze site ook audio-opname gebruikt. Werken is onder deze omstandigheden niet mogelijk."
+  },
+  "support_me": {
+    "message": "Steun mij"
   }
 }

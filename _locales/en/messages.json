@@ -6,25 +6,25 @@
         "message": "Control Your Sound: Bass Boost & Volume Amplification on Any Site"
     },
     "gain": {
-        "message":"Gain:"
+        "message": "Gain:"
     },
     "reset": {
-        "message":"Reset"
+        "message": "Reset"
     },
     "enable_eq": {
-        "message":"Enable eq on this tab"
+        "message": "Enable eq on this tab"
     },
     "stop_eq": {
-        "message":"Stop eq on this tab"
+        "message": "Stop eq on this tab"
     },
     "none": {
-        "message":"None"
+        "message": "None"
     },
     "save": {
-        "message":"Save preset"
+        "message": "Save preset"
     },
     "enter_preset_name": {
-        "message":"Enter name"
+        "message": "Enter name"
     },
     "settings": {
         "message": "Settings"
@@ -59,7 +59,10 @@
     "theme_label": {
         "message": "Theme"
     },
-    "theme_dark": {
-        "message": "Dark"
+    "capture_error_prefix": {
+        "message": "Oops... It seems the owner of this site is also using audio capture. It's impossible to work in such conditions."
+    },
+    "support_me": {
+        "message": "Support me"
     }
 }

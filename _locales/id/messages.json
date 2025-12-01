@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "Batal"
+  },
+  "theme_label": {
+    "message": "Tema"
+  },
+  "capture_error_prefix": {
+    "message": "Ups... Sepertinya pemilik situs ini juga menggunakan perekaman audio. Tidak mungkin bekerja dalam kondisi seperti ini."
+  },
+  "support_me": {
+    "message": "Dukung saya"
   }
 }

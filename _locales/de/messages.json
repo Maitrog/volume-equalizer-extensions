@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "Abbrechen"
+  },
+  "theme_label": {
+    "message": "Design"
+  },
+  "capture_error_prefix": {
+    "message": "Ups... Es scheint, dass der Besitzer dieser Website ebenfalls eine Audioaufnahme verwendet. Unter diesen Bedingungen ist es unmöglich zu arbeiten."
+  },
+  "support_me": {
+    "message": "Unterstütze mich"
   }
 }

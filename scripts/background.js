@@ -84,6 +84,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
       "gain",
       "filters",
       "enableSpectrum",
+      "theme",
     ];
     const tabIds = (await chrome.storage.session.get(["tabs"])).tabs;
 

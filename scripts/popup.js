@@ -4,9 +4,11 @@ const ctx = canvas.getContext("2d", { alpha: true });
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const THEME_KEY = "theme";
+const DEFAULT_THEME = "ny";
 const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
 const POINT_COUNT_KEY = "pointCount";
-const DEFAULT_THEME = "ny";
+const captureErrorElem = document.getElementById("capture-error");
+const captureErrorPrefix = chrome.i18n.getMessage("capture_error_prefix");
 
 const logMin = Math.log10(1);
 const logMax = Math.log10(22000);
@@ -54,6 +56,19 @@ function frequencyToX(freq, canvasWidth = null) {
 function yToDb(y, canvasHeight = null) {
   canvasHeight ??= canvas.height;
   return ((canvasHeight / 2 - y) / (canvasHeight / 2 - 20)) * 25;
+}
+
+function renderCaptureError(message) {
+  if (!captureErrorElem) return;
+  if (!message) {
+    captureErrorElem.style.display = "none";
+    captureErrorElem.textContent = "";
+    return;
+  }
+
+  console.log(message);
+  captureErrorElem.textContent = `${captureErrorPrefix}`;
+  captureErrorElem.style.display = "block";
 }
 
 function dbToGain(db) {
@@ -114,6 +129,7 @@ async function mainLoad() {
     stored[SKIP_POINTS_CONFIRM_KEY] === "true";
   updatePointCountSelect(pointCount);
   applyTheme(currentTheme);
+
   const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
     "filters",
@@ -123,6 +139,7 @@ async function mainLoad() {
     "enabled." + id,
     "mute." + id,
     "enableSpectrum",
+    "captureError." + id,
   ]);
   if (
     result["filters." + id] != null &&
@@ -154,6 +171,10 @@ async function mainLoad() {
     result.presetNames.forEach((name) => {
       addPresetToDropdown(name);
     });
+  }
+
+  if (result["captureError." + id]) {
+    renderCaptureError(result["captureError." + id]);
   }
 }
 
@@ -272,6 +293,8 @@ chrome.storage.onChanged.addListener(async (ps) => {
   if (tabId == null || tabId == undefined) return;
   if (ps["enabled." + tabId]) setEnableBtnText(ps["enabled." + tabId].newValue);
   if (ps["mute." + tabId]) setMuteBtnClass(ps["mute." + tabId].newValue);
+  if (ps["captureError." + tabId])
+    renderCaptureError(ps["captureError." + tabId].newValue);
 });
 
 document.getElementById("reset").addEventListener("click", async () => {
@@ -433,20 +456,31 @@ if (pointsCountSelect) {
   });
 }
 
-const modal = document.getElementById("settings-modal");
-const btn = document.getElementById("settings-btn");
-const span = document.getElementById("close-settings");
+const settingsModal = document.getElementById("settings-modal");
+const settingsBtn = document.getElementById("settings-btn");
+const closeSettings = document.getElementById("close-settings");
 
-btn.onclick = function () {
-  modal.style.display = "block";
+settingsBtn.onclick = function () {
+  settingsModal.style.display = "block";
 };
-span.onclick = function () {
-  modal.style.display = "none";
+closeSettings.onclick = function () {
+  settingsModal.style.display = "none";
 };
 window.onclick = function (event) {
-  if (event.target === modal) {
-    modal.style.display = "none";
+  if (event.target === settingsModal) {
+    settingsModal.style.display = "none";
   }
+};
+
+const infoModal = document.getElementById("info-modal");
+const infoBtn = document.getElementById("info-btn");
+const closeInfo = document.getElementById("close-info-modal");
+
+infoBtn.onclick = function () {
+  infoModal.style.display = "block";
+};
+closeInfo.onclick = function () {
+  infoModal.style.display = "none";
 };
 
 const pointsResetModal = document.getElementById("points-reset-modal");

@@ -55,5 +55,14 @@
   },
   "cancel": {
     "message": "İptal"
+  },
+  "theme_label": {
+    "message": "Tema"
+  },
+  "capture_error_prefix": {
+    "message": "Eyvah... Görünüşe göre bu sitenin sahibi de ses yakalama kullanıyor. Bu koşullar altında çalışmak imkânsız."
+  },
+  "support_me": {
+    "message": "Beni destekle"
   }
 }

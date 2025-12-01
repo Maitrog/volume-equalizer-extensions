@@ -4,7 +4,7 @@
   },
   "scripts": {
     "prezip": "@powershell if (-not (Test-Path -Path \"./build/Release\")) {New-Item -ItemType Directory -Path \"./build/Release\"}",
-    "zip": "bestzip ./build/Release/eq-toolkit_v1.4.0_unpackeged.zip resources/** scripts/** _locales/** manifest.json popup.html"
+    "zip": "bestzip ./build/Release/eq-toolkit_v1.4.1_unpackeged.zip resources/** scripts/** _locales/** manifest.json popup.html"
   },
   "devDependencies": {
     "bestzip": "^2.2.1"

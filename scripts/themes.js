@@ -27,6 +27,8 @@ const themes = {
     "reset-btn-hover": "var(--dark-reset-btn-hover)",
     "reset-btn-active": "var(--dark-reset-btn-active)",
     "btn-bg": "var(--dark-btn-bg)",
+    "svg-btn-filter": "var(--dark-svg-btn-filter)",
+    "info-btn-display": "var(--dark-info-btn-display)",
   },
   light: {
     bg: "var(--light-bg)",
@@ -56,6 +58,8 @@ const themes = {
     "reset-btn-hover": "var(--light-reset-btn-hover)",
     "reset-btn-active": "var(--light-reset-btn-active)",
     "btn-bg": "var(--light-btn-bg)",
+    "svg-btn-filter": "var(--light-svg-btn-filter)",
+    "info-btn-display": "var(--light-info-btn-display)",
   },
   ny: {
     bg: "var(--ny-bg)",
@@ -85,5 +89,7 @@ const themes = {
     "reset-btn-hover": "var(--ny-reset-btn-hover)",
     "reset-btn-active": "var(--ny-reset-btn-active)",
     "btn-bg": "var(--ny-btn-bg)",
+    "svg-btn-filter": "var(--ny-svg-btn-filter)",
+    "info-btn-display": "var(--ny-info-btn-display)",
   },
 };

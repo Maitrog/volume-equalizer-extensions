@@ -122,11 +122,21 @@ port.remove();
     },
   });
 
-  const convert = (target) => {
+  const convert = async (target) => {
     if (port.dataset.enabled === "false") {
       convert.caches.add(target);
-    } else {
-      source(target).then(attach);
+      return;
+    }
+
+    try {
+      const sourceNode = await source(target);
+      attach(sourceNode);
+    } catch (e) {
+      port.dispatchEvent(
+        new CustomEvent("capture-error", {
+          detail: { message: e?.message ?? "Unknown error" },
+        })
+      );
     }
   };
   convert.caches = new Set();
