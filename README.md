@@ -11,6 +11,11 @@ Works with ANY audio on ANY website :)
 - Easy graphic equalizer.
 - User friendly interface.
 - Works with any audio on any website.
+- Multiple configs for multiple tabs
+- Spectrum visualization (experimental)
+- Import/export presets
+- Selection of the number of bands
+- Dark and light themes
 
 ## Installation
 ### Chrome Extentions
