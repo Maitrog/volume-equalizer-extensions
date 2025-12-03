@@ -40,8 +40,9 @@ Available soon
 5. Enjoy
 
 ## Support
-The extention are provided for free. If you like the project, I would appreciate your support.
+The extention are provided for free. If you like the project, I would appreciate your [support](https://www.donationalerts.com/r/maitrog).
 
 [![donation_72](https://github.com/user-attachments/assets/5dc9a215-1145-4f3e-a4b4-27ffc3c3000c)](https://www.donationalerts.com/r/maitrog)
 
-
+## Privacy policy
+[Privacy policy](https://github.com/Maitrog/volume-equalizer-extensions/blob/main/PRIVACY.md)
