@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d", { alpha: true });
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const THEME_KEY = "theme";
-const DEFAULT_THEME = "ny";
+const DEFAULT_THEME = "dark";
 const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
 const POINT_COUNT_KEY = "pointCount";
 const captureErrorElem = document.getElementById("capture-error");
