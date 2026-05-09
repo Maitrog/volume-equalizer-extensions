@@ -46,6 +46,8 @@ function xToFrequency(x, canvasWidth = null) {
 }
 
 function frequencyToX(freq, canvasWidth = null) {
+  if (freq == 0) return 0;
+
   freq = freq > 24000 ? 24000 : freq;
   canvasWidth ??= canvas.width - 10;
   const x =
@@ -523,7 +525,7 @@ if (pointsResetModal) {
   });
 }
 
-// document.getElementById("experimental-mode").addEventListener("click", () => {
-//   window.close();
-//   chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
-// });
+document.getElementById("window-mod").addEventListener("click", () => {
+  window.close();
+  chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
+});

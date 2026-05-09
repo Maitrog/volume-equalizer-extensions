@@ -142,9 +142,9 @@ async function clearWindowId() {
 async function createToolkitWindow() {
   const w = await chrome.windows.create({
     url: chrome.runtime.getURL("popup.html"),
-    type: "popup", // компактное окно без вкладок
-    width: 420, // подгоните под ваш UI
-    height: 640,
+    type: "popup",
+    width: 560,
+    height: 541,
     focused: true,
   });
   await setWindowId(w.id);

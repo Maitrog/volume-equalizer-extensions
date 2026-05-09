@@ -22,45 +22,124 @@ function scheduleDraw() {
   });
 }
 
-function drawSpectrum(buffer) {
-  if (!buffer || buffer.length == 0) return;
-  const bufferLength = meta.frequencyBinCount;
+function getSpectrumValues(buffer) {
+  if (!buffer) return [];
+  if (typeof buffer.length === "number") return buffer;
 
-  const H = spectrumCanvas.height;
-  const W = spectrumCanvas.width;
-  const points = [];
-  for (let i = 0; i < bufferLength; i++) {
-    const hz = (i * meta.sampleRate) / meta.fftSize;
-    const x = frequencyToX(hz);
-    const barHeight = (buffer[i] + 100) * 2 + 100;
-    const y = H - barHeight / 2;
-    if (i == 0) {
-      points.push({ x: 0, y });
-    }
-    points.push({ x, y });
+  return Object.keys(buffer)
+    .filter((key) => !Number.isNaN(Number(key)))
+    .sort((a, b) => Number(a) - Number(b))
+    .map((key) => buffer[key]);
+}
+
+function dbToSpectrumY(db, height) {
+  const minDb = Number.isFinite(meta.minDb) ? meta.minDb : -100;
+  const maxDb = Number.isFinite(meta.maxDb) ? meta.maxDb : -30;
+  const range = maxDb - minDb || 1;
+  const normalized = (Math.max(minDb, Math.min(maxDb, db)) - minDb) / range;
+  return height - normalized * height;
+}
+
+function syncSpectrumCanvasSize() {
+  const width = spectrumCanvas.clientWidth;
+  const height = spectrumCanvas.clientHeight;
+
+  if (spectrumCanvas.width !== width) spectrumCanvas.width = width;
+  if (spectrumCanvas.height !== height) spectrumCanvas.height = height;
+}
+
+function getCssColor(propertyName, fallback) {
+  const css = getComputedStyle(document.documentElement);
+  let value = css.getPropertyValue(propertyName).trim();
+
+  while (value.startsWith("var(")) {
+    const nestedName = value.slice(4, -1).trim();
+    value = css.getPropertyValue(nestedName).trim();
   }
 
-  spectrumCtx.clearRect(0, 0, spectrumCanvas.width, spectrumCanvas.height);
+  return value || fallback;
+}
+
+function spectrumBinToFrequency(index, binCount) {
+  const sampleRate = meta.sampleRate || 48000;
+  const nyquist = sampleRate / 2;
+
+  return (index * nyquist) / binCount;
+}
+
+function drawSpectrum(buffer) {
+  syncSpectrumCanvasSize();
+
+  const values = getSpectrumValues(buffer);
+  const width = spectrumCanvas.width;
+  const height = spectrumCanvas.height;
+
+  spectrumCtx.clearRect(0, 0, width, height);
+  if (!values.length || width <= 0 || height <= 0) return;
+
+  const sampleRate = meta.sampleRate || 48000;
+  const maxFrequency = Math.min(24000, sampleRate / 2);
+  const lineColor = getCssColor("--accent-mid", accentMid || "#9d00ff");
+  const fillStart = getCssColor("--accent-start", accentStart || lineColor);
+  const fillEnd = getCssColor("--accent-end", accentEnd || lineColor);
+
+  const fill = spectrumCtx.createLinearGradient(0, 0, 0, height);
+  fill.addColorStop(0, fillStart);
+  fill.addColorStop(1, fillEnd);
 
   spectrumCtx.beginPath();
-  spectrumCtx.moveTo(0, H);
-  spectrumCtx.lineTo(points[0].x, points[0].y);
+  spectrumCtx.moveTo(0, height);
 
-  for (let i = 1; i < points.length - 1; i++) {
-    const xc = (points[i].x + points[i + 1].x) / 2;
-    const yc = (points[i].y + points[i + 1].y) / 2;
-    spectrumCtx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+  let hasPoint = false;
+  for (let i = 0; i < values.length; i++) {
+    const frequency = spectrumBinToFrequency(i, values.length);
+    if (frequency > maxFrequency) break;
+
+    const db = values[i];
+    if (!Number.isFinite(db)) continue;
+
+    const x = frequencyToX(frequency, width - 10);
+    const y = dbToSpectrumY(db, height);
+
+    if (!hasPoint) {
+      spectrumCtx.lineTo(x, y);
+      hasPoint = true;
+    } else {
+      spectrumCtx.lineTo(x, y);
+    }
   }
 
-  spectrumCtx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
-  spectrumCtx.lineTo(W, H);
+  if (!hasPoint) return;
+
+  spectrumCtx.lineTo(width, height);
   spectrumCtx.closePath();
-
-  spectrumCtx.fillStyle = "#555566";
+  spectrumCtx.fillStyle = fill;
+  spectrumCtx.globalAlpha = 0.18;
   spectrumCtx.fill();
+  spectrumCtx.globalAlpha = 1;
 
-  spectrumCtx.strokeStyle = "#aaaaaa";
-  spectrumCtx.lineWidth = 0.1;
+  spectrumCtx.beginPath();
+  hasPoint = false;
+  for (let i = 0; i < values.length; i++) {
+    const frequency = spectrumBinToFrequency(i, values.length);
+    if (frequency > maxFrequency) break;
+
+    const db = values[i];
+    if (!Number.isFinite(db)) continue;
+
+    const x = frequencyToX(frequency, width - 10);
+    const y = dbToSpectrumY(db, height);
+
+    if (!hasPoint) {
+      spectrumCtx.moveTo(x, y);
+      hasPoint = true;
+    } else {
+      spectrumCtx.lineTo(x, y);
+    }
+  }
+
+  spectrumCtx.strokeStyle = lineColor;
+  spectrumCtx.lineWidth = 1.5;
   spectrumCtx.stroke();
 }
 

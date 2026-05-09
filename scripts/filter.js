@@ -24,8 +24,7 @@ port.remove();
     const preampValue = isNaN(port.dataset.preamp)
       ? 1
       : Number(port.dataset.preamp);
-    filters.preamp.gain.value =
-      port.dataset.mute === "true" ? 0 : preampValue;
+    filters.preamp.gain.value = port.dataset.mute === "true" ? 0 : preampValue;
     source.connect(filters.preamp);
     filters.balance.pan.value = 0;
     filters.preamp.connect(filters.balance);
