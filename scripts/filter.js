@@ -7,6 +7,8 @@ port.remove();
   let currentSourceNode = null;
   let analyser = null;
   let spectrumTimer = null;
+  const mediaSources = new WeakMap();
+  const pendingMedia = new WeakSet();
 
   const { connect } = AudioNode.prototype;
 
@@ -15,6 +17,11 @@ port.remove();
 
     if (port.dataset.enabled === "false") {
       return connect.call(source, context.destination);
+    }
+
+    if (map.has(source)) {
+      port.dispatchEvent(new Event("connected"));
+      return context.destination;
     }
 
     const filters = {
@@ -56,11 +63,19 @@ port.remove();
 
   const source = (target) =>
     new Promise((resolve, reject) => {
+      const existing = mediaSources.get(target);
+      if (existing) {
+        setCurrentAudioGraph(existing.context, existing.source);
+        resolve(existing.source);
+        return;
+      }
+
       const context = new AudioContext();
 
       const next = () => {
         try {
           const source = context.createMediaElementSource(target);
+          mediaSources.set(target, { context, source });
           setCurrentAudioGraph(context, source);
           resolve(source);
         } catch (e) {
@@ -124,20 +139,31 @@ port.remove();
   });
 
   const convert = async (target) => {
+    if (!(target instanceof HTMLMediaElement)) return;
+
     if (port.dataset.enabled === "false") {
       convert.caches.add(target);
       return;
     }
 
+    if (pendingMedia.has(target)) return;
+
     try {
+      pendingMedia.add(target);
       const sourceNode = await source(target);
-      attach(sourceNode);
+      if (!map.has(sourceNode)) {
+        attach(sourceNode);
+      } else {
+        port.dispatchEvent(new Event("connected"));
+      }
     } catch (e) {
       port.dispatchEvent(
         new CustomEvent("capture-error", {
           detail: { message: e?.message ?? "Unknown error" },
         })
       );
+    } finally {
+      pendingMedia.delete(target);
     }
   };
   convert.caches = new Set();
@@ -214,7 +240,6 @@ port.remove();
     if (analyser) return analyser;
 
     analyser = audioCtx.createAnalyser();
-    analyser.connect(audioCtx.destination);
     analyser.sampleRate = 48000;
     analyser.fftSize = 512;
     analyser.smoothingTimeConstant = 0.5;
