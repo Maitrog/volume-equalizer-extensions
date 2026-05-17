@@ -7,6 +7,7 @@ const THEME_KEY = "theme";
 const DEFAULT_THEME = "dark";
 const SKIP_POINTS_CONFIRM_KEY = "skipPointsResetConfirm";
 const POINT_COUNT_KEY = "pointCount";
+const INSTALL_UPDATE_NOTICE_KEY = "installUpdateNotice";
 const captureErrorElem = document.getElementById("capture-error");
 const captureErrorPrefix = chrome.i18n.getMessage("capture_error_prefix");
 
@@ -113,11 +114,35 @@ function mainResize() {
   drawFilter();
 }
 
+function getPendingInstallUpdateNotice(stored) {
+  const notice = stored[INSTALL_UPDATE_NOTICE_KEY];
+  if (isToolkitWindow) return null;
+  if (!notice || typeof notice !== "object") return null;
+  if (!["install", "update"].includes(notice.reason)) return null;
+  if (notice.version !== chrome.runtime.getManifest().version) return null;
+  return notice;
+}
+
+function showInstallUpdateNotice(stored) {
+  const notice = getPendingInstallUpdateNotice(stored);
+  const modal = document.getElementById("install-update-notice-modal");
+  if (!notice || !modal) return;
+
+  modal.style.display = "block";
+}
+
+async function closeInstallUpdateNotice() {
+  const modal = document.getElementById("install-update-notice-modal");
+  if (modal) modal.style.display = "none";
+  await chrome.storage.local.remove(INSTALL_UPDATE_NOTICE_KEY);
+}
+
 async function mainLoad() {
   const stored = await chrome.storage.local.get([
     POINT_COUNT_KEY,
     THEME_KEY,
     SKIP_POINTS_CONFIRM_KEY,
+    INSTALL_UPDATE_NOTICE_KEY,
   ]);
   currentTheme = stored[THEME_KEY] ?? DEFAULT_THEME;
   applyTheme(currentTheme);
@@ -184,6 +209,8 @@ async function mainLoad() {
   if (result["captureError." + id]) {
     renderCaptureError(result["captureError." + id]);
   }
+
+  showInstallUpdateNotice(stored);
 
   await startToolkitTabCapture();
   await renderCapturedTabs();
@@ -537,6 +564,9 @@ const pointsResetModal = document.getElementById("points-reset-modal");
 const pointsResetConfirmBtn = document.getElementById("points-reset-confirm");
 const pointsResetCancelBtn = document.getElementById("points-reset-cancel");
 const skipResetCheckbox = document.getElementById("skip-reset-confirm");
+const installUpdateNoticeCloseBtn = document.getElementById(
+  "install-update-notice-close"
+);
 
 function closePointsResetModal() {
   if (pointsResetModal) pointsResetModal.style.display = "none";
@@ -571,6 +601,13 @@ if (pointsResetModal) {
       closePointsResetModal();
     }
   });
+}
+
+if (installUpdateNoticeCloseBtn) {
+  installUpdateNoticeCloseBtn.addEventListener(
+    "click",
+    closeInstallUpdateNotice
+  );
 }
 
 document.getElementById("window-mod").addEventListener("click", async () => {

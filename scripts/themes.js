@@ -29,6 +29,8 @@ const themes = {
     "btn-bg": "var(--dark-btn-bg)",
     "svg-btn-filter": "var(--dark-svg-btn-filter)",
     "info-btn-display": "var(--dark-info-btn-display)",
+    "notice-link": "var(--dark-notice-link)",
+    "notice-link-hover": "var(--dark-notice-link-hover)",
   },
   light: {
     bg: "var(--light-bg)",
@@ -60,6 +62,8 @@ const themes = {
     "btn-bg": "var(--light-btn-bg)",
     "svg-btn-filter": "var(--light-svg-btn-filter)",
     "info-btn-display": "var(--light-info-btn-display)",
+    "notice-link": "var(--light-notice-link)",
+    "notice-link-hover": "var(--light-notice-link-hover)",
   },
   ny: {
     bg: "var(--ny-bg)",
@@ -91,5 +95,7 @@ const themes = {
     "btn-bg": "var(--ny-btn-bg)",
     "svg-btn-filter": "var(--ny-svg-btn-filter)",
     "info-btn-display": "var(--ny-info-btn-display)",
+    "notice-link": "var(--ny-notice-link)",
+    "notice-link-hover": "var(--ny-notice-link-hover)",
   },
 };

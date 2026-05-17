@@ -29,6 +29,8 @@
   --dark-btn-bg: rgba(255, 255, 255, 0.1);
   --dark-svg-btn-filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
   --dark-info-btn-display: none;
+  --dark-notice-link: #f79518;
+  --dark-notice-link-hover: #ffb24a;
   
   /* Light theme palette */
   --light-bg: #f5f5fa;
@@ -60,6 +62,8 @@
   --light-btn-bg: rgba(0, 0, 0, 0.04);
   --light-svg-btn-filter: brightness(0) saturate(100%) invert(11%) sepia(6%) saturate(2953%) hue-rotate(201deg) brightness(193%) contrast(86%);
   --light-info-btn-display: none;
+  --light-notice-link: #7b1ed2;
+  --light-notice-link-hover: #561495;
 
   /* Christmas theme palette */
   --ny-bg: #27355a;
@@ -91,6 +95,8 @@
   --ny-btn-bg: #f3e5c5;
   --ny-svg-btn-filter: brightness(0) saturate(100%) invert(47%) sepia(77%) saturate(477%) hue-rotate(3deg) brightness(112%) contrast(90%);
   --ny-info-btn-display: block;
+  --ny-notice-link: #9b3c2c;
+  --ny-notice-link-hover: #6f2b20;
 
   /* Active theme bindings */
   --bg: var(--ny-bg);
@@ -122,6 +128,8 @@
   --btn-bg: var(--ny-btn-bg);
   --svg-btn-filter: var(--ny-svg-btn-filter);
   --info-btn-display: var(--ny-info-btn-display);
+  --notice-link: var(--ny-notice-link);
+  --notice-link-hover: var(--ny-notice-link-hover);
 }
 
 body {
@@ -619,6 +627,43 @@ button:disabled:active {
 }
 
 .confirm-actions button {
+  width: auto;
+  min-width: 80px;
+}
+
+.notice-modal {
+  max-width: 380px;
+}
+
+.notice-message {
+  margin: 10px 0 18px;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.notice-message p {
+  margin: 0;
+}
+
+.notice-message a {
+  color: var(--notice-link);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.notice-message a:hover,
+.notice-message a:focus {
+  color: var(--notice-link-hover);
+}
+
+.notice-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.notice-actions button {
   width: auto;
   min-width: 80px;
 }

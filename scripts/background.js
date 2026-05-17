@@ -24,8 +24,24 @@ const register = async () => {
   ]);
 };
 
+const INSTALL_UPDATE_NOTICE_KEY = "installUpdateNotice";
+
 chrome.runtime.onStartup.addListener(register);
-chrome.runtime.onInstalled.addListener(register);
+chrome.runtime.onInstalled.addListener(async (details) => {
+  await register();
+  await prepareInstallUpdateNotice(details);
+});
+
+async function prepareInstallUpdateNotice(details) {
+  if (!["install", "update"].includes(details.reason)) return;
+
+  await chrome.storage.local.set({
+    [INSTALL_UPDATE_NOTICE_KEY]: {
+      reason: details.reason,
+      version: chrome.runtime.getManifest().version,
+    },
+  });
+}
 
 chrome.storage.local.get(["enabled"], async (ps) => {
   const id = await getCurrentTabId();
@@ -108,6 +124,7 @@ async function clearUnusedStorage() {
     "filters",
     "enableSpectrum",
     "theme",
+    INSTALL_UPDATE_NOTICE_KEY,
   ];
   const tabIds = (await chrome.storage.session.get(["tabs"])).tabs ?? [];
 
