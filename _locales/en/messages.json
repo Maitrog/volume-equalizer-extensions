@@ -60,7 +60,10 @@
         "message": "Theme"
     },
     "capture_error_prefix": {
-        "message": "Oops... It seems the owner of this site is also using audio capture. It's impossible to work in such conditions."
+        "message": "Failed to capture the audio stream. Try using \"Window mode\"."
+    },
+    "toolkit_window_already_open": {
+        "message": "Equalizer is already open in a window"
     },
     "support_me": {
         "message": "Support me"

@@ -60,7 +60,10 @@
     "message": "Giao diện"
   },
   "capture_error_prefix": {
-    "message": "Ối... Có vẻ như chủ sở hữu trang web này cũng đang sử dụng chức năng thu âm. Không thể làm việc trong điều kiện như thế này."
+    "message": "Không thể thu luồng âm thanh. Hãy thử dùng \"Chế độ cửa sổ\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "Bộ cân bằng đã được mở trong một cửa sổ"
   },
   "support_me": {
     "message": "Hỗ trợ tôi"

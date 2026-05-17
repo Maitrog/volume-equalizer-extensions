@@ -60,7 +60,10 @@
     "message": "テーマ"
   },
   "capture_error_prefix": {
-    "message": "おっと… このサイトの所有者も音声キャプチャを使用しているようです。このような状況では動作できません。"
+    "message": "オーディオストリームをキャプチャできませんでした。「ウィンドウモード」を使用してみてください。"
+  },
+  "toolkit_window_already_open": {
+    "message": "イコライザーはすでにウィンドウで開いています"
   },
   "support_me": {
     "message": "私を支援する"

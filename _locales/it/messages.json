@@ -60,7 +60,10 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Ops... Sembra che il proprietario di questo sito stia utilizzando anche la cattura audio. È impossibile lavorare in queste condizioni."
+    "message": "Impossibile acquisire il flusso audio. Prova a usare la \"modalità finestra\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "L'equalizzatore è già aperto in una finestra"
   },
   "support_me": {
     "message": "Sostienimi"

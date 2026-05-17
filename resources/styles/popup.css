@@ -137,6 +137,27 @@ body {
   color: var(--text);
 }
 
+.window-open-notice-body {
+  width: 320px;
+  min-height: 96px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.window-open-notice {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--settings-bg);
+  color: var(--text);
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 2px 8px var(--shadow-soft);
+}
+
 .header {
   display: flex;
   margin-bottom: 5px;
@@ -165,6 +186,62 @@ body {
   color: #ffd7d7;
   font-size: 14px;
   box-shadow: 0 2px 6px var(--shadow-soft);
+}
+
+.captured-tabs {
+  display: none;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 0 8px;
+  padding: 2px 0 6px;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 6px;
+  scrollbar-width: none;
+}
+
+.toolkit-window-body .captured-tabs {
+  display: flex;
+}
+
+.captured-tab {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.captured-tab:hover {
+  background: var(--hover-bg);
+}
+
+.captured-tab.active {
+  background: var(--active-bg);
+  border-color: var(--accent-mid);
+}
+
+.captured-tab-icon {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.captured-tab-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .equalizer-curve-container {
@@ -288,6 +365,19 @@ button:active {
   background: var(--active-bg);
 }
 
+button.disabled,
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+button.disabled:hover,
+button:disabled:hover,
+button.disabled:active,
+button:disabled:active {
+  background: var(--btn-bg);
+}
+
 .reset-btn {
   background: var(--reset-btn);
 }
@@ -301,7 +391,8 @@ button:active {
 }
 
 .donation {
-  right: 20px;
+  right: 21px;
+  top: 27px;
   position: fixed;
   display: inline-flex;
   justify-content: center;
@@ -379,7 +470,8 @@ button:active {
 }
 
 .volume-mute,
-.settings-btn {
+.settings-btn,
+.window-mod {
   filter: var(--svg-btn-filter);
 }
 
@@ -396,6 +488,15 @@ button:active {
   filter: var(--svg-btn-filter);
   z-index: 2;
   display: var(--info-btn-display)
+}
+
+.window-mod {
+  width: 22px;
+  cursor: pointer;
+}
+
+.toolkit-window-body .window-mod {
+  display: none;
 }
 
 .volume-mute-active {

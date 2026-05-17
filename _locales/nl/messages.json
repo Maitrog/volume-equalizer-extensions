@@ -60,7 +60,10 @@
     "message": "Thema"
   },
   "capture_error_prefix": {
-    "message": "Oeps... Het lijkt erop dat de eigenaar van deze site ook audio-opname gebruikt. Werken is onder deze omstandigheden niet mogelijk."
+    "message": "Kan de audiostream niet vastleggen. Probeer de \"Venstermodus\" te gebruiken."
+  },
+  "toolkit_window_already_open": {
+    "message": "De equalizer is al geopend in een venster"
   },
   "support_me": {
     "message": "Steun mij"

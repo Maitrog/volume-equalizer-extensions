@@ -114,23 +114,29 @@ function mainResize() {
 }
 
 async function mainLoad() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  resizeCanvas();
   const stored = await chrome.storage.local.get([
     POINT_COUNT_KEY,
     THEME_KEY,
     SKIP_POINTS_CONFIRM_KEY,
   ]);
+  currentTheme = stored[THEME_KEY] ?? DEFAULT_THEME;
+  applyTheme(currentTheme);
+
+  if (await shouldShowToolkitWindowNotice()) {
+    showToolkitWindowNotice();
+    return;
+  }
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  resizeCanvas();
   const savedPointCount = parseInt(stored.pointCount, 10);
   if (!Number.isNaN(savedPointCount)) {
     pointCount = clampPointCount(savedPointCount);
   }
-  currentTheme = stored[THEME_KEY] ?? DEFAULT_THEME;
   skipPointsResetConfirm =
     stored[SKIP_POINTS_CONFIRM_KEY] === true ||
     stored[SKIP_POINTS_CONFIRM_KEY] === "true";
   updatePointCountSelect(pointCount);
-  applyTheme(currentTheme);
 
   const id = await getCurrentTabId();
   const result = await chrome.storage.local.get([
@@ -178,6 +184,9 @@ async function mainLoad() {
   if (result["captureError." + id]) {
     renderCaptureError(result["captureError." + id]);
   }
+
+  await startToolkitTabCapture();
+  await renderCapturedTabs();
 }
 
 window.addEventListener("resize", mainResize);
@@ -246,14 +255,16 @@ async function applyPointCountChange(newCount) {
   await savePointCount(newCount);
   initPoints(newCount);
   mainResize();
+  refreshToolkitCaptureFilters();
   const tabId = await getCurrentTabId();
   if (tabId == null || tabId == undefined) return;
   const newFilters = pointsToFilters(points);
-  chrome.storage.local.set({
+  const values = {
     ["filters." + tabId]: newFilters,
     ["filters"]: newFilters,
-    ["enabled." + tabId]: true,
-  });
+  };
+  if (!isToolkitWindow) values["enabled." + tabId] = true;
+  chrome.storage.local.set(values);
 }
 
 canvas.addEventListener("mousemove", async (e) => {
@@ -266,18 +277,22 @@ canvas.addEventListener("mousemove", async (e) => {
       my = Math.max(0, Math.min(canvas.height, my));
       points[dragIndex] = { x: mx, y: my };
       mainResize();
+      refreshToolkitCaptureFilters();
       var tabId = await getCurrentTabId();
       var newFilters = pointsToFilters(points);
-      chrome.storage.local.set({
+      const values = {
         ["filters." + tabId]: newFilters,
         ["filters"]: newFilters,
-        ["enabled." + tabId]: true,
-      });
+      };
+      if (!isToolkitWindow) values["enabled." + tabId] = true;
+      chrome.storage.local.set(values);
     }
   }
 });
 
 document.getElementById("change-eq").addEventListener("click", async () => {
+  if (isToolkitWindow) return;
+
   const tabId = await getCurrentTabId();
   chrome.storage.local.get(["enabled." + tabId]).then((result) => {
     var newFilters = pointsToFilters(points);
@@ -291,18 +306,33 @@ document.getElementById("change-eq").addEventListener("click", async () => {
 });
 
 chrome.storage.onChanged.addListener(async (ps) => {
+  if (isToolkitWindow && ps[TOOLKIT_WINDOW_ACTIVE_TAB_KEY]) {
+    toolkitActiveTabId = ps[TOOLKIT_WINDOW_ACTIVE_TAB_KEY].newValue ?? null;
+    await loadToolkitTabSettings(toolkitActiveTabId);
+    await renderCapturedTabs();
+  }
+  if (isToolkitWindow && ps[TOOLKIT_WINDOW_CAPTURE_STREAM_IDS_KEY]) {
+    await startToolkitTabCapture();
+    await renderCapturedTabs();
+  }
+
   const tabId = await getCurrentTabId();
   if (tabId == null || tabId == undefined) return;
   if (ps["enabled." + tabId]) setEnableBtnText(ps["enabled." + tabId].newValue);
   if (ps["mute." + tabId]) setMuteBtnClass(ps["mute." + tabId].newValue);
   if (ps["captureError." + tabId])
     renderCaptureError(ps["captureError." + tabId].newValue);
+
+  if (isToolkitWindow) {
+    refreshToolkitCaptureFilters();
+  }
 });
 
 document.getElementById("reset").addEventListener("click", async () => {
   document.getElementById("master-volume").value = 0;
   initPoints();
   mainResize();
+  refreshToolkitCaptureFilters();
 
   const tabId = await getCurrentTabId();
   chrome.storage.local.set({
@@ -315,12 +345,14 @@ document.getElementById("reset").addEventListener("click", async () => {
 const slider = document.getElementById("master-volume");
 slider.oninput = async () => {
   let volume = dbToGain(slider.value);
+  applyToolkitCaptureSettings();
   const tabId = await getCurrentTabId();
-  chrome.storage.local.set({
+  const values = {
     ["volume." + tabId]: volume,
     ["gain." + tabId]: slider.value,
-    ["enabled." + tabId]: true,
-  });
+  };
+  if (!isToolkitWindow) values["enabled." + tabId] = true;
+  chrome.storage.local.set(values);
 };
 
 document.getElementById("save-preset").addEventListener("click", async () => {
@@ -359,6 +391,16 @@ function setEnableBtnText(enabled) {
 }
 
 async function getCurrentTabId() {
+  if (isToolkitWindow) {
+    if (toolkitActiveTabId != null) return toolkitActiveTabId;
+
+    const stored = await chrome.storage.session.get(
+      TOOLKIT_WINDOW_ACTIVE_TAB_KEY
+    );
+    toolkitActiveTabId = stored[TOOLKIT_WINDOW_ACTIVE_TAB_KEY] ?? null;
+    return toolkitActiveTabId;
+  }
+
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab?.id;
@@ -401,12 +443,14 @@ menu.addEventListener("click", (e) => {
 
       const presets = prefs.presets;
       const tabId = await getCurrentTabId();
-      chrome.storage.local.set({
+      const values = {
         ["filters." + tabId]: presets[choice],
-        ["enabled." + tabId]: true,
-      });
+      };
+      if (!isToolkitWindow) values["enabled." + tabId] = true;
+      chrome.storage.local.set(values);
       setPoints(presets[choice]);
       mainResize();
+      refreshToolkitCaptureFilters();
     });
     menu.style.display = "none";
   }
@@ -414,7 +458,10 @@ menu.addEventListener("click", (e) => {
 
 document.getElementById("volume-mute").addEventListener("click", async () => {
   const tabId = await getCurrentTabId();
-  chrome.storage.local.set({ ["enabled." + tabId]: true }).then(() =>
+  const enableReady = isToolkitWindow
+    ? Promise.resolve()
+    : chrome.storage.local.set({ ["enabled." + tabId]: true });
+  enableReady.then(() =>
     chrome.storage.local.get(["mute." + tabId]).then((result) => {
       chrome.storage.local.set({
         ["mute." + tabId]: !result["mute." + tabId],
@@ -427,6 +474,7 @@ function setMuteBtnClass(newValue) {
   var elem = document.getElementById("volume-mute");
   if (newValue) elem.className = "volume-mute-active";
   else elem.className = "volume-mute";
+  applyToolkitCaptureSettings();
 }
 
 const themeSelect = document.getElementById("theme-select");
@@ -525,7 +573,8 @@ if (pointsResetModal) {
   });
 }
 
-document.getElementById("window-mod").addEventListener("click", () => {
+document.getElementById("window-mod").addEventListener("click", async () => {
+  const tabId = await getCurrentTabId();
+  chrome.runtime.sendMessage({ method: "enableWindowMode", tabId });
   window.close();
-  chrome.runtime.sendMessage({ method: "enableExperimentalMode" });
 });

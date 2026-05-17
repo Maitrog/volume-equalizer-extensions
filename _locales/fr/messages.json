@@ -60,7 +60,10 @@
     "message": "Thème"
   },
   "capture_error_prefix": {
-    "message": "Oups... Il semble que le propriétaire de ce site utilise également la capture audio. Il est impossible de travailler dans ces conditions."
+    "message": "Impossible de capturer le flux audio. Essayez d'utiliser le \"mode fenêtre\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "L'égaliseur est déjà ouvert dans une fenêtre"
   },
   "support_me": {
     "message": "Soutenez-moi"

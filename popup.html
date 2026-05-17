@@ -14,12 +14,13 @@
     <text>EQ Toolkit</text>
     <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
     <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
+    <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
     <a class="donation" href="https://www.donationalerts.com/r/maitrog" target="_blank">
       <span id="support-me" class="support-me-text">Support me</span>
-      <img class="icon-donation" src="/resources/images/donation_144.png">
     </a>
   </div>
   <div id="capture-error" class="capture-error"></div>
+  <div id="captured-tabs" class="captured-tabs"></div>
   <div class="equalizer-curve-container">
     <img id="info-btn" class="info-btn" src="resources/images/info.svg">
     <canvas class="eq-canvas" id="eq-canvas"></canvas>
@@ -40,7 +41,6 @@
     <button type="button" id="reset" class="reset-btn">Reset</button>
     <button type="button" id="change-eq">Enable eq on this tab</button>
   </div>
-  <!-- <button type="button" id="experimental-mode">Experimental mode</button> -->
   <div class="controls second-row">
     <div class="dropdown" id="presets">
       <div class="dropdown-toggle" id="presets-toggle">none</div>
@@ -105,7 +105,7 @@
     </div>
   </div>
 
-    <div id="info-modal" class="modal">
+  <div id="info-modal" class="modal">
     <div class="modal-content">
       <span id="close-info-modal" class="close">&times;</span>
       <p id="info-modal-message">
@@ -126,6 +126,7 @@
   <script src="scripts/localization.js"></script>
   <script src="scripts/settings.js"></script>
   <script src="scripts/themes.js"></script>
+  <script src="scripts/popupWindowMod.js"></script>
   <script src="scripts/popup.js"></script>
 </body>
 

@@ -60,7 +60,10 @@
         "message": "Tema"
     },
     "capture_error_prefix": {
-        "message": "Ups... Parece que el propietario de este sitio también está usando captura de audio. Es imposible trabajar en estas condiciones."
+        "message": "No se pudo capturar el flujo de audio. Intenta usar el \"modo ventana\"."
+    },
+    "toolkit_window_already_open": {
+        "message": "El ecualizador ya está abierto en una ventana"
     },
     "support_me": {
         "message": "Apóyame"

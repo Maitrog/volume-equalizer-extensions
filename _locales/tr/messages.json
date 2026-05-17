@@ -60,7 +60,10 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Eyvah... Görünüşe göre bu sitenin sahibi de ses yakalama kullanıyor. Bu koşullar altında çalışmak imkânsız."
+    "message": "Ses akışı yakalanamadı. \"Pencere modunu\" kullanmayı deneyin."
+  },
+  "toolkit_window_already_open": {
+    "message": "Ekolayzer zaten bir pencerede açık"
   },
   "support_me": {
     "message": "Beni destekle"

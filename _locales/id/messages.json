@@ -60,7 +60,10 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Ups... Sepertinya pemilik situs ini juga menggunakan perekaman audio. Tidak mungkin bekerja dalam kondisi seperti ini."
+    "message": "Gagal menangkap aliran audio. Coba gunakan \"Mode jendela\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "Equalizer sudah terbuka di jendela"
   },
   "support_me": {
     "message": "Dukung saya"

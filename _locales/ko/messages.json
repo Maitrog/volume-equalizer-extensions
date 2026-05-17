@@ -60,7 +60,10 @@
     "message": "테마"
   },
   "capture_error_prefix": {
-    "message": "이런... 이 사이트의 소유자도 오디오 캡처를 사용 중인 것 같습니다. 이런 환경에서는 작동할 수 없습니다."
+    "message": "오디오 스트림을 캡처하지 못했습니다. \"창 모드\"를 사용해 보세요."
+  },
+  "toolkit_window_already_open": {
+    "message": "이퀄라이저가 이미 창에서 열려 있습니다"
   },
   "support_me": {
     "message": "나를 후원하기"

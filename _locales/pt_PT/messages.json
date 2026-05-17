@@ -60,7 +60,10 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Ups... Parece que o proprietário deste site também está a utilizar captura de áudio. É impossível trabalhar nestas condições."
+    "message": "Não foi possível capturar o fluxo de áudio. Tente usar o \"modo de janela\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "O equalizador já está aberto numa janela"
   },
   "support_me": {
     "message": "Apoia-me"

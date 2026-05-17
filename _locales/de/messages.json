@@ -60,7 +60,10 @@
     "message": "Design"
   },
   "capture_error_prefix": {
-    "message": "Ups... Es scheint, dass der Besitzer dieser Website ebenfalls eine Audioaufnahme verwendet. Unter diesen Bedingungen ist es unmöglich zu arbeiten."
+    "message": "Der Audiostream konnte nicht erfasst werden. Versuchen Sie, den \"Fenstermodus\" zu verwenden."
+  },
+  "toolkit_window_already_open": {
+    "message": "Der Equalizer ist bereits in einem Fenster geöffnet"
   },
   "support_me": {
     "message": "Unterstütze mich"

@@ -42,18 +42,29 @@ chrome.storage.local.get(["enabled"], async (ps) => {
   }
 });
 
-chrome.runtime.onMessage.addListener(async (request, sender, response) => {
+chrome.runtime.onMessage.addListener((request, sender, response) => {
   if (request.method === "log") {
     console.log(request.message);
     return;
   }
 
-  if (request.method === "enableExperimentalMode") {
-    toggleToolkitWindow();
+  if (request.method === "enableWindowMode") {
+    toggleWindowMod(request.tabId);
     return;
   }
 
-  const tabId = sender.tab.id;
+  if (request.method === "getCapturedTabs") {
+    getCapturedTabs()
+      .then(response)
+      .catch(() => {
+        response({ tabs: [], activeTabId: null });
+      });
+    return true;
+  }
+
+  const tabId = sender.tab?.id;
+  if (tabId == null) return;
+
   if (request.method == "spectrum-frame") {
     chrome.storage.local.set({
       ["spectrum." + tabId]: request.payload,
@@ -66,7 +77,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
         chrome.storage.session.set({ tabs: tabs });
       }
     });
-    response(sender.tab.id);
+    response(tabId);
   } else if (request.method === "connected") {
     chrome.action.setBadgeText({
       text: "ON",
@@ -78,29 +89,7 @@ chrome.runtime.onMessage.addListener(async (request, sender, response) => {
       tabId,
     });
   } else if (request.method === "clearStorage") {
-    const constParamNames = [
-      "presets",
-      "presetNames",
-      "gain",
-      "filters",
-      "enableSpectrum",
-      "theme",
-    ];
-    const tabIds = (await chrome.storage.session.get(["tabs"])).tabs;
-
-    chrome.storage.local.getKeys((keys) =>
-      keys.forEach((key) => {
-        const keySplited = key.split(".");
-        if (
-          !constParamNames.includes(key) &&
-          !(
-            keySplited.length == 2 &&
-            tabIds.includes(Number.parseInt(keySplited[1]))
-          )
-        )
-          chrome.storage.local.remove(key);
-      })
-    );
+    clearUnusedStorage();
   }
   return true;
 });
@@ -111,19 +100,51 @@ async function getCurrentTabId() {
   return tab.id;
 }
 
+async function clearUnusedStorage() {
+  const constParamNames = [
+    "presets",
+    "presetNames",
+    "gain",
+    "filters",
+    "enableSpectrum",
+    "theme",
+  ];
+  const tabIds = (await chrome.storage.session.get(["tabs"])).tabs ?? [];
+
+  chrome.storage.local.getKeys((keys) =>
+    keys.forEach((key) => {
+      const keySplited = key.split(".");
+      if (
+        !constParamNames.includes(key) &&
+        !(
+          keySplited.length == 2 &&
+          tabIds.includes(Number.parseInt(keySplited[1]))
+        )
+      )
+        chrome.storage.local.remove(key);
+    })
+  );
+}
+
 const WINDOW_KEY = "toolkitWindowId"; // ключ, под которым хранится id окна
+const WINDOW_TAB_IDS_KEY = "toolkitWindowTabIds";
+const WINDOW_ACTIVE_TAB_KEY = "toolkitWindowActiveTabId";
+const WINDOW_CAPTURE_STREAM_IDS_KEY = "toolkitWindowCaptureStreamIds";
 
-async function toggleToolkitWindow() {
+async function toggleWindowMod(tabId) {
+  tabId ??= await getCurrentTabId();
   let id = await getWindowId();
+  await prepareTabCapture(tabId);
 
-  if (id) {
-    // Если id сохранён, пробуем закрыть
-    await closeToolkitWindow(id);
+  if (await isWindowExist()) {
+    id = await getWindowId();
+    await addTabIdToStore(tabId);
+    await focusWindowMod(id);
     return;
   }
 
   // Окно не сохранено — создаём
-  await createToolkitWindow();
+  await createWindowMod(tabId);
 }
 
 async function getWindowId() {
@@ -131,32 +152,133 @@ async function getWindowId() {
   return obj[WINDOW_KEY] ?? null;
 }
 
-async function setWindowId(id) {
-  await chrome.storage.session.set({ [WINDOW_KEY]: id });
-}
+async function isWindowExist() {
+  const id = await getWindowId();
+  if (!id) return false;
 
-async function clearWindowId() {
-  await chrome.storage.session.remove(WINDOW_KEY);
-}
-
-async function createToolkitWindow() {
-  const w = await chrome.windows.create({
-    url: chrome.runtime.getURL("popup.html"),
-    type: "popup",
-    width: 560,
-    height: 541,
-    focused: true,
-  });
-  await setWindowId(w.id);
-  return w.id;
-}
-
-async function closeToolkitWindow(windowId) {
   try {
-    await chrome.windows.remove(windowId);
+    await chrome.windows.get(id);
+    return true;
   } catch (e) {
-    // окно уже могло быть закрыто пользователем — игнорируем
-  } finally {
+    await clearWindowId();
+    return false;
+  }
+}
+
+async function addTabIdToStore(tabId) {
+  if (tabId == null) return;
+
+  const stored = await chrome.storage.session.get(WINDOW_TAB_IDS_KEY);
+  const tabIds = Array.isArray(stored[WINDOW_TAB_IDS_KEY])
+    ? stored[WINDOW_TAB_IDS_KEY]
+    : [];
+
+  if (!tabIds.includes(tabId)) {
+    tabIds.push(tabId);
+    await chrome.storage.session.set({ [WINDOW_TAB_IDS_KEY]: tabIds });
+  }
+}
+
+async function getCapturedTabs() {
+  const stored = await chrome.storage.session.get([
+    WINDOW_TAB_IDS_KEY,
+    WINDOW_ACTIVE_TAB_KEY,
+  ]);
+  const tabIds = Array.isArray(stored[WINDOW_TAB_IDS_KEY])
+    ? stored[WINDOW_TAB_IDS_KEY]
+    : [];
+  const activeTabId = stored[WINDOW_ACTIVE_TAB_KEY] ?? null;
+  const tabs = [];
+
+  for (const tabId of tabIds) {
+    try {
+      const tab = await chrome.tabs.get(tabId);
+      tabs.push({
+        id: tab.id,
+        title: tab.title,
+        url: tab.url,
+        favIconUrl: tab.favIconUrl,
+        active: tab.id === activeTabId,
+      });
+    } catch (e) {}
+  }
+
+  return { tabs, activeTabId };
+}
+
+async function focusWindowMod(windowId) {
+  try {
+    const window = await chrome.windows.get(windowId);
+    const updateInfo = { focused: true };
+    if (window.state === "minimized") updateInfo.state = "normal";
+    await chrome.windows.update(windowId, updateInfo);
+  } catch (e) {
     await clearWindowId();
   }
 }
+
+async function clearWindowId() {
+  await chrome.storage.session.remove([
+    WINDOW_KEY,
+    WINDOW_TAB_IDS_KEY,
+    WINDOW_ACTIVE_TAB_KEY,
+    WINDOW_CAPTURE_STREAM_IDS_KEY,
+  ]);
+}
+
+async function prepareTabCapture(tabId) {
+  if (tabId == null) return;
+
+  await chrome.storage.local.set({
+    ["enabled." + tabId]: false,
+  });
+
+  try {
+    const streamId = await chrome.tabCapture.getMediaStreamId({
+      targetTabId: tabId,
+    });
+    const stored = await chrome.storage.session.get(
+      WINDOW_CAPTURE_STREAM_IDS_KEY
+    );
+    const streamIds = stored[WINDOW_CAPTURE_STREAM_IDS_KEY] ?? {};
+    streamIds[tabId] = streamId;
+    await chrome.storage.session.set({
+      [WINDOW_ACTIVE_TAB_KEY]: tabId,
+      [WINDOW_CAPTURE_STREAM_IDS_KEY]: streamIds,
+    });
+  } catch (e) {
+    const stored = await chrome.storage.session.get(
+      WINDOW_CAPTURE_STREAM_IDS_KEY
+    );
+    const streamIds = stored[WINDOW_CAPTURE_STREAM_IDS_KEY] ?? {};
+    delete streamIds[tabId];
+    await chrome.storage.session.set({
+      [WINDOW_ACTIVE_TAB_KEY]: tabId,
+      [WINDOW_CAPTURE_STREAM_IDS_KEY]: streamIds,
+    });
+    await chrome.storage.local.set({
+      ["captureError." + tabId]: e?.message ?? "Tab audio capture failed",
+    });
+  }
+}
+
+async function createWindowMod(tabId) {
+  const w = await chrome.windows.create({
+    url: chrome.runtime.getURL("popup.html?mode=window"),
+    type: "popup",
+    width: 560,
+    height: 586,
+    focused: true,
+  });
+  const storageValues = {
+    [WINDOW_KEY]: w.id,
+  };
+  if (tabId != null) storageValues[WINDOW_TAB_IDS_KEY] = [tabId];
+  await chrome.storage.session.set(storageValues);
+  return w.id;
+}
+
+chrome.windows.onRemoved.addListener(async (windowId) => {
+  const id = await getWindowId();
+  if (id === windowId) await clearWindowId();
+});
