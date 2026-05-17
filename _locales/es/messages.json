@@ -3,7 +3,7 @@
         "message": "EQ Toolkit - Ecualizador de audio"
     },
     "extDescription": {
-        "message": "Controla tu sonido: refuerzo de graves y amplificación de volumen en cualquier sitio"
+        "message": "EQ Toolkit es una extensión gratuita y de código abierto para controlar el audio."
     },
     "gain": {
         "message": "Amplificación:"
