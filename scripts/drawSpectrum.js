@@ -5,10 +5,10 @@ spectrumCtx.imageSmoothingQuality = "high";
 
 let meta = {
   sampleRate: 48000,
-  fftSize: 4096,
+  fftSize: 2048,
   minDb: -100,
   maxDb: -30,
-  frequencyBinCount: 512,
+  frequencyBinCount: 2048,
 };
 let lastBuffer = null;
 let rafScheduled = false;

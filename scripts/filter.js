@@ -241,7 +241,7 @@ port.remove();
 
     analyser = audioCtx.createAnalyser();
     analyser.sampleRate = 48000;
-    analyser.fftSize = 512;
+    analyser.fftSize = 2048;
     analyser.smoothingTimeConstant = 0.5;
 
     try {
@@ -300,7 +300,7 @@ port.remove();
             composed: true,
           })
         );
-      }, 40);
+      }, 50);
     }
   }
 
