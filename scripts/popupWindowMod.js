@@ -214,7 +214,7 @@ function buildToolkitCaptureGraph(tabId) {
   capture.filters = filterSettings.map((filter) => {
     const biquadFilter = audioCtx.createBiquadFilter();
     biquadFilter.type = "peaking";
-    biquadFilter.Q.value = 0.5;
+    biquadFilter.Q.value = filter.q ?? 0.5;
     biquadFilter.frequency.value = filter.freq;
     biquadFilter.gain.value = filter.gain;
     previousNode.connect(biquadFilter);
@@ -243,6 +243,7 @@ function applyToolkitCaptureSettings(tabId = toolkitActiveTabId) {
     if (!capture.filters[index]) return;
     capture.filters[index].frequency.value = filter.freq;
     capture.filters[index].gain.value = filter.gain;
+    capture.filters[index].Q.value = filter.q ?? 0.5;
   });
 }
 

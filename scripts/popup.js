@@ -15,13 +15,25 @@ const logMin = Math.log10(1);
 const logMax = Math.log10(22000);
 const MIN_POINT_COUNT = 5;
 const MAX_POINT_COUNT = 9;
+const DEFAULT_FILTER_Q = 0.5;
+const MIN_FILTER_Q = 0.1;
+const MAX_FILTER_Q = 10;
 let pointCount = MIN_POINT_COUNT;
 let currentTheme = DEFAULT_THEME;
 let skipPointsResetConfirm = false;
 let pendingPointCount = null;
+let dragMode = null;
+let qDragStartY = 0;
+let qDragStartValue = DEFAULT_FILTER_Q;
 
 function clampPointCount(value) {
   return Math.max(MIN_POINT_COUNT, Math.min(MAX_POINT_COUNT, value));
+}
+
+function ensureQFactor(value) {
+  const q = Number(value);
+  if (!Number.isFinite(q)) return DEFAULT_FILTER_Q;
+  return Math.max(MIN_FILTER_Q, Math.min(MAX_FILTER_Q, q));
 }
 
 function savePointCount(count) {
@@ -89,7 +101,7 @@ function createCenteredPoint(index, count = pointCount) {
   const actualCount = clampPointCount(count);
   const centerY = canvas.height / 2;
   const pointStep = canvas.width / (actualCount + 1);
-  return { x: pointStep * (index + 1), y: centerY };
+  return { x: pointStep * (index + 1), y: centerY, q: DEFAULT_FILTER_Q };
 }
 
 function createCenteredPoints(count = pointCount) {
@@ -108,8 +120,22 @@ function setPoints(filters) {
   pointCount = clampPointCount(filters.length);
   savePointCount(pointCount);
   updatePointCountSelect(pointCount);
-  points = filters.map((filter) => {
-    return { x: filter.x, y: filter.y };
+  points = filters.map((filter, index) => {
+    const centeredPoint = createCenteredPoint(index, pointCount);
+    const freq = filter.freq ?? filter.frequency;
+    const gain = filter.gain;
+    const x = Number.isFinite(Number(filter.x))
+      ? Number(filter.x)
+      : Number.isFinite(Number(freq))
+      ? frequencyToX(Number(freq))
+      : centeredPoint.x;
+    const y = Number.isFinite(Number(filter.y))
+      ? Number(filter.y)
+      : Number.isFinite(Number(gain))
+      ? canvas.height / 2 - (Number(gain) / 25) * (canvas.height / 2 - 20)
+      : centeredPoint.y;
+
+    return { x: x, y: y, q: ensureQFactor(filter.q ?? filter.Q) };
   });
 }
 
@@ -229,11 +255,17 @@ canvas.addEventListener("mousedown", (e) => {
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
   const pointIndex = getPointIndexAtPosition(mx, my);
-  if (pointIndex !== -1) dragIndex = pointIndex;
+  if (pointIndex === -1) return;
+
+  dragIndex = pointIndex;
+  dragMode = e.shiftKey ? "q" : "point";
+  qDragStartY = my;
+  qDragStartValue = ensureQFactor(points[pointIndex].q);
 });
 
 window.addEventListener("mouseup", () => {
   dragIndex = null;
+  dragMode = null;
 });
 
 function addPresetToDropdown(name) {
@@ -251,7 +283,13 @@ function addPresetToDropdown(name) {
 
 function pointsToFilters(points) {
   const filters = points.map((p) => {
-    return { freq: xToFrequency(p.x), gain: yToDb(p.y), x: p.x, y: p.y };
+    return {
+      freq: xToFrequency(p.x),
+      gain: yToDb(p.y),
+      q: ensureQFactor(p.q),
+      x: p.x,
+      y: p.y,
+    };
   });
   return filters;
 }
@@ -311,10 +349,17 @@ canvas.addEventListener("mousemove", async (e) => {
     const rect = canvas.getBoundingClientRect();
     let mx = e.clientX - rect.left;
     let my = e.clientY - rect.top;
-    if (mx > 0) {
+    if (dragMode === "q") {
+      const dy = qDragStartY - my;
+      const nextQ = qDragStartValue * Math.pow(2, dy / 40);
+      points[dragIndex].q = ensureQFactor(nextQ);
+      mainResize();
+      refreshToolkitCaptureFilters();
+      await saveCurrentFilters();
+    } else if (mx > 0) {
       mx = Math.max(0, Math.min(canvas.width, mx));
       my = Math.max(0, Math.min(canvas.height, my));
-      points[dragIndex] = { x: mx, y: my };
+      points[dragIndex] = { ...points[dragIndex], x: mx, y: my };
       mainResize();
       refreshToolkitCaptureFilters();
       await saveCurrentFilters();

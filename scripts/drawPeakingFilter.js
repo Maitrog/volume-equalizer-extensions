@@ -15,18 +15,12 @@ function loadColors() {
 
 loadColors();
 
-function drawPeakingFilter(
-  canvas,
-  audioCtx,
-  freq,
-  Q = 1,
-  gainDb = 0,
-  gamma = 0.5
-) {
+function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
   const height = canvas.height;
+  const canvasWidth = width - 10;
 
   const filter = audioCtx.createBiquadFilter();
   filter.type = "peaking";
@@ -38,14 +32,13 @@ function drawPeakingFilter(
   const frequencies = new Float32Array(numPoints);
   const magResponse = new Float32Array(numPoints);
   const phaseResponse = new Float32Array(numPoints);
-  const fMin = 1;
-  const fMax = audioCtx.sampleRate / 2;
+  const maxResponseFrequency = audioCtx.sampleRate / 2;
 
   for (let i = 0; i < numPoints; i++) {
-    const t = i / (numPoints - 1);
-    const tGamma = Math.pow(t, gamma);
-    const logF = Math.log(fMin) + tGamma * (Math.log(fMax) - Math.log(fMin));
-    frequencies[i] = Math.exp(logF);
+    frequencies[i] = Math.min(
+      xToFrequency(i, canvasWidth),
+      maxResponseFrequency
+    );
   }
 
   filter.getFrequencyResponse(frequencies, magResponse, phaseResponse);

@@ -43,7 +43,7 @@ port.remove();
       biquadFilter.frequency.value = filter.frequency;
       biquadFilter.gain.value = filter.gain;
       biquadFilter.type = filter.type;
-      biquadFilter.Q.value = 0.5;
+      biquadFilter.Q.value = filter.q ?? 0.5;
       filters[i] = biquadFilter;
       if (i === 0) {
         filters.balance.connect(biquadFilter);
@@ -202,6 +202,7 @@ port.remove();
       newF.forEach((filter, i) => {
         filters[i].gain.value = Number(filter.gain);
         filters[i].frequency.value = Number(filter.frequency);
+        filters[i].Q.value = Number(filter.q ?? 0.5);
       });
     })
   );

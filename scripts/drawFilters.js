@@ -21,7 +21,7 @@ function drawFilter() {
     points.forEach((p) => {
       var freq = xToFrequency(p.x, canvasWidth);
       var db = yToDb(p.y);
-      drawPeakingFilter(canvas, audioCtx, freq, 0.5, db);
+      drawPeakingFilter(canvas, audioCtx, freq, ensureQFactor(p.q), db);
     });
   }
 }

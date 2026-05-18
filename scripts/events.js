@@ -48,7 +48,7 @@ port.addEventListener("capture-error", (e) => {
 chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
   currentTabId = tabId;
   const defaultFilters = freqs.map((freq) => {
-    return { freq: freq, gain: 0 };
+    return { freq: freq, gain: 0, q: 0.5 };
   });
   chrome.storage.local.get(
     {
@@ -63,7 +63,12 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
       const filters = prefs["filters." + tabId] ?? defaultFilters;
       const freqsMapped = filters.map((filter) => {
         const frequency = filter.freq ?? filter.frequency;
-        return { frequency: frequency, gain: filter.gain, type: "peaking" };
+        return {
+          frequency: frequency,
+          gain: filter.gain,
+          q: filter.q ?? filter.Q ?? 0.5,
+          type: "peaking",
+        };
       });
       port.dataset.freqs = JSON.stringify(freqsMapped);
       port.dataset.pan = prefs["pan." + tabId];
@@ -86,7 +91,12 @@ chrome.storage.onChanged.addListener((ps) => {
   withTabId((tabId) => {
     if (ps["filters." + tabId]) {
       var newF = ps["filters." + tabId].newValue.map((filter, i) => {
-        return { frequency: filter.freq, gain: filter.gain, type: "peaking" };
+        return {
+          frequency: filter.freq,
+          gain: filter.gain,
+          q: filter.q ?? filter.Q ?? 0.5,
+          type: "peaking",
+        };
       });
       port.dataset.freqs = JSON.stringify(newF);
       port.dispatchEvent(new Event("filters-changed"));
