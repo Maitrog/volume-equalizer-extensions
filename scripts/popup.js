@@ -85,12 +85,17 @@ function dbToGain(db) {
   return gain;
 }
 
-function createCenteredPoints(count = pointCount) {
+function createCenteredPoint(index, count = pointCount) {
   const actualCount = clampPointCount(count);
   const centerY = canvas.height / 2;
   const pointStep = canvas.width / (actualCount + 1);
+  return { x: pointStep * (index + 1), y: centerY };
+}
+
+function createCenteredPoints(count = pointCount) {
+  const actualCount = clampPointCount(count);
   return Array.from({ length: actualCount }, (_, i) => {
-    return { x: pointStep * (i + 1), y: centerY };
+    return createCenteredPoint(i, actualCount);
   });
 }
 
@@ -223,12 +228,8 @@ canvas.addEventListener("mousedown", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
-  points.forEach((p, i) => {
-    if (Math.hypot(p.x - mx, p.y - my) < pointRadius + 2) {
-      dragIndex = i;
-      return;
-    }
-  });
+  const pointIndex = getPointIndexAtPosition(mx, my);
+  if (pointIndex !== -1) dragIndex = pointIndex;
 });
 
 window.addEventListener("mouseup", () => {
@@ -253,6 +254,25 @@ function pointsToFilters(points) {
     return { freq: xToFrequency(p.x), gain: yToDb(p.y), x: p.x, y: p.y };
   });
   return filters;
+}
+
+async function saveCurrentFilters() {
+  const tabId = await getCurrentTabId();
+  if (tabId == null || tabId == undefined) return;
+
+  const newFilters = pointsToFilters(points);
+  const values = {
+    ["filters." + tabId]: newFilters,
+    ["filters"]: newFilters,
+  };
+  if (!isToolkitWindow) values["enabled." + tabId] = true;
+  return chrome.storage.local.set(values);
+}
+
+function getPointIndexAtPosition(x, y) {
+  return points.findIndex((p) => {
+    return Math.hypot(p.x - x, p.y - y) < pointRadius + 2;
+  });
 }
 
 function applyTheme(theme) {
@@ -283,15 +303,7 @@ async function applyPointCountChange(newCount) {
   initPoints(newCount);
   mainResize();
   refreshToolkitCaptureFilters();
-  const tabId = await getCurrentTabId();
-  if (tabId == null || tabId == undefined) return;
-  const newFilters = pointsToFilters(points);
-  const values = {
-    ["filters." + tabId]: newFilters,
-    ["filters"]: newFilters,
-  };
-  if (!isToolkitWindow) values["enabled." + tabId] = true;
-  chrome.storage.local.set(values);
+  await saveCurrentFilters();
 }
 
 canvas.addEventListener("mousemove", async (e) => {
@@ -305,16 +317,22 @@ canvas.addEventListener("mousemove", async (e) => {
       points[dragIndex] = { x: mx, y: my };
       mainResize();
       refreshToolkitCaptureFilters();
-      var tabId = await getCurrentTabId();
-      var newFilters = pointsToFilters(points);
-      const values = {
-        ["filters." + tabId]: newFilters,
-        ["filters"]: newFilters,
-      };
-      if (!isToolkitWindow) values["enabled." + tabId] = true;
-      chrome.storage.local.set(values);
+      await saveCurrentFilters();
     }
   }
+});
+
+canvas.addEventListener("dblclick", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const pointIndex = getPointIndexAtPosition(mx, my);
+  if (pointIndex === -1) return;
+
+  points[pointIndex] = createCenteredPoint(pointIndex, points.length);
+  mainResize();
+  refreshToolkitCaptureFilters();
+  saveCurrentFilters();
 });
 
 document.getElementById("change-eq").addEventListener("click", async () => {
