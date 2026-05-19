@@ -290,6 +290,28 @@ body {
   pointer-events: none;
 }
 
+.info-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  display: none;
+  min-width: 44px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--settings-bg);
+  color: var(--text);
+  box-shadow: 0 2px 6px var(--shadow-soft);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
 .controls {
   margin-top: 20px;
   display: flex;

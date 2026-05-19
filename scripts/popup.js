@@ -1,6 +1,7 @@
 let dragIndex = null;
 const canvas = document.getElementById("eq-canvas");
 const ctx = canvas.getContext("2d", { alpha: true });
+const infoTooltip = document.getElementById("info-tooltip");
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const THEME_KEY = "theme";
@@ -73,6 +74,37 @@ function frequencyToX(freq, canvasWidth = null) {
 function yToDb(y, canvasHeight = null) {
   canvasHeight ??= canvas.height;
   return ((canvasHeight / 2 - y) / (canvasHeight / 2 - 20)) * 25;
+}
+
+function hideinfoTooltip() {
+  if (!infoTooltip) return;
+  infoTooltip.style.display = "none";
+}
+
+function getPointTooltipText(point) {
+  if (dragMode === "q") return `Q ${ensureQFactor(point.q).toFixed(2)}`;
+  return `${Math.round(xToFrequency(point.x))} Hz`;
+}
+
+function updateInfoTooltip(point) {
+  if (!infoTooltip || !point) return;
+
+  infoTooltip.textContent = getPointTooltipText(point);
+  infoTooltip.style.display = "block";
+
+  const tooltipWidth = infoTooltip.offsetWidth;
+  const tooltipHeight = infoTooltip.offsetHeight;
+  const margin = 6;
+  const offset = 12;
+  const maxLeft = canvas.clientWidth - tooltipWidth - margin;
+  const maxTop = canvas.clientHeight - tooltipHeight - margin;
+  const left = Math.max(margin, Math.min(maxLeft, point.x + offset));
+  const top = Math.max(
+    margin,
+    Math.min(maxTop, point.y - tooltipHeight - offset)
+  );
+
+  infoTooltip.style.transform = `translate(${left}px, ${top}px)`;
 }
 
 function renderCaptureError(message) {
@@ -307,11 +339,13 @@ canvas.addEventListener("mousedown", (e) => {
   dragMode = e.shiftKey ? "q" : "point";
   qDragStartY = my;
   qDragStartValue = ensureQFactor(getDraggedPoint().q);
+  updateInfoTooltip(getDraggedPoint());
 });
 
 window.addEventListener("mouseup", () => {
   dragIndex = null;
   dragMode = null;
+  hideinfoTooltip();
 });
 
 function addPresetToDropdown(name) {
@@ -475,7 +509,9 @@ canvas.addEventListener("mousemove", async (e) => {
     if (dragMode === "q") {
       const dy = qDragStartY - my;
       const nextQ = qDragStartValue * Math.pow(2, dy / 40);
-      setDraggedPoint({ ...currentPoint, q: ensureQFactor(nextQ) });
+      const nextPoint = { ...currentPoint, q: ensureQFactor(nextQ) };
+      setDraggedPoint(nextPoint);
+      updateInfoTooltip(nextPoint);
       mainResize();
       refreshToolkitCaptureFilters();
       await saveCurrentFilters();
@@ -483,7 +519,9 @@ canvas.addEventListener("mousemove", async (e) => {
       mx = Math.max(0, Math.min(canvas.width, mx));
       my = Math.max(0, Math.min(canvas.height, my));
       const y = dragIndex.type === "peaking" ? my : canvas.height / 2;
-      setDraggedPoint({ ...currentPoint, x: mx, y: y });
+      const nextPoint = { ...currentPoint, x: mx, y: y };
+      setDraggedPoint(nextPoint);
+      updateInfoTooltip(nextPoint);
       mainResize();
       refreshToolkitCaptureFilters();
       await saveCurrentFilters();
