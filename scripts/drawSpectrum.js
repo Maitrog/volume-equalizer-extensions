@@ -48,18 +48,6 @@ function syncSpectrumCanvasSize() {
   if (spectrumCanvas.height !== height) spectrumCanvas.height = height;
 }
 
-function getCssColor(propertyName, fallback) {
-  const css = getComputedStyle(document.documentElement);
-  let value = css.getPropertyValue(propertyName).trim();
-
-  while (value.startsWith("var(")) {
-    const nestedName = value.slice(4, -1).trim();
-    value = css.getPropertyValue(nestedName).trim();
-  }
-
-  return value || fallback;
-}
-
 function spectrumBinToFrequency(index, binCount) {
   const sampleRate = meta.sampleRate || 48000;
   const nyquist = sampleRate / 2;
@@ -79,9 +67,9 @@ function drawSpectrum(buffer) {
 
   const sampleRate = meta.sampleRate || 48000;
   const maxFrequency = Math.min(24000, sampleRate / 2);
-  const lineColor = getCssColor("--accent-mid", accentMid || "#9d00ff");
-  const fillStart = getCssColor("--accent-start", accentStart || lineColor);
-  const fillEnd = getCssColor("--accent-end", accentEnd || lineColor);
+  const lineColor = accentMid;
+  const fillStart = accentStart;
+  const fillEnd = accentEnd;
 
   const fill = spectrumCtx.createLinearGradient(0, 0, 0, height);
   fill.addColorStop(0, fillStart);

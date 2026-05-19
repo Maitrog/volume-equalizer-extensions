@@ -12,6 +12,50 @@ port.remove();
 
   const { connect } = AudioNode.prototype;
 
+  const getBiquadFilterCount = (filters) => {
+    let count = 0;
+    while (filters[count]) count++;
+    return count;
+  };
+
+  const applyBiquadSettings = (biquadFilter, filter) => {
+    biquadFilter.type = filter.type ?? "peaking";
+    biquadFilter.gain.value = Number(filter.gain ?? 0);
+    biquadFilter.frequency.value = Number(filter.freq);
+    biquadFilter.Q.value = Number(filter.q ?? 0.5);
+  };
+
+  const createBiquadFilter = (context, filter) => {
+    const biquadFilter = context.createBiquadFilter();
+    applyBiquadSettings(biquadFilter, filter);
+    return biquadFilter;
+  };
+
+  const getLastBiquadFilter = (filters) => {
+    const count = getBiquadFilterCount(filters);
+    return count > 0 ? filters[count - 1] : filters.balance;
+  };
+
+  const rebuildBiquadChain = (source, filters, filterSettings) => {
+    filters.balance.disconnect();
+
+    const oldCount = getBiquadFilterCount(filters);
+    for (let i = 0; i < oldCount; i++) {
+      filters[i].disconnect();
+      delete filters[i];
+    }
+
+    let previousNode = filters.balance;
+    filterSettings.forEach((filter, i) => {
+      const biquadFilter = createBiquadFilter(source.context, filter);
+      previousNode.connect(biquadFilter);
+      filters[i] = biquadFilter;
+      previousNode = biquadFilter;
+    });
+
+    connect.call(previousNode, source.context.destination);
+  };
+
   const attach = (source) => {
     const { context } = source;
 
@@ -38,19 +82,7 @@ port.remove();
     map.set(source, filters);
 
     var newF = JSON.parse(port.dataset.freqs);
-    newF.forEach((filter, i) => {
-      const biquadFilter = context.createBiquadFilter();
-      biquadFilter.frequency.value = filter.frequency;
-      biquadFilter.gain.value = filter.gain;
-      biquadFilter.type = filter.type;
-      biquadFilter.Q.value = filter.q ?? 0.5;
-      filters[i] = biquadFilter;
-      if (i === 0) {
-        filters.balance.connect(biquadFilter);
-      } else {
-        filters[i - 1].connect(biquadFilter);
-      }
-    });
+    rebuildBiquadChain(source, filters, newF);
 
     if (port.dataset.enableSpectrum === "true") {
       currentSourceNode = filters[newF.length - 1];
@@ -58,7 +90,7 @@ port.remove();
     }
 
     port.dispatchEvent(new Event("connected"));
-    return connect.call(filters[newF.length - 1], context.destination);
+    return context.destination;
   };
 
   const source = (target) =>
@@ -103,6 +135,7 @@ port.remove();
   const detach = () => {
     map.forEach((filters, source) => {
       source.disconnect();
+      getLastBiquadFilter(filters).disconnect();
       connect.call(source, source.context.destination);
       port.dispatchEvent(new Event("disconnected"));
     });
@@ -113,7 +146,22 @@ port.remove();
     map.forEach((filters, source) => {
       source.disconnect();
       source.connect(filters.preamp);
-      connect.call(filters[newF.length - 1], source.context.destination);
+      if (getBiquadFilterCount(filters) !== newF.length) {
+        rebuildBiquadChain(source, filters, newF);
+      } else {
+        newF.forEach((filter, i) => {
+          applyBiquadSettings(filters[i], filter);
+        });
+        const lastFilter = getLastBiquadFilter(filters);
+        lastFilter.disconnect();
+        connect.call(lastFilter, source.context.destination);
+      }
+
+      if (port.dataset.enableSpectrum === "true") {
+        currentSourceNode = getLastBiquadFilter(filters);
+        analyser = null;
+        startSpectrum();
+      }
       port.dispatchEvent(new Event("connected"));
     });
     if (map.size) {
@@ -197,12 +245,21 @@ port.remove();
   });
 
   port.addEventListener("filters-changed", () =>
-    map.forEach((filters) => {
+    map.forEach((filters, source) => {
       var newF = JSON.parse(port.dataset.freqs);
+      if (getBiquadFilterCount(filters) !== newF.length) {
+        rebuildBiquadChain(source, filters, newF);
+        if (port.dataset.enableSpectrum === "true") {
+          currentSourceNode = filters[newF.length - 1];
+          analyser = null;
+          startSpectrum();
+        }
+        port.dispatchEvent(new Event("connected"));
+        return;
+      }
+
       newF.forEach((filter, i) => {
-        filters[i].gain.value = Number(filter.gain);
-        filters[i].frequency.value = Number(filter.frequency);
-        filters[i].Q.value = Number(filter.q ?? 0.5);
+        applyBiquadSettings(filters[i], filter);
       });
     })
   );

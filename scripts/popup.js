@@ -18,6 +18,8 @@ const MAX_POINT_COUNT = 9;
 const DEFAULT_FILTER_Q = 0.5;
 const MIN_FILTER_Q = 0.1;
 const MAX_FILTER_Q = 10;
+const DEFAULT_HIGHPASS_FREQ = 20;
+const DEFAULT_LOWPASS_FREQ = 20000;
 let pointCount = MIN_POINT_COUNT;
 let currentTheme = DEFAULT_THEME;
 let skipPointsResetConfirm = false;
@@ -104,6 +106,24 @@ function createCenteredPoint(index, count = pointCount) {
   return { x: pointStep * (index + 1), y: centerY, q: DEFAULT_FILTER_Q };
 }
 
+function createCrossoverPoint(freq, filter = {}) {
+  return {
+    x: Number.isFinite(Number(filter.x))
+      ? Number(filter.x)
+      : frequencyToX(Number(filter.freq ?? freq)),
+    y: canvas.height / 2,
+    q: ensureQFactor(filter.q),
+  };
+}
+
+function createDefaultHighpassPoint(filter = {}) {
+  return createCrossoverPoint(DEFAULT_HIGHPASS_FREQ, filter);
+}
+
+function createDefaultLowpassPoint(filter = {}) {
+  return createCrossoverPoint(DEFAULT_LOWPASS_FREQ, filter);
+}
+
 function createCenteredPoints(count = pointCount) {
   const actualCount = clampPointCount(count);
   return Array.from({ length: actualCount }, (_, i) => {
@@ -114,15 +134,25 @@ function createCenteredPoints(count = pointCount) {
 function initPoints(count = pointCount) {
   pointCount = clampPointCount(count);
   points = createCenteredPoints(pointCount);
+  highpassPoint = createDefaultHighpassPoint();
+  lowpassPoint = createDefaultLowpassPoint();
 }
 
 function setPoints(filters) {
-  pointCount = clampPointCount(filters.length);
+  const peakingFilters = filters.filter((filter) => {
+    return (filter.type ?? "peaking") === "peaking";
+  });
+  const highpassFilter = filters.find((filter) => filter.type === "highpass");
+  const lowpassFilter = filters.find((filter) => filter.type === "lowpass");
+
+  pointCount = clampPointCount(peakingFilters.length);
   savePointCount(pointCount);
   updatePointCountSelect(pointCount);
-  points = filters.map((filter, index) => {
+  highpassPoint = createDefaultHighpassPoint(highpassFilter);
+  lowpassPoint = createDefaultLowpassPoint(lowpassFilter);
+  points = peakingFilters.map((filter, index) => {
     const centeredPoint = createCenteredPoint(index, pointCount);
-    const freq = filter.freq ?? filter.frequency;
+    const freq = filter.freq;
     const gain = filter.gain;
     const x = Number.isFinite(Number(filter.x))
       ? Number(filter.x)
@@ -135,8 +165,15 @@ function setPoints(filters) {
       ? canvas.height / 2 - (Number(gain) / 25) * (canvas.height / 2 - 20)
       : centeredPoint.y;
 
-    return { x: x, y: y, q: ensureQFactor(filter.q ?? filter.Q) };
+    return { x: x, y: y, q: ensureQFactor(filter.q) };
   });
+}
+
+function hasCrossoverFilters(filters) {
+  return (
+    filters.some((filter) => filter.type === "highpass") &&
+    filters.some((filter) => filter.type === "lowpass")
+  );
 }
 
 function mainResize() {
@@ -205,19 +242,28 @@ async function mainLoad() {
     "enableSpectrum",
     "captureError." + id,
   ]);
+  let loadedFilters = null;
   if (
     result["filters." + id] != null &&
     result["filters." + id] != undefined &&
     result["filters." + id].length != 0
-  )
-    setPoints(result["filters." + id]);
-  else if (
+  ) {
+    loadedFilters = result["filters." + id];
+    setPoints(loadedFilters);
+  } else if (
     result["filters"] != null &&
     result["filters"] != undefined &&
     result["filters"].length != 0
-  )
-    setPoints(result["filters"]);
-  else initPoints();
+  ) {
+    loadedFilters = result["filters"];
+    setPoints(loadedFilters);
+  } else {
+    initPoints();
+  }
+
+  if (!loadedFilters || !hasCrossoverFilters(loadedFilters)) {
+    await saveCurrentFilters({ enableCurrentTab: false });
+  }
 
   if (result["gain." + id] != null && result["gain." + id] != undefined)
     document.getElementById("master-volume").value = result["gain." + id];
@@ -254,13 +300,13 @@ canvas.addEventListener("mousedown", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
-  const pointIndex = getPointIndexAtPosition(mx, my);
-  if (pointIndex === -1) return;
+  const dragTarget = getPointIndexAtPosition(mx, my);
+  if (!dragTarget) return;
 
-  dragIndex = pointIndex;
+  dragIndex = dragTarget;
   dragMode = e.shiftKey ? "q" : "point";
   qDragStartY = my;
-  qDragStartValue = ensureQFactor(points[pointIndex].q);
+  qDragStartValue = ensureQFactor(getDraggedPoint().q);
 });
 
 window.addEventListener("mouseup", () => {
@@ -282,19 +328,95 @@ function addPresetToDropdown(name) {
 }
 
 function pointsToFilters(points) {
-  const filters = points.map((p) => {
-    return {
+  const filters = [];
+
+  if (highpassPoint) {
+    filters.push({
+      type: "highpass",
+      freq: xToFrequency(highpassPoint.x),
+      gain: 0,
+      q: ensureQFactor(highpassPoint.q),
+      x: highpassPoint.x,
+      y: highpassPoint.y,
+    });
+  }
+
+  points.forEach((p) => {
+    filters.push({
+      type: "peaking",
       freq: xToFrequency(p.x),
       gain: yToDb(p.y),
       q: ensureQFactor(p.q),
       x: p.x,
       y: p.y,
-    };
+    });
   });
+
+  if (lowpassPoint) {
+    filters.push({
+      type: "lowpass",
+      freq: xToFrequency(lowpassPoint.x),
+      gain: 0,
+      q: ensureQFactor(lowpassPoint.q),
+      x: lowpassPoint.x,
+      y: lowpassPoint.y,
+    });
+  }
+
   return filters;
 }
 
-async function saveCurrentFilters() {
+function getDraggedPoint() {
+  if (!dragIndex) return null;
+  if (dragIndex.type === "highpass") return highpassPoint;
+  if (dragIndex.type === "lowpass") return lowpassPoint;
+  return points[dragIndex.index];
+}
+
+function setDraggedPoint(point) {
+  if (!dragIndex) return;
+  if (dragIndex.type === "highpass") {
+    highpassPoint = point;
+    return;
+  }
+  if (dragIndex.type === "lowpass") {
+    lowpassPoint = point;
+    return;
+  }
+  points[dragIndex.index] = point;
+}
+
+function getPointAtPosition(x, y) {
+  const peakingIndex = points.findIndex((p) => {
+    return Math.hypot(p.x - x, p.y - y) < pointRadius + 2;
+  });
+
+  if (peakingIndex !== -1) {
+    return {
+      type: "peaking",
+      index: peakingIndex,
+    };
+  }
+
+  if (
+    highpassPoint &&
+    Math.hypot(highpassPoint.x - x, highpassPoint.y - y) < pointRadius + 2
+  ) {
+    return { type: "highpass" };
+  }
+
+  if (
+    lowpassPoint &&
+    Math.hypot(lowpassPoint.x - x, lowpassPoint.y - y) < pointRadius + 2
+  ) {
+    return { type: "lowpass" };
+  }
+
+  return null;
+}
+
+async function saveCurrentFilters(options = {}) {
+  const enableCurrentTab = options.enableCurrentTab ?? true;
   const tabId = await getCurrentTabId();
   if (tabId == null || tabId == undefined) return;
 
@@ -303,14 +425,12 @@ async function saveCurrentFilters() {
     ["filters." + tabId]: newFilters,
     ["filters"]: newFilters,
   };
-  if (!isToolkitWindow) values["enabled." + tabId] = true;
+  if (!isToolkitWindow && enableCurrentTab) values["enabled." + tabId] = true;
   return chrome.storage.local.set(values);
 }
 
 function getPointIndexAtPosition(x, y) {
-  return points.findIndex((p) => {
-    return Math.hypot(p.x - x, p.y - y) < pointRadius + 2;
-  });
+  return getPointAtPosition(x, y);
 }
 
 function applyTheme(theme) {
@@ -349,17 +469,21 @@ canvas.addEventListener("mousemove", async (e) => {
     const rect = canvas.getBoundingClientRect();
     let mx = e.clientX - rect.left;
     let my = e.clientY - rect.top;
+    const currentPoint = getDraggedPoint();
+    if (!currentPoint) return;
+
     if (dragMode === "q") {
       const dy = qDragStartY - my;
       const nextQ = qDragStartValue * Math.pow(2, dy / 40);
-      points[dragIndex].q = ensureQFactor(nextQ);
+      setDraggedPoint({ ...currentPoint, q: ensureQFactor(nextQ) });
       mainResize();
       refreshToolkitCaptureFilters();
       await saveCurrentFilters();
     } else if (mx > 0) {
       mx = Math.max(0, Math.min(canvas.width, mx));
       my = Math.max(0, Math.min(canvas.height, my));
-      points[dragIndex] = { ...points[dragIndex], x: mx, y: my };
+      const y = dragIndex.type === "peaking" ? my : canvas.height / 2;
+      setDraggedPoint({ ...currentPoint, x: mx, y: y });
       mainResize();
       refreshToolkitCaptureFilters();
       await saveCurrentFilters();
@@ -371,10 +495,19 @@ canvas.addEventListener("dblclick", (e) => {
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
-  const pointIndex = getPointIndexAtPosition(mx, my);
-  if (pointIndex === -1) return;
+  const pointTarget = getPointIndexAtPosition(mx, my);
+  if (!pointTarget) return;
 
-  points[pointIndex] = createCenteredPoint(pointIndex, points.length);
+  if (pointTarget.type === "highpass") {
+    highpassPoint = createDefaultHighpassPoint();
+  } else if (pointTarget.type === "lowpass") {
+    lowpassPoint = createDefaultLowpassPoint();
+  } else {
+    points[pointTarget.index] = createCenteredPoint(
+      pointTarget.index,
+      points.length
+    );
+  }
   mainResize();
   refreshToolkitCaptureFilters();
   saveCurrentFilters();
@@ -532,13 +665,15 @@ menu.addEventListener("click", (e) => {
       if (!prefs.presets) return;
 
       const presets = prefs.presets;
+      setPoints(presets[choice]);
+      const filters = pointsToFilters(points);
       const tabId = await getCurrentTabId();
       const values = {
-        ["filters." + tabId]: presets[choice],
+        ["filters." + tabId]: filters,
+        ["filters"]: filters,
       };
       if (!isToolkitWindow) values["enabled." + tabId] = true;
       chrome.storage.local.set(values);
-      setPoints(presets[choice]);
       mainResize();
       refreshToolkitCaptureFilters();
     });

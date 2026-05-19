@@ -1,4 +1,4 @@
-function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
+function drawLowpassFilter(canvas, audioCtx, freq, Q = 0.5) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
@@ -6,10 +6,9 @@ function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   const canvasWidth = width - 10;
 
   const filter = audioCtx.createBiquadFilter();
-  filter.type = "peaking";
+  filter.type = "lowpass";
   filter.frequency.value = freq;
   filter.Q.value = Q;
-  filter.gain.value = gainDb;
 
   const numPoints = width;
   const frequencies = new Float32Array(numPoints);
@@ -26,15 +25,14 @@ function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
 
   filter.getFrequencyResponse(frequencies, magResponse, phaseResponse);
 
-  const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-  grad.addColorStop(0, accentStart);
-  grad.addColorStop(0.5, accentMid);
-  grad.addColorStop(1, accentEnd);
-  ctx.strokeStyle = grad;
+  ctx.strokeStyle = lowpassFilterColor;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let i = 0; i < numPoints; i++) {
-    const db = 25 * Math.log10(magResponse[i]);
+    const db = Math.max(
+      -80,
+      25 * Math.log10(magResponse[i] || Number.EPSILON)
+    );
     const y = height / 2 - (db / 25) * (height / 2 - gainMargin * 2);
     const x = i;
     if (i === 0) ctx.moveTo(x, y);

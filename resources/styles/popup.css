@@ -6,6 +6,8 @@
   --dark-accent-start: #00ffd8;
   --dark-accent-mid: #9d00ff;
   --dark-accent-end: #ff7700;
+  --dark-highpass-filter: #22c55e;
+  --dark-lowpass-filter: #f97316;
   --dark-text: #e0e0e0;
   --dark-text-header: #e0e0e0;
   --dark-slider-track-bg: rgba(255, 255, 255, 0.1);
@@ -39,6 +41,8 @@
   --light-accent-start: #00ffd8;
   --light-accent-mid: #9d00ff;
   --light-accent-end: #ff7700;
+  --light-highpass-filter: #16a34a;
+  --light-lowpass-filter: #ea580c;
   --light-text: #1a1a2a;
   --light-text-header: #1a1a2a;
   --light-slider-track-bg: rgba(0, 0, 0, 0.08);
@@ -73,6 +77,8 @@
   --ny-accent-start: #f1d9a8;
   --ny-accent-mid: #e4b654;
   --ny-accent-end: #f1d9a8;
+  --ny-highpass-filter: #e4b654;
+  --ny-lowpass-filter: #e4b654;
   --ny-text: #1f2745;
   --ny-text-header: #e4b654;
   --ny-text-placeholder: rgba(31, 39, 69, 0.45);
@@ -105,6 +111,8 @@
   --accent-start: var(--ny-accent-start);
   --accent-mid: var(--ny-accent-mid);
   --accent-end: var(--ny-accent-end);
+  --highpass-filter: var(--ny-highpass-filter);
+  --lowpass-filter: var(--ny-lowpass-filter);
   --text: var(--ny-text);
   --text-header: var(--ny-text-header);
   --slider-track-bg: var(--ny-slider-track-bg);

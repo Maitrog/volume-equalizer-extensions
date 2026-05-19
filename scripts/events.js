@@ -2,7 +2,7 @@ const port = document.createElement("span");
 port.id = "eq-tools-port";
 document.documentElement.append(port);
 
-const freqs = [5, 30, 180, 800, 5000];
+const peakingFreqs = [5, 30, 180, 800, 5000];
 let currentTabId = null;
 
 const withTabId = (callback) => {
@@ -47,9 +47,13 @@ port.addEventListener("capture-error", (e) => {
 
 chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
   currentTabId = tabId;
-  const defaultFilters = freqs.map((freq) => {
-    return { freq: freq, gain: 0, q: 0.5 };
-  });
+  const defaultFilters = [
+    { freq: 20, gain: 0, q: 0.5, type: "highpass" },
+    ...peakingFreqs.map((freq) => {
+      return { freq: freq, gain: 0, q: 0.5, type: "peaking" };
+    }),
+    { freq: 20000, gain: 0, q: 0.5, type: "lowpass" },
+  ];
   chrome.storage.local.get(
     {
       ["volume." + tabId]: 1,
@@ -62,12 +66,11 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
     (prefs) => {
       const filters = prefs["filters." + tabId] ?? defaultFilters;
       const freqsMapped = filters.map((filter) => {
-        const frequency = filter.freq ?? filter.frequency;
         return {
-          frequency: frequency,
+          freq: filter.freq,
           gain: filter.gain,
-          q: filter.q ?? filter.Q ?? 0.5,
-          type: "peaking",
+          q: filter.q ?? 0.5,
+          type: filter.type ?? "peaking",
         };
       });
       port.dataset.freqs = JSON.stringify(freqsMapped);
@@ -92,10 +95,10 @@ chrome.storage.onChanged.addListener((ps) => {
     if (ps["filters." + tabId]) {
       var newF = ps["filters." + tabId].newValue.map((filter, i) => {
         return {
-          frequency: filter.freq,
+          freq: filter.freq,
           gain: filter.gain,
-          q: filter.q ?? filter.Q ?? 0.5,
-          type: "peaking",
+          q: filter.q ?? 0.5,
+          type: filter.type ?? "peaking",
         };
       });
       port.dataset.freqs = JSON.stringify(newF);
