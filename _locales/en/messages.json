@@ -12,10 +12,10 @@
         "message": "Reset"
     },
     "enable_eq_button_label": {
-        "message": "Enable eq on this tab"
+        "message": "Enable EQ on this tab"
     },
     "stop_eq_button_label": {
-        "message": "Stop eq on this tab"
+        "message": "Stop EQ on this tab"
     },
     "empty_preset_name": {
         "message": "None"
