@@ -67,14 +67,14 @@
     },
     "support_me": {
         "message": "Apóyame"
-  },
-  "settings_button_tooltip": {
-    "message": "Configuración"
-  },
-  "volume_mute_button_tooltip": {
-    "message": "Silenciar/activar sonido"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Abrir modo ventana"
-  }
+    },
+    "settings_button_tooltip": {
+        "message": "Configuración"
+    },
+    "volume_mute_button_tooltip": {
+        "message": "Silenciar/activar sonido"
+    },
+    "window_mode_button_tooltip": {
+        "message": "Abrir modo ventana"
+    }
 }
