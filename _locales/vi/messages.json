@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit là tiện ích mở rộng miễn phí và mã nguồn mở để điều khiển âm thanh."
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "Khuếch đại:"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "Đặt lại"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "Bật eq trên tab này"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "Tắt eq trên tab này"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "Không"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "Lưu thiết lập trước"
   },
   "enter_preset_name": {
     "message": "Nhập tên"
   },
-  "settings": {
+  "settings_title": {
     "message": "Cài đặt"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "Nhập preset"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "Xuất preset"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "Bật hiển thị phổ, cần tải lại trang (tốn CPU cao)"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "Số điểm EQ"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "Hủy"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "Giao diện"
   },
   "capture_error_prefix": {

@@ -5,40 +5,40 @@
     "extDescription": {
         "message": "EQ Toolkit — бесплатное расширение с открытым исходным кодом для управления звуком."
     },
-    "gain": {
+    "gain_slider_label": {
         "message": "Усиление:"
     },
-    "reset": {
+    "reset_button_label": {
         "message": "Сбросить"
     },
-    "enable_eq": {
+    "enable_eq_button_label": {
         "message": "Включить в этой вкладке"
     },
-    "stop_eq": {
+    "stop_eq_button_label": {
         "message": "Выключить в этой вкладке"
     },
-    "none": {
+    "empty_preset_name": {
         "message": "Нет"
     },
-    "save": {
+    "save_preset_button_label": {
         "message": "Сохранить пресет"
     },
     "enter_preset_name": {
         "message": "Введите название"
     },
-    "settings": {
+    "settings_title": {
         "message": "Настройки"
     },
-    "import_presets": {
+    "import_presets_button_label": {
         "message": "Импорт пресетов"
     },
-    "export_presets": {
+    "export_presets_button_label": {
         "message": "Экспорт пресетов"
     },
-    "enable_spectrum": {
+    "enable_spectrum_setting_option": {
         "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
     },
-    "points_count": {
+    "points_count_setting_option": {
         "message": "Количество точек эквалайзера"
     },
     "points_reset_title": {
@@ -56,7 +56,7 @@
     "cancel": {
         "message": "Отмена"
     },
-    "theme_label": {
+    "theme_setting_option": {
         "message": "Тема"
     },
     "capture_error_prefix": {

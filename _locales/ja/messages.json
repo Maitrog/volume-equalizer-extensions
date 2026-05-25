@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit は、音声をコントロールできる無料のオープンソース拡張機能です。"
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "増幅"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "リセット"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "このタブで EQ を有効にする"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "このタブで EQ を停止する"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "なし"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "設定を保存"
   },
   "enter_preset_name": {
     "message": "名前を入力"
   },
-  "settings": {
+  "settings_title": {
     "message": "設定"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "プリセットをインポート"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "プリセットをエクスポート"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "スペクトラム可視化を有効にする（ページの再読み込みが必要・CPU負荷が高い）"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "EQポイント数"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "キャンセル"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "テーマ"
   },
   "capture_error_prefix": {

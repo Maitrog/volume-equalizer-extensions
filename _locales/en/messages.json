@@ -5,40 +5,40 @@
     "extDescription": {
         "message": "EQ Toolkit is a free and open-source extension that provides audio control."
     },
-    "gain": {
+    "gain_slider_label": {
         "message": "Gain:"
     },
-    "reset": {
+    "reset_button_label": {
         "message": "Reset"
     },
-    "enable_eq": {
+    "enable_eq_button_label": {
         "message": "Enable eq on this tab"
     },
-    "stop_eq": {
+    "stop_eq_button_label": {
         "message": "Stop eq on this tab"
     },
-    "none": {
+    "empty_preset_name": {
         "message": "None"
     },
-    "save": {
+    "save_preset_button_label": {
         "message": "Save preset"
     },
     "enter_preset_name": {
         "message": "Enter name"
     },
-    "settings": {
+    "settings_title": {
         "message": "Settings"
     },
-    "import_presets": {
+    "import_presets_button_label": {
         "message": "Import presets"
     },
-    "export_presets": {
+    "export_presets_button_label": {
         "message": "Export presets"
     },
-    "enable_spectrum": {
+    "enable_spectrum_setting_option": {
         "message": "Enable spectrum visualisation, need to restart page (high CPU load)"
     },
-    "points_count": {
+    "points_count_setting_option": {
         "message": "Number of EQ points"
     },
     "points_reset_title": {
@@ -56,7 +56,7 @@
     "cancel": {
         "message": "Cancel"
     },
-    "theme_label": {
+    "theme_setting_option": {
         "message": "Theme"
     },
     "capture_error_prefix": {

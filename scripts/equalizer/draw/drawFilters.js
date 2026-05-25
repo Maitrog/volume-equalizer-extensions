@@ -1,8 +1,3 @@
-let points = [];
-let highpassPoint = null;
-let lowpassPoint = null;
-const pointRadius = 3;
-
 function drawPoints() {
   points.forEach((p) => {
     ctx.beginPath();

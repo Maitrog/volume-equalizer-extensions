@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit 是一个免费开源的音频控制扩展程序。"
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "放大"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "重置"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "在此标签页启用均衡器"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "在此标签页停止均衡器"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "无"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "保存预设"
   },
   "enter_preset_name": {
     "message": "输入名称"
   },
-  "settings": {
+  "settings_title": {
     "message": "设置"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "导入预设"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "导出预设"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "启用频谱可视化，需要重新加载页面（CPU 负载较高）"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "EQ点数"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "取消"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "主题"
   },
   "capture_error_prefix": {

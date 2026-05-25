@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit, ses kontrolü sağlayan ücretsiz ve açık kaynaklı bir uzantıdır."
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "Amplifikasyon:"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "Sıfırla"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "Bu sekmede EQ yi etkinleştir"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "Bu sekmede EQ yi durdur"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "Yok"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "Ön ayarı kaydet"
   },
   "enter_preset_name": {
     "message": "Ad girin"
   },
-  "settings": {
+  "settings_title": {
     "message": "Ayarlar"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "Ön ayarları içe aktar"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "Ön ayarları dışa aktar"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "Spektrum görselleştirmesini etkinleştir; sayfayı yeniden yüklemek gerekir (yüksek CPU kullanımı)"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "EQ nokta sayısı"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "İptal"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "Tema"
   },
   "capture_error_prefix": {

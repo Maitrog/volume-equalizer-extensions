@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit is een gratis open-source-extensie voor audiobediening."
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "Versterking:"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "Reset"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "EQ inschakelen op dit tabblad"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "EQ uitschakelen op dit tabblad"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "Geen"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "Preset opslaan"
   },
   "enter_preset_name": {
     "message": "Voer naam in"
   },
-  "settings": {
+  "settings_title": {
     "message": "Instellingen"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "Voorinstellingen importeren"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "Voorinstellingen exporteren"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "Spectrumvisualisatie inschakelen; pagina opnieuw laden vereist (hoge CPU-belasting)"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "Aantal EQ-punten"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "Annuleren"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "Thema"
   },
   "capture_error_prefix": {

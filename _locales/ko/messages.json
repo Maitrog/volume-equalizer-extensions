@@ -5,40 +5,40 @@
   "extDescription": {
     "message": "EQ Toolkit은 오디오 제어 기능을 제공하는 무료 오픈 소스 확장 프로그램입니다."
   },
-  "gain": {
+  "gain_slider_label": {
     "message": "확대:"
   },
-  "reset": {
+  "reset_button_label": {
     "message": "재설정"
   },
-  "enable_eq": {
+  "enable_eq_button_label": {
     "message": "이 탭에서 이퀄라이저 활성화"
   },
-  "stop_eq": {
+  "stop_eq_button_label": {
     "message": "이 탭에서 이퀄라이저 중지"
   },
-  "none": {
+  "empty_preset_name": {
     "message": "없음"
   },
-  "save": {
+  "save_preset_button_label": {
     "message": "프리셋 저장"
   },
   "enter_preset_name": {
     "message": "이름 입력"
   },
-  "settings": {
+  "settings_title": {
     "message": "설정"
   },
-  "import_presets": {
+  "import_presets_button_label": {
     "message": "프리셋 가져오기"
   },
-  "export_presets": {
+  "export_presets_button_label": {
     "message": "프리셋 내보내기"
   },
-  "enable_spectrum": {
+  "enable_spectrum_setting_option": {
     "message": "스펙트럼 시각화 활성화, 페이지를 다시 로드해야 함(높은 CPU 부하)"
   },
-  "points_count": {
+  "points_count_setting_option": {
     "message": "EQ 포인트 수"
   },
   "points_reset_title": {
@@ -56,7 +56,7 @@
   "cancel": {
     "message": "취소"
   },
-  "theme_label": {
+  "theme_setting_option": {
     "message": "테마"
   },
   "capture_error_prefix": {
