@@ -39,6 +39,11 @@ Available soon
 4. Drag and drop `.crx` file to your browser
 5. Enjoy
 
+## Localization
+You can help translate EQ Toolkit on Weblate.
+
+Weblate project: [project link](https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/)
+
 ## Support
 The extention are provided for free. If you like the project, I would appreciate your [support](https://www.donationalerts.com/r/maitrog).
 
