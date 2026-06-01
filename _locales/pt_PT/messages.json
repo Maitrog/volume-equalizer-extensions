@@ -3,25 +3,25 @@
     "message": "EQ Toolkit - Equalizador de áudio"
   },
   "extDescription": {
-    "message": "O EQ Toolkit é uma extensão gratuita e de código aberto para controlar o áudio."
+    "message": "O EQ Toolkit é uma extensão gratuita e de código aberto que fornece controlo de áudio."
   },
   "gain_slider_label": {
     "message": "Amplificação:"
   },
   "reset_button_label": {
-    "message": "Redefinir"
+    "message": "Reiniciar"
   },
   "enable_eq_button_label": {
-    "message": "Ativar EQ nesta guia"
+    "message": "Ativar EQ nesta aba"
   },
   "stop_eq_button_label": {
-    "message": "Desativar EQ nesta guia"
+    "message": "Desativar EQ nesta aba"
   },
   "empty_preset_name": {
     "message": "Nenhum"
   },
   "save_preset_button_label": {
-    "message": "Salvar predefinição"
+    "message": "Guardar predefinição"
   },
   "enter_preset_name": {
     "message": "Insira o nome"
@@ -42,16 +42,16 @@
     "message": "Número de pontos de EQ"
   },
   "points_reset_title": {
-    "message": "Alterar o número de pontos de EQ?"
+    "message": "Alterar o número de pontos?"
   },
   "points_reset_message": {
     "message": "Alterar o número de pontos irá repor as definições de EQ atuais."
   },
   "points_reset_skip": {
-    "message": "Não voltar a mostrar"
+    "message": "Não mostrar novamente"
   },
   "ok": {
-    "message": "OK"
+    "message": "Ok"
   },
   "cancel": {
     "message": "Cancelar"
@@ -60,13 +60,13 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Não foi possível capturar o fluxo de áudio. Tente usar o \"modo de janela\"."
+    "message": "Não foi possível capturar o fluxo de áudio. Tente usar o \"Modo de janela\"."
   },
   "toolkit_window_already_open": {
     "message": "O equalizador já está aberto numa janela"
   },
   "support_me": {
-    "message": "Apoia-me"
+    "message": "Apoie-me"
   },
   "settings_button_tooltip": {
     "message": "Definições"
