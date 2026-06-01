@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Soutenez-moi"
+  },
+  "settings_button_tooltip": {
+    "message": "Paramètres"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Couper/rétablir le son"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Ouvrir le mode fenêtre"
   }
 }

@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Dukung saya"
+  },
+  "settings_button_tooltip": {
+    "message": "Pengaturan"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Bisukan/aktifkan volume"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Buka mode jendela"
   }
 }

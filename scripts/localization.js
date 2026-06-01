@@ -1,66 +1,43 @@
-document.getElementById("master-volume-label").textContent =
-  chrome.i18n.getMessage("gain_slider_label");
+const setTextContent = (id, messageName) => {
+  document.getElementById(id).textContent = chrome.i18n.getMessage(messageName);
+};
 
-document.getElementById("reset").textContent =
-  chrome.i18n.getMessage("reset_button_label");
-
-document.getElementById("change-eq").textContent = chrome.i18n.getMessage(
-  "enable_eq_button_label"
-);
-
-document.getElementById("presets-toggle").textContent =
-  chrome.i18n.getMessage("empty_preset_name");
-
-document.getElementById("none-item").textContent =
-  chrome.i18n.getMessage("empty_preset_name");
+setTextContent("master-volume-label", "gain_slider_label");
+setTextContent("reset", "reset_button_label");
+setTextContent("change-eq", "enable_eq_button_label");
+setTextContent("presets-toggle", "empty_preset_name");
+setTextContent("none-item", "empty_preset_name");
+setTextContent("save-preset", "save_preset_button_label");
+setTextContent("import-presets", "import_presets_button_label");
+setTextContent("export-presets", "export_presets_button_label");
+setTextContent("enable-spectrum-label", "enable_spectrum_setting_option");
+setTextContent("settings-header", "settings_title");
+setTextContent("points-count-label", "points_count_setting_option");
+setTextContent("points-reset-title", "points_reset_title");
+setTextContent("points-reset-message", "points_reset_message");
+setTextContent("skip-reset-label", "points_reset_skip");
+setTextContent("points-reset-cancel", "cancel");
+setTextContent("points-reset-confirm", "ok");
+setTextContent("support-me", "support_me");
+setTextContent("theme-label", "theme_setting_option");
 
 document
   .getElementById("none-item")
   .setAttribute("data-value", chrome.i18n.getMessage("empty_preset_name"));
 
-document.getElementById("save-preset").textContent = chrome.i18n.getMessage(
-  "save_preset_button_label"
-);
-
 document
   .getElementById("preset-name")
   .setAttribute("placeholder", chrome.i18n.getMessage("enter_preset_name"));
 
-document.getElementById("import-presets").textContent = chrome.i18n.getMessage(
-  "import_presets_button_label"
-);
+const setTooltip = (id, messageName) => {
+  const element = document.getElementById(id);
+  const message = chrome.i18n.getMessage(messageName);
 
-document.getElementById("export-presets").textContent = chrome.i18n.getMessage(
-  "export_presets_button_label"
-);
+  element.setAttribute("title", message);
+  element.setAttribute("alt", message);
+  element.setAttribute("aria-label", message);
+};
 
-document.getElementById("enable-spectrum-label").textContent =
-  chrome.i18n.getMessage("enable_spectrum_setting_option");
-
-document.getElementById("settings-header").textContent =
-  chrome.i18n.getMessage("settings_title");
-
-document.getElementById("points-count-label").textContent =
-  chrome.i18n.getMessage("points_count_setting_option");
-
-document.getElementById("points-reset-title").textContent =
-  chrome.i18n.getMessage("points_reset_title");
-
-document.getElementById("points-reset-message").textContent =
-  chrome.i18n.getMessage("points_reset_message");
-
-document.getElementById("skip-reset-label").textContent =
-  chrome.i18n.getMessage("points_reset_skip");
-
-document.getElementById("points-reset-cancel").textContent =
-  chrome.i18n.getMessage("cancel");
-
-document.getElementById("points-reset-confirm").textContent =
-  chrome.i18n.getMessage("ok");
-
-document.getElementById("theme-label").textContent = chrome.i18n.getMessage(
-  "theme_setting_option"
-);
-
-document.getElementById("support-me").textContent =
-  chrome.i18n.getMessage("support_me");
+setTooltip("settings-btn", "settings_button_tooltip");
+setTooltip("volume-mute", "volume_mute_button_tooltip");
+setTooltip("window-mod", "window_mode_button_tooltip");

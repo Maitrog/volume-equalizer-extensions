@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "나를 후원하기"
+  },
+  "settings_button_tooltip": {
+    "message": "설정"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "음소거/해제"
+  },
+  "window_mode_button_tooltip": {
+    "message": "창 모드 열기"
   }
 }

@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Apoia-me"
+  },
+  "settings_button_tooltip": {
+    "message": "Definições"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Silenciar/reativar volume"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Abrir modo janela"
   }
 }

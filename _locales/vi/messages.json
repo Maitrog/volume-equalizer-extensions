@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Hỗ trợ tôi"
+  },
+  "settings_button_tooltip": {
+    "message": "Cài đặt"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Tắt/bật âm lượng"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Mở chế độ cửa sổ"
   }
 }

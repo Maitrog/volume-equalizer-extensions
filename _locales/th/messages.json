@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "สนับสนุนฉัน"
+  },
+  "settings_button_tooltip": {
+    "message": "การตั้งค่า"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "ปิด/เปิดเสียง"
+  },
+  "window_mode_button_tooltip": {
+    "message": "เปิดโหมดหน้าต่าง"
   }
 }

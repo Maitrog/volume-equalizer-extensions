@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Steun mij"
+  },
+  "settings_button_tooltip": {
+    "message": "Instellingen"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Volume dempen/inschakelen"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Venstermodus openen"
   }
 }

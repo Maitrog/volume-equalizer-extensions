@@ -67,5 +67,14 @@
     },
     "support_me": {
         "message": "Поддержать"
+    },
+    "settings_button_tooltip": {
+        "message": "Настройки"
+    },
+    "volume_mute_button_tooltip": {
+        "message": "Выключить/включить звук"
+    },
+    "window_mode_button_tooltip": {
+        "message": "Открыть оконный режим"
     }
 }

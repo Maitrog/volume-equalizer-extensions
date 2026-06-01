@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "支持我"
+  },
+  "settings_button_tooltip": {
+    "message": "设置"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "静音/取消静音"
+  },
+  "window_mode_button_tooltip": {
+    "message": "打开窗口模式"
   }
 }

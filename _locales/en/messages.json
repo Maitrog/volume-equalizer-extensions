@@ -67,5 +67,14 @@
     },
     "support_me": {
         "message": "Support me"
+    },
+    "settings_button_tooltip": {
+        "message": "Settings"
+    },
+    "volume_mute_button_tooltip": {
+        "message": "Mute/unmute volume"
+    },
+    "window_mode_button_tooltip": {
+        "message": "Open window mode"
     }
 }

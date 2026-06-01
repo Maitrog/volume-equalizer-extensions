@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "আমাকে সমর্থন করুন"
+  },
+  "settings_button_tooltip": {
+    "message": "সেটিংস"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "শব্দ বন্ধ/চালু করুন"
+  },
+  "window_mode_button_tooltip": {
+    "message": "উইন্ডো মোড খুলুন"
   }
 }

@@ -67,5 +67,14 @@
   },
   "support_me": {
     "message": "Unterstütze mich"
+  },
+  "settings_button_tooltip": {
+    "message": "Einstellungen"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Stummschalten/Stummschaltung aufheben"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Fenstermodus öffnen"
   }
 }
