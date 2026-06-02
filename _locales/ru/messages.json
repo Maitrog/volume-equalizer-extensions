@@ -1,80 +1,80 @@
 {
-    "extName": {
-        "message": "EQ Toolkit - Аудио эквалайзер"
-    },
-    "extDescription": {
-        "message": "EQ Toolkit — бесплатное расширение с открытым исходным кодом для управления звуком."
-    },
-    "gain_slider_label": {
-        "message": "Усиление:"
-    },
-    "reset_button_label": {
-        "message": "Сбросить"
-    },
-    "enable_eq_button_label": {
-        "message": "Включить в этой вкладке"
-    },
-    "stop_eq_button_label": {
-        "message": "Выключить в этой вкладке"
-    },
-    "empty_preset_name": {
-        "message": "Нет"
-    },
-    "save_preset_button_label": {
-        "message": "Сохранить пресет"
-    },
-    "enter_preset_name": {
-        "message": "Введите название"
-    },
-    "settings_title": {
-        "message": "Настройки"
-    },
-    "import_presets_button_label": {
-        "message": "Импорт пресетов"
-    },
-    "export_presets_button_label": {
-        "message": "Экспорт пресетов"
-    },
-    "enable_spectrum_setting_option": {
-        "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
-    },
-    "points_count_setting_option": {
-        "message": "Количество точек эквалайзера"
-    },
-    "points_reset_title": {
-        "message": "Изменить количество точек эквалайзера?"
-    },
-    "points_reset_message": {
-        "message": "Изменение количества точек сбросит текущие настройки эквалайзера."
-    },
-    "points_reset_skip": {
-        "message": "Больше не показывать"
-    },
-    "ok": {
-        "message": "ОК"
-    },
-    "cancel": {
-        "message": "Отмена"
-    },
-    "theme_setting_option": {
-        "message": "Тема"
-    },
-    "capture_error_prefix": {
-        "message": "Не удалось захватить аудиопоток. Попробуйте использовать \"Оконный режим\"."
-    },
-    "toolkit_window_already_open": {
-        "message": "Эквалайзер уже открыт в оконном режиме"
-    },
-    "support_me": {
-        "message": "Поддержать"
-    },
-    "settings_button_tooltip": {
-        "message": "Настройки"
-    },
-    "volume_mute_button_tooltip": {
-        "message": "Выключить/включить звук"
-    },
-    "window_mode_button_tooltip": {
-        "message": "Открыть оконный режим"
-    }
+  "extName": {
+    "message": "EQ Toolkit - Аудио эквалайзер"
+  },
+  "extDescription": {
+    "message": "EQ Toolkit — бесплатное расширение с открытым исходным кодом для управления звуком."
+  },
+  "gain_slider_label": {
+    "message": "Усиление:"
+  },
+  "reset_button_label": {
+    "message": "Сбросить"
+  },
+  "enable_eq_button_label": {
+    "message": "Включить в этой вкладке"
+  },
+  "stop_eq_button_label": {
+    "message": "Выключить в этой вкладке"
+  },
+  "empty_preset_name": {
+    "message": "Нет"
+  },
+  "save_preset_button_label": {
+    "message": "Сохранить пресет"
+  },
+  "enter_preset_name": {
+    "message": "Введите название"
+  },
+  "settings_title": {
+    "message": "Настройки"
+  },
+  "import_presets_button_label": {
+    "message": "Импорт пресетов"
+  },
+  "export_presets_button_label": {
+    "message": "Экспорт пресетов"
+  },
+  "enable_spectrum_setting_option": {
+    "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
+  },
+  "points_count_setting_option": {
+    "message": "Количество точек эквалайзера"
+  },
+  "points_reset_title": {
+    "message": "Изменить количество точек эквалайзера?"
+  },
+  "points_reset_message": {
+    "message": "Изменение количества точек сбросит текущие настройки эквалайзера."
+  },
+  "points_reset_skip": {
+    "message": "Больше не показывать"
+  },
+  "ok": {
+    "message": "ОК"
+  },
+  "cancel": {
+    "message": "Отмена"
+  },
+  "theme_setting_option": {
+    "message": "Тема"
+  },
+  "capture_error_prefix": {
+    "message": "Не удалось захватить аудиопоток. Попробуйте использовать \"Оконный режим\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "Эквалайзер уже открыт в оконном режиме"
+  },
+  "support_me": {
+    "message": "Поддержать"
+  },
+  "settings_button_tooltip": {
+    "message": "Настройки"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Выключить/включить звук"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Открыть оконный режим"
+  }
 }

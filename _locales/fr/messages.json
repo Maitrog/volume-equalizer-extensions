@@ -42,7 +42,7 @@
     "message": "Nombre de points d'EQ"
   },
   "points_reset_title": {
-    "message": "Modifier le nombre de points d'EQ ?"
+    "message": "Modifier le nombre de points d'EQ ?"
   },
   "points_reset_message": {
     "message": "La modification du nombre de points réinitialisera les paramètres EQ actuels."
