@@ -1,80 +1,80 @@
 {
-    "extName": {
-        "message": "EQ Toolkit - Ecualizador de audio"
-    },
-    "extDescription": {
-        "message": "EQ Toolkit es una extensión gratuita y de código abierto para controlar el audio."
-    },
-    "gain_slider_label": {
-        "message": "Amplificación:"
-    },
-    "reset_button_label": {
-        "message": "Restablecer"
-    },
-    "enable_eq_button_label": {
-        "message": "Activar EQ en esta pestaña"
-    },
-    "stop_eq_button_label": {
-        "message": "Detener EQ en esta pestaña"
-    },
-    "empty_preset_name": {
-        "message": "Ninguno"
-    },
-    "save_preset_button_label": {
-        "message": "Guardar preset"
-    },
-    "enter_preset_name": {
-        "message": "Ingrese nombre"
-    },
-    "settings_title": {
-        "message": "Configuración"
-    },
-    "import_presets_button_label": {
-        "message": "Importar preajustes"
-    },
-    "export_presets_button_label": {
-        "message": "Exportar preajustes"
-    },
-    "enable_spectrum_setting_option": {
-        "message": "Activar la visualización del espectro; es necesario recargar la página (alto uso de CPU)"
-    },
-    "points_count_setting_option": {
-        "message": "Número de puntos de EQ"
-    },
-    "points_reset_title": {
-        "message": "¿Cambiar el número de puntos de EQ?"
-    },
-    "points_reset_message": {
-        "message": "Cambiar el número de puntos restablecerá la configuración actual de EQ."
-    },
-    "points_reset_skip": {
-        "message": "No volver a mostrar"
-    },
-    "ok": {
-        "message": "Aceptar"
-    },
-    "cancel": {
-        "message": "Cancelar"
-    },
-    "theme_setting_option": {
-        "message": "Tema"
-    },
-    "capture_error_prefix": {
-        "message": "No se pudo capturar el flujo de audio. Intenta usar el \"modo ventana\"."
-    },
-    "toolkit_window_already_open": {
-        "message": "El ecualizador ya está abierto en una ventana"
-    },
-    "support_me": {
-        "message": "Apóyame"
-    },
-    "settings_button_tooltip": {
-        "message": "Configuración"
-    },
-    "volume_mute_button_tooltip": {
-        "message": "Silenciar/activar sonido"
-    },
-    "window_mode_button_tooltip": {
-        "message": "Abrir modo ventana"
-    }
+  "extName": {
+    "message": "EQ Toolkit - Ecualizador de audio"
+  },
+  "extDescription": {
+    "message": "EQ Toolkit es una extensión gratuita y de código abierto para controlar el audio."
+  },
+  "gain_slider_label": {
+    "message": "Amplificación:"
+  },
+  "reset_button_label": {
+    "message": "Restablecer"
+  },
+  "enable_eq_button_label": {
+    "message": "Activar EQ en esta pestaña"
+  },
+  "stop_eq_button_label": {
+    "message": "Detener EQ en esta pestaña"
+  },
+  "empty_preset_name": {
+    "message": "Ninguno"
+  },
+  "save_preset_button_label": {
+    "message": "Guardar preset"
+  },
+  "enter_preset_name": {
+    "message": "Ingrese nombre"
+  },
+  "settings_title": {
+    "message": "Configuración"
+  },
+  "import_presets_button_label": {
+    "message": "Importar preajustes"
+  },
+  "export_presets_button_label": {
+    "message": "Exportar preajustes"
+  },
+  "enable_spectrum_setting_option": {
+    "message": "Activar la visualización del espectro; es necesario recargar la página (alto uso de CPU)"
+  },
+  "points_count_setting_option": {
+    "message": "Número de puntos de EQ"
+  },
+  "points_reset_title": {
+    "message": "¿Cambiar el número de puntos de EQ?"
+  },
+  "points_reset_message": {
+    "message": "Cambiar el número de puntos restablecerá la configuración actual de EQ."
+  },
+  "points_reset_skip": {
+    "message": "No volver a mostrar"
+  },
+  "ok": {
+    "message": "Aceptar"
+  },
+  "cancel": {
+    "message": "Cancelar"
+  },
+  "theme_setting_option": {
+    "message": "Tema"
+  },
+  "capture_error_prefix": {
+    "message": "No se pudo capturar el flujo de audio. Intenta usar el \"modo ventana\"."
+  },
+  "toolkit_window_already_open": {
+    "message": "El ecualizador ya está abierto en una ventana"
+  },
+  "support_me": {
+    "message": "Apóyame"
+  },
+  "settings_button_tooltip": {
+    "message": "Configuración"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "Silenciar/activar sonido"
+  },
+  "window_mode_button_tooltip": {
+    "message": "Abrir modo ventana"
+  }
 }
