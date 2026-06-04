@@ -33,10 +33,10 @@
     "message": "Пресеты"
   },
   "import_presets_button_label": {
-    "message": "Импорт пресетов"
+    "message": "Импорт"
   },
   "export_presets_button_label": {
-    "message": "Экспорт пресетов"
+    "message": "Экспорт"
   },
   "enable_spectrum_setting_option": {
     "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
@@ -54,7 +54,7 @@
     "message": "Больше не показывать"
   },
   "ok": {
-    "message": "ОК"
+    "message": "Ок"
   },
   "cancel": {
     "message": "Отмена"
