@@ -1,3 +1,5 @@
+importScripts(chrome.runtime.getURL("scripts/whitelist.js"));
+
 const register = async () => {
   await chrome.scripting.unregisterContentScripts();
 
@@ -94,6 +96,8 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
       }
     });
     response(tabId);
+  } else if (request.method === "pageStarted") {
+    applyWhitelistForTab(tabId, sender.tab?.url, { resetWhenNoMatch: true });
   } else if (request.method === "connected") {
     chrome.action.setBadgeText({
       text: "ON",
@@ -110,6 +114,18 @@ chrome.runtime.onMessage.addListener((request, sender, response) => {
   return true;
 });
 
+chrome.tabs.onActivated.addListener(async ({ tabId }) => {
+  try {
+    const tab = await chrome.tabs.get(tabId);
+    await applyWhitelistForTab(tabId, tab.url);
+  } catch (e) {}
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (!changeInfo.url) return;
+  applyWhitelistForTab(tabId, tab.url);
+});
+
 async function getCurrentTabId() {
   let queryOptions = { active: true, lastFocusedWindow: true };
   let [tab] = await chrome.tabs.query(queryOptions);
@@ -120,6 +136,7 @@ async function clearUnusedStorage() {
   const constParamNames = [
     "presets",
     "presetNames",
+    "whitelist",
     "gain",
     "filters",
     "enableSpectrum",
@@ -141,6 +158,31 @@ async function clearUnusedStorage() {
         chrome.storage.local.remove(key);
     })
   );
+}
+
+async function applyWhitelistForTab(tabId, url, options = {}) {
+  if (tabId == null || !url || !url.startsWith("http")) return;
+
+  const stored = await chrome.storage.local.get(["whitelist", "presets"]);
+  const entry = findWhitelistMatch(stored.whitelist, url);
+  if (!entry) {
+    if (options.resetWhenNoMatch) {
+      await chrome.storage.local.set({ ["enabled." + tabId]: false });
+    }
+    return;
+  }
+
+  const preset = stored.presets?.[entry.presetName];
+  if (!Array.isArray(preset) || preset.length === 0) {
+    await chrome.storage.local.set({ ["enabled." + tabId]: false });
+    return;
+  }
+
+  await chrome.storage.local.set({
+    ["filters." + tabId]: preset,
+    ["filters"]: preset,
+    ["enabled." + tabId]: true,
+  });
 }
 
 const WINDOW_KEY = "toolkitWindowId"; // ключ, под которым хранится id окна

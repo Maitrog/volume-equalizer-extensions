@@ -501,20 +501,31 @@ button:disabled:active {
 }
 
 .volume-mute,
-.volume-mute-active,
-.settings-btn {
-  width: 26px;
+.volume-mute-active {
+  width: 27px;
   cursor: pointer;
 }
 
 .volume-mute,
 .settings-btn,
-.window-mod {
+.window-mod,
+.add-to-autostart-whitelist-btn {
   filter: var(--svg-btn-filter);
 }
 
 .settings-btn {
   width: 25px;
+  cursor: pointer;
+}
+
+.add-to-autostart-whitelist-btn {
+  width: 24px;
+  cursor: pointer;
+}
+
+.window-mod {
+  width: 22px;
+  cursor: pointer;
 }
 
 .info-btn {
@@ -528,12 +539,8 @@ button:disabled:active {
   display: var(--info-btn-display)
 }
 
-.window-mod {
-  width: 22px;
-  cursor: pointer;
-}
-
-.toolkit-window-body .window-mod {
+.toolkit-window-body .window-mod,
+.toolkit-window-body .add-to-autostart-whitelist-btn {
   display: none;
 }
 
@@ -564,6 +571,26 @@ button:disabled:active {
   color: var(--text);
   animation: fadeIn 0.3s ease;
   border: 1px solid var(--border);
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+#settings-modal .modal-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-placeholder) transparent;
+}
+
+#settings-modal .modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+#settings-modal .modal-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#settings-modal .modal-content::-webkit-scrollbar-thumb {
+  background-color: var(--text-placeholder);
+  border-radius: 999px;
 }
 
 .modal-content h2 {
@@ -610,7 +637,7 @@ button:disabled:active {
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 15px;
+  margin-top: 8px;
 }
 
 .settings-row span {
@@ -628,6 +655,127 @@ button:disabled:active {
 
 .settings-select:focus {
   outline: 1px solid var(--accent-mid);
+}
+
+.settings-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.settings-section h3 {
+  margin: 0 0 10px;
+}
+
+.settings-input {
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-alt);
+  color: var(--text);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.settings-input:focus {
+  outline: 1px solid var(--accent-mid);
+}
+
+.settings-error {
+  display: none;
+  margin-top: 8px;
+  color: #ff8a8a;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.autostart-settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 145px;
+  overflow-y: auto;
+}
+
+.whitelist-empty {
+  color: var(--text-placeholder);
+  font-size: 13px;
+}
+
+.whitelist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--btn-bg);
+}
+
+.whitelist-item-text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.whitelist-item-text span,
+.whitelist-item-text small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whitelist-item-text small {
+  color: var(--text-volume-scale);
+}
+
+.whitelist-delete {
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.autostart-settings-add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.autostart-settings-type-select {
+  flex: 0 0 110px;
+}
+
+.autostart-settings-add-value-input,
+.autostart-preset-select {
+  flex: 1 1 auto;
+}
+
+.autostart-settings-add-row button {
+  flex: 0 0 90px;
+  width: 90px;
+  height: 31px;
+}
+
+.autostart-modal-choice-list .checkbox-row {
+  margin: 8px 0;
+}
+
+.autostart-modal-choice-value {
+  display: block;
+  max-width: 290px;
+  margin-top: 2px;
+  overflow: hidden;
+  color: var(--text-volume-scale);
+  font-size: 12px;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .confirm-modal {
@@ -654,6 +802,7 @@ button:disabled:active {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-top: 10px;
 }
 
 .confirm-actions button {
@@ -699,7 +848,6 @@ button:disabled:active {
 }
 
 .settings-actions {
-  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   gap: 10px;

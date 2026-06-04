@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Настройки"
   },
+  "presets_settings_title": {
+    "message": "Пресеты"
+  },
   "import_presets_button_label": {
     "message": "Импорт пресетов"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Открыть оконный режим"
+  },
+  "autostart_settings_title": {
+    "message": "Автозапуск"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Выберите пресет"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Добавить текущий сайт в список для автозапуска"
+  },
+  "autostart_modal_title": {
+    "message": "Добавить в автозапуск"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Домен"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Пресет"
+  },
+  "autostart_whitelist_empty": {
+    "message": "Белый список пуст"
+  },
+  "autostart_validation_error": {
+    "message": "Введите корректный домен или URL и выберите пресет."
+  },
+  "preset_delete_error": {
+    "message": "Этот пресет используется в белом списке. Сначала удалите связанные записи."
+  },
+  "add": {
+    "message": "Добавить"
+  },
+  "delete": {
+    "message": "Удалить"
   }
 }

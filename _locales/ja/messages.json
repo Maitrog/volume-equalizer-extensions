@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "設定"
   },
+  "presets_settings_title": {
+    "message": "プリセット"
+  },
   "import_presets_button_label": {
     "message": "プリセットをインポート"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "ウィンドウモードを開く"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "現在のサイトを自動起動リストに追加"
+  },
+  "autostart_modal_title": {
+    "message": "自動起動に追加"
+  },
+  "autostart_settings_title": {
+    "message": "自動起動"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "ドメイン"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "プリセット"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "プリセットを選択"
+  },
+  "autostart_whitelist_empty": {
+    "message": "ホワイトリストは空です"
+  },
+  "autostart_validation_error": {
+    "message": "有効なドメインまたはURLを入力し、プリセットを選択してください。"
+  },
+  "preset_delete_error": {
+    "message": "このプリセットはホワイトリストで使用されています。先に関連する項目を削除してください。"
+  },
+  "add": {
+    "message": "追加"
+  },
+  "delete": {
+    "message": "削除"
   }
 }

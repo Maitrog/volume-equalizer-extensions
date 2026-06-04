@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "设置"
   },
+  "presets_settings_title": {
+    "message": "预设"
+  },
   "import_presets_button_label": {
     "message": "导入预设"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "打开窗口模式"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "将当前网站添加到自动启动列表"
+  },
+  "autostart_modal_title": {
+    "message": "添加到自动启动"
+  },
+  "autostart_settings_title": {
+    "message": "自动启动"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "域名"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "预设"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "选择预设"
+  },
+  "autostart_whitelist_empty": {
+    "message": "白名单为空"
+  },
+  "autostart_validation_error": {
+    "message": "请输入有效的域名或 URL，并选择一个预设。"
+  },
+  "preset_delete_error": {
+    "message": "此预设正在白名单中使用。请先删除相关条目。"
+  },
+  "add": {
+    "message": "添加"
+  },
+  "delete": {
+    "message": "删除"
   }
 }

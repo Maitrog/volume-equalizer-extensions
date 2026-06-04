@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Einstellungen"
   },
+  "presets_settings_title": {
+    "message": "Voreinstellungen"
+  },
   "import_presets_button_label": {
     "message": "Voreinstellungen importieren"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Fenstermodus öffnen"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Aktuelle Website zur Autostart-Liste hinzufügen"
+  },
+  "autostart_modal_title": {
+    "message": "Zum Autostart hinzufügen"
+  },
+  "autostart_settings_title": {
+    "message": "Autostart"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Domain"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Voreinstellung"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Voreinstellung auswählen"
+  },
+  "autostart_whitelist_empty": {
+    "message": "Die Whitelist ist leer"
+  },
+  "autostart_validation_error": {
+    "message": "Geben Sie eine gültige Domain oder URL ein und wählen Sie eine Voreinstellung aus."
+  },
+  "preset_delete_error": {
+    "message": "Diese Voreinstellung wird in der Whitelist verwendet. Entfernen Sie zuerst die verknüpften Einträge."
+  },
+  "add": {
+    "message": "Hinzufügen"
+  },
+  "delete": {
+    "message": "Löschen"
   }
 }

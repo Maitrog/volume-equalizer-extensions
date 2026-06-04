@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Definições"
   },
+  "presets_settings_title": {
+    "message": "Predefinições"
+  },
   "import_presets_button_label": {
     "message": "Importar predefinições"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Abrir modo janela"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Adicionar o site atual à lista de arranque automático"
+  },
+  "autostart_modal_title": {
+    "message": "Adicionar ao arranque automático"
+  },
+  "autostart_settings_title": {
+    "message": "Arranque automático"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Domínio"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Predefinição"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Selecionar predefinição"
+  },
+  "autostart_whitelist_empty": {
+    "message": "A lista branca está vazia"
+  },
+  "autostart_validation_error": {
+    "message": "Introduza um domínio ou URL válido e selecione uma predefinição."
+  },
+  "preset_delete_error": {
+    "message": "Esta predefinição é usada na lista branca. Remova primeiro as entradas relacionadas."
+  },
+  "add": {
+    "message": "Adicionar"
+  },
+  "delete": {
+    "message": "Eliminar"
   }
 }

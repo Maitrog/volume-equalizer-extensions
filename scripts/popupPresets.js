@@ -60,18 +60,27 @@ menu.addEventListener("click", (e) => {
   }
 
   if (e.target.classList.contains("close-btn")) {
-    const item = e.target.parentElement;
-    item.remove();
-    chrome.storage.local.get(["presets", "presetNames"]).then(async (prefs) => {
-      const presets = prefs.presets;
-      const presetNames = prefs.presetNames.filter((n) => n != choice);
-      delete presets[choice];
+    chrome.storage.local
+      .get(["presets", "presetNames", "whitelist"])
+      .then(async (prefs) => {
+        if (isPresetUsedInWhitelist(prefs.whitelist, choice)) {
+          alert(chrome.i18n.getMessage("preset_delete_error"));
+          return;
+        }
 
-      chrome.storage.local.set({
-        presets: presets,
-        presetNames: presetNames,
+        const item = e.target.parentElement;
+        item.remove();
+        const presets = prefs.presets ?? {};
+        const presetNames = (prefs.presetNames ?? []).filter(
+          (n) => n != choice
+        );
+        delete presets[choice];
+
+        chrome.storage.local.set({
+          presets: presets,
+          presetNames: presetNames,
+        });
       });
-    });
   } else if (e.target.classList.contains("dropdown-item")) {
     toggle.textContent = choice;
     chrome.storage.local.get(["presets"]).then(async (prefs) => {

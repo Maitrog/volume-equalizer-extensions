@@ -130,9 +130,8 @@ port.addEventListener("spectrum-frame", (e) => {
 self.start = () => {
   if (window.top !== window) return;
 
-  port.dataset.enabled = false;
   chrome.runtime.sendMessage({ method: "getTabId" }, async (tabId) => {
-    await chrome.storage.local.set({ ["enabled." + tabId]: false });
+    chrome.runtime.sendMessage({ method: "pageStarted" });
   });
 
   setTimeout(async () => {

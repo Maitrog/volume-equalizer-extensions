@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Ayarlar"
   },
+  "presets_settings_title": {
+    "message": "Ön ayarlar"
+  },
   "import_presets_button_label": {
     "message": "Ön ayarları içe aktar"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Pencere modunu aç"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Geçerli siteyi otomatik başlatma listesine ekle"
+  },
+  "autostart_modal_title": {
+    "message": "Otomatik başlatmaya ekle"
+  },
+  "autostart_settings_title": {
+    "message": "Otomatik başlatma"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Alan adı"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Ön ayar"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Ön ayar seç"
+  },
+  "autostart_whitelist_empty": {
+    "message": "Beyaz liste boş"
+  },
+  "autostart_validation_error": {
+    "message": "Geçerli bir alan adı veya URL girin ve bir ön ayar seçin."
+  },
+  "preset_delete_error": {
+    "message": "Bu ön ayar beyaz listede kullanılıyor. Önce ilgili kayıtları silin."
+  },
+  "add": {
+    "message": "Ekle"
+  },
+  "delete": {
+    "message": "Sil"
   }
 }

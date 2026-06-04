@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Cài đặt"
   },
+  "presets_settings_title": {
+    "message": "Cấu hình sẵn"
+  },
   "import_presets_button_label": {
     "message": "Nhập preset"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Mở chế độ cửa sổ"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Thêm trang hiện tại vào danh sách tự động khởi động"
+  },
+  "autostart_modal_title": {
+    "message": "Thêm vào tự động khởi động"
+  },
+  "autostart_settings_title": {
+    "message": "Tự động khởi động"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Tên miền"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Cấu hình sẵn"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Chọn cấu hình sẵn"
+  },
+  "autostart_whitelist_empty": {
+    "message": "Danh sách trắng trống"
+  },
+  "autostart_validation_error": {
+    "message": "Nhập tên miền hoặc URL hợp lệ và chọn một cấu hình sẵn."
+  },
+  "preset_delete_error": {
+    "message": "Cấu hình sẵn này đang được dùng trong danh sách trắng. Hãy xóa các mục liên quan trước."
+  },
+  "add": {
+    "message": "Thêm"
+  },
+  "delete": {
+    "message": "Xóa"
   }
 }

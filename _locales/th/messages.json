@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "การตั้งค่า"
   },
+  "presets_settings_title": {
+    "message": "พรีเซ็ต"
+  },
   "import_presets_button_label": {
     "message": "นำเข้าพรีเซ็ต"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "เปิดโหมดหน้าต่าง"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "เพิ่มเว็บไซต์ปัจจุบันไปยังรายการเริ่มอัตโนมัติ"
+  },
+  "autostart_modal_title": {
+    "message": "เพิ่มไปยังการเริ่มอัตโนมัติ"
+  },
+  "autostart_settings_title": {
+    "message": "เริ่มอัตโนมัติ"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "โดเมน"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "พรีเซ็ต"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "เลือกพรีเซ็ต"
+  },
+  "autostart_whitelist_empty": {
+    "message": "ไวต์ลิสต์ว่างเปล่า"
+  },
+  "autostart_validation_error": {
+    "message": "ป้อนโดเมนหรือ URL ที่ถูกต้องและเลือกพรีเซ็ต"
+  },
+  "preset_delete_error": {
+    "message": "พรีเซ็ตนี้ถูกใช้ในไวต์ลิสต์ โปรดลบรายการที่เกี่ยวข้องก่อน"
+  },
+  "add": {
+    "message": "เพิ่ม"
+  },
+  "delete": {
+    "message": "ลบ"
   }
 }

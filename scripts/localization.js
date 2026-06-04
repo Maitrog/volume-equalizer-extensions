@@ -20,6 +20,23 @@ setTextContent("points-reset-cancel", "cancel");
 setTextContent("points-reset-confirm", "ok");
 setTextContent("support-me", "support_me");
 setTextContent("theme-label", "theme_setting_option");
+setTextContent("presets-settings-title", "presets_settings_title");
+setTextContent("autostart-settings-title", "autostart_settings_title");
+setTextContent(
+  "autostart-settings-type-domain",
+  "autostart_rule_type_domain_label"
+);
+setTextContent("autostart-settings-type-url", "autostart_rule_type_url_label");
+setTextContent("autostart-settings-add-btn", "add");
+setTextContent("autostart-modal-title", "autostart_modal_title");
+setTextContent(
+  "autostart-modal-domain-label",
+  "autostart_rule_type_domain_label"
+);
+setTextContent("autostart-modal-url-label", "autostart_rule_type_url_label");
+setTextContent("autostart-modal-preset-label", "autostart_modal_preset_label");
+setTextContent("autostart-modal-cancel", "cancel");
+setTextContent("autostart-modal-confirm", "add");
 
 document
   .getElementById("none-item")
@@ -40,4 +57,5 @@ const setTooltip = (id, messageName) => {
 
 setTooltip("settings-btn", "settings_button_tooltip");
 setTooltip("volume-mute", "volume_mute_button_tooltip");
+setTooltip("add-to-autostart-whitelist-btn", "add_to_autostart_tooltip");
 setTooltip("window-mod", "window_mode_button_tooltip");

@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Impostazioni"
   },
+  "presets_settings_title": {
+    "message": "Presets"
+  },
   "import_presets_button_label": {
     "message": "Importa preset"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Apri modalità finestra"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Aggiungi il sito corrente all'elenco di avvio automatico"
+  },
+  "autostart_modal_title": {
+    "message": "Aggiungi all'avvio automatico"
+  },
+  "autostart_settings_title": {
+    "message": "Avvio automatico"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Dominio"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Preset"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Seleziona preset"
+  },
+  "autostart_whitelist_empty": {
+    "message": "La whitelist è vuota"
+  },
+  "autostart_validation_error": {
+    "message": "Inserisci un dominio o URL valido e seleziona un preset."
+  },
+  "preset_delete_error": {
+    "message": "Questo preset è usato nella whitelist. Rimuovi prima le voci collegate."
+  },
+  "add": {
+    "message": "Aggiungi"
+  },
+  "delete": {
+    "message": "Elimina"
   }
 }

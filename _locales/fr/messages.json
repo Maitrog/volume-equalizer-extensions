@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Paramètres"
   },
+  "presets_settings_title": {
+    "message": "Préréglages"
+  },
   "import_presets_button_label": {
     "message": "Importer des préréglages"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Ouvrir le mode fenêtre"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Ajouter le site actuel à la liste de démarrage automatique"
+  },
+  "autostart_modal_title": {
+    "message": "Ajouter au démarrage automatique"
+  },
+  "autostart_settings_title": {
+    "message": "Démarrage automatique"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Domaine"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Préréglage"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Sélectionner un préréglage"
+  },
+  "autostart_whitelist_empty": {
+    "message": "La liste blanche est vide"
+  },
+  "autostart_validation_error": {
+    "message": "Saisissez un domaine ou une URL valide et sélectionnez un préréglage."
+  },
+  "preset_delete_error": {
+    "message": "Ce préréglage est utilisé dans la liste blanche. Supprimez d'abord les entrées associées."
+  },
+  "add": {
+    "message": "Ajouter"
+  },
+  "delete": {
+    "message": "Supprimer"
   }
 }

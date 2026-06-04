@@ -14,6 +14,7 @@
     <text>EQ Toolkit</text>
     <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
     <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
+    <img id="add-to-autostart-whitelist-btn" class="add-to-autostart-whitelist-btn" src="resources/images/add_to_whitelist.svg">
     <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
     <a class="donation" href="https://www.donationalerts.com/r/maitrog" target="_blank">
       <span id="support-me" class="support-me-text">Support me</span>
@@ -58,10 +59,10 @@
       <span id="close-settings" class="close">&times;</span>
       <h2 id="settings-header">Settings</h2>
       <label>
-        <input type="checkbox" id="enable-spectrum">
         <text id="enable-spectrum-label">
           Enable spectrum visualisation (high CPU load)
         </text>
+        <input type="checkbox" id="enable-spectrum">
       </label>
       <div class="settings-row">
         <span id="points-count-label">EQ points</span>
@@ -81,13 +82,64 @@
           <option value="ny" id="theme-ny-option">Christmas</option>
         </select>
       </div>
-      <div class="notice-message">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">Feedback questionnaire</a>
+      <div class="settings-section">
+        <h3 id="autostart-settings-title">Whitelist</h3>
+        <div id="autostart-settings-list" class="autostart-settings-list"></div>
+        <div class="autostart-settings-add-row">
+          <select id="autostart-settings-type" class="settings-select autostart-settings-type-select">
+            <option value="domain" id="autostart-settings-type-domain">Domain</option>
+            <option value="url" id="autostart-settings-type-url">URL</option>
+          </select>
+          <input type="text" id="autostart-settings-add-value" class="settings-input autostart-settings-add-value-input" placeholder="example.com or https://example.com/page">
+        </div>
+        <div class="autostart-settings-add-row">
+          <select id="autostart-settings-add-preset" class="settings-select autostart-preset-select"></select>
+          <button type="button" id="autostart-settings-add-btn">Add</button>
+        </div>
+        <div id="autostart-settings-error" class="settings-error"></div>
       </div>
-      <div class="settings-actions">
-        <input type="file" id="import-input" hidden>
-        <button type="input" id="import-presets">Import presets</button>
-        <button type="button" id="export-presets">Export presets</button>
+      <div class="settings-section">
+        <h3 id="presets-settings-title">Presets</h3>
+        <div class="settings-actions">
+          <input type="file" id="import-input" hidden>
+          <button type="input" id="import-presets">Import presets</button>
+          <button type="button" id="export-presets">Export presets</button>
+        </div>
+      </div>
+      <div class="notice-message">
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">Feedback questionnaire</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="autostart-modal" class="modal">
+    <div class="modal-content confirm-modal">
+      <span id="autostart-modal-close" class="close">&times;</span>
+      <h3 id="autostart-modal-title">Add to autostart whitelist</h3>
+      <div class="autostart-modal-choice-list">
+        <label class="checkbox-row">
+          <input type="radio" name="autostart-modal-add-type" value="domain" checked>
+          <span>
+            <span id="autostart-modal-domain-label">Domain</span>
+            <small id="autostart-modal-domain-value" class="autostart-modal-choice-value"></small>
+          </span>
+        </label>
+        <label class="checkbox-row">
+          <input type="radio" name="autostart-modal-add-type" value="url">
+          <span>
+            <span id="autostart-modal-url-label">Current URL</span>
+            <small id="autostart-modal-url-value" class="autostart-modal-choice-value"></small>
+          </span>
+        </label>
+      </div>
+      <div class="settings-row">
+        <span id="autostart-modal-preset-label">Preset</span>
+        <select id="autostart-modal-preset" class="settings-select autostart-preset-select"></select>
+      </div>
+      <div id="autostart-modal-error" class="settings-error"></div>
+      <div class="confirm-actions">
+        <button type="button" id="autostart-modal-cancel">Cancel</button>
+        <button type="button" id="autostart-modal-confirm">Add</button>
       </div>
     </div>
   </div>
@@ -144,6 +196,7 @@
   </div>
 
   <script src="scripts/localization.js"></script>
+  <script src="scripts/whitelist.js"></script>
   <script src="scripts/themes.js"></script>
   <script src="scripts/loadColors.js"></script>
   <script src="scripts/popupState.js"></script>
@@ -168,6 +221,7 @@
 
   <script src="scripts/popupSettings.js"></script>
   <script src="scripts/popupControls.js"></script>
+  <script src="scripts/popupWhitelist.js"></script>
   <script src="scripts/popupPresets.js"></script>
   <script src="scripts/popup.js"></script>
 </body>

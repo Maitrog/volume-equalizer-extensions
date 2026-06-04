@@ -78,6 +78,7 @@ async function mainLoad() {
     "filters",
     "filters." + id,
     "gain." + id,
+    "presets",
     "presetNames",
     "enabled." + id,
     "mute." + id,

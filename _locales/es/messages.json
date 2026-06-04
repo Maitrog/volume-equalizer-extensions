@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Configuración"
   },
+  "presets_settings_title": {
+    "message": "Preajustes"
+  },
   "import_presets_button_label": {
     "message": "Importar preajustes"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Abrir modo ventana"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Añadir el sitio actual a la lista de inicio automático"
+  },
+  "autostart_modal_title": {
+    "message": "Añadir al inicio automático"
+  },
+  "autostart_settings_title": {
+    "message": "Inicio automático"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Dominio"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Preajuste"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Seleccionar preajuste"
+  },
+  "autostart_whitelist_empty": {
+    "message": "La lista blanca está vacía"
+  },
+  "autostart_validation_error": {
+    "message": "Introduce un dominio o una URL válidos y selecciona un preajuste."
+  },
+  "preset_delete_error": {
+    "message": "Este preajuste se usa en la lista blanca. Elimina primero las entradas relacionadas."
+  },
+  "add": {
+    "message": "Añadir"
+  },
+  "delete": {
+    "message": "Eliminar"
   }
 }

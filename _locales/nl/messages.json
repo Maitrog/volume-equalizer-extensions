@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Instellingen"
   },
+  "presets_settings_title": {
+    "message": "Voorinstellingen"
+  },
   "import_presets_button_label": {
     "message": "Voorinstellingen importeren"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Venstermodus openen"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Huidige site aan autostart-lijst toevoegen"
+  },
+  "autostart_modal_title": {
+    "message": "Aan autostart toevoegen"
+  },
+  "autostart_settings_title": {
+    "message": "Automatisch starten"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Domein"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Voorinstelling"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Voorinstelling selecteren"
+  },
+  "autostart_whitelist_empty": {
+    "message": "De whitelist is leeg"
+  },
+  "autostart_validation_error": {
+    "message": "Voer een geldig domein of geldige URL in en selecteer een voorinstelling."
+  },
+  "preset_delete_error": {
+    "message": "Deze voorinstelling wordt in de whitelist gebruikt. Verwijder eerst de gekoppelde items."
+  },
+  "add": {
+    "message": "Toevoegen"
+  },
+  "delete": {
+    "message": "Verwijderen"
   }
 }

@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "Pengaturan"
   },
+  "presets_settings_title": {
+    "message": "Preset"
+  },
   "import_presets_button_label": {
     "message": "Impor preset"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "Buka mode jendela"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "Tambahkan situs saat ini ke daftar autostart"
+  },
+  "autostart_modal_title": {
+    "message": "Tambahkan ke autostart"
+  },
+  "autostart_settings_title": {
+    "message": "Autostart"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "Domain"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "Preset"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "Pilih preset"
+  },
+  "autostart_whitelist_empty": {
+    "message": "Daftar putih kosong"
+  },
+  "autostart_validation_error": {
+    "message": "Masukkan domain atau URL yang valid dan pilih preset."
+  },
+  "preset_delete_error": {
+    "message": "Preset ini digunakan dalam daftar putih. Hapus entri terkait terlebih dahulu."
+  },
+  "add": {
+    "message": "Tambah"
+  },
+  "delete": {
+    "message": "Hapus"
   }
 }

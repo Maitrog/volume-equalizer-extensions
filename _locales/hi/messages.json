@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "सेटिंग्स"
   },
+  "presets_settings_title": {
+    "message": "प्रीसेट"
+  },
   "import_presets_button_label": {
     "message": "प्रीसेट आयात करें"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "विंडो मोड खोलें"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "मौजूदा साइट को ऑटोस्टार्ट सूची में जोड़ें"
+  },
+  "autostart_modal_title": {
+    "message": "ऑटोस्टार्ट में जोड़ें"
+  },
+  "autostart_settings_title": {
+    "message": "ऑटोस्टार्ट"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "डोमेन"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "प्रीसेट"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "प्रीसेट चुनें"
+  },
+  "autostart_whitelist_empty": {
+    "message": "श्वेतसूची खाली है"
+  },
+  "autostart_validation_error": {
+    "message": "मान्य डोमेन या URL दर्ज करें और एक प्रीसेट चुनें।"
+  },
+  "preset_delete_error": {
+    "message": "यह प्रीसेट श्वेतसूची प्रविष्टियों में इस्तेमाल हो रहा है। पहले संबंधित प्रविष्टियां हटाएं।"
+  },
+  "add": {
+    "message": "जोड़ें"
+  },
+  "delete": {
+    "message": "हटाएं"
   }
 }

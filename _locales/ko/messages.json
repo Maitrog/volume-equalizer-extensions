@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "설정"
   },
+  "presets_settings_title": {
+    "message": "프리셋"
+  },
   "import_presets_button_label": {
     "message": "프리셋 가져오기"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "창 모드 열기"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "현재 사이트를 자동 시작 목록에 추가"
+  },
+  "autostart_modal_title": {
+    "message": "자동 시작에 추가"
+  },
+  "autostart_settings_title": {
+    "message": "자동 시작"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "도메인"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "프리셋"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "프리셋 선택"
+  },
+  "autostart_whitelist_empty": {
+    "message": "화이트리스트가 비어 있습니다"
+  },
+  "autostart_validation_error": {
+    "message": "올바른 도메인 또는 URL을 입력하고 프리셋을 선택하세요."
+  },
+  "preset_delete_error": {
+    "message": "이 프리셋은 화이트리스트 항목에서 사용 중입니다. 먼저 관련 항목을 삭제하세요."
+  },
+  "add": {
+    "message": "추가"
+  },
+  "delete": {
+    "message": "삭제"
   }
 }

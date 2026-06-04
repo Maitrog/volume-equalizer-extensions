@@ -29,6 +29,9 @@
   "settings_title": {
     "message": "সেটিংস"
   },
+  "presets_settings_title": {
+    "message": "প্রিসেট"
+  },
   "import_presets_button_label": {
     "message": "প্রিসেট আমদানি করুন"
   },
@@ -76,5 +79,41 @@
   },
   "window_mode_button_tooltip": {
     "message": "উইন্ডো মোড খুলুন"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "বর্তমান সাইটটি অটোস্টার্ট তালিকায় যোগ করুন"
+  },
+  "autostart_modal_title": {
+    "message": "অটোস্টার্টে যোগ করুন"
+  },
+  "autostart_settings_title": {
+    "message": "অটোস্টার্ট"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "ডোমেইন"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "প্রিসেট"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "প্রিসেট নির্বাচন করুন"
+  },
+  "autostart_whitelist_empty": {
+    "message": "সাদা তালিকা খালি"
+  },
+  "autostart_validation_error": {
+    "message": "একটি বৈধ ডোমেইন বা URL লিখুন এবং একটি প্রিসেট নির্বাচন করুন।"
+  },
+  "preset_delete_error": {
+    "message": "এই প্রিসেটটি সাদা তালিকার এন্ট্রিতে ব্যবহৃত হচ্ছে। আগে সংশ্লিষ্ট এন্ট্রিগুলি মুছে ফেলুন।"
+  },
+  "add": {
+    "message": "যোগ করুন"
+  },
+  "delete": {
+    "message": "মুছুন"
   }
 }
