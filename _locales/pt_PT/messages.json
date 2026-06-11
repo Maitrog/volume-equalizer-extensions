@@ -33,10 +33,10 @@
     "message": "Predefinições"
   },
   "import_presets_button_label": {
-    "message": "Importar predefinições"
+    "message": "Importar"
   },
   "export_presets_button_label": {
-    "message": "Exportar predefinições"
+    "message": "Exportar"
   },
   "enable_spectrum_setting_option": {
     "message": "Ativar a visualização do espectro; é necessário recarregar a página (elevada carga de CPU)"
@@ -81,7 +81,7 @@
     "message": "Abrir modo janela"
   },
   "add_to_autostart_tooltip": {
-    "message": "Adicionar o site atual à lista de arranque automático"
+    "message": "Adicionar o site atual à lista branca de arranque automático"
   },
   "autostart_modal_title": {
     "message": "Adicionar ao arranque automático"
