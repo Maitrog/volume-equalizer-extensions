@@ -39,7 +39,7 @@
     "message": "Exportar"
   },
   "enable_spectrum_setting_option": {
-    "message": "Ativar a visualização do espectro; é necessário recarregar a página (elevada carga de CPU)"
+    "message": "Ativar a visualização do espectro, é necessário recarregar a página (elevada carga de CPU)"
   },
   "points_count_setting_option": {
     "message": "Número de pontos de EQ"
@@ -108,7 +108,7 @@
     "message": "Introduza um domínio ou URL válido e selecione uma predefinição."
   },
   "preset_delete_error": {
-    "message": "Esta predefinição é usada na lista branca. Remova primeiro as entradas relacionadas."
+    "message": "Esta predefinição é usada nas regras de arranque automático. Remova primeiro as entradas relacionadas."
   },
   "add": {
     "message": "Adicionar"
