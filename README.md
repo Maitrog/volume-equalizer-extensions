@@ -12,9 +12,10 @@ Works with ANY audio on ANY website :)
 - User friendly interface.
 - Works with any audio on any website.
 - Multiple configs for multiple tabs
-- Spectrum visualization (experimental)
+- Spectrum visualization
 - Import/export presets
 - Selection of the number of bands
+- Whitelist for auto start
 - Dark and light themes
 
 ## Installation
@@ -40,9 +41,9 @@ Available soon
 5. Enjoy
 
 ## Localization
-You can help translate EQ Toolkit on Weblate.
+You can help translate EQ Toolkit on [Weblate](https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/).
 
-Weblate project: [project link](https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/)
+[![Translation status](https://hosted.weblate.org/widget/eq-toolkit-chrome-extension/svg-badge.svg)](https://hosted.weblate.org/engage/eq-toolkit-chrome-extension/)
 
 ## Support
 The extention are provided for free. If you like the project, I would appreciate your [support](https://www.donationalerts.com/r/maitrog).
