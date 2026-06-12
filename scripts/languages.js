@@ -1,0 +1,88 @@
+﻿const LANGUAGE_KEY = "uiLanguage";
+const DEFAULT_LANGUAGE = "en";
+
+const CHROME_I18N_LOCALES = new Map([
+  ["ar", "Arabic"],
+  ["am", "Amharic"],
+  ["bg", "Bulgarian"],
+  ["bn", "Bengali"],
+  ["ca", "Catalan"],
+  ["cs", "Czech"],
+  ["da", "Danish"],
+  ["de", "German"],
+  ["el", "Greek"],
+  ["en", "English"],
+  ["en_AU", "English (Australia)"],
+  ["en_GB", "English (Great Britain)"],
+  ["en_US", "English (USA)"],
+  ["es", "Spanish"],
+  ["es_419", "Spanish (Latin America and Caribbean)"],
+  ["et", "Estonian"],
+  ["fa", "Persian"],
+  ["fi", "Finnish"],
+  ["fil", "Filipino"],
+  ["fr", "French"],
+  ["gu", "Gujarati"],
+  ["he", "Hebrew"],
+  ["hi", "Hindi"],
+  ["hr", "Croatian"],
+  ["hu", "Hungarian"],
+  ["id", "Indonesian"],
+  ["it", "Italian"],
+  ["ja", "Japanese"],
+  ["kn", "Kannada"],
+  ["ko", "Korean"],
+  ["lt", "Lithuanian"],
+  ["lv", "Latvian"],
+  ["ml", "Malayalam"],
+  ["mr", "Marathi"],
+  ["ms", "Malay"],
+  ["nl", "Dutch"],
+  ["no", "Norwegian"],
+  ["pl", "Polish"],
+  ["pt_BR", "Portuguese (Brazil)"],
+  ["pt_PT", "Portuguese (Portugal)"],
+  ["ro", "Romanian"],
+  ["ru", "Russian"],
+  ["sk", "Slovak"],
+  ["sl", "Slovenian"],
+  ["sr", "Serbian"],
+  ["sv", "Swedish"],
+  ["sw", "Swahili"],
+  ["ta", "Tamil"],
+  ["te", "Telugu"],
+  ["th", "Thai"],
+  ["tr", "Turkish"],
+  ["uk", "Ukrainian"],
+  ["vi", "Vietnamese"],
+  ["zh_CN", "Chinese (China)"],
+  ["zh_TW", "Chinese (Taiwan)"],
+]);
+
+const AVAILABLE_LANGUAGE_CODES = [
+  "bn",
+  "de",
+  "en",
+  "es",
+  "fr",
+  "hi",
+  "id",
+  "it",
+  "ja",
+  "ko",
+  "nl",
+  "pt_PT",
+  "ru",
+  "th",
+  "tr",
+  "vi",
+  "zh_CN",
+];
+
+function getBrowserLanguage() {
+  const locale = chrome.i18n.getMessage("@@ui_locale") || navigator.language;
+  const exactMatch = AVAILABLE_LANGUAGE_CODES.find((code) => code === locale);
+  if (exactMatch) return exactMatch;
+
+  return DEFAULT_LANGUAGE;
+}

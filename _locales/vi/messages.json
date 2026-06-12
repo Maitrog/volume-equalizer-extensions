@@ -115,5 +115,8 @@
   },
   "delete": {
     "message": "Xóa"
+  },
+  "language_setting_option": {
+    "message": "Ngôn ngữ"
   }
 }

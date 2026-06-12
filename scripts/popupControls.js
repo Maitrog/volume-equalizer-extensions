@@ -1,4 +1,4 @@
-document.getElementById("change-eq").addEventListener("click", async () => {
+﻿document.getElementById("change-eq").addEventListener("click", async () => {
   if (isToolkitWindow) return;
 
   const tabId = await getCurrentTabId();
@@ -56,11 +56,11 @@ document.getElementById("volume-mute").addEventListener("click", async () => {
 
 function setEnableBtnText(enabled) {
   if (!enabled)
-    document.getElementById("change-eq").textContent = chrome.i18n.getMessage(
+    document.getElementById("change-eq").textContent = getLocalizedMessage(
       "enable_eq_button_label"
     );
   else
-    document.getElementById("change-eq").textContent = chrome.i18n.getMessage(
+    document.getElementById("change-eq").textContent = getLocalizedMessage(
       "stop_eq_button_label"
     );
 }

@@ -1,4 +1,4 @@
-function addPresetToDropdown(name) {
+﻿function addPresetToDropdown(name) {
   const option = document.createElement("div");
   option.textContent = name;
   option.setAttribute("data-value", name);
@@ -54,7 +54,7 @@ document.addEventListener("click", (e) => {
 menu.addEventListener("click", (e) => {
   const choice = e.target.getAttribute("data-value");
   if (choice == "none") {
-    toggle.textContent = choice;
+    toggle.textContent = getLocalizedMessage("empty_preset_name");
     menu.style.display = "none";
     return;
   }
@@ -64,7 +64,7 @@ menu.addEventListener("click", (e) => {
       .get(["presets", "presetNames", "whitelist"])
       .then(async (prefs) => {
         if (isPresetUsedInWhitelist(prefs.whitelist, choice)) {
-          alert(chrome.i18n.getMessage("preset_delete_error"));
+          alert(getLocalizedMessage("preset_delete_error"));
           return;
         }
 
@@ -82,7 +82,8 @@ menu.addEventListener("click", (e) => {
         });
       });
   } else if (e.target.classList.contains("dropdown-item")) {
-    toggle.textContent = choice;
+    toggle.textContent =
+      choice === "none" ? getLocalizedMessage("empty_preset_name") : choice;
     chrome.storage.local.get(["presets"]).then(async (prefs) => {
       if (!prefs.presets) return;
 

@@ -115,5 +115,8 @@
   },
   "delete": {
     "message": "Sil"
+  },
+  "language_setting_option": {
+    "message": "Dil"
   }
 }

@@ -1,16 +1,16 @@
-function drawPoints() {
+﻿function drawPoints() {
   points.forEach((p) => {
     ctx.beginPath();
     ctx.arc(p.x, p.y, pointRadius, 0, Math.PI * 2);
     ctx.fillStyle = panelBg;
     ctx.fill();
-    ctx.strokeStyle = accentMid;
+    ctx.strokeStyle = g_accentMid;
     ctx.lineWidth = 2;
     ctx.stroke();
   });
 
-  drawTypedPoint(highpassPoint, highpassFilterColor);
-  drawTypedPoint(lowpassPoint, lowpassFilterColor);
+  drawTypedPoint(g_highpassPoint, g_highpassFilterColor);
+  drawTypedPoint(g_lowpassPoint, g_lowpassFilterColor);
 }
 
 function drawTypedPoint(point, color) {
@@ -28,10 +28,10 @@ function drawTypedPoint(point, color) {
 function drawFilter() {
   drawPoints();
 
-  if (highpassPoint) {
+  if (g_highpassPoint) {
     const canvasWidth = canvas.width - 10;
-    const freq = xToFrequency(highpassPoint.x, canvasWidth);
-    drawHighpassFilter(canvas, audioCtx, freq, ensureQFactor(highpassPoint.q));
+    const freq = xToFrequency(g_highpassPoint.x, canvasWidth);
+    drawHighpassFilter(canvas, audioCtx, freq, ensureQFactor(g_highpassPoint.q));
   }
 
   if (points.length > 0) {
@@ -43,9 +43,9 @@ function drawFilter() {
     });
   }
 
-  if (lowpassPoint) {
+  if (g_lowpassPoint) {
     const canvasWidth = canvas.width - 10;
-    const freq = xToFrequency(lowpassPoint.x, canvasWidth);
-    drawLowpassFilter(canvas, audioCtx, freq, ensureQFactor(lowpassPoint.q));
+    const freq = xToFrequency(g_lowpassPoint.x, canvasWidth);
+    drawLowpassFilter(canvas, audioCtx, freq, ensureQFactor(g_lowpassPoint.q));
   }
 }

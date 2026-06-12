@@ -1,4 +1,4 @@
-const spectrumCanvas = document.getElementById("spectrum-canvas");
+﻿const spectrumCanvas = document.getElementById("spectrum-canvas");
 const spectrumCtx = spectrumCanvas.getContext("2d");
 spectrumCtx.imageSmoothingEnabled = true;
 spectrumCtx.imageSmoothingQuality = "high";
@@ -10,15 +10,15 @@ let meta = {
   maxDb: -30,
   frequencyBinCount: 2048,
 };
-let lastBuffer = null;
-let rafScheduled = false;
+let g_lastBuffer = null;
+let g_rafScheduled = false;
 
 function scheduleDraw() {
-  if (rafScheduled) return;
-  rafScheduled = true;
+  if (g_rafScheduled) return;
+  g_rafScheduled = true;
   requestAnimationFrame(() => {
-    rafScheduled = false;
-    if (lastBuffer) drawSpectrum(lastBuffer);
+    g_rafScheduled = false;
+    if (g_lastBuffer) drawSpectrum(g_lastBuffer);
   });
 }
 
@@ -67,9 +67,9 @@ function drawSpectrum(buffer) {
 
   const sampleRate = meta.sampleRate || 48000;
   const maxFrequency = Math.min(24000, sampleRate / 2);
-  const lineColor = accentMid;
-  const fillStart = accentStart;
-  const fillEnd = accentEnd;
+  const lineColor = g_accentMid;
+  const fillStart = g_accentStart;
+  const fillEnd = g_accentEnd;
 
   const fill = spectrumCtx.createLinearGradient(0, 0, 0, height);
   fill.addColorStop(0, fillStart);
@@ -148,7 +148,7 @@ chrome.storage.onChanged.addListener(async (ps) => {
       return;
     }
     if (msg.type === "spectrum" && msg.buffer) {
-      lastBuffer = msg.buffer;
+      g_lastBuffer = msg.buffer;
       scheduleDraw();
       return;
     }

@@ -1,4 +1,4 @@
-function drawHighpassFilter(canvas, audioCtx, freq, Q = 0.5) {
+﻿function drawHighpassFilter(canvas, audioCtx, freq, Q = 0.5) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
@@ -25,7 +25,7 @@ function drawHighpassFilter(canvas, audioCtx, freq, Q = 0.5) {
 
   filter.getFrequencyResponse(frequencies, magResponse, phaseResponse);
 
-  ctx.strokeStyle = highpassFilterColor;
+  ctx.strokeStyle = g_highpassFilterColor;
   ctx.lineWidth = 1;
   ctx.beginPath();
   for (let i = 0; i < numPoints; i++) {

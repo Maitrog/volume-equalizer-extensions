@@ -1,4 +1,4 @@
-function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
+﻿function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   const gainMargin = 20;
   const ctx = canvas.getContext("2d");
   const width = canvas.width;
@@ -27,9 +27,9 @@ function drawPeakingFilter(canvas, audioCtx, freq, Q = 1, gainDb = 0) {
   filter.getFrequencyResponse(frequencies, magResponse, phaseResponse);
 
   const grad = ctx.createLinearGradient(0, 0, canvas.width, 0);
-  grad.addColorStop(0, accentStart);
-  grad.addColorStop(0.5, accentMid);
-  grad.addColorStop(1, accentEnd);
+  grad.addColorStop(0, g_accentStart);
+  grad.addColorStop(0.5, g_accentMid);
+  grad.addColorStop(1, g_accentEnd);
   ctx.strokeStyle = grad;
   ctx.lineWidth = 1;
   ctx.beginPath();

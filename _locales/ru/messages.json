@@ -115,5 +115,8 @@
   },
   "delete": {
     "message": "Удалить"
+  },
+  "language_setting_option": {
+    "message": "Язык"
   }
 }

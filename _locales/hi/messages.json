@@ -115,5 +115,8 @@
   },
   "delete": {
     "message": "हटाएं"
+  },
+  "language_setting_option": {
+    "message": "भाषा"
   }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -81,6 +81,10 @@
           <option value="light" id="theme-light-option">Lignt</option>
           <option value="ny" id="theme-ny-option">Christmas</option>
         </select>
+      </div>
+      <div class="settings-row">
+        <span id="language-label">Language</span>
+        <select id="language-select" class="settings-select"></select>
       </div>
       <div class="settings-section">
         <h3 id="autostart-settings-title">Whitelist</h3>
@@ -195,6 +199,7 @@
     </div>
   </div>
 
+  <script src="scripts/languages.js"></script>
   <script src="scripts/localization.js"></script>
   <script src="scripts/whitelist.js"></script>
   <script src="scripts/themes.js"></script>

@@ -1,4 +1,4 @@
-// ********************
+﻿// ********************
 // Settings modal
 // ********************
 const settingsModal = document.getElementById("settings-modal");
@@ -29,16 +29,16 @@ function applyTheme(theme) {
   Object.entries(chosen).forEach(([key, value]) => {
     document.documentElement.style.setProperty(`--${key}`, value);
   });
-  currentTheme = theme in themes ? theme : DEFAULT_THEME;
+  g_currentTheme = theme in themes ? theme : DEFAULT_THEME;
   const select = document.getElementById("theme-select");
-  if (select) select.value = currentTheme;
+  if (select) select.value = g_currentTheme;
   if (typeof loadColors === "function") loadColors();
   mainResize();
 }
 
 const themeSelect = document.getElementById("theme-select");
 if (themeSelect) {
-  themeSelect.value = currentTheme;
+  themeSelect.value = g_currentTheme;
   themeSelect.addEventListener("change", (e) => {
     const theme = e.target.value || DEFAULT_THEME;
     applyTheme(theme);
@@ -50,13 +50,13 @@ if (themeSelect) {
 // EQ points count settings
 // ********************
 function shouldSkipPointsResetConfirm() {
-  return skipPointsResetConfirm;
+  return g_skipPointsResetConfirm;
 }
 
 function setSkipPointsResetConfirm(value) {
-  skipPointsResetConfirm = Boolean(value);
+  g_skipPointsResetConfirm = Boolean(value);
   return chrome.storage.local.set({
-    [SKIP_POINTS_CONFIRM_KEY]: skipPointsResetConfirm,
+    [SKIP_POINTS_CONFIRM_KEY]: g_skipPointsResetConfirm,
   });
 }
 
@@ -82,7 +82,7 @@ if (pointsCountSelect) {
       applyPointCountChange(newCount);
       return;
     }
-    pendingPointCount = newCount;
+    g_pendingPointCount = newCount;
     const skipCheckbox = document.getElementById("skip-reset-confirm");
     if (skipCheckbox) {
       skipCheckbox.checked = shouldSkipPointsResetConfirm();
@@ -109,18 +109,18 @@ if (pointsResetConfirmBtn) {
     if (skipResetCheckbox) {
       setSkipPointsResetConfirm(skipResetCheckbox.checked);
     }
-    if (pendingPointCount != null) {
-      await applyPointCountChange(pendingPointCount);
+    if (g_pendingPointCount != null) {
+      await applyPointCountChange(g_pendingPointCount);
     }
-    pendingPointCount = null;
+    g_pendingPointCount = null;
     closePointsResetModal();
   });
 }
 
 if (pointsResetCancelBtn) {
   pointsResetCancelBtn.addEventListener("click", () => {
-    updatePointCountSelect(pointCount);
-    pendingPointCount = null;
+    updatePointCountSelect(g_pointCount);
+    g_pendingPointCount = null;
     closePointsResetModal();
   });
 }
@@ -128,8 +128,8 @@ if (pointsResetCancelBtn) {
 if (pointsResetModal) {
   pointsResetModal.addEventListener("click", (event) => {
     if (event.target === pointsResetModal) {
-      updatePointCountSelect(pointCount);
-      pendingPointCount = null;
+      updatePointCountSelect(g_pointCount);
+      g_pendingPointCount = null;
       closePointsResetModal();
     }
   });
@@ -203,3 +203,13 @@ document.getElementById("enable-spectrum").addEventListener("change", (e) => {
     enableSpectrum: value,
   });
 });
+
+// ********************
+// Language setting
+// ********************
+const languageSelect = document.getElementById("language-select");
+if (languageSelect) {
+  languageSelect.addEventListener("change", (event) => {
+    setLanguage(event.target.value, { save: true });
+  });
+}

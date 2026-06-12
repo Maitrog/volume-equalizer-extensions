@@ -1,10 +1,10 @@
-function hideinfoTooltip() {
+﻿function hideinfoTooltip() {
   if (!infoTooltip) return;
   infoTooltip.style.display = "none";
 }
 
 function getPointTooltipText(point) {
-  if (dragMode === "q") return `Q ${ensureQFactor(point.q).toFixed(2)}`;
+  if (g_dragMode === "q") return `Q ${ensureQFactor(point.q).toFixed(2)}`;
   return `${Math.round(xToFrequency(point.x))} Hz`;
 }
 

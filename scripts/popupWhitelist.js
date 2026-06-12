@@ -1,4 +1,4 @@
-const addToWhitelistBtn = document.getElementById(
+﻿const addToWhitelistBtn = document.getElementById(
   "add-to-autostart-whitelist-btn"
 );
 const autostartModal = document.getElementById("autostart-modal");
@@ -24,7 +24,7 @@ async function getActiveTab() {
 
 function setAutostartSettingsError(element, messageName) {
   if (!element) return;
-  element.textContent = messageName ? chrome.i18n.getMessage(messageName) : "";
+  element.textContent = messageName ? getLocalizedMessage(messageName) : "";
   element.style.display = messageName ? "block" : "none";
 }
 
@@ -34,7 +34,7 @@ function fillPresetSelect(select, presetNames, selectedName = "") {
 
   const emptyOption = document.createElement("option");
   emptyOption.value = "";
-  emptyOption.textContent = chrome.i18n.getMessage(
+  emptyOption.textContent = getLocalizedMessage(
     "autostart_settings_select_preset_placeholder"
   );
   select.appendChild(emptyOption);
@@ -58,8 +58,8 @@ async function refreshAutostartSettingsPresetValueSelects() {
 function formatWhitelistEntry(entry) {
   const typeLabel =
     entry.type === "url"
-      ? chrome.i18n.getMessage("autostart_rule_type_url_label")
-      : chrome.i18n.getMessage("autostart_rule_type_domain_label");
+      ? getLocalizedMessage("autostart_rule_type_url_label")
+      : getLocalizedMessage("autostart_rule_type_domain_label");
   return `${typeLabel}: ${entry.value}`;
 }
 
@@ -158,7 +158,7 @@ async function renderWhitelist() {
   if (entries.length === 0) {
     const empty = document.createElement("div");
     empty.className = "whitelist-empty";
-    empty.textContent = chrome.i18n.getMessage("autostart_whitelist_empty");
+    empty.textContent = getLocalizedMessage("autostart_whitelist_empty");
     autostartSettingsList.appendChild(empty);
     return;
   }
@@ -174,7 +174,7 @@ async function renderWhitelist() {
     value.textContent = formatWhitelistEntry(entry);
 
     const preset = document.createElement("small");
-    preset.textContent = `${chrome.i18n.getMessage(
+    preset.textContent = `${getLocalizedMessage(
       "autostart_modal_preset_label"
     )}: ${entry.presetName}`;
 
@@ -184,7 +184,7 @@ async function renderWhitelist() {
     deleteBtn.type = "button";
     deleteBtn.className = "whitelist-delete";
     deleteBtn.textContent = "\u00d7";
-    deleteBtn.setAttribute("aria-label", chrome.i18n.getMessage("delete"));
+    deleteBtn.setAttribute("aria-label", getLocalizedMessage("delete"));
     deleteBtn.addEventListener("click", () => removeWhitelistEntry(entry.id));
 
     item.append(text, deleteBtn);

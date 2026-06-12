@@ -1,18 +1,18 @@
-const port = document.createElement("span");
+﻿const port = document.createElement("span");
 port.id = "eq-tools-port";
 document.documentElement.append(port);
 
 const peakingFreqs = [5, 30, 180, 800, 5000];
-let currentTabId = null;
+let g_currentTabId = null;
 
 const withTabId = (callback) => {
-  if (currentTabId !== null) {
-    callback(currentTabId);
+  if (g_currentTabId !== null) {
+    callback(g_currentTabId);
     return;
   }
 
   chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
-    currentTabId = tabId;
+    g_currentTabId = tabId;
     callback(tabId);
   });
 };
@@ -46,7 +46,7 @@ port.addEventListener("capture-error", (e) => {
 });
 
 chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
-  currentTabId = tabId;
+  g_currentTabId = tabId;
   const defaultFilters = [
     { freq: 20, gain: 0, q: 0.5, type: "highpass" },
     ...peakingFreqs.map((freq) => {

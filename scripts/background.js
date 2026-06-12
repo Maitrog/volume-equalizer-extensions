@@ -1,4 +1,4 @@
-importScripts(chrome.runtime.getURL("scripts/whitelist.js"));
+﻿importScripts(chrome.runtime.getURL("scripts/whitelist.js"));
 
 const register = async () => {
   await chrome.scripting.unregisterContentScripts();
@@ -141,6 +141,7 @@ async function clearUnusedStorage() {
     "filters",
     "enableSpectrum",
     "theme",
+    "uiLanguage",
     INSTALL_UPDATE_NOTICE_KEY,
   ];
   const tabIds = (await chrome.storage.session.get(["tabs"])).tabs ?? [];

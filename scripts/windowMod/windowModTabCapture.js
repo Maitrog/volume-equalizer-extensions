@@ -1,6 +1,6 @@
-async function loadToolkitTabSettings(tabId) {
+﻿async function loadToolkitTabSettings(tabId) {
   if (tabId == null) return;
-  toolkitActiveTabId = tabId;
+  g_toolkitActiveTabId = tabId;
 
   const result = await chrome.storage.local.get([
     "filters",
@@ -49,20 +49,20 @@ async function startToolkitTabCapture() {
     await audioCtx.resume();
 
     const activeTabIds = new Set(streamEntries.map(([tabId]) => tabId));
-    toolkitCaptures.forEach((capture, tabId) => {
+    g_toolkitCaptures.forEach((capture, tabId) => {
       if (activeTabIds.has(tabId)) return;
       stopToolkitCaptureEntry(capture);
-      toolkitCaptures.delete(tabId);
+      g_toolkitCaptures.delete(tabId);
     });
 
     await Promise.all(
       streamEntries.map(async ([tabId, streamId]) => {
-        const existing = toolkitCaptures.get(tabId);
+        const existing = g_toolkitCaptures.get(tabId);
         if (existing?.streamId === streamId) return;
 
         if (existing) {
           stopToolkitCaptureEntry(existing);
-          toolkitCaptures.delete(tabId);
+          g_toolkitCaptures.delete(tabId);
         }
 
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -84,7 +84,7 @@ async function startToolkitTabCapture() {
           output: null,
           filterSettings: [],
         };
-        toolkitCaptures.set(tabId, capture);
+        g_toolkitCaptures.set(tabId, capture);
         buildToolkitCaptureGraph(tabId);
         chrome.storage.local.remove("captureError." + tabId);
       })
@@ -105,7 +105,7 @@ async function startToolkitTabCapture() {
 window.addEventListener("beforeunload", stopToolkitTabCapture);
 
 function buildToolkitCaptureGraph(tabId) {
-  const capture = toolkitCaptures.get(String(tabId));
+  const capture = g_toolkitCaptures.get(String(tabId));
   if (!capture?.source) return;
 
   disconnectToolkitCaptureGraph(capture);
@@ -131,8 +131,8 @@ function buildToolkitCaptureGraph(tabId) {
   applyToolkitCaptureSettings(tabId);
 }
 
-function applyToolkitCaptureSettings(tabId = toolkitActiveTabId) {
-  const capture = toolkitCaptures.get(String(tabId));
+function applyToolkitCaptureSettings(tabId = g_toolkitActiveTabId) {
+  const capture = g_toolkitCaptures.get(String(tabId));
   if (!capture?.preamp) return;
 
   const slider = document.getElementById("master-volume");
@@ -153,9 +153,9 @@ function applyToolkitCaptureSettings(tabId = toolkitActiveTabId) {
 }
 
 function getToolkitCaptureFilterSettings(tabId) {
-  if (tabId === toolkitActiveTabId) return pointsToFilters(points);
+  if (tabId === g_toolkitActiveTabId) return pointsToFilters(points);
 
-  const capture = toolkitCaptures.get(String(tabId));
+  const capture = g_toolkitCaptures.get(String(tabId));
   if (capture?.filterSettings?.length) {
     return capture.filterSettings;
   }
@@ -163,8 +163,8 @@ function getToolkitCaptureFilterSettings(tabId) {
   return pointsToFilters(points);
 }
 
-function refreshToolkitCaptureFilters(tabId = toolkitActiveTabId) {
-  const capture = toolkitCaptures.get(String(tabId));
+function refreshToolkitCaptureFilters(tabId = g_toolkitActiveTabId) {
+  const capture = g_toolkitCaptures.get(String(tabId));
   if (!capture?.source) return;
 
   const filterSettings = getToolkitCaptureFilterSettings(tabId);
@@ -178,8 +178,8 @@ function refreshToolkitCaptureFilters(tabId = toolkitActiveTabId) {
 }
 
 function stopToolkitTabCapture() {
-  toolkitCaptures.forEach((capture) => stopToolkitCaptureEntry(capture));
-  toolkitCaptures.clear();
+  g_toolkitCaptures.forEach((capture) => stopToolkitCaptureEntry(capture));
+  g_toolkitCaptures.clear();
 }
 
 function stopToolkitCaptureEntry(capture) {

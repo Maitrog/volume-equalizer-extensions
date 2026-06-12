@@ -115,5 +115,8 @@
   },
   "delete": {
     "message": "削除"
+  },
+  "language_setting_option": {
+    "message": "言語"
   }
 }

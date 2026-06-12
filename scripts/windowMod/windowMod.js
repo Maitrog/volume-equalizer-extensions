@@ -1,4 +1,4 @@
-const TOOLKIT_WINDOW_KEY = "toolkitWindowId";
+﻿const TOOLKIT_WINDOW_KEY = "toolkitWindowId";
 const TOOLKIT_WINDOW_TAB_IDS_KEY = "toolkitWindowTabIds";
 const TOOLKIT_WINDOW_ACTIVE_TAB_KEY = "toolkitWindowActiveTabId";
 const TOOLKIT_WINDOW_CAPTURE_STREAM_IDS_KEY = "toolkitWindowCaptureStreamIds";
@@ -15,8 +15,8 @@ if (isToolkitWindow) {
   changeEqBtn.classList.add("disabled");
 }
 
-let toolkitActiveTabId = null;
-let toolkitCaptures = new Map();
+let g_toolkitActiveTabId = null;
+let g_toolkitCaptures = new Map();
 
 // ********************
 // Window already open notification
@@ -39,7 +39,7 @@ async function shouldShowToolkitWindowNotice() {
 
 function showToolkitWindowNotice() {
   const message =
-    chrome.i18n.getMessage("toolkit_window_already_open") ||
+    getLocalizedMessage("toolkit_window_already_open") ||
     "Equalizer is already open in a window";
   const notice = document.createElement("div");
   notice.className = "window-open-notice";

@@ -1,13 +1,13 @@
-let points = [];
-let highpassPoint = null;
-let lowpassPoint = null;
+﻿let points = [];
+let g_highpassPoint = null;
+let g_lowpassPoint = null;
 const pointRadius = 3;
 
 function savePointCount(count) {
-  return chrome.storage.local.set({ pointCount: clampPointCount(count) });
+  return chrome.storage.local.set({ g_pointCount: clampPointCount(count) });
 }
 
-function createPeakingFilterPoint(index, count = pointCount) {
+function createPeakingFilterPoint(index, count = g_pointCount) {
   const actualCount = clampPointCount(count);
   const centerY = canvas.height / 2;
   const pointStep = canvas.width / (actualCount + 1);
@@ -32,18 +32,18 @@ function createDefaultLowpassPoint(filter = {}) {
   return createCrossoverPoint(DEFAULT_LOWPASS_FREQ, filter);
 }
 
-function createPeakingFilterPoints(count = pointCount) {
+function createPeakingFilterPoints(count = g_pointCount) {
   const actualCount = clampPointCount(count);
   return Array.from({ length: actualCount }, (_, i) => {
     return createPeakingFilterPoint(i, actualCount);
   });
 }
 
-function initPoints(count = pointCount) {
-  pointCount = clampPointCount(count);
-  points = createPeakingFilterPoints(pointCount);
-  highpassPoint = createDefaultHighpassPoint();
-  lowpassPoint = createDefaultLowpassPoint();
+function initPoints(count = g_pointCount) {
+  g_pointCount = clampPointCount(count);
+  points = createPeakingFilterPoints(g_pointCount);
+  g_highpassPoint = createDefaultHighpassPoint();
+  g_lowpassPoint = createDefaultLowpassPoint();
 }
 
 function setPoints(filters) {
@@ -53,13 +53,13 @@ function setPoints(filters) {
   const highpassFilter = filters.find((filter) => filter.type === "highpass");
   const lowpassFilter = filters.find((filter) => filter.type === "lowpass");
 
-  pointCount = clampPointCount(peakingFilters.length);
-  savePointCount(pointCount);
-  updatePointCountSelect(pointCount);
-  highpassPoint = createDefaultHighpassPoint(highpassFilter);
-  lowpassPoint = createDefaultLowpassPoint(lowpassFilter);
+  g_pointCount = clampPointCount(peakingFilters.length);
+  savePointCount(g_pointCount);
+  updatePointCountSelect(g_pointCount);
+  g_highpassPoint = createDefaultHighpassPoint(highpassFilter);
+  g_lowpassPoint = createDefaultLowpassPoint(lowpassFilter);
   points = peakingFilters.map((filter, index) => {
-    const centeredPoint = createPeakingFilterPoint(index, pointCount);
+    const centeredPoint = createPeakingFilterPoint(index, g_pointCount);
     const freq = filter.freq;
     const gain = filter.gain;
     const x = Number.isFinite(Number(filter.x))
@@ -87,14 +87,14 @@ function hasCrossoverFilters(filters) {
 function pointsToFilters(points) {
   const filters = [];
 
-  if (highpassPoint) {
+  if (g_highpassPoint) {
     filters.push({
       type: "highpass",
-      freq: xToFrequency(highpassPoint.x),
+      freq: xToFrequency(g_highpassPoint.x),
       gain: 0,
-      q: ensureQFactor(highpassPoint.q),
-      x: highpassPoint.x,
-      y: highpassPoint.y,
+      q: ensureQFactor(g_highpassPoint.q),
+      x: g_highpassPoint.x,
+      y: g_highpassPoint.y,
     });
   }
 
@@ -109,14 +109,14 @@ function pointsToFilters(points) {
     });
   });
 
-  if (lowpassPoint) {
+  if (g_lowpassPoint) {
     filters.push({
       type: "lowpass",
-      freq: xToFrequency(lowpassPoint.x),
+      freq: xToFrequency(g_lowpassPoint.x),
       gain: 0,
-      q: ensureQFactor(lowpassPoint.q),
-      x: lowpassPoint.x,
-      y: lowpassPoint.y,
+      q: ensureQFactor(g_lowpassPoint.q),
+      x: g_lowpassPoint.x,
+      y: g_lowpassPoint.y,
     });
   }
 
@@ -124,23 +124,23 @@ function pointsToFilters(points) {
 }
 
 function getDraggedPoint() {
-  if (!dragIndex) return null;
-  if (dragIndex.type === "highpass") return highpassPoint;
-  if (dragIndex.type === "lowpass") return lowpassPoint;
-  return points[dragIndex.index];
+  if (!g_dragIndex) return null;
+  if (g_dragIndex.type === "highpass") return g_highpassPoint;
+  if (g_dragIndex.type === "lowpass") return g_lowpassPoint;
+  return points[g_dragIndex.index];
 }
 
 function setDraggedPoint(point) {
-  if (!dragIndex) return;
-  if (dragIndex.type === "highpass") {
-    highpassPoint = point;
+  if (!g_dragIndex) return;
+  if (g_dragIndex.type === "highpass") {
+    g_highpassPoint = point;
     return;
   }
-  if (dragIndex.type === "lowpass") {
-    lowpassPoint = point;
+  if (g_dragIndex.type === "lowpass") {
+    g_lowpassPoint = point;
     return;
   }
-  points[dragIndex.index] = point;
+  points[g_dragIndex.index] = point;
 }
 
 function getPointIndexAtPosition(x, y) {
@@ -156,15 +156,15 @@ function getPointIndexAtPosition(x, y) {
   }
 
   if (
-    highpassPoint &&
-    Math.hypot(highpassPoint.x - x, highpassPoint.y - y) < pointRadius + 2
+    g_highpassPoint &&
+    Math.hypot(g_highpassPoint.x - x, g_highpassPoint.y - y) < pointRadius + 2
   ) {
     return { type: "highpass" };
   }
 
   if (
-    lowpassPoint &&
-    Math.hypot(lowpassPoint.x - x, lowpassPoint.y - y) < pointRadius + 2
+    g_lowpassPoint &&
+    Math.hypot(g_lowpassPoint.x - x, g_lowpassPoint.y - y) < pointRadius + 2
   ) {
     return { type: "lowpass" };
   }
