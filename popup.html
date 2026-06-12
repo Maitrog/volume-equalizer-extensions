@@ -167,17 +167,28 @@
 
   <div id="install-update-notice-modal" class="modal">
     <div class="modal-content notice-modal">
-      <h3>EQ Toolkit update</h3>
+      <h3>Patch Notes 1.7.0</h3>
       <div class="notice-message">
-        <p>
-          Hey! It's Maitrog, the creator of the extension.
-          I'm glad you chose my equalizer. Thank you!
-        </p>
-        <p>
-          I want to ask you to fill out 
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">this questionnaire</a> and provide a review about your experience.
-          That'll really help me to choose a development track and make the right decisions.
-        </p>
+        <ul>
+          <li>Added language selection in Settings.
+            <ul>
+              <li>The interface now uses the selected language instead of only following the browser language.</li>
+            </ul>
+          </li>
+          <li>Added auto start rules for websites.
+            <ul>
+              <li>You can now add a domain or exact URL to auto start and assign a preset to it.</li>
+              <li>Added a quick button to add the current site to auto start.</li>
+              <li>Added whitelist management in Settings.</li>
+              <li>Prevented deleting presets that are used by auto start rules.</li>
+            </ul>
+          </li>
+          <li>Added high-pass and low-pass filter controls to the equalizer.</li>
+          <li>Added Q-factor adjustment for equalizer points (Shift + LMB).</li>
+          <li>Added tooltips for equalizer points (frequencies or Q factor during changing).</li>
+          <li>Added double-click reset for individual equalizer points.</li>
+        </ul>
+        <p>Now you can help with localization on <a href="https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/">Weblate</a> </p>
       </div>
       <div class="notice-actions">
         <button type="button" id="install-update-notice-close">Close</button>

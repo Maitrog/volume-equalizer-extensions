@@ -812,10 +812,16 @@ button:disabled:active {
 
 .notice-modal {
   max-width: 380px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-placeholder) transparent;
+}
+
+.notice-modal ul {
+  padding-inline-start: 15px;
 }
 
 .notice-message {
-  margin: 10px 0 18px;
+  margin: 10px 0 10px;
   line-height: 1.45;
   color: var(--text);
 }
