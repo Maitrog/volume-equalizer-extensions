@@ -56,20 +56,11 @@ function populateLanguageSelect() {
 }
 
 async function refreshLocalizedDynamicContent() {
-  if (typeof refreshAutostartSettingsPresetValueSelects === "function") {
-    await refreshAutostartSettingsPresetValueSelects();
-  }
-  if (typeof renderWhitelist === "function") {
-    await renderWhitelist();
-  }
-  if (
-    typeof getCurrentTabId === "function" &&
-    typeof setEnableBtnText === "function"
-  ) {
-    const tabId = await getCurrentTabId();
-    const result = await chrome.storage.local.get(["enabled." + tabId]);
-    setEnableBtnText(result["enabled." + tabId] ?? false);
-  }
+  await refreshAutostartSettingsPresetValueSelects();
+  await renderWhitelist();
+  const tabId = await getCurrentTabId();
+  const result = await chrome.storage.local.get(["enabled." + tabId]);
+  setEnableBtnText(result["enabled." + tabId] ?? false);
 }
 
 function applyLocalization() {

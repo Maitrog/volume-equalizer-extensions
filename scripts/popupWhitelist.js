@@ -212,5 +212,10 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   if (changes.presetNames) refreshAutostartSettingsPresetValueSelects();
 });
 
-refreshAutostartSettingsPresetValueSelects();
-renderWhitelist();
+async function initAutostartSettings() {
+  await g_localizationReady;
+  await refreshAutostartSettingsPresetValueSelects();
+  await renderWhitelist();
+}
+
+initAutostartSettings();
