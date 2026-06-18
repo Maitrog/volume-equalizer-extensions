@@ -157,6 +157,7 @@ async function renderWhitelist() {
 
   if (entries.length === 0) {
     const empty = document.createElement("div");
+    empty.id = "whitelist-empty";
     empty.className = "whitelist-empty";
     empty.textContent = getLocalizedMessage("autostart_whitelist_empty");
     autostartSettingsList.appendChild(empty);
