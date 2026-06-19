@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Preset"
   },
+  "community_settings_title": {
+    "message": "Komunitas"
+  },
   "import_presets_button_label": {
     "message": "Impor preset"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Bahasa"
+  },
+  "shortcuts_settings_title": {
+    "message": "Pintasan keyboard"
+  },
+  "shortcut_mute_label": {
+    "message": "Bisukan/aktifkan suara"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Aktifkan/nonaktifkan"
+  },
+  "shortcut_validation_error": {
+    "message": "Gunakan setidaknya satu tombol pengubah (Ctrl, Alt, Shift, atau Meta) dan satu huruf atau angka."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Pintasan ini sudah digunakan oleh perintah lain."
   }
 }

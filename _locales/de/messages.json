@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Voreinstellungen"
   },
+  "community_settings_title": {
+    "message": "Community"
+  },
   "import_presets_button_label": {
     "message": "Voreinstellungen importieren"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Sprache"
+  },
+  "shortcuts_settings_title": {
+    "message": "Tastenkürzel"
+  },
+  "shortcut_mute_label": {
+    "message": "Stummschalten/Stummschaltung aufheben"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Aktivieren/deaktivieren"
+  },
+  "shortcut_validation_error": {
+    "message": "Verwenden Sie mindestens eine Modifikatortaste (Ctrl, Alt, Shift oder Meta) und einen Buchstaben oder eine Zahl."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Dieses Tastenkürzel wird bereits von einem anderen Befehl verwendet."
   }
 }

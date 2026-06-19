@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Cấu hình sẵn"
   },
+  "community_settings_title": {
+    "message": "Cộng đồng"
+  },
   "import_presets_button_label": {
     "message": "Nhập preset"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Ngôn ngữ"
+  },
+  "shortcuts_settings_title": {
+    "message": "Phím tắt"
+  },
+  "shortcut_mute_label": {
+    "message": "Tắt/bật tiếng"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Bật/tắt"
+  },
+  "shortcut_validation_error": {
+    "message": "Sử dụng ít nhất một phím bổ trợ (Ctrl, Alt, Shift hoặc Meta) và một chữ cái hoặc số."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Phím tắt này đã được lệnh khác sử dụng."
   }
 }

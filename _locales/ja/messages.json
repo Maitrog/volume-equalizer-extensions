@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "プリセット"
   },
+  "community_settings_title": {
+    "message": "コミュニティ"
+  },
   "import_presets_button_label": {
     "message": "プリセットをインポート"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "言語"
+  },
+  "shortcuts_settings_title": {
+    "message": "ホットキー"
+  },
+  "shortcut_mute_label": {
+    "message": "ミュート/ミュート解除"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "有効/無効"
+  },
+  "shortcut_validation_error": {
+    "message": "少なくとも 1 つの修飾キー（Ctrl、Alt、Shift、Meta）と 1 つの文字または数字を使用してください。"
+  },
+  "shortcut_duplicate_error": {
+    "message": "このショートカットは別のコマンドですでに使用されています。"
   }
 }

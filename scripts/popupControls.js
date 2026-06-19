@@ -77,3 +77,39 @@ document.getElementById("window-mod").addEventListener("click", async () => {
   chrome.runtime.sendMessage({ method: "enableWindowMode", tabId });
   window.close();
 });
+
+async function toggleCurrentTabStorageValue(key, options = {}) {
+  const tabId = await getCurrentTabId();
+  if (tabId == null) return;
+
+  const storageKey = key + "." + tabId;
+  const values = await chrome.storage.local.get([storageKey]);
+  const nextValues = {
+    [storageKey]: !values[storageKey],
+  };
+  if (options.enableTab && !isToolkitWindow) {
+    nextValues["enabled." + tabId] = true;
+  }
+  await chrome.storage.local.set(nextValues);
+}
+
+document.addEventListener("keydown", async (event) => {
+  if (event.repeat || isEditableShortcutTarget(event.target)) return;
+
+  if (matchesShortcut(event, g_shortcutSettings[SHORTCUT_ACTION_MUTE_NAME])) {
+    event.preventDefault();
+    event.stopPropagation();
+    await toggleCurrentTabStorageValue("mute", { enableTab: true });
+    return;
+  }
+
+  if (
+    matchesShortcut(event, g_shortcutSettings[SHORTCUT_ACTION_TOGGLE_EQ_NAME])
+  ) {
+    if (isToolkitWindow) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    await toggleCurrentTabStorageValue("enabled");
+  }
+});

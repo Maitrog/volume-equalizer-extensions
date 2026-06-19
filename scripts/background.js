@@ -1,5 +1,7 @@
 ﻿importScripts(chrome.runtime.getURL("scripts/whitelist.js"));
 
+importScripts(chrome.runtime.getURL("scripts/shortcuts.js"));
+
 const register = async () => {
   await chrome.scripting.unregisterContentScripts();
 
@@ -13,7 +15,7 @@ const register = async () => {
   await chrome.scripting.registerContentScripts([
     {
       id: "events",
-      js: ["scripts/events.js"],
+      js: ["scripts/shortcuts.js", "scripts/events.js"],
       world: "ISOLATED",
       ...props,
     },
@@ -142,6 +144,7 @@ async function clearUnusedStorage() {
     "enableSpectrum",
     "theme",
     "uiLanguage",
+    "shortcuts",
     INSTALL_UPDATE_NOTICE_KEY,
   ];
   const tabIds = (await chrome.storage.session.get(["tabs"])).tabs ?? [];

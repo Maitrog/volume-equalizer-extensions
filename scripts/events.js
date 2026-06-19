@@ -4,6 +4,7 @@ document.documentElement.append(port);
 
 const peakingFreqs = [5, 30, 180, 800, 5000];
 let g_currentTabId = null;
+let g_shortcuts = resolveShortcuts(null);
 
 const withTabId = (callback) => {
   if (g_currentTabId !== null) {
@@ -91,6 +92,10 @@ chrome.runtime.sendMessage({ method: "getTabId" }, (tabId) => {
 });
 
 chrome.storage.onChanged.addListener((ps) => {
+  if (ps["shortcuts"]) {
+    g_shortcuts = resolveShortcuts(ps["shortcuts"].newValue);
+  }
+
   withTabId((tabId) => {
     if (ps["filters." + tabId]) {
       var newF = ps["filters." + tabId].newValue.map((filter, i) => {
@@ -122,6 +127,45 @@ chrome.storage.onChanged.addListener((ps) => {
     }
   });
 });
+
+chrome.storage.local.get(["shortcuts"], (prefs) => {
+  g_shortcuts = resolveShortcuts(prefs["shortcuts"]);
+});
+
+function toggleTabStorageValue(tabId, key, options = {}) {
+  chrome.storage.local.get([key]).then((prefs) => {
+    const values = {
+      [key]: !prefs[key],
+    };
+    if (options.enableTab) values["enabled." + tabId] = true;
+    chrome.storage.local.set(values);
+  });
+}
+
+document.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.repeat || isEditableShortcutTarget(event.target)) return;
+
+    if (matchesShortcut(event, g_shortcuts[SHORTCUT_ACTION_MUTE_NAME])) {
+      event.preventDefault();
+      event.stopPropagation();
+      withTabId((tabId) => {
+        toggleTabStorageValue(tabId, "mute." + tabId, { enableTab: true });
+      });
+      return;
+    }
+
+    if (matchesShortcut(event, g_shortcuts[SHORTCUT_ACTION_TOGGLE_EQ_NAME])) {
+      event.preventDefault();
+      event.stopPropagation();
+      withTabId((tabId) => {
+        toggleTabStorageValue(tabId, "enabled." + tabId);
+      });
+    }
+  },
+  true
+);
 
 port.addEventListener("spectrum-frame", (e) => {
   chrome.runtime.sendMessage({ method: "spectrum-frame", payload: e.detail });

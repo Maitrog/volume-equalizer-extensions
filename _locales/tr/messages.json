@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Ön ayarlar"
   },
+  "community_settings_title": {
+    "message": "Topluluk"
+  },
   "import_presets_button_label": {
     "message": "Ön ayarları içe aktar"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Dil"
+  },
+  "shortcuts_settings_title": {
+    "message": "Kısayol tuşları"
+  },
+  "shortcut_mute_label": {
+    "message": "Sesi kapat/aç"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Etkinleştir/devre dışı bırak"
+  },
+  "shortcut_validation_error": {
+    "message": "En az bir değiştirici (Ctrl, Alt, Shift veya Meta) ve bir harf ya da sayı kullanın."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Bu kısayol zaten başka bir komut tarafından kullanılıyor."
   }
 }

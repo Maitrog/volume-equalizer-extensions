@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "프리셋"
   },
+  "community_settings_title": {
+    "message": "커뮤니티"
+  },
   "import_presets_button_label": {
     "message": "프리셋 가져오기"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "언어"
+  },
+  "shortcuts_settings_title": {
+    "message": "단축키"
+  },
+  "shortcut_mute_label": {
+    "message": "음소거/음소거 해제"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "활성화/비활성화"
+  },
+  "shortcut_validation_error": {
+    "message": "하나 이상의 보조 키(Ctrl, Alt, Shift 또는 Meta)와 문자 또는 숫자 하나를 사용하세요."
+  },
+  "shortcut_duplicate_error": {
+    "message": "이 단축키는 이미 다른 명령에서 사용 중입니다."
   }
 }

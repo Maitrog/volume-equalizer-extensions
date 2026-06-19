@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "प्रीसेट"
   },
+  "community_settings_title": {
+    "message": "समुदाय"
+  },
   "import_presets_button_label": {
     "message": "प्रीसेट आयात करें"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "भाषा"
+  },
+  "shortcuts_settings_title": {
+    "message": "कीबोर्ड शॉर्टकट"
+  },
+  "shortcut_mute_label": {
+    "message": "म्यूट/अनम्यूट"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "सक्षम/अक्षम"
+  },
+  "shortcut_validation_error": {
+    "message": "कम से कम एक मॉडिफायर (Ctrl, Alt, Shift या Meta) और एक अक्षर या संख्या का उपयोग करें।"
+  },
+  "shortcut_duplicate_error": {
+    "message": "यह शॉर्टकट पहले से ही किसी अन्य कमांड द्वारा उपयोग किया जा रहा है।"
   }
 }

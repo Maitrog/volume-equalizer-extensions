@@ -28,3 +28,4 @@ let g_pendingPointCount = null;
 let g_dragMode = null;
 let g_qDragStartY = 0;
 let g_qDragStartValue = DEFAULT_FILTER_Q;
+let g_shortcutSettings = resolveShortcuts(null);

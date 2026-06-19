@@ -87,6 +87,18 @@
         <select id="language-select" class="settings-select"></select>
       </div>
       <div class="settings-section">
+        <h3 id="shortcuts-settings-title">Shortcuts</h3>
+        <div class="settings-row">
+          <span id="shortcut-mute-label">Mute/unmute</span>
+          <input type="text" id="shortcut-mute" class="settings-input shortcut-input" readonly>
+        </div>
+        <div class="settings-row">
+          <span id="shortcut-toggle-eq-label">Enable/disable</span>
+          <input type="text" id="shortcut-toggle-eq" class="settings-input shortcut-input" readonly>
+        </div>
+        <div id="shortcuts-settings-error" class="settings-error"></div>
+      </div>
+      <div class="settings-section">
         <h3 id="autostart-settings-title">Whitelist</h3>
         <div id="autostart-settings-list" class="autostart-settings-list"></div>
         <div class="autostart-settings-add-row">
@@ -111,7 +123,7 @@
         </div>
       </div>
       <div class="settings-section">
-        <h3 id="presets-settings-title">Community</h3>
+        <h3 id="community-settings-title">Community</h3>
         <div class="notice-message">
           <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">Feedback</a>
         </div>
@@ -218,6 +230,7 @@
   </div>
 
   <script src="scripts/languages.js"></script>
+  <script src="scripts/shortcuts.js"></script>
   <script src="scripts/localization.js"></script>
   <script src="scripts/whitelist.js"></script>
   <script src="scripts/themes.js"></script>

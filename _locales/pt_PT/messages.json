@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Predefinições"
   },
+  "community_settings_title": {
+    "message": "Comunidade"
+  },
   "import_presets_button_label": {
     "message": "Importar"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Idioma"
+  },
+  "shortcuts_settings_title": {
+    "message": "Atalhos de teclado"
+  },
+  "shortcut_mute_label": {
+    "message": "Silenciar/ativar som"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Ativar/desativar"
+  },
+  "shortcut_validation_error": {
+    "message": "Utilize pelo menos uma tecla modificadora (Ctrl, Alt, Shift ou Meta) e uma letra ou número."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Este atalho já está a ser utilizado por outro comando."
   }
 }

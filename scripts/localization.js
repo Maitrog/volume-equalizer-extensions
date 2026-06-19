@@ -83,7 +83,11 @@ function applyLocalization() {
   setTextContent("points-reset-confirm", "ok");
   setTextContent("support-me", "support_me");
   setTextContent("theme-label", "theme_setting_option");
+  setTextContent("shortcuts-settings-title", "shortcuts_settings_title");
+  setTextContent("shortcut-mute-label", "shortcut_mute_label");
+  setTextContent("shortcut-toggle-eq-label", "shortcut_toggle_eq_label");
   setTextContent("presets-settings-title", "presets_settings_title");
+  setTextContent("community-settings-title", "community_settings_title");
   setTextContent("autostart-settings-title", "autostart_settings_title");
   setTextContent(
     "autostart-settings-type-domain",

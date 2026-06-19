@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "พรีเซ็ต"
   },
+  "community_settings_title": {
+    "message": "ชุมชน"
+  },
   "import_presets_button_label": {
     "message": "นำเข้าพรีเซ็ต"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "ภาษา"
+  },
+  "shortcuts_settings_title": {
+    "message": "ปุ่มลัด"
+  },
+  "shortcut_mute_label": {
+    "message": "ปิดเสียง/เปิดเสียง"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "เปิดใช้งาน/ปิดใช้งาน"
+  },
+  "shortcut_validation_error": {
+    "message": "ใช้อย่างน้อยหนึ่งปุ่มปรับแต่ง (Ctrl, Alt, Shift หรือ Meta) และตัวอักษรหรือตัวเลขหนึ่งตัว"
+  },
+  "shortcut_duplicate_error": {
+    "message": "ปุ่มลัดนี้ถูกใช้โดยคำสั่งอื่นแล้ว"
   }
 }

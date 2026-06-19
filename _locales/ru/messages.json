@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Пресеты"
   },
+  "community_settings_title": {
+    "message": "Сообщество"
+  },
   "import_presets_button_label": {
     "message": "Импорт"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Язык"
+  },
+  "shortcuts_settings_title": {
+    "message": "Горячие клавиши"
+  },
+  "shortcut_mute_label": {
+    "message": "Выключить/включить звук"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Включить/выключить"
+  },
+  "shortcut_validation_error": {
+    "message": "Используйте хотя бы один модификатор (Ctrl, Alt, Shift или Meta) и одну букву или цифру."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Это сочетание уже используется другой командой."
   }
 }

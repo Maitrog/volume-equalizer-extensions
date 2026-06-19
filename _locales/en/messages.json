@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Presets"
   },
+  "community_settings_title": {
+    "message": "Community"
+  },
   "import_presets_button_label": {
     "message": "Import"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Language"
+  },
+  "shortcuts_settings_title": {
+    "message": "Shortcuts"
+  },
+  "shortcut_mute_label": {
+    "message": "Mute/unmute"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Enable/disable"
+  },
+  "shortcut_validation_error": {
+    "message": "Use at least one modifier (Ctrl, Alt, Shift, or Meta) and one letter or number."
+  },
+  "shortcut_duplicate_error": {
+    "message": "This shortcut is already used by another command."
   }
 }

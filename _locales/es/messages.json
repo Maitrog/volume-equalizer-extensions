@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Preajustes"
   },
+  "community_settings_title": {
+    "message": "Comunidad"
+  },
   "import_presets_button_label": {
     "message": "Importar preajustes"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Idioma"
+  },
+  "shortcuts_settings_title": {
+    "message": "Atajos de teclado"
+  },
+  "shortcut_mute_label": {
+    "message": "Silenciar/activar sonido"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Activar/desactivar"
+  },
+  "shortcut_validation_error": {
+    "message": "Usa al menos un modificador (Ctrl, Alt, Shift o Meta) y una letra o número."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Este atajo ya lo usa otro comando."
   }
 }

@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Presets"
   },
+  "community_settings_title": {
+    "message": "Community"
+  },
   "import_presets_button_label": {
     "message": "Importa preset"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "Lingua"
+  },
+  "shortcuts_settings_title": {
+    "message": "Scorciatoie da tastiera"
+  },
+  "shortcut_mute_label": {
+    "message": "Disattiva/riattiva audio"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "Attiva/disattiva"
+  },
+  "shortcut_validation_error": {
+    "message": "Usa almeno un modificatore (Ctrl, Alt, Shift o Meta) e una lettera o un numero."
+  },
+  "shortcut_duplicate_error": {
+    "message": "Questa scorciatoia è già usata da un altro comando."
   }
 }

@@ -682,6 +682,17 @@ button:disabled:active {
   outline: 1px solid var(--accent-mid);
 }
 
+.shortcut-input {
+  width: 130px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.shortcut-input.invalid {
+  border-color: #ff4d4d;
+  outline: 1px solid #ff4d4d;
+}
+
 .settings-error {
   display: none;
   margin-top: 8px;

@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "预设"
   },
+  "community_settings_title": {
+    "message": "社区"
+  },
   "import_presets_button_label": {
     "message": "导入预设"
   },
@@ -118,5 +121,20 @@
   },
   "language_setting_option": {
     "message": "语言"
+  },
+  "shortcuts_settings_title": {
+    "message": "快捷键"
+  },
+  "shortcut_mute_label": {
+    "message": "静音/取消静音"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "启用/禁用"
+  },
+  "shortcut_validation_error": {
+    "message": "请至少使用一个修饰键（Ctrl、Alt、Shift 或 Meta）和一个字母或数字。"
+  },
+  "shortcut_duplicate_error": {
+    "message": "此快捷键已被另一个命令使用。"
   }
 }

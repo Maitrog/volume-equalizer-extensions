@@ -213,3 +213,100 @@ if (languageSelect) {
     setLanguage(event.target.value, { save: true });
   });
 }
+
+// ********************
+// Shortcuts settings
+// ********************
+const shortcutInputs = {
+  [SHORTCUT_ACTION_MUTE_NAME]: document.getElementById("shortcut-mute"),
+  [SHORTCUT_ACTION_TOGGLE_EQ_NAME]:
+    document.getElementById("shortcut-toggle-eq"),
+};
+const shortcutsError = document.getElementById("shortcuts-settings-error");
+
+function setShortcutsError(messageName) {
+  if (!shortcutsError) return;
+
+  if (!messageName) {
+    shortcutsError.style.display = "none";
+    shortcutsError.textContent = "";
+    return;
+  }
+
+  shortcutsError.textContent = getLocalizedMessage(messageName);
+  shortcutsError.style.display = "block";
+}
+
+function renderShortcutInputs(invalidAction = null) {
+  Object.entries(shortcutInputs).forEach(([action, input]) => {
+    if (!input) return;
+
+    input.value = formatShortcut(g_shortcutSettings[action]);
+    input.classList.toggle("invalid", action === invalidAction);
+  });
+}
+
+function startShortcutEdit(input) {
+  input.value = "?";
+  input.classList.remove("invalid");
+  setShortcutsError(null);
+}
+
+async function saveShortcut(action, shortcut) {
+  const nextShortcuts = {
+    ...g_shortcutSettings,
+    [action]: shortcut,
+  };
+  const validationError = validateShortcutConfig(nextShortcuts);
+
+  if (validationError) {
+    const messageName =
+      validationError === "duplicate"
+        ? "shortcut_duplicate_error"
+        : "shortcut_validation_error";
+    setShortcutsError(messageName);
+    renderShortcutInputs(action);
+    return false;
+  }
+
+  g_shortcutSettings = resolveShortcuts(nextShortcuts);
+  await chrome.storage.local.set({ ["shortcuts"]: g_shortcutSettings });
+  setShortcutsError(null);
+  renderShortcutInputs();
+  return true;
+}
+
+Object.entries(shortcutInputs).forEach(([action, input]) => {
+  if (!input) return;
+
+  input.addEventListener("focus", () => {
+    startShortcutEdit(input);
+  });
+
+  input.addEventListener("blur", () => {
+    setShortcutsError(null);
+    renderShortcutInputs();
+  });
+
+  input.addEventListener("keydown", async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isModifierShortcutKey(event.key)) return;
+
+    const shortcut = normalizeShortcutFromKeyboardEvent(event);
+    if (!shortcut) {
+      setShortcutsError("shortcut_validation_error");
+      input.classList.add("invalid");
+      return;
+    }
+
+    const saved = await saveShortcut(action, shortcut);
+    if (!saved) input.value = "?";
+  });
+});
+
+chrome.storage.local.get(["shortcuts"]).then((stored) => {
+  g_shortcutSettings = resolveShortcuts(stored["shortcuts"]);
+  renderShortcutInputs();
+});
