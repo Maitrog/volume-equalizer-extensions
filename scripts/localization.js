@@ -33,6 +33,16 @@ const setTooltip = (id, messageName) => {
   element.setAttribute("aria-label", message);
 };
 
+const setFirstTextNodeContent = (id, messageName) => {
+  const element = document.getElementById(id);
+  if (!element) return;
+
+  const textNode = Array.from(element.childNodes).find(
+    (node) => node.nodeType === Node.TEXT_NODE
+  );
+  if (textNode) textNode.textContent = getLocalizedMessage(messageName);
+};
+
 async function loadLocaleMessages(locale) {
   const response = await fetch(
     chrome.runtime.getURL(`_locales/${locale}/messages.json`)
@@ -88,6 +98,11 @@ function applyLocalization() {
   setTextContent("shortcut-toggle-eq-label", "shortcut_toggle_eq_label");
   setTextContent("presets-settings-title", "presets_settings_title");
   setTextContent("community-settings-title", "community_settings_title");
+  setFirstTextNodeContent(
+    "help-with-translation-label",
+    "help_with_translation_label"
+  );
+  setFirstTextNodeContent("source-code-label", "source_code_label");
   setTextContent("autostart-settings-title", "autostart_settings_title");
   setTextContent(
     "autostart-settings-type-domain",

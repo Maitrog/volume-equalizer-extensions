@@ -35,6 +35,12 @@
   "community_settings_title": {
     "message": "社区"
   },
+  "help_with_translation_label": {
+    "message": "帮助翻译:"
+  },
+  "source_code_label": {
+    "message": "源代码:"
+  },
   "import_presets_button_label": {
     "message": "导入预设"
   },

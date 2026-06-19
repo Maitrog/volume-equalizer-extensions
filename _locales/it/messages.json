@@ -35,6 +35,12 @@
   "community_settings_title": {
     "message": "Community"
   },
+  "help_with_translation_label": {
+    "message": "Aiuta con la traduzione:"
+  },
+  "source_code_label": {
+    "message": "Codice sorgente:"
+  },
   "import_presets_button_label": {
     "message": "Importa preset"
   },

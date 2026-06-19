@@ -35,6 +35,12 @@
   "community_settings_title": {
     "message": "ชุมชน"
   },
+  "help_with_translation_label": {
+    "message": "ช่วยแปล:"
+  },
+  "source_code_label": {
+    "message": "ซอร์สโค้ด:"
+  },
   "import_presets_button_label": {
     "message": "นำเข้าพรีเซ็ต"
   },

@@ -35,6 +35,12 @@
   "community_settings_title": {
     "message": "Komunitas"
   },
+  "help_with_translation_label": {
+    "message": "Bantu terjemahan:"
+  },
+  "source_code_label": {
+    "message": "Kode sumber:"
+  },
   "import_presets_button_label": {
     "message": "Impor preset"
   },

@@ -35,6 +35,12 @@
   "community_settings_title": {
     "message": "समुदाय"
   },
+  "help_with_translation_label": {
+    "message": "अनुवाद में मदद करें:"
+  },
+  "source_code_label": {
+    "message": "सोर्स कोड:"
+  },
   "import_presets_button_label": {
     "message": "प्रीसेट आयात करें"
   },
