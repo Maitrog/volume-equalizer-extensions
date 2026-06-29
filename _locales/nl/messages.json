@@ -12,10 +12,10 @@
     "message": "Reset"
   },
   "enable_eq_button_label": {
-    "message": "EQ inschakelen op dit tabblad"
+    "message": "EQ activeren op dit tabblad"
   },
   "stop_eq_button_label": {
-    "message": "EQ uitschakelen op dit tabblad"
+    "message": "EQ uitzetten op dit tabblad"
   },
   "empty_preset_name": {
     "message": "Geen"
