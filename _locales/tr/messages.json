@@ -12,10 +12,10 @@
     "message": "Sıfırla"
   },
   "enable_eq_button_label": {
-    "message": "Bu sekmede EQ yi etkinleştir"
+    "message": "Bu sekmede EQ'yu aç"
   },
   "stop_eq_button_label": {
-    "message": "Bu sekmede EQ yi durdur"
+    "message": "Bu sekmede EQ'yu durdur"
   },
   "empty_preset_name": {
     "message": "Yok"

@@ -1,0 +1,143 @@
+{
+  "extDescription": {
+    "message": "சம கருவித்தொகுப்பு என்பது ஒலி கட்டுப்பாட்டை வழங்கும் கட்டற்ற மற்றும் திறந்த மூல நீட்டிப்பாகும்."
+  },
+  "gain_slider_label": {
+    "message": "பெருக்கம்:"
+  },
+  "reset_button_label": {
+    "message": "மீட்டமை"
+  },
+  "enable_eq_button_label": {
+    "message": "இதில் சம இயக்கு"
+  },
+  "stop_eq_button_label": {
+    "message": "இதில் சம நிறுத்து"
+  },
+  "empty_preset_name": {
+    "message": "ஒன்றுமில்"
+  },
+  "save_preset_button_label": {
+    "message": "அமைவைச் சேமி"
+  },
+  "enter_preset_name": {
+    "message": "பெயரை உள்ளிடவும்"
+  },
+  "settings_title": {
+    "message": "அமைப்புகள்"
+  },
+  "presets_settings_title": {
+    "message": "முன்னமைவுகள்"
+  },
+  "community_settings_title": {
+    "message": "சமூகம்"
+  },
+  "help_with_translation_label": {
+    "message": "மொழிபெயர்ப்பு உதவி:"
+  },
+  "source_code_label": {
+    "message": "மூல குறியீடு:"
+  },
+  "import_presets_button_label": {
+    "message": "இறக்குமதி"
+  },
+  "export_presets_button_label": {
+    "message": "ஏற்றுமதி"
+  },
+  "enable_spectrum_setting_option": {
+    "message": "வானவில் காட்சிப்படுத்தலை இயக்கு, பக்கத்தை மறுதொடக்கம் செய்ய வேண்டும் (அதிக சிபியு சுமை)"
+  },
+  "points_count_setting_option": {
+    "message": "சமனாக்கி புள்ளிகளின் எண்ணிக்கை"
+  },
+  "points_reset_title": {
+    "message": "புள்ளிகளின் எண்ணிக்கையை மாற்றவா?"
+  },
+  "points_reset_message": {
+    "message": "புள்ளிகளின் எண்ணிக்கையை மாற்றுவது தற்போதைய சமனாக்கி அமைப்புகளை மீட்டமைக்கும்."
+  },
+  "points_reset_skip": {
+    "message": "மீண்டும் காட்டாதே"
+  },
+  "ok": {
+    "message": "சரி"
+  },
+  "cancel": {
+    "message": "கைவிடு"
+  },
+  "theme_setting_option": {
+    "message": "கருப்பொருள்"
+  },
+  "capture_error_prefix": {
+    "message": "ஒலி ஓடையைப் பிடிக்க முடியவில்லை. \"சாளர பயன்முறையை\" பயன்படுத்தி முயற்சி."
+  },
+  "toolkit_window_already_open": {
+    "message": "சமனாக்கி ஏற்கனவே ஒரு சாளரத்தில் திறக்கப்பட்டுள்ளது"
+  },
+  "support_me": {
+    "message": "என்னை ஆதரிக்கவும்"
+  },
+  "settings_button_tooltip": {
+    "message": "அமைப்புகள்"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "ஒலியளவை முடக்கு/இயக்கு"
+  },
+  "window_mode_button_tooltip": {
+    "message": "சாளர பயன்முறையைத் திற"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "தானியங்கு தொடக்கத்தில் அனுமதிப்பட்டியலுக்கு தற்போதைய தளத்தைச் சேர்"
+  },
+  "autostart_modal_title": {
+    "message": "தானியங்கு தொடக்கத்தில் சேர்"
+  },
+  "autostart_settings_title": {
+    "message": "தானியங்கு தொடக்கம்"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "துறை"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "முகவரி"
+  },
+  "autostart_modal_preset_label": {
+    "message": "முன்னமைவு"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "முன்னமைவைத் தேர்ந்தெடு"
+  },
+  "autostart_whitelist_empty": {
+    "message": "ஏற்புப் பட்டியல் காலியாக உள்ளது"
+  },
+  "autostart_validation_error": {
+    "message": "சரியான துறை அல்லது முகவரியை உள்ளிட்டு முன்னமைவைத் தேர்ந்தெடு."
+  },
+  "preset_delete_error": {
+    "message": "இந்த முன்னமைவு தானியங்கு தொடக்க விதிகளில் பயன்படுத்தப்படுகிறது. முதலில் தொடர்புடைய விதிகளை நீக்கு."
+  },
+  "add": {
+    "message": "சேர்"
+  },
+  "delete": {
+    "message": "நீக்கு"
+  },
+  "language_setting_option": {
+    "message": "மொழி"
+  },
+  "shortcuts_settings_title": {
+    "message": "குறுக்குவழிகள்"
+  },
+  "shortcut_mute_label": {
+    "message": "ஒலிமுடக்கு/இயக்கு"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "இயக்கு/முடக்கு"
+  },
+  "shortcut_validation_error": {
+    "message": "குறைந்தபட்சம் ஒரு மாற்றியை (கட்டு, மாற்று, உயர்த்து அல்லது சாளரம்) மற்றும் ஒரு எழுத்து அல்லது எண்ணைப் பயன்படுத்தவும்."
+  },
+  "shortcut_duplicate_error": {
+    "message": "இந்த குறுக்குவழி ஏற்கனவே மற்றொரு கட்டளையால் பயன்படுத்தப்பட்டது."
+  }
+}
