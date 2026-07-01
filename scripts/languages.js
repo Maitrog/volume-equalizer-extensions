@@ -73,6 +73,7 @@ const AVAILABLE_LANGUAGE_CODES = [
   "nl",
   "pt_PT",
   "ru",
+  "ta",
   "th",
   "tr",
   "vi",
