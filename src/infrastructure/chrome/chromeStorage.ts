@@ -6,7 +6,7 @@ export interface ChromeStorageArea {
   remove(keys: string | string[]): Promise<void>;
 }
 
-const createChromeStorageArea = (
+export const createChromeStorageArea = (
   area: chrome.storage.StorageArea,
 ): ChromeStorageArea => ({
   get: (keys) => area.get(keys ?? undefined) as Promise<Record<string, unknown>>,
@@ -14,5 +14,8 @@ const createChromeStorageArea = (
   remove: (keys) => area.remove(keys),
 });
 
-export const localStorageArea = createChromeStorageArea(chrome.storage.local);
-export const sessionStorageArea = createChromeStorageArea(chrome.storage.session);
+export const getLocalStorageArea = (): ChromeStorageArea =>
+  createChromeStorageArea(chrome.storage.local);
+
+export const getSessionStorageArea = (): ChromeStorageArea =>
+  createChromeStorageArea(chrome.storage.session);

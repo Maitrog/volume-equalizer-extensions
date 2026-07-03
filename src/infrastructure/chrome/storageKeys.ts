@@ -1,6 +1,6 @@
 export type StorageKey = string;
 
-type DynamicStorageKeyPart = number | string | null | undefined;
+type DynamicStorageKeyPart = number | string;
 
 export const STORAGE_KEYS = {
   PRESETS: "presets",
