@@ -207,6 +207,7 @@ const createMediaSource = (
   });
 
 const detach = (): void => {
+  stopSpectrum();
   equalizerGraphs.forEach((filters, source) => {
     const context = getAudioContext(source);
     source.disconnect();
@@ -243,6 +244,23 @@ const reattach = (): void => {
     port.dispatchEvent(new Event("connected"));
   }
 };
+
+const updateSpectrumState = (): void => {
+  if (port.dataset.enableSpectrum !== "true") {
+    stopSpectrum();
+    return;
+  }
+
+  for (const [source, filters] of equalizerGraphs) {
+    currentAudioCtx = getAudioContext(source);
+    currentSourceNode = getLastBiquadFilter(filters, filters.balance);
+    analyser = null;
+    startSpectrum();
+    return;
+  }
+};
+
+port.addEventListener("spectrum-state-changed", updateSpectrumState);
 
 AudioNode.prototype.connect = new Proxy(nativeConnect, {
   apply(target, self, args) {

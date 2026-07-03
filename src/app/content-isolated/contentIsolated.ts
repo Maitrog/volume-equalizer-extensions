@@ -161,6 +161,13 @@ chrome.storage.onChanged.addListener((changes) => {
     );
   }
 
+  if (changes[STORAGE_KEYS.ENABLE_SPECTRUM]) {
+    port.dataset.enableSpectrum = String(
+      changes[STORAGE_KEYS.ENABLE_SPECTRUM].newValue,
+    );
+    port.dispatchEvent(new Event("spectrum-state-changed"));
+  }
+
   withTabId((tabId) => {
     const tabFiltersKey = STORAGE_KEYS.tabFilters(tabId);
     if (changes[tabFiltersKey]) {
