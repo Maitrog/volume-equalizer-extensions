@@ -38,6 +38,9 @@
   "help_with_translation_label": {
     "message": "Помочь с переводом:"
   },
+  "translators_label": {
+    "message": "Переводчики:"
+  },
   "source_code_label": {
     "message": "Исходный код:"
   },

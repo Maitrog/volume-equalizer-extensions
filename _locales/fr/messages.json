@@ -38,6 +38,9 @@
   "help_with_translation_label": {
     "message": "Aider à la traduction :"
   },
+  "translators_label": {
+    "message": "Traducteurs :"
+  },
   "source_code_label": {
     "message": "Code source :"
   },

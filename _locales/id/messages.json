@@ -38,6 +38,9 @@
   "help_with_translation_label": {
     "message": "Bantu terjemahan:"
   },
+  "translators_label": {
+    "message": "Penerjemah:"
+  },
   "source_code_label": {
     "message": "Kode sumber:"
   },

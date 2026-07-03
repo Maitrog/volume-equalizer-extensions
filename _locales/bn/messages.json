@@ -38,6 +38,9 @@
   "help_with_translation_label": {
     "message": "অনুবাদে সাহায্য করুন:"
   },
+  "translators_label": {
+    "message": "অনুবাদকরা:"
+  },
   "source_code_label": {
     "message": "সোর্স কোড:"
   },

@@ -102,6 +102,7 @@ function applyLocalization() {
     "help-with-translation-label",
     "help_with_translation_label"
   );
+  setFirstTextNodeContent("translators-label", "translators_label");
   setFirstTextNodeContent("source-code-label", "source_code_label");
   setTextContent("autostart-settings-title", "autostart_settings_title");
   setTextContent(

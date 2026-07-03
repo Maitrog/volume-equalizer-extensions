@@ -35,6 +35,9 @@
   "help_with_translation_label": {
     "message": "மொழிபெயர்ப்பு உதவி:"
   },
+  "translators_label": {
+    "message": "மொழிபெயர்ப்பாளர்கள்:"
+  },
   "source_code_label": {
     "message": "மூல குறியீடு:"
   },

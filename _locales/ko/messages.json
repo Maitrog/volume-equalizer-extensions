@@ -38,6 +38,9 @@
   "help_with_translation_label": {
     "message": "번역 돕기:"
   },
+  "translators_label": {
+    "message": "번역가:"
+  },
   "source_code_label": {
     "message": "소스 코드:"
   },
