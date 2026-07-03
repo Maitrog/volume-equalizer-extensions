@@ -109,7 +109,7 @@ describe("createRuntimeMessageHandler", () => {
       response
     );
 
-    expect(result).toBe(true);
+    expect(result).toBeUndefined();
     expect(chromeMock.sessionSet).toHaveBeenCalledWith({
       [STORAGE_KEYS.REGISTERED_TAB_IDS]: [3, 7],
     });
@@ -132,11 +132,51 @@ describe("createRuntimeMessageHandler", () => {
       vi.fn()
     );
 
-    expect(result).toBe(true);
+    expect(result).toBeUndefined();
     expect(applyAutostartForTab).toHaveBeenCalledWith(
       9,
       "https://example.com",
       { resetWhenNoMatch: true }
     );
+  });
+
+  test("does not keep channel open for fire-and-forget tab messages", () => {
+    const chromeMock = createChromeMock();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      toggleWindowMode: vi.fn(),
+    });
+
+    const result = handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn()
+    );
+
+    expect(result).toBeUndefined();
+    expect(chromeMock.setBadgeText).toHaveBeenCalledWith({
+      text: "ON",
+      tabId: 11,
+    });
+  });
+
+  test("does not keep channel open for unknown tab messages", () => {
+    createChromeMock();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      toggleWindowMode: vi.fn(),
+    });
+
+    const result = handler(
+      { method: "unknown" as typeof RUNTIME_MESSAGES.GET_TAB_ID },
+      { tab: { id: 13 } as chrome.tabs.Tab },
+      vi.fn()
+    );
+
+    expect(result).toBeUndefined();
   });
 });

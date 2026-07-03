@@ -82,6 +82,6 @@ export const createRuntimeMessageHandler = ({
     } else if (request.method === RUNTIME_MESSAGES.CLEAR_STORAGE) {
       clearUnusedStorage();
     }
-    return true;
+    return;
   };
 };
