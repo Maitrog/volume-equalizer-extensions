@@ -4,10 +4,17 @@
   },
   "scripts": {
     "lint:locales": "node tools/validateLocalizationLengths.js",
-    "prezip": "@powershell if (-not (Test-Path -Path \"./build/Release\")) {New-Item -ItemType Directory -Path \"./build/Release\"}",
-    "zip": "bestzip ./build/Release/eq-toolkit_v1.8.0_unpackeged.zip resources/** scripts/** _locales/** manifest.json popup.html"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "build": "vite build",
+    "prezip": "npm run build",
+    "zip": "bestzip ./build/Release/eq-toolkit_v1.8.0_unpacked.zip dist/**"
   },
   "devDependencies": {
-    "bestzip": "^2.2.1"
+    "@types/node": "^26.1.0",
+    "bestzip": "^2.2.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.3",
+    "vitest": "^4.1.9"
   }
 }
