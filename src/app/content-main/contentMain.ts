@@ -246,7 +246,10 @@ const reattach = (): void => {
 };
 
 const updateSpectrumState = (): void => {
-  if (port.dataset.enableSpectrum !== "true") {
+  if (
+    port.dataset.enableSpectrum !== "true" ||
+    port.dataset.enabled !== "true"
+  ) {
     stopSpectrum();
     return;
   }
