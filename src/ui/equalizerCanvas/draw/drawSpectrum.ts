@@ -14,7 +14,7 @@ export type SpectrumBuffer = ArrayLike<number> | Record<string, number>;
 export interface SpectrumRendererOptions {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  colors: ThemeColors;
+  getColors: () => ThemeColors;
   requestAnimationFrame?: (callback: FrameRequestCallback) => number;
 }
 
@@ -89,7 +89,7 @@ const spectrumBinToFrequency = (
 export const createSpectrumRenderer = ({
   canvas,
   ctx,
-  colors,
+  getColors,
   requestAnimationFrame: requestFrame = window.requestAnimationFrame.bind(window),
 }: SpectrumRendererOptions): SpectrumRenderer => {
   let meta = { ...DEFAULT_META };
@@ -111,6 +111,7 @@ export const createSpectrumRenderer = ({
 
     const sampleRate = meta.sampleRate || 48000;
     const maxFrequency = Math.min(24000, sampleRate / 2);
+    const colors = getColors();
     const fill = ctx.createLinearGradient(0, 0, 0, height);
     fill.addColorStop(0, colors.accentStart);
     fill.addColorStop(1, colors.accentEnd);

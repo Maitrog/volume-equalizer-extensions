@@ -7,6 +7,7 @@ import {
   POINT_RADIUS,
   type EqualizerCanvasPoint,
 } from "../../../domains/equalizer/equalizerState";
+import type { ThemeColors } from "../../../domains/theme/themeColors";
 import type { EqualizerCanvasRenderOptions } from "../types";
 import { drawHighpassFilter } from "./drawHighpassFilter";
 import { drawLowpassFilter } from "./drawLowpassFilter";
@@ -35,7 +36,11 @@ export const drawPoints = ({
   ctx,
   state,
   colors,
-}: Pick<EqualizerCanvasRenderOptions, "ctx" | "state" | "colors">): void => {
+}: {
+  ctx: CanvasRenderingContext2D;
+  state: EqualizerCanvasRenderOptions["state"];
+  colors: ThemeColors;
+}): void => {
   state.getPoints().forEach((point) => {
     ctx.beginPath();
     ctx.arc(point.x, point.y, POINT_RADIUS, 0, Math.PI * 2);
@@ -65,8 +70,10 @@ export const drawFilter = ({
   ctx,
   audioContext,
   state,
-  colors,
+  getColors,
 }: EqualizerCanvasRenderOptions): void => {
+  const colors = getColors();
+
   drawPoints({ ctx, state, colors });
 
   const canvasWidth = canvas.width - 10;

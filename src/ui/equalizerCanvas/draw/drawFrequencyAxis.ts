@@ -4,8 +4,9 @@ import type { EqualizerCanvasPaintOptions } from "../types";
 export const drawAxis = ({
   canvas,
   ctx,
-  colors,
+  getColors,
 }: EqualizerCanvasPaintOptions): void => {
+  const colors = getColors();
   const freqMargin = 10;
   const margin = 10;
   const yPos = canvas.height;
