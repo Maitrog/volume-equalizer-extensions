@@ -1,0 +1,414 @@
+import type {
+  EqualizerPersistedFilter,
+  EqualizerState,
+} from "../../domains/equalizer/equalizerState";
+import { dbToGain } from "../../domains/equalizer/equalizerMath";
+import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
+import {
+  createCapturedTabsView,
+  type CapturedTabsView,
+} from "../../ui/popup/capturedTabsView";
+
+interface ToolkitCapture {
+  streamId: string;
+  stream: MediaStream;
+  source: MediaStreamAudioSourceNode;
+  preamp: GainNode | null;
+  filters: BiquadFilterNode[];
+  output: AudioNode | null;
+  filterSettings: EqualizerPersistedFilter[];
+}
+
+interface ToolkitBiquadInput {
+  freq: number;
+  gain: number;
+  q: number;
+  type?: BiquadFilterType;
+}
+
+const toBiquadInput = (filter: EqualizerPersistedFilter): ToolkitBiquadInput => ({
+  freq: Number(filter.freq ?? 0),
+  gain: Number(filter.gain ?? 0),
+  q: Number(filter.q ?? 0.5),
+  type: filter.type as BiquadFilterType | undefined,
+});
+
+const applyBiquadSettings = (
+  biquadFilter: BiquadFilterNode,
+  filter: ToolkitBiquadInput,
+): void => {
+  biquadFilter.type = filter.type ?? "peaking";
+  biquadFilter.gain.value = filter.gain;
+  biquadFilter.frequency.value = filter.freq;
+  biquadFilter.Q.value = filter.q;
+};
+
+const createBiquadFilter = (
+  context: BaseAudioContext,
+  filter: ToolkitBiquadInput,
+): BiquadFilterNode => {
+  const biquadFilter = context.createBiquadFilter();
+  applyBiquadSettings(biquadFilter, filter);
+  return biquadFilter;
+};
+
+export interface ToolkitWindowController {
+  readonly isToolkitWindow: boolean;
+  getCurrentTabId(): Promise<number | null>;
+  shouldShowToolkitWindowNotice(currentTabId: number | null): Promise<boolean>;
+  showToolkitWindowNotice(): void;
+  loadTabSettings(tabId: number | null): Promise<void>;
+  startTabCapture(): Promise<void>;
+  renderCapturedTabs(): Promise<void>;
+  refreshCaptureFilters(tabId?: number | null): void;
+  applyCaptureSettings(tabId?: number | null): void;
+  stopTabCapture(): void;
+  handleStorageChange(changes: Record<string, chrome.storage.StorageChange>): Promise<void>;
+}
+
+export const createToolkitWindowController = (deps: {
+  body: HTMLElement;
+  capturedTabs: HTMLElement;
+  changeEqButton: HTMLButtonElement;
+  audioContext: AudioContext;
+  equalizerState: EqualizerState;
+  getDimensions(): { canvasWidth: number; canvasHeight: number };
+  getPointCount(): Promise<number>;
+  getFilters(): EqualizerPersistedFilter[];
+  setFilters(filters: EqualizerPersistedFilter[]): void;
+  initPoints(count: number): void;
+  resize(): void;
+  setEnableButtonText(enabled: boolean): void;
+  setMuteButtonClass(muted: boolean): void;
+  renderCaptureError(message: string | null): void;
+  getGainValue(): number;
+  setGainValue(value: number): void;
+  isMuted(): boolean;
+  getMessage(messageName: string): string;
+}): ToolkitWindowController => {
+  const isToolkitWindow = new URLSearchParams(window.location.search).get("mode") === "window";
+  let activeTabId: number | null = null;
+  const captures = new Map<string, ToolkitCapture>();
+  let capturedTabsView: CapturedTabsView | null = null;
+
+  if (isToolkitWindow) {
+    deps.body.classList.add("toolkit-window-body");
+    deps.changeEqButton.disabled = true;
+    deps.changeEqButton.classList.add("disabled");
+  }
+
+  const getCurrentTabId = async (): Promise<number | null> => {
+    if (isToolkitWindow) {
+      if (activeTabId != null) return activeTabId;
+
+      const stored = await chrome.storage.session.get(
+        STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+      );
+      activeTabId =
+        (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ??
+        null;
+      return activeTabId;
+    }
+
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true,
+    });
+    return tab?.id ?? null;
+  };
+
+  const shouldShowToolkitWindowNotice = async (
+    currentTabId: number | null,
+  ): Promise<boolean> => {
+    if (isToolkitWindow || currentTabId == null) return false;
+
+    const stored = await chrome.storage.session.get([
+      STORAGE_KEYS.TOOLKIT_WINDOW_ID,
+      STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
+    ]);
+    const toolkitWindowTabIds = Array.isArray(
+      stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS],
+    )
+      ? (stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] as number[])
+      : [];
+    return (
+      stored[STORAGE_KEYS.TOOLKIT_WINDOW_ID] != null &&
+      toolkitWindowTabIds.includes(currentTabId)
+    );
+  };
+
+  const showToolkitWindowNotice = (): void => {
+    const notice = document.createElement("div");
+    notice.className = "window-open-notice";
+    notice.textContent =
+      deps.getMessage("toolkit_window_already_open") ||
+      "Equalizer is already open in a window";
+
+    deps.body.className = "window-open-notice-body";
+    deps.body.replaceChildren(notice);
+  };
+
+  const getCaptureStreamIds = async (): Promise<Record<string, string>> => {
+    const stored = await chrome.storage.session.get(
+      STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
+    );
+    return (
+      (stored[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS] as
+        | Record<string, string>
+        | undefined) ?? {}
+    );
+  };
+
+  const disconnectCaptureGraph = (capture: ToolkitCapture): void => {
+    try {
+      capture.source.disconnect();
+    } catch (e) {
+      // A node can already be disconnected when the stream is being replaced.
+    }
+
+    if (capture.preamp) {
+      try {
+        capture.preamp.disconnect();
+      } catch (e) {
+        // A node can already be disconnected when the stream is being replaced.
+      }
+    }
+
+    capture.filters.forEach((filter) => {
+      try {
+        filter.disconnect();
+      } catch (e) {
+        // A node can already be disconnected when the stream is being replaced.
+      }
+    });
+    capture.preamp = null;
+    capture.filters = [];
+    capture.output = null;
+  };
+
+  const stopCaptureEntry = (capture: ToolkitCapture): void => {
+    disconnectCaptureGraph(capture);
+    capture.stream.getTracks().forEach((track) => track.stop());
+  };
+
+  const getCaptureFilterSettings = (
+    tabId: number | string | null = activeTabId,
+  ): EqualizerPersistedFilter[] => {
+    if (tabId != null && Number(tabId) === activeTabId) {
+      return deps.getFilters();
+    }
+
+    const capture = captures.get(String(tabId));
+    if (capture?.filterSettings?.length) {
+      return capture.filterSettings;
+    }
+
+    return deps.getFilters();
+  };
+
+  const applyCaptureSettings = (
+    tabId: number | string | null = activeTabId,
+  ): void => {
+    const capture = captures.get(String(tabId));
+    if (!capture?.preamp) return;
+
+    capture.preamp.gain.value = deps.isMuted() ? 0 : dbToGain(deps.getGainValue());
+
+    const filterSettings = getCaptureFilterSettings(tabId);
+    capture.filterSettings = filterSettings;
+    filterSettings.forEach((filter, index) => {
+      if (!capture.filters[index]) return;
+      applyBiquadSettings(capture.filters[index], toBiquadInput(filter));
+    });
+  };
+
+  const buildCaptureGraph = (tabId: number | string): void => {
+    const capture = captures.get(String(tabId));
+    if (!capture?.source) return;
+
+    disconnectCaptureGraph(capture);
+    capture.preamp = deps.audioContext.createGain();
+    capture.source.connect(capture.preamp);
+
+    let previousNode: AudioNode = capture.preamp;
+    const filterSettings = getCaptureFilterSettings(tabId);
+    capture.filters = filterSettings.map((filter) => {
+      const biquadFilter = createBiquadFilter(deps.audioContext, toBiquadInput(filter));
+      previousNode.connect(biquadFilter);
+      previousNode = biquadFilter;
+      return biquadFilter;
+    });
+
+    capture.output = previousNode;
+    capture.output.connect(deps.audioContext.destination);
+    applyCaptureSettings(tabId);
+  };
+
+  const refreshCaptureFilters = (
+    tabId: number | string | null = activeTabId,
+  ): void => {
+    const capture = captures.get(String(tabId));
+    if (!capture?.source) return;
+
+    const filterSettings = getCaptureFilterSettings(tabId);
+    capture.filterSettings = filterSettings;
+    if (capture.filters.length !== filterSettings.length) {
+      buildCaptureGraph(tabId ?? activeTabId ?? "");
+      return;
+    }
+
+    applyCaptureSettings(tabId);
+  };
+
+  const loadTabSettings = async (tabId: number | null): Promise<void> => {
+    if (tabId == null) return;
+    activeTabId = tabId;
+
+    const result = await chrome.storage.local.get([
+      STORAGE_KEYS.FILTERS,
+      STORAGE_KEYS.tabFilters(tabId),
+      STORAGE_KEYS.tabGain(tabId),
+      STORAGE_KEYS.tabEnabled(tabId),
+      STORAGE_KEYS.tabMute(tabId),
+      STORAGE_KEYS.tabCaptureError(tabId),
+    ]);
+
+    const tabFilters = result[STORAGE_KEYS.tabFilters(tabId)] as
+      | EqualizerPersistedFilter[]
+      | undefined;
+    const defaultFilters = result[STORAGE_KEYS.FILTERS] as
+      | EqualizerPersistedFilter[]
+      | undefined;
+
+    if (tabFilters?.length) {
+      deps.setFilters(tabFilters);
+    } else if (defaultFilters?.length) {
+      deps.setFilters(defaultFilters);
+    } else {
+      deps.initPoints(await deps.getPointCount());
+    }
+
+    const gain = result[STORAGE_KEYS.tabGain(tabId)];
+    deps.resize();
+    deps.setEnableButtonText(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
+    deps.setMuteButtonClass(result[STORAGE_KEYS.tabMute(tabId)] === true);
+
+    deps.setGainValue(typeof gain === "string" || typeof gain === "number" ? Number(gain) : 0);
+
+    deps.renderCaptureError(
+      typeof result[STORAGE_KEYS.tabCaptureError(tabId)] === "string"
+        ? (result[STORAGE_KEYS.tabCaptureError(tabId)] as string)
+        : null,
+    );
+    refreshCaptureFilters(tabId);
+  };
+
+  const startTabCapture = async (): Promise<void> => {
+    if (!isToolkitWindow) return;
+
+    const streamIds = await getCaptureStreamIds();
+    const streamEntries = Object.entries(streamIds);
+
+    try {
+      await deps.audioContext.resume();
+
+      const activeTabIds = new Set(streamEntries.map(([tabId]) => tabId));
+      captures.forEach((capture, tabId) => {
+        if (activeTabIds.has(tabId)) return;
+        stopCaptureEntry(capture);
+        captures.delete(tabId);
+      });
+
+      await Promise.all(
+        streamEntries.map(async ([tabId, streamId]) => {
+          const existing = captures.get(tabId);
+          if (existing?.streamId === streamId) return;
+
+          if (existing) {
+            stopCaptureEntry(existing);
+            captures.delete(tabId);
+          }
+
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              mandatory: {
+                chromeMediaSource: "tab",
+                chromeMediaSourceId: streamId,
+              },
+            } as MediaTrackConstraints,
+            video: false,
+          });
+          const source = deps.audioContext.createMediaStreamSource(stream);
+          const capture: ToolkitCapture = {
+            streamId,
+            stream,
+            source,
+            preamp: null,
+            filters: [],
+            output: null,
+            filterSettings: [],
+          };
+          captures.set(tabId, capture);
+          buildCaptureGraph(tabId);
+          await chrome.storage.local.remove(STORAGE_KEYS.tabCaptureError(tabId));
+        }),
+      );
+
+      deps.renderCaptureError(null);
+    } catch (e) {
+      const tabId = await getCurrentTabId();
+      const message = e instanceof Error ? e.message : "Tab audio capture failed";
+      if (tabId != null) {
+        await chrome.storage.local.set({
+          [STORAGE_KEYS.tabCaptureError(tabId)]: message,
+        });
+      }
+      deps.renderCaptureError(message);
+    }
+  };
+
+  capturedTabsView = createCapturedTabsView({
+    root: deps.capturedTabs,
+    isToolkitWindow,
+    onSelectTab: loadTabSettings,
+  });
+
+  const renderCapturedTabs = async (): Promise<void> => {
+    await capturedTabsView?.render();
+  };
+
+  const stopTabCapture = (): void => {
+    captures.forEach((capture) => stopCaptureEntry(capture));
+    captures.clear();
+  };
+
+  window.addEventListener("beforeunload", stopTabCapture);
+
+  return {
+    isToolkitWindow,
+    getCurrentTabId,
+    shouldShowToolkitWindowNotice,
+    showToolkitWindowNotice,
+    loadTabSettings,
+    startTabCapture,
+    renderCapturedTabs,
+    refreshCaptureFilters,
+    applyCaptureSettings,
+    stopTabCapture,
+    handleStorageChange: async (changes) => {
+      if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]) {
+        activeTabId =
+          (changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID].newValue as
+            | number
+            | undefined) ?? null;
+        await loadTabSettings(activeTabId);
+        await renderCapturedTabs();
+      }
+
+      if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]) {
+        await startTabCapture();
+        await renderCapturedTabs();
+      }
+    },
+  };
+};
