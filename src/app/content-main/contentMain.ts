@@ -345,12 +345,7 @@ port.addEventListener("filters-changed", () => {
     const filterSettings = readFilterSettings();
     if (getBiquadFilterCount(filters) !== filterSettings.length) {
       rebuildBiquadChain(source, filters, filterSettings);
-      if (port.dataset.enableSpectrum === "true") {
-        currentSourceNode =
-          filterSettings.length > 0 ? filters[filterSettings.length - 1] ?? null : null;
-        analyser = null;
-        startSpectrum();
-      }
+      updateSpectrumState();
       port.dispatchEvent(new Event("connected"));
       return;
     }
