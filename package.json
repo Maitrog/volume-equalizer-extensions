@@ -6,7 +6,7 @@
     "lint:locales": "node tools/validateLocalizationLengths.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "build": "vite build",
+    "build": "node tools/buildExtension.mjs",
     "prezip": "npm run build && node -e \"require('node:fs').mkdirSync('build/Release',{recursive:true})\"",
     "zip": "bestzip ./build/Release/eq-toolkit_v1.8.0_unpacked.zip dist/**"
   },
