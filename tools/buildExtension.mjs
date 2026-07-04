@@ -51,9 +51,6 @@ await Promise.all([
   cp(resolve(rootDir, "_locales"), resolve(distDir, "_locales"), {
     recursive: true,
   }),
-  cp(resolve(rootDir, "scripts"), resolve(distDir, "scripts"), {
-    recursive: true,
-  }),
 ]);
 
 const scriptEntries = await readdir(resolve(distDir, "scripts"), {
