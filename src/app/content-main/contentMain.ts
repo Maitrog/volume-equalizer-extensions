@@ -28,6 +28,7 @@ port.remove();
 const equalizerGraphs = new Map<AudioNode, EqualizerNodeChain>();
 let currentAudioCtx: AudioContext | null = null;
 let currentSourceNode: AudioNode | null = null;
+let currentGraphSource: AudioNode | null = null;
 let analyser: AnalyserWithLegacySampleRate | null = null;
 let spectrumTimer: ReturnType<typeof setInterval> | null = null;
 const mediaSources = new WeakMap<HTMLMediaElement, CapturedMediaSource>();
@@ -145,6 +146,7 @@ const attach = (source: AudioNode): AudioNode => {
   filters.balance.pan.value = 0;
   filters.preamp.connect(filters.balance);
   equalizerGraphs.set(source, filters);
+  currentGraphSource = source;
 
   const filterSettings = readFilterSettings();
   rebuildBiquadChain(source, filters, filterSettings);
@@ -254,13 +256,21 @@ const updateSpectrumState = (): void => {
     return;
   }
 
-  for (const [source, filters] of equalizerGraphs) {
-    currentAudioCtx = getAudioContext(source);
-    currentSourceNode = getLastBiquadFilter(filters, filters.balance);
-    analyser = null;
-    startSpectrum();
+  const source =
+    currentGraphSource && equalizerGraphs.has(currentGraphSource)
+      ? currentGraphSource
+      : Array.from(equalizerGraphs.keys()).at(-1) ?? null;
+  if (!source) {
     return;
   }
+
+  const filters = equalizerGraphs.get(source);
+  if (!filters) {
+    return;
+  }
+
+  currentGraphSource = source;
+  refreshSpectrumForGraph(source, filters);
 };
 
 const refreshSpectrumForGraph = (
@@ -431,4 +441,15 @@ function stopSpectrum(): void {
     clearInterval(spectrumTimer);
     spectrumTimer = null;
   }
+
+  port.dispatchEvent(
+    new CustomEvent("spectrum-frame", {
+      detail: {
+        type: "spectrum",
+        buffer: null,
+      },
+      bubbles: true,
+      composed: true,
+    }),
+  );
 }

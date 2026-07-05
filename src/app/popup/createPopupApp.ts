@@ -42,7 +42,7 @@ export interface PopupAppDependencies {
 
 interface SpectrumStorageMessage extends Partial<SpectrumMeta> {
   type?: "meta" | "spectrum";
-  buffer?: SpectrumBuffer;
+  buffer?: SpectrumBuffer | null;
 }
 
 export const createPopupApp = ({
@@ -427,7 +427,7 @@ export const createPopupApp = ({
         if (message?.type === "meta") {
           spectrumRenderer.setMeta(message);
         }
-        if (message?.type === "spectrum" && message.buffer) {
+        if (message?.type === "spectrum") {
           spectrumRenderer.scheduleDraw(message.buffer);
         }
       }

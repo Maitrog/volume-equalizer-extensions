@@ -109,4 +109,22 @@ describe("equalizer canvas color providers", () => {
     );
     expect(ctx.strokeStyle).toBe("accent-mid-updated");
   });
+
+  test("spectrum renderer clears canvas when a null frame is scheduled", () => {
+    const canvas = createCanvas();
+    const ctx = createContext();
+    const renderer = createSpectrumRenderer({
+      canvas,
+      ctx,
+      getColors: () => createColors("initial"),
+      requestAnimationFrame: (callback) => {
+        callback(0);
+        return 1;
+      },
+    });
+
+    renderer.scheduleDraw(null);
+
+    expect(ctx.clearRect).toHaveBeenCalledWith(0, 0, 100, 60);
+  });
 });

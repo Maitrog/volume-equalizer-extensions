@@ -194,10 +194,7 @@ export const createSpectrumRenderer = ({
     rafScheduled = true;
     requestFrame(() => {
       rafScheduled = false;
-
-      if (lastBuffer) {
-        drawSpectrum(lastBuffer);
-      }
+      drawSpectrum(lastBuffer);
     });
   };
 
