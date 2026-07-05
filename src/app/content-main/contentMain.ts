@@ -263,6 +263,24 @@ const updateSpectrumState = (): void => {
   }
 };
 
+const refreshSpectrumForGraph = (
+  source: AudioNode,
+  filters: EqualizerNodeChain,
+): void => {
+  if (
+    port.dataset.enableSpectrum !== "true" ||
+    port.dataset.enabled !== "true"
+  ) {
+    stopSpectrum();
+    return;
+  }
+
+  currentAudioCtx = getAudioContext(source);
+  currentSourceNode = getLastBiquadFilter(filters, filters.balance);
+  analyser = null;
+  startSpectrum();
+};
+
 port.addEventListener("spectrum-state-changed", updateSpectrumState);
 
 AudioNode.prototype.connect = new Proxy(nativeConnect, {
@@ -345,7 +363,8 @@ port.addEventListener("filters-changed", () => {
     const filterSettings = readFilterSettings();
     if (getBiquadFilterCount(filters) !== filterSettings.length) {
       rebuildBiquadChain(source, filters, filterSettings);
-      updateSpectrumState();
+      currentGraphSource = source;
+      refreshSpectrumForGraph(source, filters);
       port.dispatchEvent(new Event("connected"));
       return;
     }
