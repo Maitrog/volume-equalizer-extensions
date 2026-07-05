@@ -90,7 +90,7 @@ describe("createRuntimeMessageHandler", () => {
     expect(response).toHaveBeenCalledWith({ tabs: [], activeTabId: null });
   });
 
-  test("registers sender tab id before responding", () => {
+  test("stores sender tab id and responds synchronously", () => {
     const chromeMock = createChromeMock();
     chromeMock.sessionGet.mockImplementation((_keys, callback) => {
       callback({ [STORAGE_KEYS.REGISTERED_TAB_IDS]: [3] });
@@ -140,7 +140,7 @@ describe("createRuntimeMessageHandler", () => {
     );
   });
 
-  test("does not keep channel open for fire-and-forget tab messages", () => {
+  test("updates connected tab badge without an async response", () => {
     const chromeMock = createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
@@ -162,7 +162,7 @@ describe("createRuntimeMessageHandler", () => {
     });
   });
 
-  test("does not keep channel open for unknown tab messages", () => {
+  test("ignores unknown tab messages without an async response", () => {
     createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
