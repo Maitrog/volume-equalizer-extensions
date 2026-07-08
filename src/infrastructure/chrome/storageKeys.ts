@@ -6,6 +6,7 @@ export const STORAGE_KEYS = {
   PRESETS: "presets",
   PRESET_NAMES: "presetNames",
   AUTOSTART_RULES: "whitelist",
+  GAIN: "gain",
   FILTERS: "filters",
   ENABLE_SPECTRUM: "enableSpectrum",
   THEME: "theme",
