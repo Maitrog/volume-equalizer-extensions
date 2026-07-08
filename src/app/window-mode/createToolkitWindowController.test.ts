@@ -130,6 +130,7 @@ const createChromeStorage = () => {
         return Promise.resolve();
       }),
     },
+    sessionValues,
   };
 };
 
@@ -334,5 +335,35 @@ describe("createToolkitWindowController spectrum", () => {
     expect(audioContext.createdAnalyser).not.toBe(firstAnalyser);
     expect(clearInterval).toHaveBeenCalledWith(1);
     expect(setInterval).toHaveBeenCalledTimes(1);
+  });
+
+  test("removes one captured tab from window capture storage", async () => {
+    const storage = createChromeStorage();
+    storage.sessionValues[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] = [123, 456];
+    storage.sessionValues[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS] = {
+      123: "stream-123",
+      456: "stream-456",
+    };
+
+    vi.stubGlobal("window", {
+      location: { search: "?mode=window" },
+      addEventListener: vi.fn(),
+    });
+    vi.stubGlobal("document", {
+      createElement: () => new FakeElement(),
+    });
+    vi.stubGlobal("chrome", { storage });
+
+    const { controller } = createController();
+
+    await controller.stopCapturedTabCapture(123);
+
+    expect(storage.session.set).toHaveBeenCalledWith({
+      [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [456],
+      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 456,
+      [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
+        456: "stream-456",
+      },
+    });
   });
 });

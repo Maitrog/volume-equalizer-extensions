@@ -29,6 +29,7 @@ export const createCapturedTabsView = (deps: {
   root: HTMLElement;
   isToolkitWindow: boolean;
   onSelectTab(tabId: number): Promise<void>;
+  onStopCapture(tabId: number): Promise<void>;
 }): CapturedTabsView => {
   const render = async (): Promise<void> => {
     if (!deps.isToolkitWindow) return;
@@ -41,9 +42,10 @@ export const createCapturedTabsView = (deps: {
 
     deps.root.replaceChildren();
     result.tabs.forEach((tab) => {
-      const item = document.createElement("button");
-      item.type = "button";
+      const item = document.createElement("div");
       item.className = "captured-tab";
+      item.role = "button";
+      item.tabIndex = 0;
       if (tab.id === result.activeTabId) item.classList.add("active");
       item.dataset.tabId = String(tab.id);
       item.title = tab.title || tab.url || String(tab.id);
@@ -61,8 +63,37 @@ export const createCapturedTabsView = (deps: {
       title.textContent = tab.title || tab.url || `Tab ${tab.id}`;
       item.appendChild(title);
 
+      const stopButton = document.createElement("button");
+      stopButton.type = "button";
+      stopButton.className = "captured-tab-stop";
+      item.appendChild(stopButton);
+
       deps.root.appendChild(item);
     });
+  };
+
+  const getTabId = (item: HTMLElement): number | null => {
+    const tabId = Number.parseInt(item.dataset.tabId ?? "", 10);
+    return Number.isNaN(tabId) ? null : tabId;
+  };
+
+  const selectTab = async (item: HTMLElement): Promise<void> => {
+    const tabId = getTabId(item);
+    if (tabId == null) return;
+
+    await chrome.storage.session.set({
+      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: tabId,
+    });
+    await deps.onSelectTab(tabId);
+    await render();
+  };
+
+  const stopCapture = async (item: HTMLElement): Promise<void> => {
+    const tabId = getTabId(item);
+    if (tabId == null) return;
+
+    await deps.onStopCapture(tabId);
+    await render();
   };
 
   deps.root.addEventListener("click", (event) => {
@@ -72,14 +103,26 @@ export const createCapturedTabsView = (deps: {
       const item = event.target.closest<HTMLElement>(".captured-tab");
       if (!item) return;
 
-      const tabId = Number.parseInt(item.dataset.tabId ?? "", 10);
-      if (Number.isNaN(tabId)) return;
+      if (event.target.closest(".captured-tab-stop")) {
+        await stopCapture(item);
+        return;
+      }
 
-      await chrome.storage.session.set({
-        [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: tabId,
-      });
-      await deps.onSelectTab(tabId);
-      await render();
+      await selectTab(item);
+    })();
+  });
+
+  deps.root.addEventListener("keydown", (event) => {
+    void (async () => {
+      if (!(event.target instanceof HTMLElement)) return;
+      if (event.target.closest(".captured-tab-stop")) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+
+      const item = event.target.closest<HTMLElement>(".captured-tab");
+      if (!item) return;
+
+      event.preventDefault();
+      await selectTab(item);
     })();
   });
 

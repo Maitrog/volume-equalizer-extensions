@@ -239,6 +239,11 @@ body {
   box-sizing: border-box;
 }
 
+.captured-tab:focus-visible {
+  outline: 1px solid var(--accent-mid);
+  outline-offset: 2px;
+}
+
 .captured-tab:hover {
   background: var(--hover-bg);
 }
@@ -255,9 +260,34 @@ body {
 }
 
 .captured-tab-title {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.captured-tab-stop {
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  background: transparent;
+  color: var(--text-volume-scale);
+}
+
+.captured-tab-stop::before {
+  content: "\00d7";
+}
+
+.captured-tab-stop:hover,
+.captured-tab-stop:focus-visible {
+  background: var(--hover-bg);
+  color: var(--text);
 }
 
 .equalizer-curve-container {

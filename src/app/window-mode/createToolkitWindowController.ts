@@ -72,6 +72,7 @@ export interface ToolkitWindowController {
   renderCapturedTabs(): Promise<void>;
   refreshCaptureFilters(tabId?: number | null): void;
   applyCaptureSettings(tabId?: number | null): void;
+  stopCapturedTabCapture(tabId: number): Promise<void>;
   stopTabCapture(): void;
   handleStorageChange(changes: Record<string, chrome.storage.StorageChange>): Promise<void>;
 }
@@ -479,6 +480,9 @@ export const createToolkitWindowController = (deps: {
     root: deps.capturedTabs,
     isToolkitWindow,
     onSelectTab: loadTabSettings,
+    onStopCapture: async (tabId) => {
+      await stopCapturedTabCapture(tabId);
+    },
   });
 
   const renderCapturedTabs = async (): Promise<void> => {
@@ -489,6 +493,53 @@ export const createToolkitWindowController = (deps: {
     stopSpectrum();
     captures.forEach((capture) => stopCaptureEntry(capture));
     captures.clear();
+  };
+
+  const stopCapturedTabCapture = async (tabId: number): Promise<void> => {
+    if (!isToolkitWindow) return;
+
+    const capture = captures.get(String(tabId));
+    if (capture) {
+      stopCaptureEntry(capture);
+      captures.delete(String(tabId));
+    }
+
+    const stored = await chrome.storage.session.get([
+      STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
+      STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+      STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
+    ]);
+    const remainingTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
+      ? (stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] as number[]).filter(
+          (storedTabId) => storedTabId !== tabId,
+        )
+      : [];
+    const streamIds = {
+      ...((stored[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS] as
+        | Record<string, string>
+        | undefined) ?? {}),
+    };
+    delete streamIds[tabId];
+
+    const storedActiveTabId =
+      (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ??
+      activeTabId;
+    activeTabId =
+      storedActiveTabId === tabId
+        ? remainingTabIds[0] ?? null
+        : storedActiveTabId ?? null;
+
+    if (activeTabId == null || activeTabId === tabId) {
+      stopSpectrum();
+    } else {
+      startSpectrum(activeTabId);
+    }
+
+    await chrome.storage.session.set({
+      [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: remainingTabIds,
+      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: activeTabId,
+      [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: streamIds,
+    });
   };
 
   window.addEventListener("beforeunload", stopTabCapture);
@@ -503,6 +554,7 @@ export const createToolkitWindowController = (deps: {
     renderCapturedTabs,
     refreshCaptureFilters,
     applyCaptureSettings,
+    stopCapturedTabCapture,
     stopTabCapture,
     handleStorageChange: async (changes) => {
       if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]) {
