@@ -16,7 +16,17 @@ interface ToolkitCapture {
   preamp: GainNode | null;
   filters: BiquadFilterNode[];
   output: AudioNode | null;
+  analyser: AnalyserNode | null;
   filterSettings: EqualizerPersistedFilter[];
+}
+
+export interface ToolkitSpectrumMeta {
+  type: "meta";
+  sampleRate: number;
+  fftSize: number;
+  minDb: number;
+  maxDb: number;
+  frequencyBinCount: number;
 }
 
 interface ToolkitBiquadInput {
@@ -85,11 +95,17 @@ export const createToolkitWindowController = (deps: {
   setGainValue(value: number): void;
   isMuted(): boolean;
   getMessage(messageName: string): string;
+  onSpectrumMeta?(meta: ToolkitSpectrumMeta): void;
+  onSpectrumFrame?(buffer: Float32Array | null): void;
 }): ToolkitWindowController => {
   const isToolkitWindow = new URLSearchParams(window.location.search).get("mode") === "window";
   let activeTabId: number | null = null;
   const captures = new Map<string, ToolkitCapture>();
   let capturedTabsView: CapturedTabsView | null = null;
+  let spectrumEnabled = false;
+  let spectrumTimer: ReturnType<typeof setInterval> | null = null;
+  let spectrumTabId: string | null = null;
+  let spectrumAnalyser: AnalyserNode | null = null;
 
   if (isToolkitWindow) {
     deps.body.classList.add("toolkit-window-body");
@@ -159,6 +175,16 @@ export const createToolkitWindowController = (deps: {
     );
   };
 
+  const stopSpectrum = (): void => {
+    if (spectrumTimer) {
+      clearInterval(spectrumTimer);
+      spectrumTimer = null;
+    }
+    spectrumTabId = null;
+    spectrumAnalyser = null;
+    deps.onSpectrumFrame?.(null);
+  };
+
   const disconnectCaptureGraph = (capture: ToolkitCapture): void => {
     try {
       capture.source.disconnect();
@@ -184,6 +210,7 @@ export const createToolkitWindowController = (deps: {
     capture.preamp = null;
     capture.filters = [];
     capture.output = null;
+    capture.analyser = null;
   };
 
   const stopCaptureEntry = (capture: ToolkitCapture): void => {
@@ -242,6 +269,10 @@ export const createToolkitWindowController = (deps: {
     capture.output = previousNode;
     capture.output.connect(deps.audioContext.destination);
     applyCaptureSettings(tabId);
+
+    if (spectrumEnabled && Number(tabId) === activeTabId) {
+      startSpectrum(tabId);
+    }
   };
 
   const refreshCaptureFilters = (
@@ -258,7 +289,72 @@ export const createToolkitWindowController = (deps: {
     }
 
     applyCaptureSettings(tabId);
+
+    if (spectrumEnabled && Number(tabId) === activeTabId) {
+      startSpectrum(tabId);
+    }
   };
+
+  const ensureSpectrumAnalyser = (capture: ToolkitCapture): AnalyserNode | null => {
+    if (!capture.output) return null;
+    if (capture.analyser) return capture.analyser;
+
+    const analyser = deps.audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.5;
+    capture.output.connect(analyser);
+    capture.analyser = analyser;
+    return analyser;
+  };
+
+  function startSpectrum(tabId: number | string | null = activeTabId): void {
+    if (!isToolkitWindow || !spectrumEnabled || tabId == null) {
+      stopSpectrum();
+      return;
+    }
+
+    const capture = captures.get(String(tabId));
+    if (!capture?.output) {
+      stopSpectrum();
+      return;
+    }
+
+    const analyser = ensureSpectrumAnalyser(capture);
+    if (!analyser) {
+      stopSpectrum();
+      return;
+    }
+
+    const nextSpectrumTabId = String(tabId);
+    if (
+      spectrumTimer &&
+      spectrumTabId === nextSpectrumTabId &&
+      spectrumAnalyser === analyser
+    ) {
+      return;
+    }
+
+    if (spectrumTimer) {
+      clearInterval(spectrumTimer);
+    }
+
+    spectrumTabId = nextSpectrumTabId;
+    spectrumAnalyser = analyser;
+    deps.onSpectrumMeta?.({
+      type: "meta",
+      sampleRate: deps.audioContext.sampleRate,
+      fftSize: analyser.fftSize,
+      minDb: analyser.minDecibels,
+      maxDb: analyser.maxDecibels,
+      frequencyBinCount: analyser.frequencyBinCount,
+    });
+
+    spectrumTimer = setInterval(() => {
+      const buffer = new Float32Array(analyser.frequencyBinCount);
+      analyser.getFloatFrequencyData(buffer);
+      deps.onSpectrumFrame?.(buffer);
+    }, 50);
+  }
 
   const loadTabSettings = async (tabId: number | null): Promise<void> => {
     if (tabId == null) return;
@@ -306,6 +402,12 @@ export const createToolkitWindowController = (deps: {
   const startTabCapture = async (): Promise<void> => {
     if (!isToolkitWindow) return;
 
+    activeTabId = await getCurrentTabId();
+    const spectrumSettings = await chrome.storage.local.get([
+      STORAGE_KEYS.ENABLE_SPECTRUM,
+    ]);
+    spectrumEnabled = spectrumSettings[STORAGE_KEYS.ENABLE_SPECTRUM] === true;
+
     const streamIds = await getCaptureStreamIds();
     const streamEntries = Object.entries(streamIds);
 
@@ -346,6 +448,7 @@ export const createToolkitWindowController = (deps: {
             preamp: null,
             filters: [],
             output: null,
+            analyser: null,
             filterSettings: [],
           };
           captures.set(tabId, capture);
@@ -355,6 +458,11 @@ export const createToolkitWindowController = (deps: {
       );
 
       deps.renderCaptureError(null);
+      if (spectrumEnabled) {
+        startSpectrum(activeTabId);
+      } else {
+        stopSpectrum();
+      }
     } catch (e) {
       const tabId = await getCurrentTabId();
       const message = e instanceof Error ? e.message : "Tab audio capture failed";
@@ -378,6 +486,7 @@ export const createToolkitWindowController = (deps: {
   };
 
   const stopTabCapture = (): void => {
+    stopSpectrum();
     captures.forEach((capture) => stopCaptureEntry(capture));
     captures.clear();
   };
@@ -403,11 +512,21 @@ export const createToolkitWindowController = (deps: {
             | undefined) ?? null;
         await loadTabSettings(activeTabId);
         await renderCapturedTabs();
+        startSpectrum(activeTabId);
       }
 
       if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]) {
         await startTabCapture();
         await renderCapturedTabs();
+      }
+
+      if (isToolkitWindow && changes[STORAGE_KEYS.ENABLE_SPECTRUM]) {
+        spectrumEnabled = changes[STORAGE_KEYS.ENABLE_SPECTRUM].newValue === true;
+        if (spectrumEnabled) {
+          startSpectrum(activeTabId);
+        } else {
+          stopSpectrum();
+        }
       }
     },
   };

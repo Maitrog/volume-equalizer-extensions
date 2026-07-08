@@ -145,6 +145,8 @@ export const createPopupApp = ({
     setGainValue,
     isMuted: () => elements.volumeMuteButton.className === "volume-mute-active",
     getMessage: localization.getMessage,
+    onSpectrumMeta: (meta) => spectrumRenderer.setMeta(meta),
+    onSpectrumFrame: (buffer) => spectrumRenderer.scheduleDraw(buffer),
   });
 
   const getCurrentTabId = (): Promise<number | null> => {
