@@ -64,6 +64,7 @@ const setFirstTextNodeContent = (
   id: string,
   messageName: string,
   getMessage: (messageName: string) => string,
+  suffix = "",
 ): void => {
   const element = root.getElementById(id);
   if (!element) return;
@@ -71,7 +72,7 @@ const setFirstTextNodeContent = (
   const textNode = Array.from(element.childNodes).find(
     (node) => node.nodeType === 3,
   );
-  if (textNode) textNode.textContent = getMessage(messageName);
+  if (textNode) textNode.textContent = `${getMessage(messageName)}${suffix}`;
 };
 
 const loadLocaleMessages = async (locale: string): Promise<LocaleMessages> => {
@@ -117,7 +118,9 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "shortcut-mute-label", "shortcut_mute_label", getMessage);
     setElementTextContent(root, "shortcut-toggle-eq-label", "shortcut_toggle_eq_label", getMessage);
     setElementTextContent(root, "presets-settings-title", "presets_settings_title", getMessage);
+    setElementTextContent(root, "hide-default-presets-label", "hide_default_presets_label", getMessage);
     setElementTextContent(root, "community-settings-title", "community_settings_title", getMessage);
+    setFirstTextNodeContent(root, "translators-label", "translators_label", getMessage, " ");
     setFirstTextNodeContent(root, "help-with-translation-label", "help_with_translation_label", getMessage);
     setFirstTextNodeContent(root, "source-code-label", "source_code_label", getMessage);
     setElementTextContent(root, "autostart-settings-title", "autostart_settings_title", getMessage);
