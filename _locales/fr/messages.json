@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Préréglages"
   },
+  "hide_default_presets_label": {
+    "message": "Masquer les préréglages par défaut"
+  },
   "community_settings_title": {
     "message": "Communauté"
   },

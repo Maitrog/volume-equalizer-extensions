@@ -1,11 +1,10 @@
 import { findWhitelistMatch } from "../../domains/autostart/autostartRules";
+import { resolvePresetFilters, type PresetStorage } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface ApplyAutostartOptions {
   resetWhenNoMatch?: boolean;
 }
-
-type PresetStore = Record<string, unknown>;
 
 export const applyAutostartForTab = async (
   tabId: number | undefined,
@@ -29,8 +28,8 @@ export const applyAutostartForTab = async (
     return;
   }
 
-  const presets = stored[STORAGE_KEYS.PRESETS] as PresetStore | undefined;
-  const preset = presets?.[entry.presetName];
+  const presets = stored[STORAGE_KEYS.PRESETS] as PresetStorage | undefined;
+  const preset = resolvePresetFilters(entry.presetName, presets);
   if (!Array.isArray(preset) || preset.length === 0) {
     await chrome.storage.local.set({ [STORAGE_KEYS.tabEnabled(tabId)]: false });
     return;

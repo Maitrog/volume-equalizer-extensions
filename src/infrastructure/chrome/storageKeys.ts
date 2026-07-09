@@ -5,6 +5,7 @@ type DynamicStorageKeyPart = number | string;
 export const STORAGE_KEYS = {
   PRESETS: "presets",
   PRESET_NAMES: "presetNames",
+  HIDE_DEFAULT_PRESETS: "hideDefaultPresets",
   AUTOSTART_RULES: "whitelist",
   GAIN: "gain",
   FILTERS: "filters",

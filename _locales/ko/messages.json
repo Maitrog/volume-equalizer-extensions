@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "프리셋"
   },
+  "hide_default_presets_label": {
+    "message": "기본 프리셋 숨기기"
+  },
   "community_settings_title": {
     "message": "커뮤니티"
   },

@@ -5,6 +5,7 @@ import {
   type AutostartEntryType,
   type AutostartWhitelistEntry,
 } from "../../domains/autostart/autostartRules";
+import { getAvailablePresetNames } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface AutostartView {
@@ -70,8 +71,17 @@ export const createAutostartView = (deps: {
   };
 
   const refreshPresetSelects = async (): Promise<void> => {
-    const stored = await chrome.storage.local.get([STORAGE_KEYS.PRESET_NAMES]);
-    const presetNames = (stored[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[];
+    const stored = await chrome.storage.local.get([
+      STORAGE_KEYS.PRESET_NAMES,
+      STORAGE_KEYS.HIDE_DEFAULT_PRESETS,
+    ]);
+    const presetNames = getAvailablePresetNames(
+      (stored[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[],
+      {
+        includeDefaultPresets:
+          stored[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] !== true,
+      },
+    );
     fillPresetSelect(deps.modalPreset, presetNames);
     fillPresetSelect(deps.settingsAddPreset, presetNames);
   };
@@ -215,7 +225,12 @@ export const createAutostartView = (deps: {
   chrome.storage.onChanged.addListener((changes, areaName) => {
     if (areaName !== "local") return;
     if (changes[STORAGE_KEYS.AUTOSTART_RULES]) void renderWhitelist();
-    if (changes[STORAGE_KEYS.PRESET_NAMES]) void refreshPresetSelects();
+    if (
+      changes[STORAGE_KEYS.PRESET_NAMES] ||
+      changes[STORAGE_KEYS.HIDE_DEFAULT_PRESETS]
+    ) {
+      void refreshPresetSelects();
+    }
   });
 
   return {

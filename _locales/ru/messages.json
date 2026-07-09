@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Пресеты"
   },
+  "hide_default_presets_label": {
+    "message": "Скрыть стандартные пресеты"
+  },
   "community_settings_title": {
     "message": "Сообщество"
   },

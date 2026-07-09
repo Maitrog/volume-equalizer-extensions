@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "预设"
   },
+  "hide_default_presets_label": {
+    "message": "隐藏默认预设"
+  },
   "community_settings_title": {
     "message": "社区"
   },

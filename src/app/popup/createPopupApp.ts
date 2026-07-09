@@ -205,9 +205,24 @@ export const createPopupApp = ({
     await chrome.storage.local.set(nextValues);
   };
 
+  const refreshPresetDropdown = async (): Promise<void> => {
+    const stored = await chrome.storage.local.get([
+      STORAGE_KEYS.PRESET_NAMES,
+      STORAGE_KEYS.HIDE_DEFAULT_PRESETS,
+    ]);
+    presetsView.renderPresetNames(
+      (stored[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[],
+      {
+        includeDefaultPresets:
+          stored[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] !== true,
+      },
+    );
+  };
+
   const refreshDynamicContent = async (): Promise<void> => {
     await autostartView.renderWhitelist();
     await autostartView.refreshPresetSelects();
+    await refreshPresetDropdown();
     controlsView.setEnableButtonText(false);
   };
 
@@ -348,6 +363,7 @@ export const createPopupApp = ({
     importPresetsButton: elements.importPresetsButton,
     importInput: elements.importInput,
     enableSpectrum: elements.enableSpectrum,
+    hideDefaultPresets: elements.hideDefaultPresets,
     languageSelect: elements.languageSelect,
     shortcutMute: elements.shortcutMute,
     shortcutToggleEq: elements.shortcutToggleEq,
@@ -477,6 +493,7 @@ export const createPopupApp = ({
       STORAGE_KEYS.tabGain(tabId),
       STORAGE_KEYS.PRESETS,
       STORAGE_KEYS.PRESET_NAMES,
+      STORAGE_KEYS.HIDE_DEFAULT_PRESETS,
       STORAGE_KEYS.tabEnabled(tabId),
       STORAGE_KEYS.tabMute(tabId),
       STORAGE_KEYS.ENABLE_SPECTRUM,
@@ -514,9 +531,13 @@ export const createPopupApp = ({
       elements.enableSpectrum.checked = true;
     }
 
-    ((result[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[]).forEach((name) => {
-      presetsView.addPresetToDropdown(name);
-    });
+    presetsView.renderPresetNames(
+      (result[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[],
+      {
+        includeDefaultPresets:
+          result[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] !== true,
+      },
+    );
 
     renderCaptureError(
       typeof result[STORAGE_KEYS.tabCaptureError(tabId)] === "string"

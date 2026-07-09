@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Voorinstellingen"
   },
+  "hide_default_presets_label": {
+    "message": "Standaardpresets verbergen"
+  },
   "community_settings_title": {
     "message": "Community"
   },

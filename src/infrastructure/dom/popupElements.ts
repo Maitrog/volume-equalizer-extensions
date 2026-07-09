@@ -52,6 +52,8 @@ export interface PopupElements {
   autostartSettingsAddButton: HTMLButtonElement;
   autostartSettingsError: HTMLDivElement;
   presetsSettingsTitle: HTMLHeadingElement;
+  hideDefaultPresetsLabel: HTMLElement;
+  hideDefaultPresets: HTMLInputElement;
   importInput: HTMLInputElement;
   importPresetsButton: HTMLButtonElement;
   exportPresetsButton: HTMLButtonElement;
@@ -211,6 +213,16 @@ export const getPopupElements = (document: Document): PopupElements => ({
     document,
     "presets-settings-title",
     HTMLHeadingElement,
+  ),
+  hideDefaultPresetsLabel: getRequiredElement(
+    document,
+    "hide-default-presets-label",
+    HTMLElement,
+  ),
+  hideDefaultPresets: getRequiredElement(
+    document,
+    "hide-default-presets",
+    HTMLInputElement,
   ),
   importInput: getRequiredElement(document, "import-input", HTMLInputElement),
   importPresetsButton: getRequiredElement(

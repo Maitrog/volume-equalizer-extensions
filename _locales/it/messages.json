@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Presets"
   },
+  "hide_default_presets_label": {
+    "message": "Nascondi preset predefiniti"
+  },
   "community_settings_title": {
     "message": "Community"
   },

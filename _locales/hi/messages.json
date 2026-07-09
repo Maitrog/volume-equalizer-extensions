@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "प्रीसेट"
   },
+  "hide_default_presets_label": {
+    "message": "डिफ़ॉल्ट प्रीसेट छिपाएं"
+  },
   "community_settings_title": {
     "message": "समुदाय"
   },

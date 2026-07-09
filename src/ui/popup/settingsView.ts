@@ -13,6 +13,7 @@ import {
   validatePopupShortcutConfig,
 } from "./popupShortcuts";
 import { themes, type ThemeName } from "../../domains/theme/themes";
+import { isDefaultPresetName } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 const DEFAULT_THEME: ThemeName = "dark";
@@ -54,6 +55,7 @@ export const createSettingsView = (deps: {
   importPresetsButton: HTMLButtonElement;
   importInput: HTMLInputElement;
   enableSpectrum: HTMLInputElement;
+  hideDefaultPresets: HTMLInputElement;
   languageSelect: HTMLSelectElement;
   shortcutMute: HTMLInputElement;
   shortcutToggleEq: HTMLInputElement;
@@ -281,6 +283,8 @@ export const createSettingsView = (deps: {
         const presetNames = [...((prefs[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[])];
 
         (presetsInfo.presetNames ?? []).forEach((name) => {
+          if (isDefaultPresetName(name)) return;
+
           const needAdd = !presetNames.includes(name);
           if (!needAdd) return;
 
@@ -302,6 +306,15 @@ export const createSettingsView = (deps: {
     void chrome.storage.local.set({
       [STORAGE_KEYS.ENABLE_SPECTRUM]: deps.enableSpectrum.checked,
     });
+  });
+
+  deps.hideDefaultPresets.addEventListener("change", () => {
+    void (async () => {
+      await chrome.storage.local.set({
+        [STORAGE_KEYS.HIDE_DEFAULT_PRESETS]: deps.hideDefaultPresets.checked,
+      });
+      await deps.refreshDynamicContent();
+    })();
   });
 
   deps.languageSelect.addEventListener("change", () => {
@@ -345,7 +358,12 @@ export const createSettingsView = (deps: {
 
   return {
     init: async () => {
-      const stored = await chrome.storage.local.get([STORAGE_KEYS.SHORTCUTS]);
+      const stored = await chrome.storage.local.get([
+        STORAGE_KEYS.SHORTCUTS,
+        STORAGE_KEYS.HIDE_DEFAULT_PRESETS,
+      ]);
+      deps.hideDefaultPresets.checked =
+        stored[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] === true;
       shortcutSettings = resolvePopupShortcuts(
         stored[STORAGE_KEYS.SHORTCUTS] as Partial<PopupShortcutMap>,
       );

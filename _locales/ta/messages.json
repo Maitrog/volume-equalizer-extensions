@@ -29,6 +29,9 @@
   "presets_settings_title": {
     "message": "முன்னமைவுகள்"
   },
+  "hide_default_presets_label": {
+    "message": "இயல்புநிலை முன்னமைவுகளை மறை"
+  },
   "community_settings_title": {
     "message": "சமூகம்"
   },

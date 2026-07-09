@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "プリセット"
   },
+  "hide_default_presets_label": {
+    "message": "デフォルトプリセットを非表示"
+  },
   "community_settings_title": {
     "message": "コミュニティ"
   },

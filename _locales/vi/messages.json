@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Cấu hình sẵn"
   },
+  "hide_default_presets_label": {
+    "message": "Ẩn cấu hình sẵn mặc định"
+  },
   "community_settings_title": {
     "message": "Cộng đồng"
   },

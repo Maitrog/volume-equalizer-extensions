@@ -1,12 +1,20 @@
 import { isPresetUsedInWhitelist } from "../../domains/autostart/autostartRules";
 import type { EqualizerPersistedFilter } from "../../domains/equalizer/equalizerState";
+import {
+  getAvailablePresetNames,
+  isDefaultPresetName,
+  resolvePresetFilters,
+  type PresetStorage,
+} from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface PresetsView {
-  addPresetToDropdown(name: string): void;
+  addPresetToDropdown(name: string, options?: { deletable?: boolean }): void;
+  renderPresetNames(
+    userPresetNames: string[],
+    options?: { includeDefaultPresets?: boolean },
+  ): void;
 }
-
-type PresetStorage = Record<string, EqualizerPersistedFilter[] | undefined>;
 
 export const createPresetsView = (deps: {
   dropdown: HTMLElement;
@@ -23,25 +31,44 @@ export const createPresetsView = (deps: {
   redraw(): void;
   refreshToolkitCaptureFilters(): void;
 }): PresetsView => {
-  const addPresetToDropdown = (name: string): void => {
+  const addPresetToDropdown = (
+    name: string,
+    options: { deletable?: boolean } = {},
+  ): void => {
     const option = document.createElement("div");
     option.textContent = name;
     option.setAttribute("data-value", name);
     option.className = "dropdown-item";
 
-    const closeButton = document.createElement("span");
-    closeButton.className = "close-btn";
-    closeButton.textContent = "\u00d7";
-    closeButton.setAttribute("data-value", name);
-    option.appendChild(closeButton);
+    if (options.deletable ?? true) {
+      const closeButton = document.createElement("span");
+      closeButton.className = "close-btn";
+      closeButton.textContent = "\u00d7";
+      closeButton.setAttribute("data-value", name);
+      option.appendChild(closeButton);
+    }
 
     deps.menu.appendChild(option);
+  };
+
+  const renderPresetNames = (
+    userPresetNames: string[],
+    options: { includeDefaultPresets?: boolean } = {},
+  ): void => {
+    Array.from(deps.menu.querySelectorAll(".dropdown-item")).forEach((item) => {
+      if (item.getAttribute("data-value") !== "none") item.remove();
+    });
+
+    getAvailablePresetNames(userPresetNames, options).forEach((name) => {
+      addPresetToDropdown(name, { deletable: !isDefaultPresetName(name) });
+    });
   };
 
   deps.saveButton.addEventListener("click", () => {
     void (async () => {
       const name = deps.nameInput.value;
       if (name.length === 0) return;
+      if (isDefaultPresetName(name)) return;
 
       const tabId = await deps.getCurrentTabId();
       if (tabId == null) return;
@@ -92,6 +119,8 @@ export const createPresetsView = (deps: {
       }
 
       if (event.target.classList.contains("close-btn")) {
+        if (isDefaultPresetName(choice)) return;
+
         const prefs = await chrome.storage.local.get([
           STORAGE_KEYS.PRESETS,
           STORAGE_KEYS.PRESET_NAMES,
@@ -123,7 +152,7 @@ export const createPresetsView = (deps: {
         choice === "none" ? deps.getMessage("empty_preset_name") : choice;
       const prefs = await chrome.storage.local.get([STORAGE_KEYS.PRESETS]);
       const presets = prefs[STORAGE_KEYS.PRESETS] as PresetStorage | undefined;
-      const filters = presets?.[choice];
+      const filters = resolvePresetFilters(choice, presets);
       if (!filters) return;
 
       deps.setCurrentFilters(filters);
@@ -136,5 +165,6 @@ export const createPresetsView = (deps: {
 
   return {
     addPresetToDropdown,
+    renderPresetNames,
   };
 };

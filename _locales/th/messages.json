@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "พรีเซ็ต"
   },
+  "hide_default_presets_label": {
+    "message": "ซ่อนพรีเซ็ตเริ่มต้น"
+  },
   "community_settings_title": {
     "message": "ชุมชน"
   },

@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "প্রিসেট"
   },
+  "hide_default_presets_label": {
+    "message": "ডিফল্ট প্রিসেট লুকান"
+  },
   "community_settings_title": {
     "message": "কমিউনিটি"
   },

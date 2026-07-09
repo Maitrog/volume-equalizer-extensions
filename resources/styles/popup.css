@@ -510,6 +510,8 @@ button:disabled:active {
   max-height: 200px;
   overflow-y: auto;
   z-index: 10;
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-placeholder) transparent;
 }
 
 .dropdown-item {
@@ -654,7 +656,6 @@ button:disabled:active {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-top: 15px;
   cursor: pointer;
 }
 
@@ -898,6 +899,7 @@ button:disabled:active {
   display: flex;
   justify-content: space-between;
   gap: 10px;
+  margin-top: 8px;
 }
 
 .settings-actions button {

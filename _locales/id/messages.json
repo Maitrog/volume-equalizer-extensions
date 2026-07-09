@@ -32,6 +32,9 @@
   "presets_settings_title": {
     "message": "Preset"
   },
+  "hide_default_presets_label": {
+    "message": "Sembunyikan preset bawaan"
+  },
   "community_settings_title": {
     "message": "Komunitas"
   },

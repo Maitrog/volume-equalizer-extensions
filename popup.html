@@ -58,7 +58,7 @@
     <div class="modal-content">
       <span id="close-settings" class="close">&times;</span>
       <h2 id="settings-header">Settings</h2>
-      <label>
+      <label class="settings-row">
         <text id="enable-spectrum-label">
           Enable spectrum visualisation (high CPU load)
         </text>
@@ -116,6 +116,10 @@
       </div>
       <div class="settings-section">
         <h3 id="presets-settings-title">Presets</h3>
+        <label class="settings-row">
+          <text id="hide-default-presets-label">Hide default presets</text>
+          <input type="checkbox" id="hide-default-presets">
+        </label>
         <div class="settings-actions">
           <input type="file" id="import-input" hidden>
           <button type="input" id="import-presets">Import presets</button>
