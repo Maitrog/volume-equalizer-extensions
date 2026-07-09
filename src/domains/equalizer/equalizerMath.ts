@@ -52,8 +52,8 @@ export const yToDb = (y: number, canvasHeight: number): number => {
 
 export const dbToGain = (db: number): number => {
   if (db >= 0) {
-    return 1 + db / 3;
+    return 1 * Math.pow(1.12, db);
   }
 
-  return 1.5 / Math.abs(db);
+  return 1 / Math.pow(1.12, Math.abs(db));
 };

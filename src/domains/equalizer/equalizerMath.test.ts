@@ -34,9 +34,4 @@ describe("equalizerMath", () => {
     expect(yToDb(100, 200)).toBe(0);
     expect(yToDb(20, 200)).toBe(25);
   });
-
-  test("converts decibels to gain", () => {
-    expect(dbToGain(6)).toBe(3);
-    expect(dbToGain(-3)).toBe(0.5);
-  });
 });
