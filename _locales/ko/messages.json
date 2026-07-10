@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - 오디오 이퀄라이저"
   },
   "extDescription": {
-    "message": "EQ Toolkit은 오디오 제어 기능을 제공하는 무료 오픈 소스 확장 프로그램입니다."
+    "message": "모든 탭용 오디오 이퀄라이저와 볼륨 부스터: 베이스 강화, 사운드 조정, 프리셋 저장, 탭 음소거."
   },
   "gain_slider_label": {
     "message": "확대:"
@@ -54,7 +54,7 @@
     "message": "프리셋 내보내기"
   },
   "enable_spectrum_setting_option": {
-    "message": "스펙트럼 시각화 활성화, 페이지를 다시 로드해야 함(높은 CPU 부하)"
+    "message": "스펙트럼 시각화 활성화"
   },
   "points_count_setting_option": {
     "message": "EQ 포인트 수"

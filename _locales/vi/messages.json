@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Bộ cân bằng âm thanh"
   },
   "extDescription": {
-    "message": "EQ Toolkit là tiện ích mở rộng miễn phí và mã nguồn mở để điều khiển âm thanh."
+    "message": "Bộ cân bằng âm thanh và tăng âm lượng cho mọi thẻ: tăng bass, chỉnh âm, lưu preset, tắt tiếng thẻ."
   },
   "gain_slider_label": {
     "message": "Khuếch đại:"
@@ -54,7 +54,7 @@
     "message": "Xuất preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Bật hiển thị phổ, cần tải lại trang (tốn CPU cao)"
+    "message": "Bật hiển thị phổ"
   },
   "points_count_setting_option": {
     "message": "Số điểm EQ"

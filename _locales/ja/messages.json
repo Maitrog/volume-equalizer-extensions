@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - オーディオイコライザー"
   },
   "extDescription": {
-    "message": "EQ Toolkit は、音声をコントロールできる無料のオープンソース拡張機能です。"
+    "message": "任意のタブで使える音声イコライザーと音量ブースター。低音強化、音質調整、プリセット保存、ミュート、ショートカットに対応。"
   },
   "gain_slider_label": {
     "message": "増幅"
@@ -54,7 +54,7 @@
     "message": "プリセットをエクスポート"
   },
   "enable_spectrum_setting_option": {
-    "message": "スペクトラム可視化を有効にする（ページの再読み込みが必要・CPU負荷が高い）"
+    "message": "スペクトラム可視化を有効にする"
   },
   "points_count_setting_option": {
     "message": "EQポイント数"

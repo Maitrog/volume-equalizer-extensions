@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit is a free and open-source extension that provides audio control."
+    "message": "Audio equalizer and volume booster for any tab: boost bass, tune sound, save presets, mute tabs, use shortcuts and auto-start."
   },
   "gain_slider_label": {
     "message": "Gain:"
@@ -54,7 +54,7 @@
     "message": "Export"
   },
   "enable_spectrum_setting_option": {
-    "message": "Enable spectrum visualisation, need to restart page (high CPU load)"
+    "message": "Enable spectrum visualisation"
   },
   "points_count_setting_option": {
     "message": "Number of EQ points"

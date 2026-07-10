@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizador de áudio"
   },
   "extDescription": {
-    "message": "O EQ Toolkit é uma extensão gratuita e de código aberto que fornece controlo de áudio."
+    "message": "Equalizador de áudio e amplificador de volume para qualquer separador: aumente graves, ajuste som e guarde predefinições."
   },
   "gain_slider_label": {
     "message": "Amplificação:"
@@ -54,7 +54,7 @@
     "message": "Exportar"
   },
   "enable_spectrum_setting_option": {
-    "message": "Ativar a visualização do espectro, é necessário recarregar a página (elevada carga de CPU)"
+    "message": "Ativar a visualização do espectro"
   },
   "points_count_setting_option": {
     "message": "Número de pontos de EQ"

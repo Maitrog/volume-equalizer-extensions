@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - ตัวปรับสมดุลเสียง"
   },
   "extDescription": {
-    "message": "EQ Toolkit เป็นส่วนขยายฟรีและโอเพนซอร์สสำหรับควบคุมเสียง"
+    "message": "อีควอไลเซอร์และตัวเพิ่มเสียงสำหรับทุกแท็บ: เพิ่มเบส ปรับเสียง บันทึกพรีเซ็ต ปิดเสียงแท็บ"
   },
   "gain_slider_label": {
     "message": "การขยายเสียง:"
@@ -54,7 +54,7 @@
     "message": "ส่งออกพรีเซ็ต"
   },
   "enable_spectrum_setting_option": {
-    "message": "เปิดใช้งานการแสดงผลสเปกตรัม ต้องโหลดหน้าใหม่ (ใช้ CPU สูง)"
+    "message": "เปิดใช้งานการแสดงผลสเปกตรัม"
   },
   "points_count_setting_option": {
     "message": "จำนวนจุด EQ"

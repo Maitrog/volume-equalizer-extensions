@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Ecualizador de audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit es una extensión gratuita y de código abierto para controlar el audio."
+    "message": "Ecualizador de audio y amplificador de volumen para cualquier pestaña: potencia graves, ajusta sonido y guarda presets."
   },
   "gain_slider_label": {
     "message": "Amplificación:"
@@ -54,7 +54,7 @@
     "message": "Exportar preajustes"
   },
   "enable_spectrum_setting_option": {
-    "message": "Activar la visualización del espectro; es necesario recargar la página (alto uso de CPU)"
+    "message": "Activar la visualización del espectro"
   },
   "points_count_setting_option": {
     "message": "Número de puntos de EQ"

@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizer audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit adalah ekstensi gratis dan sumber terbuka untuk mengontrol audio."
+    "message": "Equalizer audio dan penguat volume untuk tab apa pun: boost bass, atur suara, simpan preset, mute tab."
   },
   "gain_slider_label": {
     "message": "Amplifikasi:"
@@ -54,7 +54,7 @@
     "message": "Ekspor preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Aktifkan visualisasi spektrum, perlu memuat ulang halaman (beban CPU tinggi)"
+    "message": "Aktifkan visualisasi spektrum"
   },
   "points_count_setting_option": {
     "message": "Jumlah titik EQ"

@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizzatore audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit è un'estensione gratuita e open source per controllare l'audio."
+    "message": "Equalizzatore audio e booster volume per ogni scheda: potenzia i bassi, regola il suono e salva preset."
   },
   "gain_slider_label": {
     "message": "Amplificazione:"
@@ -54,7 +54,7 @@
     "message": "Esporta preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Abilita la visualizzazione dello spettro, è necessario ricaricare la pagina (carico CPU elevato)"
+    "message": "Abilita la visualizzazione dello spettro"
   },
   "points_count_setting_option": {
     "message": "Numero di punti EQ"

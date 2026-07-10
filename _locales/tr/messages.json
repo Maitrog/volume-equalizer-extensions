@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Ses eşitleyici"
   },
   "extDescription": {
-    "message": "EQ Toolkit, ses kontrolü sağlayan ücretsiz ve açık kaynaklı bir uzantıdır."
+    "message": "Her sekme için ses ekolayzırı ve ses yükseltici: bası güçlendir, sesi ayarla, preset kaydet, sekmeleri sustur."
   },
   "gain_slider_label": {
     "message": "Amplifikasyon:"
@@ -54,7 +54,7 @@
     "message": "Ön ayarları dışa aktar"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spektrum görselleştirmesini etkinleştir; sayfayı yeniden yüklemek gerekir (yüksek CPU kullanımı)"
+    "message": "Spektrum görselleştirmesini etkinleştir"
   },
   "points_count_setting_option": {
     "message": "EQ nokta sayısı"

@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio-Equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit ist eine kostenlose Open-Source-Erweiterung zur Audiosteuerung."
+    "message": "Audio-Equalizer und Lautstärke-Booster für jeden Tab: Bass verstärken, Sound anpassen, Presets speichern."
   },
   "gain_slider_label": {
     "message": "Verstärkung:"
@@ -54,7 +54,7 @@
     "message": "Voreinstellungen exportieren"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spektrumvisualisierung aktivieren, Seite muss neu geladen werden (hohe CPU-Last)"
+    "message": "Spektrumvisualisierung aktivieren"
   },
   "points_count_setting_option": {
     "message": "Anzahl der EQ-Punkte"

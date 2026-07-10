@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio-equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit is een gratis open-source-extensie voor audiobediening."
+    "message": "Audio-equalizer en volumebooster voor elk tabblad: boost bass, stem geluid af, sla presets op en demp tabs."
   },
   "gain_slider_label": {
     "message": "Versterking:"
@@ -54,7 +54,7 @@
     "message": "Voorinstellingen exporteren"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spectrumvisualisatie inschakelen; pagina opnieuw laden vereist (hoge CPU-belasting)"
+    "message": "Spectrumvisualisatie inschakelen"
   },
   "points_count_setting_option": {
     "message": "Aantal EQ-punten"

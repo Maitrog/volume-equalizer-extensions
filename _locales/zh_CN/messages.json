@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - 音频均衡器"
   },
   "extDescription": {
-    "message": "EQ Toolkit 是一个免费开源的音频控制扩展程序。"
+    "message": "适用于任意标签页的音频均衡器和音量增强器：增强低音、调音、保存预设、静音标签页、使用快捷键和自动启动。"
   },
   "gain_slider_label": {
     "message": "放大"
@@ -54,7 +54,7 @@
     "message": "导出预设"
   },
   "enable_spectrum_setting_option": {
-    "message": "启用频谱可视化，需要重新加载页面（CPU 负载较高）"
+    "message": "启用频谱可视化"
   },
   "points_count_setting_option": {
     "message": "EQ点数"
