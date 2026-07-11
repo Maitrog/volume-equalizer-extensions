@@ -142,7 +142,7 @@ const createController = (
   const controller = createToolkitWindowController({
     body: new FakeElement() as unknown as HTMLElement,
     capturedTabs: new FakeElement() as unknown as HTMLElement,
-    changeEqButton: new FakeElement() as unknown as HTMLButtonElement,
+    changeEqButton: new FakeElement() as unknown as HTMLImageElement,
     audioContext: audioContext as unknown as AudioContext,
     equalizerState: {} as Parameters<
       typeof createToolkitWindowController

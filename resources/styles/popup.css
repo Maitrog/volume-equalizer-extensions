@@ -142,7 +142,7 @@
 
 body {
   position: relative;
-  width: 500px;
+  width: 600px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
   display: flex;
@@ -534,13 +534,14 @@ button:disabled:active {
 
 .volume-mute,
 .volume-mute-active {
-  width: 27px;
+  width: 31px;
   cursor: pointer;
 }
 
 .volume-mute,
 .settings-btn,
 .window-mod,
+.change-eq,
 .add-to-autostart-whitelist-btn {
   filter: var(--svg-btn-filter);
 }
@@ -556,7 +557,12 @@ button:disabled:active {
 }
 
 .window-mod {
-  width: 22px;
+  width: 25px;
+  cursor: pointer;
+}
+
+.change-eq {
+  width: 23px;
   cursor: pointer;
 }
 

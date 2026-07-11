@@ -80,7 +80,7 @@ export interface ToolkitWindowController {
 export const createToolkitWindowController = (deps: {
   body: HTMLElement;
   capturedTabs: HTMLElement;
-  changeEqButton: HTMLButtonElement;
+  changeEqButton: HTMLImageElement;
   audioContext: AudioContext;
   equalizerState: EqualizerState;
   getDimensions(): { canvasWidth: number; canvasHeight: number };
@@ -110,7 +110,6 @@ export const createToolkitWindowController = (deps: {
 
   if (isToolkitWindow) {
     deps.body.classList.add("toolkit-window-body");
-    deps.changeEqButton.disabled = true;
     deps.changeEqButton.classList.add("disabled");
   }
 

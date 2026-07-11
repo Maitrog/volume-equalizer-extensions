@@ -97,7 +97,6 @@ export const createLocalizationService = (): LocalizationService => {
   const applyLocalization = (root: Document = document): void => {
     setElementTextContent(root, "master-volume-label", "gain_slider_label", getMessage);
     setElementTextContent(root, "reset", "reset_button_label", getMessage);
-    setElementTextContent(root, "change-eq", "enable_eq_button_label", getMessage);
     setElementTextContent(root, "presets-toggle", "empty_preset_name", getMessage);
     setElementTextContent(root, "none-item", "empty_preset_name", getMessage);
     setElementTextContent(root, "save-preset", "save_preset_button_label", getMessage);

@@ -15,7 +15,7 @@ export interface PopupElements {
   masterVolumeLabel: HTMLLabelElement;
   masterVolume: HTMLInputElement;
   resetButton: HTMLButtonElement;
-  changeEqButton: HTMLButtonElement;
+  changeEqButton: HTMLImageElement;
   presets: HTMLDivElement;
   presetsToggle: HTMLDivElement;
   presetsMenu: HTMLDivElement;
@@ -116,7 +116,7 @@ export const getPopupElements = (document: Document): PopupElements => ({
   changeEqButton: getRequiredElement(
     document,
     "change-eq",
-    HTMLButtonElement,
+    HTMLImageElement,
   ),
   presets: getRequiredElement(document, "presets", HTMLDivElement),
   presetsToggle: getRequiredElement(document, "presets-toggle", HTMLDivElement),

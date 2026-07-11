@@ -4,7 +4,7 @@ export interface ControlsView {
 }
 
 export const createControlsView = (deps: {
-  changeEqButton: HTMLButtonElement;
+  changeEqButton: HTMLImageElement;
   resetButton: HTMLButtonElement;
   masterVolume: HTMLInputElement;
   volumeMuteButton: HTMLElement;
