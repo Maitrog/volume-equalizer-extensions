@@ -6,6 +6,7 @@ import {
   resolvePresetFilters,
   type PresetStorage,
 } from "../../domains/presets/defaultPresets";
+import { validatePresetName } from "../../domains/presets/presetNameValidation";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface PresetsView {
@@ -20,8 +21,13 @@ export const createPresetsView = (deps: {
   dropdown: HTMLElement;
   toggle: HTMLElement;
   menu: HTMLElement;
-  nameInput: HTMLInputElement;
   saveButton: HTMLButtonElement;
+  saveModal: HTMLDivElement;
+  saveModalClose: HTMLSpanElement;
+  saveForm: HTMLFormElement;
+  nameInput: HTMLInputElement;
+  saveError: HTMLDivElement;
+  saveCancel: HTMLButtonElement;
   isToolkitWindow: boolean;
   getMessage(messageName: string): string;
   getCurrentTabId(): Promise<number | null>;
@@ -64,12 +70,35 @@ export const createPresetsView = (deps: {
     });
   };
 
-  deps.saveButton.addEventListener("click", () => {
-    void (async () => {
-      const name = deps.nameInput.value;
-      if (name.length === 0) return;
-      if (isDefaultPresetName(name)) return;
+  const closeSaveModal = (): void => {
+    deps.saveModal.style.display = "none";
+    deps.saveButton.focus();
+  };
 
+  deps.saveButton.addEventListener("click", () => {
+    deps.nameInput.value = "";
+    deps.saveError.textContent = "";
+    deps.saveModal.style.display = "block";
+    deps.nameInput.focus();
+  });
+
+  deps.saveModalClose.addEventListener("click", closeSaveModal);
+  deps.saveCancel.addEventListener("click", closeSaveModal);
+  deps.saveModal.addEventListener("click", (event) => {
+    if (event.target === deps.saveModal) closeSaveModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && deps.saveModal.style.display === "block") {
+      closeSaveModal();
+    }
+  });
+  deps.nameInput.addEventListener("input", () => {
+    deps.saveError.textContent = "";
+  });
+
+  deps.saveForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    void (async () => {
       const tabId = await deps.getCurrentTabId();
       if (tabId == null) return;
 
@@ -80,19 +109,25 @@ export const createPresetsView = (deps: {
       ]);
       const presets = (prefs[STORAGE_KEYS.PRESETS] ?? {}) as PresetStorage;
       const presetNames = [...((prefs[STORAGE_KEYS.PRESET_NAMES] ?? []) as string[])];
+      const validation = validatePresetName(deps.nameInput.value, presetNames);
+      if (validation.kind === "error") {
+        deps.saveError.textContent = deps.getMessage(`preset_name_${validation.reason}_error`);
+        deps.saveError.style.display = "block";
+        return;
+      }
+
+      const { name } = validation;
       presets[name] =
         (prefs[STORAGE_KEYS.tabFilters(tabId)] as EqualizerPersistedFilter[]) ??
         deps.getCurrentFilters();
-
-      const needAdd = !presetNames.includes(name);
-      if (needAdd) presetNames.push(name);
+      presetNames.push(name);
 
       await chrome.storage.local.set({
         [STORAGE_KEYS.PRESETS]: presets,
         [STORAGE_KEYS.PRESET_NAMES]: presetNames,
       });
-      if (needAdd) addPresetToDropdown(name);
-      deps.nameInput.value = "";
+      addPresetToDropdown(name);
+      closeSaveModal();
     })();
   });
 

@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Simpan preset"
   },
-  "enter_preset_name": {
-    "message": "Masukkan nama"
-  },
   "settings_title": {
     "message": "Pengaturan"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Pintasan ini sudah digunakan oleh perintah lain."
+  },
+  "global_controls_title": {
+    "message": "Kontrol global"
+  },
+  "preset_controls_title": {
+    "message": "Kontrol preset"
+  },
+  "save": {
+    "message": "Simpan"
+  },
+  "save_preset_modal_title": {
+    "message": "Simpan preset"
+  },
+  "preset_name_label": {
+    "message": "Nama preset"
+  },
+  "preset_name_empty_error": {
+    "message": "Masukkan nama preset."
+  },
+  "preset_name_reserved_error": {
+    "message": "Nama ini disediakan untuk preset bawaan."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Preset dengan nama ini sudah ada."
   }
 }

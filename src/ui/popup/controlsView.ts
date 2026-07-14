@@ -3,10 +3,13 @@ export interface ControlsView {
   setMuteButtonClass(muted: boolean): void;
 }
 
+export const formatGainValue = (value: number): string => `${value.toFixed(1)} dB`;
+
 export const createControlsView = (deps: {
   changeEqButton: HTMLImageElement;
   resetButton: HTMLButtonElement;
   masterVolume: HTMLInputElement;
+  masterVolumeValue: HTMLOutputElement;
   volumeMuteButton: HTMLElement;
   windowModeButton: HTMLElement;
   isToolkitWindow: boolean;
@@ -28,7 +31,9 @@ export const createControlsView = (deps: {
   });
 
   deps.masterVolume.addEventListener("input", () => {
-    void deps.onVolumeInput(Number(deps.masterVolume.value));
+    const value = Number(deps.masterVolume.value);
+    deps.masterVolumeValue.textContent = formatGainValue(value);
+    void deps.onVolumeInput(value);
   });
 
   deps.volumeMuteButton.addEventListener("click", () => {

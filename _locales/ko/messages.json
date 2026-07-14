@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "프리셋 저장"
   },
-  "enter_preset_name": {
-    "message": "이름 입력"
-  },
   "settings_title": {
     "message": "설정"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "이 단축키는 이미 다른 명령에서 사용 중입니다."
+  },
+  "global_controls_title": {
+    "message": "전역 컨트롤"
+  },
+  "preset_controls_title": {
+    "message": "프리셋 컨트롤"
+  },
+  "save": {
+    "message": "저장"
+  },
+  "save_preset_modal_title": {
+    "message": "프리셋 저장"
+  },
+  "preset_name_label": {
+    "message": "프리셋 이름"
+  },
+  "preset_name_empty_error": {
+    "message": "프리셋 이름을 입력하세요."
+  },
+  "preset_name_reserved_error": {
+    "message": "이 이름은 기본 제공 프리셋용으로 예약되어 있습니다."
+  },
+  "preset_name_duplicate_error": {
+    "message": "이 이름의 프리셋이 이미 있습니다."
   }
 }

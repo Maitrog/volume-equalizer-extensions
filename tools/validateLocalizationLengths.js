@@ -3,42 +3,35 @@ const path = require("path");
 
 const LOCALES_DIR = path.join(__dirname, "..", "_locales");
 const FONT_SIZE_PX = 14;
-const TAMIL_CLUSTER_WIDTH_PX = 15;
-const TAMIL_WIDE_CLUSTER_WIDTH_PX = 18;
+const TAMIL_CLUSTER_WIDTH_PX = 12;
+const TAMIL_WIDE_CLUSTER_WIDTH_PX = 16;
+const TAMIL_ZERO_CLUSTER_WIDTH_PX = 0;
 const NARROW_LATIN_WIDTH_PX = 3;
 const NARROW_LATIN_T_WIDTH_PX = 4;
 
 const MESSAGE_LIMITS = {
   empty_preset_name: {
-    maxWidthPx: 80,
+    maxWidthPx: 125,
     maxLines: 1,
     target: "#presets-toggle",
   },
   save_preset_button_label: {
-    maxWidthPx: 90,
-    maxLines: 2,
+    maxWidthPx: 124,
+    maxLines: 1,
     target: "#save-preset",
   },
-  enable_eq_button_label: {
-    maxWidthPx: 90,
-    maxLines: 2,
-    target: "#change-eq",
-  },
-  stop_eq_button_label: {
-    maxWidthPx: 90,
-    maxLines: 2,
-    target: "#change-eq",
-  },
   reset_button_label: {
-    maxWidthPx: 90,
-    maxLines: 2,
+    maxWidthPx: 86,
+    maxLines: 1,
     target: "#reset",
   },
 };
 
 const CJK_OR_THAI_PATTERN =
   /[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af\u0e00-\u0e7f]/u;
-const TAMIL_WIDE_VOWEL_SIGNS_PATTERN = /[\u0bc6-\u0bc8\u0bca-\u0bcc]/u;
+const TAMIL_WIDE_VOWEL_SIGNS_PATTERN =
+  /[\u0b8a\u0b94\u0ba3\u0ba9\u0bb7-\u0bb9\u0bc6-\u0bc8\u0bca-\u0bcc\u0bf5-\u0bf8]/u;
+const TAMIL_ZERO_VOWEL_SIGNS_PATTERN = /[\u0b82\u0bc0\u0bcd]/u;
 
 const SCRIPT_PATTERNS = {
   arabic: /\p{Script=Arabic}/u,
@@ -66,15 +59,7 @@ const isScript = (char, script) => SCRIPT_PATTERNS[script].test(char);
 const canBreakAnywhere = (text) =>
   SCRIPT_PATTERNS.han.test(text) || SCRIPT_PATTERNS.hangul.test(text);
 
-const g_segmenter =
-  typeof Intl.Segmenter === "function"
-    ? new Intl.Segmenter(undefined, { granularity: "grapheme" })
-    : null;
-
-const getTextUnits = (text) =>
-  g_segmenter
-    ? Array.from(g_segmenter.segment(text), (segment) => segment.segment)
-    : Array.from(text);
+const getTextUnits = (text) => Array.from(text);
 
 const getCharWidth = (char) => {
   if (/\p{Mark}/u.test(char)) return 0;
@@ -123,6 +108,8 @@ const getTextUnitWidth = (unit) => {
 
     return TAMIL_WIDE_VOWEL_SIGNS_PATTERN.test(unit)
       ? Math.max(baseWidth, TAMIL_WIDE_CLUSTER_WIDTH_PX)
+      : TAMIL_ZERO_VOWEL_SIGNS_PATTERN.test(unit)
+      ? TAMIL_ZERO_CLUSTER_WIDTH_PX
       : Math.max(baseWidth, TAMIL_CLUSTER_WIDTH_PX);
   }
 

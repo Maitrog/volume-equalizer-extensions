@@ -142,7 +142,7 @@
 
 body {
   position: relative;
-  width: 600px;
+  width: 640px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
   display: flex;
@@ -175,13 +175,27 @@ body {
 }
 
 .header {
+  justify-content: space-between;
+  display: flex;
+  width: inherit;
+}
+
+.header-left,
+.header-right {
   display: flex;
   margin-bottom: 5px;
   width: 100%;
   gap: 10px;
 }
 
-.header text {
+.header-right {
+  padding-right: 10px;
+  justify-content: end  ;
+}
+
+.header text,
+.header-left text,
+.header-right text {
   top: 10px;
   left: 18px;
   letter-spacing: 0.1em;
@@ -190,6 +204,7 @@ body {
   font-weight: 700;
   margin: 0;
 }
+
 
 .capture-error {
   display: none;
@@ -342,28 +357,66 @@ body {
   box-sizing: border-box;
 }
 
-.controls {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  gap: 15px;
+.controls-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
   width: 100%;
+  margin-top: 14px;
 }
 
-.controls.second-row {
+.control-card {
+  min-width: 0;
+  padding: 15px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-bg);
+  box-shadow: 0 2px 8px var(--shadow-soft);
+  box-sizing: border-box;
+  height: 97px;
+}
+
+.control-card h2 {
+  margin: 0 0 15px;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.global-actions,
+.preset-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-top: 6px;
+}
+
+.global-actions {
   justify-content: flex-end;
 }
 
+.save-preset {
+  width: 140px;
+  height: 30px;
+  padding: 4px 8px;
+}
+
 .volume-control {
+  width: 180px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 5px;
 }
 
 .volume-control label {
   color: var(--text-header);
   font-weight: bold;
+}
+
+.gain-value-row {
+  display: flex;
+  justify-content: space-between;
 }
 
 label {
@@ -373,7 +426,7 @@ label {
 
 .master-volume {
   -webkit-appearance: none;
-  width: 245px;
+  width: 180px;
   height: 4px;
   background: var(--slider-track-bg);
   border-radius: 2px;
@@ -391,21 +444,6 @@ label {
   box-shadow: 0 0 8px var(--slider-glow);
 }
 
-.preset-name {
-  padding: 4px 8px;
-  border: none;
-  border-radius: 4px;
-  background: var(--surface-alt);
-  color: var(--text);
-  outline: none;
-  height: 30px;
-  width: 96px;
-}
-
-.preset-name::placeholder {
-  color: var(--text-placeholder);
-}
-
 .volume-scale {
   margin-left: -8px;
   width: 253px;
@@ -416,8 +454,8 @@ label {
 
 button {
   width: 110px;
-  height: 40px;
-  padding: 4px 10px;
+  height: 30px;
+  padding: 4px 8px;
   border: none;
   background: var(--btn-bg);
   color: var(--text);
@@ -482,25 +520,25 @@ button:disabled:active {
 }
 
 .dropdown {
+  width: 130px;
   position: relative;
   font-size: 1.1em;
 }
 
 .dropdown-toggle {
-  padding: 11px 8px;
+  padding: 8px 8px;
   background: var(--surface-alt);
   color: var(--text);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
-  width: 80px;
+  width: 125px;
 }
 
 .dropdown-menu {
   position: absolute;
   bottom: 110%;
-  right: 0;
   background: var(--settings-bg);
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -600,7 +638,7 @@ button:disabled:active {
 
 .modal-content {
   background: var(--settings-bg);
-  margin: 10% auto;
+  margin: 7% auto;
   padding: 20px;
   border-radius: 8px;
   width: 400px;
@@ -667,6 +705,12 @@ button:disabled:active {
 
 .modal-content input[type="checkbox"] {
   accent-color: var(--accent-mid);
+}
+
+.preset-name-input {
+  box-sizing: border-box;
+  margin-top: 8px;
+  width: 100%;
 }
 
 .settings-row {

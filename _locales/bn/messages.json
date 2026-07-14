@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "প্রিসেট সংরক্ষণ করুন"
   },
-  "enter_preset_name": {
-    "message": "নাম লিখুন"
-  },
   "settings_title": {
     "message": "সেটিংস"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "এই শর্টকাটটি ইতিমধ্যে অন্য কমান্ডে ব্যবহৃত হচ্ছে।"
+  },
+  "global_controls_title": {
+    "message": "সামগ্রিক নিয়ন্ত্রণ"
+  },
+  "preset_controls_title": {
+    "message": "প্রিসেট নিয়ন্ত্রণ"
+  },
+  "save": {
+    "message": "সংরক্ষণ করুন"
+  },
+  "save_preset_modal_title": {
+    "message": "প্রিসেট সংরক্ষণ করুন"
+  },
+  "preset_name_label": {
+    "message": "প্রিসেটের নাম"
+  },
+  "preset_name_empty_error": {
+    "message": "প্রিসেটের নাম লিখুন।"
+  },
+  "preset_name_reserved_error": {
+    "message": "এই নামটি একটি অন্তর্নির্মিত প্রিসেটের জন্য সংরক্ষিত।"
+  },
+  "preset_name_duplicate_error": {
+    "message": "এই নামে একটি প্রিসেট ইতিমধ্যে বিদ্যমান।"
   }
 }

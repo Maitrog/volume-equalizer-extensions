@@ -22,7 +22,11 @@ import {
   type SpectrumMeta,
 } from "../../ui/equalizerCanvas/draw/drawSpectrum";
 import { createAutostartView } from "../../ui/popup/autostartView";
-import { createControlsView, type ControlsView } from "../../ui/popup/controlsView";
+import {
+  createControlsView,
+  formatGainValue,
+  type ControlsView,
+} from "../../ui/popup/controlsView";
 import { createInstallUpdateNoticeView } from "../../ui/popup/installUpdateNoticeView";
 import { createPresetsView, type PresetsView } from "../../ui/popup/presetsView";
 import { createSettingsView, type SettingsView } from "../../ui/popup/settingsView";
@@ -112,6 +116,7 @@ export const createPopupApp = ({
 
   const setGainValue = (value: number): void => {
     elements.masterVolume.value = String(value);
+    elements.masterVolumeValue.textContent = formatGainValue(value);
   };
 
   const renderCaptureError = (message: string | null): void => {
@@ -242,7 +247,7 @@ export const createPopupApp = ({
   };
 
   const onReset = async (): Promise<void> => {
-    elements.masterVolume.value = "0";
+    setGainValue(0);
     initPoints(await getPointCount());
     resize();
     toolkitController.refreshCaptureFilters();
@@ -301,6 +306,7 @@ export const createPopupApp = ({
     changeEqButton: elements.changeEqButton,
     resetButton: elements.resetButton,
     masterVolume: elements.masterVolume,
+    masterVolumeValue: elements.masterVolumeValue,
     volumeMuteButton: elements.volumeMuteButton,
     windowModeButton: elements.windowModeButton,
     isToolkitWindow: toolkitController.isToolkitWindow,
@@ -317,8 +323,13 @@ export const createPopupApp = ({
     dropdown: elements.presets,
     toggle: elements.presetsToggle,
     menu: elements.presetsMenu,
-    nameInput: elements.presetName,
     saveButton: elements.savePresetButton,
+    saveModal: elements.presetSaveModal,
+    saveModalClose: elements.presetSaveClose,
+    saveForm: elements.presetSaveForm,
+    nameInput: elements.presetName,
+    saveError: elements.presetSaveError,
+    saveCancel: elements.presetSaveCancel,
     isToolkitWindow: toolkitController.isToolkitWindow,
     getMessage: localization.getMessage,
     getCurrentTabId,
@@ -520,7 +531,7 @@ export const createPopupApp = ({
 
     const gain = result[STORAGE_KEYS.tabGain(tabId)];
     if (typeof gain === "string" || typeof gain === "number") {
-      elements.masterVolume.value = String(gain);
+      setGainValue(Number(gain));
     }
 
     resize();

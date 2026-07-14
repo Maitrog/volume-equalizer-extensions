@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Ön ayarı kaydet"
   },
-  "enter_preset_name": {
-    "message": "Ad girin"
-  },
   "settings_title": {
     "message": "Ayarlar"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Bu kısayol zaten başka bir komut tarafından kullanılıyor."
+  },
+  "global_controls_title": {
+    "message": "Genel kontroller"
+  },
+  "preset_controls_title": {
+    "message": "Ön ayar kontrolleri"
+  },
+  "save": {
+    "message": "Kaydet"
+  },
+  "save_preset_modal_title": {
+    "message": "Ön ayarı kaydet"
+  },
+  "preset_name_label": {
+    "message": "Ön ayar adı"
+  },
+  "preset_name_empty_error": {
+    "message": "Bir ön ayar adı girin."
+  },
+  "preset_name_reserved_error": {
+    "message": "Bu ad yerleşik bir ön ayar için ayrılmıştır."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Bu ada sahip bir ön ayar zaten var."
   }
 }

@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Save preset"
   },
-  "enter_preset_name": {
-    "message": "Enter name"
-  },
   "settings_title": {
     "message": "Settings"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "This shortcut is already used by another command."
+  },
+  "global_controls_title": {
+    "message": "Global Controls"
+  },
+  "preset_controls_title": {
+    "message": "Preset Controls"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "save_preset_modal_title": {
+    "message": "Save preset"
+  },
+  "preset_name_label": {
+    "message": "Preset name"
+  },
+  "preset_name_empty_error": {
+    "message": "Enter a preset name."
+  },
+  "preset_name_reserved_error": {
+    "message": "This name is reserved for a built-in preset."
+  },
+  "preset_name_duplicate_error": {
+    "message": "A preset with this name already exists."
   }
 }

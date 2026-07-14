@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "บันทึกพรีเซ็ต"
   },
-  "enter_preset_name": {
-    "message": "ใส่ชื่อ"
-  },
   "settings_title": {
     "message": "การตั้งค่า"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "ปุ่มลัดนี้ถูกใช้โดยคำสั่งอื่นแล้ว"
+  },
+  "global_controls_title": {
+    "message": "การควบคุมส่วนกลาง"
+  },
+  "preset_controls_title": {
+    "message": "การควบคุมค่าที่ตั้งไว้"
+  },
+  "save": {
+    "message": "บันทึก"
+  },
+  "save_preset_modal_title": {
+    "message": "บันทึกค่าที่ตั้งไว้"
+  },
+  "preset_name_label": {
+    "message": "ชื่อค่าที่ตั้งไว้"
+  },
+  "preset_name_empty_error": {
+    "message": "ป้อนชื่อค่าที่ตั้งไว้"
+  },
+  "preset_name_reserved_error": {
+    "message": "ชื่อนี้สงวนไว้สำหรับค่าที่ตั้งไว้ในตัว"
+  },
+  "preset_name_duplicate_error": {
+    "message": "มีค่าที่ตั้งไว้ชื่อนี้อยู่แล้ว"
   }
 }

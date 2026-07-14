@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Guardar preset"
   },
-  "enter_preset_name": {
-    "message": "Ingrese nombre"
-  },
   "settings_title": {
     "message": "Configuración"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Este atajo ya lo usa otro comando."
+  },
+  "global_controls_title": {
+    "message": "Controles globales"
+  },
+  "preset_controls_title": {
+    "message": "Controles de preajustes"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "save_preset_modal_title": {
+    "message": "Guardar preajuste"
+  },
+  "preset_name_label": {
+    "message": "Nombre del preajuste"
+  },
+  "preset_name_empty_error": {
+    "message": "Introduce un nombre para el preajuste."
+  },
+  "preset_name_reserved_error": {
+    "message": "Este nombre está reservado para un preajuste integrado."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Ya existe un preajuste con este nombre."
   }
 }

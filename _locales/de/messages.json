@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Preset speichern"
   },
-  "enter_preset_name": {
-    "message": "Name eingeben"
-  },
   "settings_title": {
     "message": "Einstellungen"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Dieses Tastenkürzel wird bereits von einem anderen Befehl verwendet."
+  },
+  "global_controls_title": {
+    "message": "Globale Steuerelemente"
+  },
+  "preset_controls_title": {
+    "message": "Voreinstellungen"
+  },
+  "save": {
+    "message": "Speichern"
+  },
+  "save_preset_modal_title": {
+    "message": "Voreinstellung speichern"
+  },
+  "preset_name_label": {
+    "message": "Name der Voreinstellung"
+  },
+  "preset_name_empty_error": {
+    "message": "Geben Sie einen Namen für die Voreinstellung ein."
+  },
+  "preset_name_reserved_error": {
+    "message": "Dieser Name ist für eine integrierte Voreinstellung reserviert."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Eine Voreinstellung mit diesem Namen existiert bereits."
   }
 }

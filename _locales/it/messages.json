@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Salva preset"
   },
-  "enter_preset_name": {
-    "message": "Inserisci nome"
-  },
   "settings_title": {
     "message": "Impostazioni"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Questa scorciatoia è già usata da un altro comando."
+  },
+  "global_controls_title": {
+    "message": "Controlli globali"
+  },
+  "preset_controls_title": {
+    "message": "Controlli delle preimpostazioni"
+  },
+  "save": {
+    "message": "Salva"
+  },
+  "save_preset_modal_title": {
+    "message": "Salva preimpostazione"
+  },
+  "preset_name_label": {
+    "message": "Nome preimpostazione"
+  },
+  "preset_name_empty_error": {
+    "message": "Inserisci un nome per la preimpostazione."
+  },
+  "preset_name_reserved_error": {
+    "message": "Questo nome è riservato a una preimpostazione integrata."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Esiste già una preimpostazione con questo nome."
   }
 }

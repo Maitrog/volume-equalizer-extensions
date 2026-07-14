@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "保存预设"
   },
-  "enter_preset_name": {
-    "message": "输入名称"
-  },
   "settings_title": {
     "message": "设置"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "此快捷键已被另一个命令使用。"
+  },
+  "global_controls_title": {
+    "message": "全局控制"
+  },
+  "preset_controls_title": {
+    "message": "预设控制"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_preset_modal_title": {
+    "message": "保存预设"
+  },
+  "preset_name_label": {
+    "message": "预设名称"
+  },
+  "preset_name_empty_error": {
+    "message": "请输入预设名称。"
+  },
+  "preset_name_reserved_error": {
+    "message": "此名称为内置预设保留。"
+  },
+  "preset_name_duplicate_error": {
+    "message": "已存在同名预设。"
   }
 }

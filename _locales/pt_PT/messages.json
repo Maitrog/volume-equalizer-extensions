@@ -21,10 +21,7 @@
     "message": "Nenhum"
   },
   "save_preset_button_label": {
-    "message": "Guardar predefinição"
-  },
-  "enter_preset_name": {
-    "message": "Insira o nome"
+    "message": "Guardar"
   },
   "settings_title": {
     "message": "Definições"
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Este atalho já está a ser utilizado por outro comando."
+  },
+  "global_controls_title": {
+    "message": "Controlos globais"
+  },
+  "preset_controls_title": {
+    "message": "Controlos de predefinições"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "save_preset_modal_title": {
+    "message": "Guardar predefinição"
+  },
+  "preset_name_label": {
+    "message": "Nome da predefinição"
+  },
+  "preset_name_empty_error": {
+    "message": "Introduza um nome para a predefinição."
+  },
+  "preset_name_reserved_error": {
+    "message": "Este nome está reservado para uma predefinição incorporada."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Já existe uma predefinição com este nome."
   }
 }

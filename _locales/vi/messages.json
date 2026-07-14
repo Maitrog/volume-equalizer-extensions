@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Lưu thiết lập trước"
   },
-  "enter_preset_name": {
-    "message": "Nhập tên"
-  },
   "settings_title": {
     "message": "Cài đặt"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Phím tắt này đã được lệnh khác sử dụng."
+  },
+  "global_controls_title": {
+    "message": "Điều khiển chung"
+  },
+  "preset_controls_title": {
+    "message": "Điều khiển cài đặt sẵn"
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "save_preset_modal_title": {
+    "message": "Lưu cài đặt sẵn"
+  },
+  "preset_name_label": {
+    "message": "Tên cài đặt sẵn"
+  },
+  "preset_name_empty_error": {
+    "message": "Nhập tên cài đặt sẵn."
+  },
+  "preset_name_reserved_error": {
+    "message": "Tên này được dành riêng cho cài đặt sẵn tích hợp."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Đã có cài đặt sẵn với tên này."
   }
 }

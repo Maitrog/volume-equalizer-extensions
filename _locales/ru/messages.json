@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Сохранить пресет"
   },
-  "enter_preset_name": {
-    "message": "Введите название"
-  },
   "settings_title": {
     "message": "Настройки"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Это сочетание уже используется другой командой."
+  },
+  "global_controls_title": {
+    "message": "Общие настройки"
+  },
+  "preset_controls_title": {
+    "message": "Управление пресетами"
+  },
+  "save": {
+    "message": "Сохранить"
+  },
+  "save_preset_modal_title": {
+    "message": "Сохранить пресет"
+  },
+  "preset_name_label": {
+    "message": "Название пресета"
+  },
+  "preset_name_empty_error": {
+    "message": "Введите название пресета."
+  },
+  "preset_name_reserved_error": {
+    "message": "Это название зарезервировано для встроенного пресета."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Пресет с таким названием уже существует."
   }
 }

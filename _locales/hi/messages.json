@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "प्रसेट सहेजें"
   },
-  "enter_preset_name": {
-    "message": "नाम दर्ज करें"
-  },
   "settings_title": {
     "message": "सेटिंग्स"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "यह शॉर्टकट पहले से ही किसी अन्य कमांड द्वारा उपयोग किया जा रहा है।"
+  },
+  "global_controls_title": {
+    "message": "वैश्विक नियंत्रण"
+  },
+  "preset_controls_title": {
+    "message": "प्रीसेट नियंत्रण"
+  },
+  "save": {
+    "message": "सहेजें"
+  },
+  "save_preset_modal_title": {
+    "message": "प्रीसेट सहेजें"
+  },
+  "preset_name_label": {
+    "message": "प्रीसेट का नाम"
+  },
+  "preset_name_empty_error": {
+    "message": "प्रीसेट का नाम दर्ज करें।"
+  },
+  "preset_name_reserved_error": {
+    "message": "यह नाम अंतर्निहित प्रीसेट के लिए आरक्षित है।"
+  },
+  "preset_name_duplicate_error": {
+    "message": "इस नाम का प्रीसेट पहले से मौजूद है।"
   }
 }

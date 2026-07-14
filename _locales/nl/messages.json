@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "Preset opslaan"
   },
-  "enter_preset_name": {
-    "message": "Voer naam in"
-  },
   "settings_title": {
     "message": "Instellingen"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Deze sneltoets wordt al door een andere opdracht gebruikt."
+  },
+  "global_controls_title": {
+    "message": "Algemene bediening"
+  },
+  "preset_controls_title": {
+    "message": "Voorinstellingsbediening"
+  },
+  "save": {
+    "message": "Opslaan"
+  },
+  "save_preset_modal_title": {
+    "message": "Voorinstelling opslaan"
+  },
+  "preset_name_label": {
+    "message": "Naam voorinstelling"
+  },
+  "preset_name_empty_error": {
+    "message": "Voer een naam voor de voorinstelling in."
+  },
+  "preset_name_reserved_error": {
+    "message": "Deze naam is gereserveerd voor een ingebouwde voorinstelling."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Er bestaat al een voorinstelling met deze naam."
   }
 }

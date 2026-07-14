@@ -5,7 +5,6 @@ export interface PopupElements {
   volumeMuteButton: HTMLImageElement;
   addToAutostartWhitelistButton: HTMLImageElement;
   windowModeButton: HTMLImageElement;
-  supportMe: HTMLSpanElement;
   captureError: HTMLDivElement;
   capturedTabs: HTMLDivElement;
   infoButton: HTMLImageElement;
@@ -14,14 +13,21 @@ export interface PopupElements {
   infoTooltip: HTMLDivElement;
   masterVolumeLabel: HTMLLabelElement;
   masterVolume: HTMLInputElement;
+  masterVolumeValue: HTMLOutputElement;
   resetButton: HTMLButtonElement;
   changeEqButton: HTMLImageElement;
   presets: HTMLDivElement;
   presetsToggle: HTMLDivElement;
   presetsMenu: HTMLDivElement;
   noneItem: HTMLDivElement;
-  presetName: HTMLInputElement;
   savePresetButton: HTMLButtonElement;
+  presetSaveModal: HTMLDivElement;
+  presetSaveClose: HTMLSpanElement;
+  presetSaveForm: HTMLFormElement;
+  presetName: HTMLInputElement;
+  presetSaveError: HTMLDivElement;
+  presetSaveCancel: HTMLButtonElement;
+  presetSaveConfirm: HTMLButtonElement;
   settingsModal: HTMLDivElement;
   closeSettingsButton: HTMLSpanElement;
   settingsHeader: HTMLHeadingElement;
@@ -95,7 +101,6 @@ export const getPopupElements = (document: Document): PopupElements => ({
     HTMLImageElement,
   ),
   windowModeButton: getRequiredElement(document, "window-mod", HTMLImageElement),
-  supportMe: getRequiredElement(document, "support-me", HTMLSpanElement),
   captureError: getRequiredElement(document, "capture-error", HTMLDivElement),
   capturedTabs: getRequiredElement(document, "captured-tabs", HTMLDivElement),
   infoButton: getRequiredElement(document, "info-btn", HTMLImageElement),
@@ -112,6 +117,11 @@ export const getPopupElements = (document: Document): PopupElements => ({
     HTMLLabelElement,
   ),
   masterVolume: getRequiredElement(document, "master-volume", HTMLInputElement),
+  masterVolumeValue: getRequiredElement(
+    document,
+    "master-volume-value",
+    HTMLOutputElement,
+  ),
   resetButton: getRequiredElement(document, "reset", HTMLButtonElement),
   changeEqButton: getRequiredElement(
     document,
@@ -122,8 +132,14 @@ export const getPopupElements = (document: Document): PopupElements => ({
   presetsToggle: getRequiredElement(document, "presets-toggle", HTMLDivElement),
   presetsMenu: getRequiredElement(document, "presets-menu", HTMLDivElement),
   noneItem: getRequiredElement(document, "none-item", HTMLDivElement),
-  presetName: getRequiredElement(document, "preset-name", HTMLInputElement),
   savePresetButton: getRequiredElement(document, "save-preset", HTMLButtonElement),
+  presetSaveModal: getRequiredElement(document, "preset-save-modal", HTMLDivElement),
+  presetSaveClose: getRequiredElement(document, "preset-save-close", HTMLSpanElement),
+  presetSaveForm: getRequiredElement(document, "preset-save-form", HTMLFormElement),
+  presetName: getRequiredElement(document, "preset-name", HTMLInputElement),
+  presetSaveError: getRequiredElement(document, "preset-save-error", HTMLDivElement),
+  presetSaveCancel: getRequiredElement(document, "preset-save-cancel", HTMLButtonElement),
+  presetSaveConfirm: getRequiredElement(document, "preset-save-confirm", HTMLButtonElement),
   settingsModal: getRequiredElement(document, "settings-modal", HTMLDivElement),
   closeSettingsButton: getRequiredElement(
     document,

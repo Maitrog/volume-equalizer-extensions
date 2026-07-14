@@ -23,9 +23,6 @@
   "save_preset_button_label": {
     "message": "設定を保存"
   },
-  "enter_preset_name": {
-    "message": "名前を入力"
-  },
   "settings_title": {
     "message": "設定"
   },
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "このショートカットは別のコマンドですでに使用されています。"
+  },
+  "global_controls_title": {
+    "message": "グローバルコントロール"
+  },
+  "preset_controls_title": {
+    "message": "プリセットコントロール"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_preset_modal_title": {
+    "message": "プリセットを保存"
+  },
+  "preset_name_label": {
+    "message": "プリセット名"
+  },
+  "preset_name_empty_error": {
+    "message": "プリセット名を入力してください。"
+  },
+  "preset_name_reserved_error": {
+    "message": "この名前は組み込みプリセット用に予約されています。"
+  },
+  "preset_name_duplicate_error": {
+    "message": "この名前のプリセットは既に存在します。"
   }
 }

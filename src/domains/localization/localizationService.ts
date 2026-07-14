@@ -95,11 +95,17 @@ export const createLocalizationService = (): LocalizationService => {
     messageName;
 
   const applyLocalization = (root: Document = document): void => {
+    setElementTextContent(root, "global-controls-title", "global_controls_title", getMessage);
+    setElementTextContent(root, "preset-controls-title", "preset_controls_title", getMessage);
     setElementTextContent(root, "master-volume-label", "gain_slider_label", getMessage);
     setElementTextContent(root, "reset", "reset_button_label", getMessage);
     setElementTextContent(root, "presets-toggle", "empty_preset_name", getMessage);
     setElementTextContent(root, "none-item", "empty_preset_name", getMessage);
     setElementTextContent(root, "save-preset", "save_preset_button_label", getMessage);
+    setElementTextContent(root, "preset-save-title", "save_preset_modal_title", getMessage);
+    setElementTextContent(root, "preset-name-label", "preset_name_label", getMessage);
+    setElementTextContent(root, "preset-save-cancel", "cancel", getMessage);
+    setElementTextContent(root, "preset-save-confirm", "save", getMessage);
     setElementTextContent(root, "import-presets", "import_presets_button_label", getMessage);
     setElementTextContent(root, "export-presets", "export_presets_button_label", getMessage);
     setElementTextContent(root, "enable-spectrum-label", "enable_spectrum_setting_option", getMessage);
@@ -111,7 +117,6 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "skip-reset-label", "points_reset_skip", getMessage);
     setElementTextContent(root, "points-reset-cancel", "cancel", getMessage);
     setElementTextContent(root, "points-reset-confirm", "ok", getMessage);
-    setElementTextContent(root, "support-me", "support_me", getMessage);
     setElementTextContent(root, "theme-label", "theme_setting_option", getMessage);
     setElementTextContent(root, "shortcuts-settings-title", "shortcuts_settings_title", getMessage);
     setElementTextContent(root, "shortcut-mute-label", "shortcut_mute_label", getMessage);
@@ -133,8 +138,6 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "autostart-modal-cancel", "cancel", getMessage);
     setElementTextContent(root, "autostart-modal-confirm", "add", getMessage);
     setElementTextContent(root, "whitelist-empty", "autostart_whitelist_empty", getMessage);
-
-    setElementPlaceholder(root, "preset-name", "enter_preset_name", getMessage);
 
     setElementTooltip(root, "settings-btn", "settings_button_tooltip", getMessage);
     setElementTooltip(root, "volume-mute", "volume_mute_button_tooltip", getMessage);

@@ -11,15 +11,16 @@
 
 <body>
   <div class="header">
-    <text>EQ Toolkit</text>
-    <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
-    <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
-    <img id="add-to-autostart-whitelist-btn" class="add-to-autostart-whitelist-btn" src="resources/images/add_to_whitelist.svg">
-    <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
-    <img id="change-eq" class="change-eq" src="resources/images/on-off-button.svg">
-    <a class="donation" href="https://www.donationalerts.com/r/maitrog" target="_blank">
-      <span id="support-me" class="support-me-text">Support me</span>
-    </a>
+    <div class="header-left">
+      <text>EQ Toolkit</text>
+      <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
+      <img id="add-to-autostart-whitelist-btn" class="add-to-autostart-whitelist-btn" src="resources/images/add_to_whitelist.svg">
+      <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
+    </div>
+    <div class="header-right">
+      <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
+      <img id="change-eq" class="change-eq" src="resources/images/on-off-button.svg">
+    </div>
   </div>
   <div id="capture-error" class="capture-error"></div>
   <div id="captured-tabs" class="captured-tabs"></div>
@@ -29,30 +30,32 @@
     <canvas class="spectrum-canvas" id="spectrum-canvas"></canvas>
     <div class="info-tooltip" id="info-tooltip"></div>
   </div>
-  <div class="controls first-row">
-    <div class="volume-control">
-      <label for="master-volume" id="master-volume-label">Gain:</label>
-      <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
-      <div class="volume-scale">
-        <span>-24</span>
-        <span>-12</span>
-        <span>0</span>
-        <span>12</span>
-        <span>24</span>
+  <div class="controls-panel">
+    <section class="control-card">
+      <h2 id="global-controls-title">Global Controls</h2>
+      <div class="global-actions">
+        <div class="volume-control">
+          <div class="gain-value-row">
+            <label for="master-volume" id="master-volume-label">Gain:</label>
+            <output id="master-volume-value" for="master-volume">0.0 dB</output>
+          </div>
+          <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
+        </div>
+        <button type="button" id="reset" class="reset-btn">Reset</button>
       </div>
-    </div>
-    <button type="button" id="reset" class="reset-btn">Reset</button>
-    <button type="button" id="change-eq">Enable eq on this tab</button>
-  </div>
-  <div class="controls second-row">
-    <div class="dropdown" id="presets">
-      <div class="dropdown-toggle" id="presets-toggle">none</div>
-      <div class="dropdown-menu" id="presets-menu">
-        <div class="dropdown-item" data-value="none" id="none-item">none</div>
+    </section>
+    <section class="control-card">
+      <h2 id="preset-controls-title">Preset Controls</h2>
+      <div class="preset-actions">
+        <button type="button" id="save-preset" class="save-preset">Save preset</button>
+        <div class="dropdown" id="presets">
+          <div class="dropdown-toggle" id="presets-toggle">none</div>
+          <div class="dropdown-menu" id="presets-menu">
+            <div class="dropdown-item" data-value="none" id="none-item">none</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
-    <button type="button" id="save-preset">Save preset</button>
+    </section>
   </div>
 
   <div id="settings-modal" class="modal">
@@ -179,6 +182,20 @@
         <button type="button" id="autostart-modal-confirm">Add</button>
       </div>
     </div>
+  </div>
+
+  <div id="preset-save-modal" class="modal">
+    <form id="preset-save-form" class="modal-content confirm-modal">
+      <span id="preset-save-close" class="close">&times;</span>
+      <h3 id="preset-save-title">Save preset</h3>
+      <label for="preset-name" id="preset-name-label">Preset name</label>
+      <input type="text" id="preset-name" class="settings-input preset-name-input" autocomplete="off">
+      <div id="preset-save-error" class="settings-error" role="alert"></div>
+      <div class="confirm-actions">
+        <button type="button" id="preset-save-cancel">Cancel</button>
+        <button type="submit" id="preset-save-confirm">Save</button>
+      </div>
+    </form>
   </div>
 
   <div id="points-reset-modal" class="modal">

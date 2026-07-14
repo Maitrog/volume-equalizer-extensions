@@ -18,10 +18,7 @@
     "message": "ஒன்றுமில்"
   },
   "save_preset_button_label": {
-    "message": "அமைவைச் சேமி"
-  },
-  "enter_preset_name": {
-    "message": "பெயரை உள்ளிடவும்"
+    "message": "சேமி"
   },
   "settings_title": {
     "message": "அமைப்புகள்"
@@ -148,5 +145,29 @@
   },
   "extName": {
     "message": "EQ Toolkit - ஆடியோ சமநிலைப்படுத்தி"
+  },
+  "global_controls_title": {
+    "message": "உலகளாவிய கட்டுப்பாடுகள்"
+  },
+  "preset_controls_title": {
+    "message": "முன்னமைவுக் கட்டுப்பாடுகள்"
+  },
+  "save": {
+    "message": "சேமி"
+  },
+  "save_preset_modal_title": {
+    "message": "முன்னமைவைச் சேமி"
+  },
+  "preset_name_label": {
+    "message": "முன்னமைவின் பெயர்"
+  },
+  "preset_name_empty_error": {
+    "message": "முன்னமைவின் பெயரை உள்ளிடவும்."
+  },
+  "preset_name_reserved_error": {
+    "message": "இந்தப் பெயர் உள்ளமைந்த முன்னமைவுக்காக ஒதுக்கப்பட்டுள்ளது."
+  },
+  "preset_name_duplicate_error": {
+    "message": "இந்தப் பெயரில் ஒரு முன்னமைவு ஏற்கனவே உள்ளது."
   }
 }

@@ -21,10 +21,7 @@
     "message": "Aucun"
   },
   "save_preset_button_label": {
-    "message": "Enregistrer le préréglage"
-  },
-  "enter_preset_name": {
-    "message": "Entrez le nom"
+    "message": "Enregistrer"
   },
   "settings_title": {
     "message": "Paramètres"
@@ -148,5 +145,29 @@
   },
   "shortcut_duplicate_error": {
     "message": "Ce raccourci est déjà utilisé par une autre commande."
+  },
+  "global_controls_title": {
+    "message": "Commandes globales"
+  },
+  "preset_controls_title": {
+    "message": "Commandes des préréglages"
+  },
+  "save": {
+    "message": "Enregistrer"
+  },
+  "save_preset_modal_title": {
+    "message": "Enregistrer le préréglage"
+  },
+  "preset_name_label": {
+    "message": "Nom du préréglage"
+  },
+  "preset_name_empty_error": {
+    "message": "Saisissez un nom de préréglage."
+  },
+  "preset_name_reserved_error": {
+    "message": "Ce nom est réservé à un préréglage intégré."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Un préréglage portant ce nom existe déjà."
   }
 }
