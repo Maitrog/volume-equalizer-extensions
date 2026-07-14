@@ -69,41 +69,6 @@
   --light-notice-link: #7b1ed2;
   --light-notice-link-hover: #561495;
 
-  /* Christmas theme palette */
-  --ny-bg: #27355a;
-  --ny-panel-bg: url("/resources/images/ny_panel_bg_300.jpg");
-  --ny-settings-bg: #f7f0de;
-  --ny-surface-alt: #f3e5c5;
-  --ny-accent-start: #f1d9a8;
-  --ny-accent-mid: #e4b654;
-  --ny-accent-end: #f1d9a8;
-  --ny-highpass-filter: #e4b654;
-  --ny-lowpass-filter: #e4b654;
-  --ny-text: #1f2745;
-  --ny-text-header: #e4b654;
-  --ny-text-placeholder: rgba(31, 39, 69, 0.45);
-  --ny-text-volume-scale: #f1d9a8;
-  --ny-slider-track-bg: #f1d9a8;
-  --ny-slider-thumb: #e4b654;
-  --ny-slider-glow: rgba(228, 182, 84, 0.7);
-  --ny-axis: rgba(31, 39, 69, 0.7);
-  --ny-border: rgba(228, 182, 84, 0.45);
-  --ny-hover-bg: #e7d7b2;
-  --ny-active-bg: #f3e5c5;
-  --ny-menu-hover: #e7d7b2;
-  --ny-overlay: rgba(13, 18, 36, 0.8);
-  --ny-shadow-soft: rgba(0, 0, 0, 0.18);
-  --ny-shadow-strong: rgba(0, 0, 0, 0.35);
-  --ny-donation: #e4b654;
-  --ny-reset-btn: #e4b654cc;
-  --ny-reset-btn-hover: #e4b654e6;
-  --ny-reset-btn-active: #e4b654;
-  --ny-btn-bg: #f3e5c5;
-  --ny-svg-btn-filter: brightness(0) saturate(100%) invert(47%) sepia(77%) saturate(477%) hue-rotate(3deg) brightness(112%) contrast(90%);
-  --ny-info-btn-display: block;
-  --ny-notice-link: #9b3c2c;
-  --ny-notice-link-hover: #6f2b20;
-
   /* Active theme bindings */
   --bg: var(--dark-bg);
   --panel-bg: var(--dark-panel-bg);
@@ -189,7 +154,6 @@ body {
 }
 
 .header-right {
-  padding-right: 10px;
   justify-content: end  ;
 }
 

@@ -395,13 +395,6 @@ export const createPopupApp = ({
     isToolkitWindow: toolkitController.isToolkitWindow,
   });
 
-  elements.infoButton.addEventListener("click", () => {
-    elements.infoModal.style.display = "block";
-  });
-  elements.closeInfoModal.addEventListener("click", () => {
-    elements.infoModal.style.display = "none";
-  });
-
   document.addEventListener("keydown", (event) => {
     void (async () => {
       if (event.repeat || isPopupEditableShortcutTarget(event.target)) return;

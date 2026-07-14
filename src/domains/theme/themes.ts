@@ -1,4 +1,4 @@
-export const THEME_NAMES = ["dark", "light", "ny"] as const;
+export const THEME_NAMES = ["dark", "light"] as const;
 
 export type ThemeName = (typeof THEME_NAMES)[number];
 
@@ -74,40 +74,5 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     "info-btn-display": "var(--light-info-btn-display)",
     "notice-link": "var(--light-notice-link)",
     "notice-link-hover": "var(--light-notice-link-hover)",
-  },
-  ny: {
-    bg: "var(--ny-bg)",
-    "panel-bg": "var(--ny-panel-bg)",
-    "settings-bg": "var(--ny-settings-bg)",
-    "accent-start": "var(--ny-accent-start)",
-    "accent-mid": "var(--ny-accent-mid)",
-    "accent-end": "var(--ny-accent-end)",
-    "highpass-filter": "var(--ny-highpass-filter)",
-    "lowpass-filter": "var(--ny-lowpass-filter)",
-    text: "var(--ny-text)",
-    "text-header": "var(--ny-text-header)",
-    "slider-track-bg": "var(--ny-slider-track-bg)",
-    "slider-thumb": "var(--ny-slider-thumb)",
-    axis: "var(--ny-axis)",
-    border: "var(--ny-border)",
-    "surface-alt": "var(--ny-surface-alt)",
-    "text-placeholder": "var(--ny-text-placeholder)",
-    "text-volume-scale": "var(--ny-text-volume-scale)",
-    "hover-bg": "var(--ny-hover-bg)",
-    "active-bg": "var(--ny-active-bg)",
-    "menu-hover": "var(--ny-menu-hover)",
-    overlay: "var(--ny-overlay)",
-    "shadow-soft": "var(--ny-shadow-soft)",
-    "shadow-strong": "var(--ny-shadow-strong)",
-    donation: "var(--ny-donation)",
-    "slider-glow": "var(--ny-slider-glow)",
-    "reset-btn": "var(--ny-reset-btn)",
-    "reset-btn-hover": "var(--ny-reset-btn-hover)",
-    "reset-btn-active": "var(--ny-reset-btn-active)",
-    "btn-bg": "var(--ny-btn-bg)",
-    "svg-btn-filter": "var(--ny-svg-btn-filter)",
-    "info-btn-display": "var(--ny-info-btn-display)",
-    "notice-link": "var(--ny-notice-link)",
-    "notice-link-hover": "var(--ny-notice-link-hover)",
-  },
+  }
 };

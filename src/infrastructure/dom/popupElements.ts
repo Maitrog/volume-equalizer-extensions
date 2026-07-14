@@ -39,7 +39,6 @@ export interface PopupElements {
   themeSelect: HTMLSelectElement;
   themeDarkOption: HTMLOptionElement;
   themeLightOption: HTMLOptionElement;
-  themeNyOption: HTMLOptionElement;
   languageLabel: HTMLSpanElement;
   languageSelect: HTMLSelectElement;
   shortcutsSettingsTitle: HTMLHeadingElement;
@@ -87,9 +86,6 @@ export interface PopupElements {
   pointsResetConfirm: HTMLButtonElement;
   installUpdateNoticeModal: HTMLDivElement;
   installUpdateNoticeClose: HTMLButtonElement;
-  infoModal: HTMLDivElement;
-  closeInfoModal: HTMLSpanElement;
-  infoModalMessage: HTMLParagraphElement;
 }
 
 export const getPopupElements = (document: Document): PopupElements => ({
@@ -159,7 +155,6 @@ export const getPopupElements = (document: Document): PopupElements => ({
   themeSelect: getRequiredElement(document, "theme-select", HTMLSelectElement),
   themeDarkOption: getRequiredElement(document, "theme-dark-option", HTMLOptionElement),
   themeLightOption: getRequiredElement(document, "theme-light-option", HTMLOptionElement),
-  themeNyOption: getRequiredElement(document, "theme-ny-option", HTMLOptionElement),
   languageLabel: getRequiredElement(document, "language-label", HTMLSpanElement),
   languageSelect: getRequiredElement(document, "language-select", HTMLSelectElement),
   shortcutsSettingsTitle: getRequiredElement(
@@ -354,12 +349,5 @@ export const getPopupElements = (document: Document): PopupElements => ({
     document,
     "install-update-notice-close",
     HTMLButtonElement,
-  ),
-  infoModal: getRequiredElement(document, "info-modal", HTMLDivElement),
-  closeInfoModal: getRequiredElement(document, "close-info-modal", HTMLSpanElement),
-  infoModalMessage: getRequiredElement(
-    document,
-    "info-modal-message",
-    HTMLParagraphElement,
   ),
 });
