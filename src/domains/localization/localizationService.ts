@@ -125,6 +125,7 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "hide-default-presets-label", "hide_default_presets_label", getMessage);
     setElementTextContent(root, "community-settings-title", "community_settings_title", getMessage);
     setFirstTextNodeContent(root, "translators-label", "translators_label", getMessage, " ");
+    setFirstTextNodeContent(root, "donation-label", "support_me", getMessage, " ");
     setFirstTextNodeContent(root, "help-with-translation-label", "help_with_translation_label", getMessage);
     setFirstTextNodeContent(root, "source-code-label", "source_code_label", getMessage);
     setElementTextContent(root, "autostart-settings-title", "autostart_settings_title", getMessage);
