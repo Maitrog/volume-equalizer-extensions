@@ -46,9 +46,7 @@ export const createControlsView = (deps: {
 
   return {
     setEnableButtonText: (enabled) => {
-      deps.changeEqButton.textContent = deps.getMessage(
-        enabled ? "stop_eq_button_label" : "enable_eq_button_label",
-      );
+      deps.changeEqButton.classList.toggle("change-eq-active", enabled);
     },
 
     setMuteButtonClass: (muted) => {

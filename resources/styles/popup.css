@@ -568,6 +568,10 @@ button:disabled:active {
   cursor: pointer;
 }
 
+.change-eq-active {
+  filter: brightness(0) saturate(100%) invert(19%) sepia(99%) saturate(7473%) hue-rotate(277deg) brightness(99%) contrast(126%) drop-shadow(0 0 8px var(--accent-mid));
+}
+
 .info-btn {
   width: 20px;
   cursor: pointer;
