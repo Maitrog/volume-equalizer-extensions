@@ -143,7 +143,7 @@ export const createPopupApp = ({
     setFilters: setCurrentFilters,
     initPoints,
     resize,
-    setEnableButtonText: (enabled) => controlsView?.setEnableButtonText(enabled),
+    setEnableButtonClass: (enabled) => controlsView?.setEnableButtonClass(enabled),
     setMuteButtonClass: (muted) => controlsView?.setMuteButtonClass(muted),
     renderCaptureError,
     getGainValue: () => Number(elements.masterVolume.value),
@@ -228,7 +228,6 @@ export const createPopupApp = ({
     await autostartView.renderWhitelist();
     await autostartView.refreshPresetSelects();
     await refreshPresetDropdown();
-    controlsView.setEnableButtonText(false);
   };
 
   const onToggleEqualizer = async (): Promise<void> => {
@@ -428,7 +427,7 @@ export const createPopupApp = ({
       if (tabId == null) return;
 
       if (changes[STORAGE_KEYS.tabEnabled(tabId)]) {
-        controlsView.setEnableButtonText(
+        controlsView.setEnableButtonClass(
           changes[STORAGE_KEYS.tabEnabled(tabId)].newValue === true,
         );
       }
@@ -528,7 +527,7 @@ export const createPopupApp = ({
     }
 
     resize();
-    controlsView.setEnableButtonText(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
+    controlsView.setEnableButtonClass(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
     controlsView.setMuteButtonClass(result[STORAGE_KEYS.tabMute(tabId)] === true);
 
     if (result[STORAGE_KEYS.ENABLE_SPECTRUM] === true) {

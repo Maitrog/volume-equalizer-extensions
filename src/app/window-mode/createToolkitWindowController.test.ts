@@ -155,7 +155,7 @@ const createController = (
     setFilters: vi.fn(),
     initPoints: vi.fn(),
     resize: vi.fn(),
-    setEnableButtonText: vi.fn(),
+    setEnableButtonClass: vi.fn(),
     setMuteButtonClass: vi.fn(),
     renderCaptureError: vi.fn(),
     getGainValue: () => 0,

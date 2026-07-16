@@ -1,5 +1,5 @@
 export interface ControlsView {
-  setEnableButtonText(enabled: boolean): void;
+  setEnableButtonClass(enabled: boolean): void;
   setMuteButtonClass(muted: boolean): void;
 }
 
@@ -45,7 +45,7 @@ export const createControlsView = (deps: {
   });
 
   return {
-    setEnableButtonText: (enabled) => {
+    setEnableButtonClass: (enabled) => {
       deps.changeEqButton.classList.toggle("change-eq-active", enabled);
     },
 

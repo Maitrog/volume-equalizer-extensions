@@ -67,7 +67,7 @@ export const createToolkitWindowController = (deps: {
   setFilters(filters: EqualizerPersistedFilter[]): void;
   initPoints(count: number): void;
   resize(): void;
-  setEnableButtonText(enabled: boolean): void;
+  setEnableButtonClass(enabled: boolean): void;
   setMuteButtonClass(muted: boolean): void;
   renderCaptureError(message: string | null): void;
   getGainValue(): number;
@@ -364,7 +364,7 @@ export const createToolkitWindowController = (deps: {
 
     const gain = result[STORAGE_KEYS.tabGain(tabId)];
     deps.resize();
-    deps.setEnableButtonText(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
+    deps.setEnableButtonClass(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
     deps.setMuteButtonClass(result[STORAGE_KEYS.tabMute(tabId)] === true);
 
     deps.setGainValue(typeof gain === "string" || typeof gain === "number" ? Number(gain) : 0);
