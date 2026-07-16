@@ -2,6 +2,10 @@ import type {
   EqualizerPersistedFilter,
   EqualizerState,
 } from "../../domains/equalizer/equalizerState";
+import {
+  applyBiquadSettings,
+  createBiquadFilter,
+} from "../../domains/audio/biquadChain";
 import { dbToGain } from "../../domains/equalizer/equalizerMath";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import {
@@ -29,38 +33,12 @@ export interface ToolkitSpectrumMeta {
   frequencyBinCount: number;
 }
 
-interface ToolkitBiquadInput {
-  freq: number;
-  gain: number;
-  q: number;
-  type?: BiquadFilterType;
-}
-
-const toBiquadInput = (filter: EqualizerPersistedFilter): ToolkitBiquadInput => ({
+const toBiquadInput = (filter: EqualizerPersistedFilter) => ({
   freq: Number(filter.freq ?? 0),
   gain: Number(filter.gain ?? 0),
   q: Number(filter.q ?? 0.5),
-  type: filter.type as BiquadFilterType | undefined,
+  type: filter.type,
 });
-
-const applyBiquadSettings = (
-  biquadFilter: BiquadFilterNode,
-  filter: ToolkitBiquadInput,
-): void => {
-  biquadFilter.type = filter.type ?? "peaking";
-  biquadFilter.gain.value = filter.gain;
-  biquadFilter.frequency.value = filter.freq;
-  biquadFilter.Q.value = filter.q;
-};
-
-const createBiquadFilter = (
-  context: BaseAudioContext,
-  filter: ToolkitBiquadInput,
-): BiquadFilterNode => {
-  const biquadFilter = context.createBiquadFilter();
-  applyBiquadSettings(biquadFilter, filter);
-  return biquadFilter;
-};
 
 export interface ToolkitWindowController {
   readonly isToolkitWindow: boolean;

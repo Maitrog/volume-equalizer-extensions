@@ -6,11 +6,11 @@ import type {
 import { clampPointCount } from "../../domains/equalizer/equalizerMath";
 import { type LocalizationService } from "../../domains/localization/localizationService";
 import {
-  isPopupEditableShortcutTarget,
-  matchesPopupShortcut,
-  POPUP_SHORTCUT_ACTION_MUTE_NAME,
-  POPUP_SHORTCUT_ACTION_TOGGLE_EQ_NAME,
-} from "../../ui/popup/popupShortcuts";
+  isEditableShortcutTarget,
+  matchesShortcut,
+  SHORTCUT_ACTION_MUTE_NAME,
+  SHORTCUT_ACTION_TOGGLE_EQ_NAME,
+} from "../../domains/shortcuts/shortcuts";
 import type { ThemeColors } from "../../domains/theme/themeColors";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { PopupElements } from "../../infrastructure/dom/popupElements";
@@ -397,19 +397,19 @@ export const createPopupApp = ({
 
   document.addEventListener("keydown", (event) => {
     void (async () => {
-      if (event.repeat || isPopupEditableShortcutTarget(event.target)) return;
+      if (event.repeat || isEditableShortcutTarget(event.target)) return;
 
       const shortcuts = settingsView.getShortcutSettings();
-      if (matchesPopupShortcut(event, shortcuts[POPUP_SHORTCUT_ACTION_MUTE_NAME])) {
+      if (matchesShortcut(event, shortcuts[SHORTCUT_ACTION_MUTE_NAME])) {
         event.preventDefault();
         event.stopPropagation();
         await toggleCurrentTabStorageValue("mute", { enableTab: true });
         return;
       }
 
-      if (matchesPopupShortcut(
+      if (matchesShortcut(
         event,
-        shortcuts[POPUP_SHORTCUT_ACTION_TOGGLE_EQ_NAME],
+        shortcuts[SHORTCUT_ACTION_TOGGLE_EQ_NAME],
       )) {
         if (toolkitController.isToolkitWindow) return;
 

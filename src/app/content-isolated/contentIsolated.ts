@@ -11,48 +11,16 @@ import {
   normalizeFilterSettings,
 } from "../../domains/equalizer/defaultFilters";
 
-import type { RuntimeMessageMethod } from "../../infrastructure/chrome/runtimeMessages";
-import type { STORAGE_KEYS as INFRASTRUCTURE_STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
+import {
+  RUNTIME_MESSAGES,
+  type RuntimeMessage,
+} from "../../infrastructure/chrome/runtimeMessages";
+import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
-type InfrastructureStorageKeys = typeof INFRASTRUCTURE_STORAGE_KEYS;
-type RuntimeMessagePayload = {
-  method: RuntimeMessageMethod;
-  payload?: unknown;
-};
 type SendRuntimeMessageWithCallback = (
-  message: RuntimeMessagePayload,
+  message: RuntimeMessage,
   callback: (response: unknown) => void,
 ) => void;
-
-const CONTENT_RUNTIME_MESSAGES = {
-  GET_TAB_ID: "getTabId",
-  CONNECTED: "connected",
-  DISCONNECTED: "disconnected",
-  SPECTRUM_FRAME: "spectrum-frame",
-  PAGE_STARTED: "pageStarted",
-  CLEAR_STORAGE: "clearStorage",
-} as const satisfies Record<string, RuntimeMessageMethod>;
-
-const STORAGE_KEYS = {
-  ENABLE_SPECTRUM: "enableSpectrum",
-  SHORTCUTS: "shortcuts",
-  tabFilters: (tabId: number | string) => `filters.${tabId}`,
-  tabEnabled: (tabId: number | string) => `enabled.${tabId}`,
-  tabMute: (tabId: number | string) => `mute.${tabId}`,
-  tabVolume: (tabId: number | string) => `volume.${tabId}`,
-  tabPan: (tabId: number | string) => `pan.${tabId}`,
-  tabCaptureError: (tabId: number | string) => `captureError.${tabId}`,
-} as const satisfies Pick<
-  InfrastructureStorageKeys,
-  | "ENABLE_SPECTRUM"
-  | "SHORTCUTS"
-  | "tabFilters"
-  | "tabEnabled"
-  | "tabMute"
-  | "tabVolume"
-  | "tabPan"
-  | "tabCaptureError"
->;
 
 const sendRuntimeMessageWithCallback =
   chrome.runtime.sendMessage as unknown as SendRuntimeMessageWithCallback;
@@ -66,7 +34,7 @@ let shortcuts = resolveShortcuts(null);
 
 const getTabId = (callback: (tabId: number) => void): void => {
   sendRuntimeMessageWithCallback(
-    { method: CONTENT_RUNTIME_MESSAGES.GET_TAB_ID },
+    { method: RUNTIME_MESSAGES.GET_TAB_ID },
     (tabId) => {
       if (typeof tabId !== "number") return;
 
@@ -109,13 +77,13 @@ const getCaptureErrorMessage = (event: Event): string => {
 port.addEventListener("connected", () => {
   clearCaptureError();
   chrome.runtime.sendMessage({
-    method: CONTENT_RUNTIME_MESSAGES.CONNECTED,
+    method: RUNTIME_MESSAGES.CONNECTED,
   });
 });
 
 port.addEventListener("disconnected", () => {
   chrome.runtime.sendMessage({
-    method: CONTENT_RUNTIME_MESSAGES.DISCONNECTED,
+    method: RUNTIME_MESSAGES.DISCONNECTED,
   });
 });
 
@@ -253,7 +221,7 @@ document.addEventListener(
 
 port.addEventListener("spectrum-frame", (event) => {
   chrome.runtime.sendMessage({
-    method: CONTENT_RUNTIME_MESSAGES.SPECTRUM_FRAME,
+    method: RUNTIME_MESSAGES.SPECTRUM_FRAME,
     payload: (event as CustomEvent<unknown>).detail,
   });
 });
@@ -262,14 +230,14 @@ const start = (): void => {
   if (window.top !== window) return;
 
   sendRuntimeMessageWithCallback(
-    { method: CONTENT_RUNTIME_MESSAGES.GET_TAB_ID },
+    { method: RUNTIME_MESSAGES.GET_TAB_ID },
     () => {
-      chrome.runtime.sendMessage({ method: CONTENT_RUNTIME_MESSAGES.PAGE_STARTED });
+      chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.PAGE_STARTED });
     },
   );
 
   setTimeout(() => {
-    chrome.runtime.sendMessage({ method: CONTENT_RUNTIME_MESSAGES.CLEAR_STORAGE });
+    chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.CLEAR_STORAGE });
   }, 1000);
 };
 

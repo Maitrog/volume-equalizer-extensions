@@ -1,20 +1,21 @@
 import { clampPointCount } from "../../domains/equalizer/equalizerMath";
 import { type LocalizationService } from "../../domains/localization/localizationService";
 import {
-  formatPopupShortcut,
-  isPopupModifierShortcutKey,
-  normalizePopupShortcutFromKeyboardEvent,
-  POPUP_SHORTCUT_ACTION_MUTE_NAME,
-  POPUP_SHORTCUT_ACTION_TOGGLE_EQ_NAME,
-  resolvePopupShortcuts,
-  type PopupShortcut,
-  type PopupShortcutActionName,
-  type PopupShortcutMap,
-  validatePopupShortcutConfig,
-} from "./popupShortcuts";
-import { themes, type ThemeName } from "../../domains/theme/themes";
+  formatShortcut,
+  isModifierShortcutKey,
+  normalizeShortcutFromKeyboardEvent,
+  SHORTCUT_ACTION_MUTE_NAME,
+  SHORTCUT_ACTION_TOGGLE_EQ_NAME,
+  resolveShortcuts,
+  type Shortcut,
+  type ShortcutActionName,
+  type ShortcutMap,
+  validateShortcutConfig,
+} from "../../domains/shortcuts/shortcuts";
 import { isDefaultPresetName } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
+
+type ThemeName = "dark" | "light";
 
 const DEFAULT_THEME: ThemeName = "dark";
 
@@ -22,11 +23,11 @@ export interface SettingsView {
   init(): Promise<void>;
   applyTheme(theme: unknown): ThemeName;
   updatePointCountSelect(count: unknown): void;
-  getShortcutSettings(): PopupShortcutMap;
+  getShortcutSettings(): ShortcutMap;
 }
 
 const isThemeName = (theme: unknown): theme is ThemeName => {
-  return typeof theme === "string" && theme in themes;
+  return theme === "dark" || theme === "light";
 };
 
 const saveTextAsFile = (text: string, filename = "file.txt"): void => {
@@ -69,15 +70,11 @@ export const createSettingsView = (deps: {
   refreshDynamicContent(): Promise<void>;
 }): SettingsView => {
   let pendingPointCount: number | null = null;
-  let shortcutSettings: PopupShortcutMap = resolvePopupShortcuts(null);
+  let shortcutSettings: ShortcutMap = resolveShortcuts(null);
 
   const applyTheme = (theme: unknown): ThemeName => {
     const chosenTheme = isThemeName(theme) ? theme : DEFAULT_THEME;
-    const chosen = themes[chosenTheme] ?? themes.dark;
-
-    Object.entries(chosen).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
+    document.documentElement.dataset.theme = chosenTheme;
     deps.themeSelect.value = chosenTheme;
     deps.redraw();
     return chosenTheme;
@@ -133,17 +130,17 @@ export const createSettingsView = (deps: {
     deps.shortcutsError.style.display = "block";
   };
 
-  const shortcutInputs: Record<PopupShortcutActionName, HTMLInputElement> = {
-    [POPUP_SHORTCUT_ACTION_MUTE_NAME]: deps.shortcutMute,
-    [POPUP_SHORTCUT_ACTION_TOGGLE_EQ_NAME]: deps.shortcutToggleEq,
+  const shortcutInputs: Record<ShortcutActionName, HTMLInputElement> = {
+    [SHORTCUT_ACTION_MUTE_NAME]: deps.shortcutMute,
+    [SHORTCUT_ACTION_TOGGLE_EQ_NAME]: deps.shortcutToggleEq,
   };
 
   const renderShortcutInputs = (
-    invalidAction: PopupShortcutActionName | null = null,
+    invalidAction: ShortcutActionName | null = null,
   ): void => {
     Object.entries(shortcutInputs).forEach(([action, input]) => {
-      input.value = formatPopupShortcut(
-        shortcutSettings[action as PopupShortcutActionName],
+      input.value = formatShortcut(
+        shortcutSettings[action as ShortcutActionName],
       );
       input.classList.toggle("invalid", action === invalidAction);
     });
@@ -156,14 +153,14 @@ export const createSettingsView = (deps: {
   };
 
   const saveShortcut = async (
-    action: PopupShortcutActionName,
-    shortcut: PopupShortcut,
+    action: ShortcutActionName,
+    shortcut: Shortcut,
   ): Promise<boolean> => {
     const nextShortcuts = {
       ...shortcutSettings,
       [action]: shortcut,
     };
-    const validationError = validatePopupShortcutConfig(nextShortcuts);
+    const validationError = validateShortcutConfig(nextShortcuts);
 
     if (validationError) {
       const messageName =
@@ -175,7 +172,7 @@ export const createSettingsView = (deps: {
       return false;
     }
 
-    shortcutSettings = resolvePopupShortcuts(nextShortcuts);
+    shortcutSettings = resolveShortcuts(nextShortcuts);
     await chrome.storage.local.set({
       [STORAGE_KEYS.SHORTCUTS]: shortcutSettings,
     });
@@ -325,7 +322,7 @@ export const createSettingsView = (deps: {
   });
 
   Object.entries(shortcutInputs).forEach(([action, input]) => {
-    const shortcutAction = action as PopupShortcutActionName;
+    const shortcutAction = action as ShortcutActionName;
 
     input.addEventListener("focus", () => {
       startShortcutEdit(input);
@@ -341,9 +338,9 @@ export const createSettingsView = (deps: {
         event.preventDefault();
         event.stopPropagation();
 
-        if (isPopupModifierShortcutKey(event.key)) return;
+        if (isModifierShortcutKey(event.key)) return;
 
-        const shortcut = normalizePopupShortcutFromKeyboardEvent(event);
+        const shortcut = normalizeShortcutFromKeyboardEvent(event);
         if (!shortcut) {
           setShortcutsError("shortcut_validation_error");
           input.classList.add("invalid");
@@ -364,8 +361,8 @@ export const createSettingsView = (deps: {
       ]);
       deps.hideDefaultPresets.checked =
         stored[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] === true;
-      shortcutSettings = resolvePopupShortcuts(
-        stored[STORAGE_KEYS.SHORTCUTS] as Partial<PopupShortcutMap>,
+      shortcutSettings = resolveShortcuts(
+        stored[STORAGE_KEYS.SHORTCUTS] as Partial<ShortcutMap>,
       );
       renderShortcutInputs();
     },
