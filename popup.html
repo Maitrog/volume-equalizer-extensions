@@ -24,7 +24,7 @@
   </div>
   <div id="capture-error" class="capture-error"></div>
   <div id="captured-tabs" class="captured-tabs"></div>
-  <div class="equalizer-curve-container">
+  <div id="equalizer-curve-container" class="equalizer-curve-container">
     <img id="info-btn" class="info-btn" src="resources/images/info.svg">
     <canvas class="eq-canvas" id="eq-canvas"></canvas>
     <canvas class="spectrum-canvas" id="spectrum-canvas"></canvas>
@@ -44,7 +44,7 @@
         <button type="button" id="reset" class="reset-btn">Reset</button>
       </div>
     </section>
-    <section class="control-card">
+    <section id="preset-controls-card" class="control-card">
       <h2 id="preset-controls-title">Preset Controls</h2>
       <div class="preset-actions">
         <button type="button" id="save-preset" class="save-preset">Save preset</button>
@@ -243,6 +243,25 @@
         <button type="button" id="install-update-notice-close">Close</button>
       </div>
     </div>
+  </div>
+
+  <div id="onboarding-guide" class="onboarding-guide" hidden>
+    <div class="guide-blocker"></div>
+    <div class="guide-blur-panel" data-guide-panel="top"></div>
+    <div class="guide-blur-panel" data-guide-panel="left"></div>
+    <div class="guide-blur-panel" data-guide-panel="right"></div>
+    <div class="guide-blur-panel" data-guide-panel="bottom"></div>
+    <div class="guide-spotlight"></div>
+    <section class="guide-card" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <div class="guide-progress"></div>
+      <h2 id="guide-title" tabindex="-1"></h2>
+      <div class="guide-content"></div>
+      <div class="guide-actions">
+        <button type="button" data-guide-action="skip"></button>
+        <button type="button" data-guide-action="back"></button>
+        <button type="button" data-guide-action="next"></button>
+      </div>
+    </section>
   </div>
 
   <script src="scripts/popup.js"></script>

@@ -1,4 +1,8 @@
-import { GUIDE_SCREENS, getGuideNavigation } from "./onboardingGuideView";
+import {
+  GUIDE_SCREENS,
+  getGuideNavigation,
+  getSpotlightPanels,
+} from "./onboardingGuideView";
 
 describe("onboarding guide navigation", () => {
   test("keeps button explanations inside stages 4 and 5", () => {
@@ -12,5 +16,20 @@ describe("onboarding guide navigation", () => {
     });
     expect(getGuideNavigation(3).canSkip).toBe(true);
     expect(getGuideNavigation(GUIDE_SCREENS.length - 1).isLast).toBe(true);
+  });
+});
+
+test("splits the viewport into four panels around the target", () => {
+  expect(
+    getSpotlightPanels(
+      { left: 10, top: 20, right: 40, bottom: 60 },
+      100,
+      90,
+    ),
+  ).toEqual({
+    top: { left: 0, top: 0, width: 100, height: 20 },
+    left: { left: 0, top: 20, width: 10, height: 40 },
+    right: { left: 40, top: 20, width: 60, height: 40 },
+    bottom: { left: 0, top: 60, width: 100, height: 30 },
   });
 });

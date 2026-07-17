@@ -738,6 +738,112 @@ button:disabled:active {
   line-height: 1.35;
 }
 
+.onboarding-guide {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  color: var(--text);
+}
+
+.onboarding-guide[hidden] {
+  display: none;
+}
+
+.guide-blocker {
+  position: absolute;
+  inset: 0;
+}
+
+.guide-blur-panel {
+  position: absolute;
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+}
+
+.guide-spotlight {
+  position: absolute;
+  border: 2px solid var(--accent-mid);
+  border-radius: 8px;
+  box-shadow: 0 0 18px var(--accent-mid);
+  pointer-events: none;
+}
+
+.guide-card {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  width: min(400px, calc(100% - 32px));
+  padding: 18px;
+  transform: translateX(-50%);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--settings-bg);
+  box-shadow: 0 4px 16px var(--shadow-strong);
+  box-sizing: border-box;
+}
+
+.guide-card h2 {
+  margin: 4px 0 0;
+  font-size: 18px;
+}
+
+.onboarding-guide.card-mode {
+  background: var(--overlay);
+  backdrop-filter: blur(4px);
+}
+
+.onboarding-guide.card-mode .guide-blur-panel,
+.onboarding-guide.card-mode .guide-spotlight {
+  display: none;
+}
+
+.onboarding-guide.card-mode .guide-card {
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.guide-content {
+  display: grid;
+  gap: 12px;
+  margin: 12px 0 18px;
+}
+
+.guide-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guide-field select {
+  min-width: 150px;
+}
+
+.guide-shortcut {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.guide-shortcut kbd {
+  color: var(--text);
+}
+
+.guide-progress {
+  color: var(--text-placeholder);
+  font-size: 12px;
+}
+
+.guide-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.guide-actions [data-guide-action="skip"] {
+  margin-right: auto;
+}
+
 .autostart-settings-list {
   display: flex;
   flex-direction: column;

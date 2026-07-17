@@ -8,6 +8,7 @@ export interface PopupElements {
   captureError: HTMLDivElement;
   capturedTabs: HTMLDivElement;
   infoButton: HTMLImageElement;
+  equalizerCurveContainer: HTMLDivElement;
   eqCanvas: HTMLCanvasElement;
   spectrumCanvas: HTMLCanvasElement;
   infoTooltip: HTMLDivElement;
@@ -21,6 +22,7 @@ export interface PopupElements {
   presetsMenu: HTMLDivElement;
   noneItem: HTMLDivElement;
   savePresetButton: HTMLButtonElement;
+  presetControlsCard: HTMLElement;
   presetSaveModal: HTMLDivElement;
   presetSaveClose: HTMLSpanElement;
   presetSaveForm: HTMLFormElement;
@@ -86,6 +88,7 @@ export interface PopupElements {
   pointsResetConfirm: HTMLButtonElement;
   installUpdateNoticeModal: HTMLDivElement;
   installUpdateNoticeClose: HTMLButtonElement;
+  onboardingGuide: HTMLDivElement;
 }
 
 export const getPopupElements = (document: Document): PopupElements => ({
@@ -100,6 +103,11 @@ export const getPopupElements = (document: Document): PopupElements => ({
   captureError: getRequiredElement(document, "capture-error", HTMLDivElement),
   capturedTabs: getRequiredElement(document, "captured-tabs", HTMLDivElement),
   infoButton: getRequiredElement(document, "info-btn", HTMLImageElement),
+  equalizerCurveContainer: getRequiredElement(
+    document,
+    "equalizer-curve-container",
+    HTMLDivElement,
+  ),
   eqCanvas: getRequiredElement(document, "eq-canvas", HTMLCanvasElement),
   spectrumCanvas: getRequiredElement(
     document,
@@ -129,6 +137,11 @@ export const getPopupElements = (document: Document): PopupElements => ({
   presetsMenu: getRequiredElement(document, "presets-menu", HTMLDivElement),
   noneItem: getRequiredElement(document, "none-item", HTMLDivElement),
   savePresetButton: getRequiredElement(document, "save-preset", HTMLButtonElement),
+  presetControlsCard: getRequiredElement(
+    document,
+    "preset-controls-card",
+    HTMLElement,
+  ),
   presetSaveModal: getRequiredElement(document, "preset-save-modal", HTMLDivElement),
   presetSaveClose: getRequiredElement(document, "preset-save-close", HTMLSpanElement),
   presetSaveForm: getRequiredElement(document, "preset-save-form", HTMLFormElement),
@@ -349,5 +362,10 @@ export const getPopupElements = (document: Document): PopupElements => ({
     document,
     "install-update-notice-close",
     HTMLButtonElement,
+  ),
+  onboardingGuide: getRequiredElement(
+    document,
+    "onboarding-guide",
+    HTMLDivElement,
   ),
 });
