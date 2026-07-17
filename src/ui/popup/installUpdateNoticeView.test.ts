@@ -51,24 +51,12 @@ describe("getPendingInstallUpdateNotice", () => {
     const view = createInstallUpdateNoticeView({
       modal,
       closeButton,
-      currentVersion: "1.8.0",
-      isToolkitWindow: false,
     });
 
-    view.showInstallUpdateNotice({
-      [STORAGE_KEYS.INSTALL_UPDATE_NOTICE]: {
-        reason: "install",
-        version: "1.8.0",
-      },
-    });
+    view.showInstallUpdateNotice({ reason: "install", version: "1.8.0" });
     expect(modal.style.display).toBe("none");
 
-    view.showInstallUpdateNotice({
-      [STORAGE_KEYS.INSTALL_UPDATE_NOTICE]: {
-        reason: "update",
-        version: "1.8.0",
-      },
-    });
+    view.showInstallUpdateNotice({ reason: "update", version: "1.8.0" });
     expect(modal.style.display).toBe("block");
   });
 });

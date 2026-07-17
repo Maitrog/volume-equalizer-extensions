@@ -12,7 +12,7 @@ export interface PendingInstallUpdateNoticeOptions {
 }
 
 export interface InstallUpdateNoticeView {
-  showInstallUpdateNotice(stored: Record<string, unknown>): void;
+  showInstallUpdateNotice(notice: InstallUpdateNotice | null): void;
 }
 
 export const getPendingInstallUpdateNotice = ({
@@ -39,8 +39,6 @@ export const getPendingInstallUpdateNotice = ({
 export const createInstallUpdateNoticeView = (deps: {
   modal: HTMLElement;
   closeButton: HTMLElement;
-  currentVersion: string;
-  isToolkitWindow: boolean;
 }): InstallUpdateNoticeView => {
   const closeInstallUpdateNotice = async (): Promise<void> => {
     deps.modal.style.display = "none";
@@ -52,12 +50,7 @@ export const createInstallUpdateNoticeView = (deps: {
   });
 
   return {
-    showInstallUpdateNotice: (stored) => {
-      const notice = getPendingInstallUpdateNotice({
-        stored,
-        currentVersion: deps.currentVersion,
-        isToolkitWindow: deps.isToolkitWindow,
-      });
+    showInstallUpdateNotice: (notice) => {
       if (notice?.reason !== "update") return;
 
       deps.modal.style.display = "block";

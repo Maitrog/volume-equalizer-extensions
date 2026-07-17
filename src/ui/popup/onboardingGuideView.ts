@@ -136,6 +136,18 @@ export const getSpotlightPanels = (
   },
 });
 
+export const getNextFocusIndex = (
+  currentIndex: number,
+  length: number,
+  backwards: boolean,
+): number => {
+  if (length <= 0) return -1;
+  if (currentIndex < 0) return backwards ? length - 1 : 0;
+  return backwards
+    ? (currentIndex - 1 + length) % length
+    : (currentIndex + 1) % length;
+};
+
 export interface OnboardingGuideView {
   start(): Promise<void>;
 }
@@ -195,6 +207,7 @@ export const createOnboardingGuideView = (deps: {
     select.removeAttribute("id");
     select.value = source.value;
     select.addEventListener("change", () => {
+      source.value = select.value;
       void onChange(select.value).then(() => render());
     });
     field.append(label, select);
@@ -229,13 +242,20 @@ export const createOnboardingGuideView = (deps: {
       return;
     }
     if (screen.kind === "shortcuts") {
-      const mute = document.createElement("div");
-      mute.className = "guide-shortcut";
-      mute.innerHTML = `<span>${deps.getMessage("shortcut_mute_label")}</span><kbd>Alt+M</kbd>`;
-      const toggle = document.createElement("div");
-      toggle.className = "guide-shortcut";
-      toggle.innerHTML = `<span>${deps.getMessage("shortcut_toggle_eq_label")}</span><kbd>Alt+K</kbd>`;
-      content.append(mute, toggle);
+      const createShortcut = (messageName: string, keys: string): HTMLElement => {
+        const row = document.createElement("div");
+        row.className = "guide-shortcut";
+        const label = document.createElement("span");
+        label.textContent = deps.getMessage(messageName);
+        const shortcut = document.createElement("kbd");
+        shortcut.textContent = keys;
+        row.append(label, shortcut);
+        return row;
+      };
+      content.append(
+        createShortcut("shortcut_mute_label", "Alt+M"),
+        createShortcut("shortcut_toggle_eq_label", "Alt+K"),
+      );
     }
     if (screen.messageKey) {
       const message = document.createElement("p");
@@ -348,9 +368,7 @@ export const createOnboardingGuideView = (deps: {
     );
     if (controls.length === 0) return;
     const current = controls.indexOf(document.activeElement as typeof controls[number]);
-    const next = event.shiftKey
-      ? (current - 1 + controls.length) % controls.length
-      : (current + 1) % controls.length;
+    const next = getNextFocusIndex(current, controls.length, event.shiftKey);
     event.preventDefault();
     controls[next].focus();
   });

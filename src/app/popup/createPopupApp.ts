@@ -394,8 +394,6 @@ export const createPopupApp = ({
   const installUpdateNoticeView = createInstallUpdateNoticeView({
     modal: elements.installUpdateNoticeModal,
     closeButton: elements.installUpdateNoticeClose,
-    currentVersion: chrome.runtime.getManifest().version,
-    isToolkitWindow: toolkitController.isToolkitWindow,
   });
 
   const onboardingGuideView = createOnboardingGuideView({
@@ -592,7 +590,7 @@ export const createPopupApp = ({
     if (pendingNotice?.reason === "install") {
       await onboardingGuideView.start();
     } else {
-      installUpdateNoticeView.showInstallUpdateNotice(stored);
+      installUpdateNoticeView.showInstallUpdateNotice(pendingNotice);
     }
     await toolkitController.startTabCapture();
     await toolkitController.renderCapturedTabs();

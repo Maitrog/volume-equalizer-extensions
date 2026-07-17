@@ -1,6 +1,7 @@
 import {
   GUIDE_SCREENS,
   getGuideNavigation,
+  getNextFocusIndex,
   getSpotlightPanels,
 } from "./onboardingGuideView";
 
@@ -17,6 +18,11 @@ describe("onboarding guide navigation", () => {
     expect(getGuideNavigation(3).canSkip).toBe(true);
     expect(getGuideNavigation(GUIDE_SCREENS.length - 1).isLast).toBe(true);
   });
+});
+
+test("moves backward from the dialog title to the last control", () => {
+  expect(getNextFocusIndex(-1, 3, true)).toBe(2);
+  expect(getNextFocusIndex(2, 3, false)).toBe(0);
 });
 
 test("splits the viewport into four panels around the target", () => {
