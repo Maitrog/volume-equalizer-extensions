@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Já existe uma predefinição com este nome."
-  }
+  },
+  "guide_back": { "message": "Voltar" },
+  "guide_next": { "message": "Seguinte" },
+  "guide_skip": { "message": "Ignorar" },
+  "guide_finish": { "message": "Concluir" },
+  "guide_theme_dark": { "message": "Escuro" },
+  "guide_theme_light": { "message": "Claro" },
+  "guide_shortcuts_hint": { "message": "Pode alterar estes atalhos nas Definições." },
+  "guide_canvas_hint": { "message": "Arraste os pontos para ajustar o equalizador. Altere o número de pontos nas Definições." },
+  "guide_volume_hint": { "message": "Utilize este controlo para ajustar o volume geral." },
+  "guide_presets_hint": { "message": "Guarde a configuração atual ou aplique uma predefinição aqui." }
 }

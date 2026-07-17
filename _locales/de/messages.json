@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Eine Voreinstellung mit diesem Namen existiert bereits."
-  }
+  },
+  "guide_back": { "message": "Zurück" },
+  "guide_next": { "message": "Weiter" },
+  "guide_skip": { "message": "Überspringen" },
+  "guide_finish": { "message": "Fertig" },
+  "guide_theme_dark": { "message": "Dunkel" },
+  "guide_theme_light": { "message": "Hell" },
+  "guide_shortcuts_hint": { "message": "Du kannst diese Tastenkürzel in den Einstellungen ändern." },
+  "guide_canvas_hint": { "message": "Ziehe die Punkte, um den Equalizer einzustellen. Die Anzahl kannst du in den Einstellungen ändern." },
+  "guide_volume_hint": { "message": "Mit diesem Regler passt du die Gesamtlautstärke an." },
+  "guide_presets_hint": { "message": "Hier kannst du die aktuelle Einstellung speichern oder ein Preset anwenden." }
 }

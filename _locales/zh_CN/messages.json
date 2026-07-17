@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "已存在同名预设。"
-  }
+  },
+  "guide_back": { "message": "返回" },
+  "guide_next": { "message": "下一步" },
+  "guide_skip": { "message": "跳过" },
+  "guide_finish": { "message": "完成" },
+  "guide_theme_dark": { "message": "深色" },
+  "guide_theme_light": { "message": "浅色" },
+  "guide_shortcuts_hint": { "message": "你可以在设置中更改这些快捷键。" },
+  "guide_canvas_hint": { "message": "拖动控制点以调节均衡器。可在设置中更改控制点数量。" },
+  "guide_volume_hint": { "message": "使用此滑块调节整体音量。" },
+  "guide_presets_hint": { "message": "在这里保存当前设置或应用预设。" }
 }

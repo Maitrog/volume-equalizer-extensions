@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "এই নামে একটি প্রিসেট ইতিমধ্যে বিদ্যমান।"
-  }
+  },
+  "guide_back": { "message": "পিছনে" },
+  "guide_next": { "message": "পরবর্তী" },
+  "guide_skip": { "message": "এড়িয়ে যান" },
+  "guide_finish": { "message": "শেষ করুন" },
+  "guide_theme_dark": { "message": "গাঢ়" },
+  "guide_theme_light": { "message": "হালকা" },
+  "guide_shortcuts_hint": { "message": "সেটিংসে এই শর্টকাটগুলো পরিবর্তন করতে পারেন।" },
+  "guide_canvas_hint": { "message": "ইকুয়ালাইজার সাজাতে পয়েন্ট টানুন। সেটিংসে পয়েন্টের সংখ্যা পরিবর্তন করুন।" },
+  "guide_volume_hint": { "message": "সামগ্রিক ভলিউম সামঞ্জস্য করতে এই স্লাইডার ব্যবহার করুন।" },
+  "guide_presets_hint": { "message": "এখানে বর্তমান সেটআপ সংরক্ষণ করুন বা একটি প্রিসেট প্রয়োগ করুন।" }
 }

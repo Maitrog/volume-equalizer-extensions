@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Preset dengan nama ini sudah ada."
-  }
+  },
+  "guide_back": { "message": "Kembali" },
+  "guide_next": { "message": "Berikutnya" },
+  "guide_skip": { "message": "Lewati" },
+  "guide_finish": { "message": "Selesai" },
+  "guide_theme_dark": { "message": "Gelap" },
+  "guide_theme_light": { "message": "Terang" },
+  "guide_shortcuts_hint": { "message": "Anda dapat mengubah pintasan ini di Pengaturan." },
+  "guide_canvas_hint": { "message": "Seret titik untuk mengatur equalizer. Ubah jumlah titik di Pengaturan." },
+  "guide_volume_hint": { "message": "Gunakan penggeser ini untuk menyesuaikan volume keseluruhan." },
+  "guide_presets_hint": { "message": "Simpan pengaturan saat ini atau terapkan preset di sini." }
 }

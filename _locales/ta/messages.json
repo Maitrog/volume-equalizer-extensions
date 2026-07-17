@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "இந்தப் பெயரில் ஒரு முன்னமைவு ஏற்கனவே உள்ளது."
-  }
+  },
+  "guide_back": { "message": "பின்செல்" },
+  "guide_next": { "message": "அடுத்து" },
+  "guide_skip": { "message": "தவிர்" },
+  "guide_finish": { "message": "முடி" },
+  "guide_theme_dark": { "message": "இருண்ட" },
+  "guide_theme_light": { "message": "வெளிர்" },
+  "guide_shortcuts_hint": { "message": "இந்தக் குறுக்குவழிகளை அமைப்புகளில் மாற்றலாம்." },
+  "guide_canvas_hint": { "message": "சமப்படுத்தியை அமைக்க புள்ளிகளை இழுக்கவும். புள்ளிகளின் எண்ணிக்கையை அமைப்புகளில் மாற்றலாம்." },
+  "guide_volume_hint": { "message": "மொத்த ஒலியளவை மாற்ற இந்த நகர்த்தியைப் பயன்படுத்தவும்." },
+  "guide_presets_hint": { "message": "தற்போதைய அமைப்பைச் சேமிக்கவும் அல்லது முன்அமைவைப் பயன்படுத்தவும்." }
 }

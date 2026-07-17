@@ -118,6 +118,8 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "points-reset-cancel", "cancel", getMessage);
     setElementTextContent(root, "points-reset-confirm", "ok", getMessage);
     setElementTextContent(root, "theme-label", "theme_setting_option", getMessage);
+    setElementTextContent(root, "theme-dark-option", "guide_theme_dark", getMessage);
+    setElementTextContent(root, "theme-light-option", "guide_theme_light", getMessage);
     setElementTextContent(root, "shortcuts-settings-title", "shortcuts_settings_title", getMessage);
     setElementTextContent(root, "shortcut-mute-label", "shortcut_mute_label", getMessage);
     setElementTextContent(root, "shortcut-toggle-eq-label", "shortcut_toggle_eq_label", getMessage);

@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Ya existe un preajuste con este nombre."
-  }
+  },
+  "guide_back": { "message": "Atrás" },
+  "guide_next": { "message": "Siguiente" },
+  "guide_skip": { "message": "Omitir" },
+  "guide_finish": { "message": "Finalizar" },
+  "guide_theme_dark": { "message": "Oscuro" },
+  "guide_theme_light": { "message": "Claro" },
+  "guide_shortcuts_hint": { "message": "Puedes cambiar estos atajos en Ajustes." },
+  "guide_canvas_hint": { "message": "Arrastra los puntos para ajustar el ecualizador. Cambia su cantidad en Ajustes." },
+  "guide_volume_hint": { "message": "Usa este control para ajustar el volumen general." },
+  "guide_presets_hint": { "message": "Aquí puedes guardar la configuración actual o aplicar un preajuste." }
 }

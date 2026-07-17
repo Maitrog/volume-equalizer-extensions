@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "この名前のプリセットは既に存在します。"
-  }
+  },
+  "guide_back": { "message": "戻る" },
+  "guide_next": { "message": "次へ" },
+  "guide_skip": { "message": "スキップ" },
+  "guide_finish": { "message": "完了" },
+  "guide_theme_dark": { "message": "ダーク" },
+  "guide_theme_light": { "message": "ライト" },
+  "guide_shortcuts_hint": { "message": "これらのショートカットは設定で変更できます。" },
+  "guide_canvas_hint": { "message": "ポイントをドラッグしてイコライザーを調整します。ポイント数は設定で変更できます。" },
+  "guide_volume_hint": { "message": "このスライダーで全体の音量を調整します。" },
+  "guide_presets_hint": { "message": "ここで現在の設定を保存するか、プリセットを適用できます。" }
 }

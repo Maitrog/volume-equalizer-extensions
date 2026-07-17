@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Пресет с таким названием уже существует."
-  }
+  },
+  "guide_back": { "message": "Назад" },
+  "guide_next": { "message": "Далее" },
+  "guide_skip": { "message": "Пропустить" },
+  "guide_finish": { "message": "Завершить" },
+  "guide_theme_dark": { "message": "Тёмная" },
+  "guide_theme_light": { "message": "Светлая" },
+  "guide_shortcuts_hint": { "message": "Эти сочетания можно изменить в настройках." },
+  "guide_canvas_hint": { "message": "Перетаскивайте точки для настройки эквалайзера. Их количество можно изменить в настройках." },
+  "guide_volume_hint": { "message": "Используйте этот слайдер для регулировки общей громкости." },
+  "guide_presets_hint": { "message": "Здесь можно сохранить текущую настройку или применить пресет." }
 }

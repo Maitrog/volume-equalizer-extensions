@@ -61,4 +61,31 @@ describe("createLocalizationService", () => {
     expect(chrome.storage.local.set).toHaveBeenCalledWith({ uiLanguage: "ru" });
     expect(refreshDynamicContent).toHaveBeenCalledOnce();
   });
+
+  test("localizes theme option labels used by settings and onboarding", async () => {
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        createResponse({
+          guide_theme_dark: { message: "Dark localized" },
+          guide_theme_light: { message: "Light localized" },
+        }),
+      )
+      .mockResolvedValueOnce(createResponse({}));
+    const darkOption = { textContent: "" };
+    const lightOption = { textContent: "" };
+    const root = {
+      getElementById: vi.fn((id: string) => {
+        if (id === "theme-dark-option") return darkOption;
+        if (id === "theme-light-option") return lightOption;
+        return null;
+      }),
+    } as unknown as Document;
+    const service = createLocalizationService();
+    await service.ready;
+
+    service.applyLocalization(root);
+
+    expect(darkOption.textContent).toBe("Dark localized");
+    expect(lightOption.textContent).toBe("Light localized");
+  });
 });

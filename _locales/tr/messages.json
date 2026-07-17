@@ -169,5 +169,15 @@
   },
   "preset_name_duplicate_error": {
     "message": "Bu ada sahip bir ön ayar zaten var."
-  }
+  },
+  "guide_back": { "message": "Geri" },
+  "guide_next": { "message": "İleri" },
+  "guide_skip": { "message": "Atla" },
+  "guide_finish": { "message": "Bitir" },
+  "guide_theme_dark": { "message": "Koyu" },
+  "guide_theme_light": { "message": "Açık" },
+  "guide_shortcuts_hint": { "message": "Bu kısayolları Ayarlar bölümünde değiştirebilirsiniz." },
+  "guide_canvas_hint": { "message": "Ekolayzırı ayarlamak için noktaları sürükleyin. Nokta sayısını Ayarlar bölümünde değiştirin." },
+  "guide_volume_hint": { "message": "Genel ses düzeyini ayarlamak için bu kaydırıcıyı kullanın." },
+  "guide_presets_hint": { "message": "Geçerli ayarı kaydedin veya burada bir ön ayar uygulayın." }
 }
