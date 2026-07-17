@@ -27,7 +27,11 @@ import {
   formatGainValue,
   type ControlsView,
 } from "../../ui/popup/controlsView";
-import { createInstallUpdateNoticeView } from "../../ui/popup/installUpdateNoticeView";
+import {
+  createInstallUpdateNoticeView,
+  getPendingInstallUpdateNotice,
+} from "../../ui/popup/installUpdateNoticeView";
+import { createOnboardingGuideView } from "../../ui/popup/onboardingGuideView";
 import { createPresetsView, type PresetsView } from "../../ui/popup/presetsView";
 import { createSettingsView, type SettingsView } from "../../ui/popup/settingsView";
 
@@ -394,6 +398,38 @@ export const createPopupApp = ({
     isToolkitWindow: toolkitController.isToolkitWindow,
   });
 
+  const onboardingGuideView = createOnboardingGuideView({
+    root: elements.onboardingGuide,
+    inertElements: Array.from(document.body.children).filter(
+      (element): element is HTMLElement =>
+        element instanceof HTMLElement && element !== elements.onboardingGuide,
+    ),
+    targets: {
+      volumeMute: elements.volumeMuteButton,
+      changeEq: elements.changeEqButton,
+      settings: elements.settingsButton,
+      autostart: elements.addToAutostartWhitelistButton,
+      windowMode: elements.windowModeButton,
+      equalizer: elements.equalizerCurveContainer,
+      volume: elements.masterVolume,
+      presets: elements.presetControlsCard,
+    },
+    sourceLanguageSelect: elements.languageSelect,
+    sourceThemeSelect: elements.themeSelect,
+    sourcePointCountSelect: elements.pointsCount,
+    getMessage: localization.getMessage,
+    setLanguage: async (language) => {
+      await localization.setLanguage(language, {
+        save: true,
+        refreshDynamicContent,
+      });
+    },
+    setTheme: (theme) => settingsView.setTheme(theme),
+    setPointCount: (count) => settingsView.setPointCount(count),
+    onShown: () =>
+      chrome.storage.local.remove(STORAGE_KEYS.INSTALL_UPDATE_NOTICE),
+  });
+
   document.addEventListener("keydown", (event) => {
     void (async () => {
       if (event.repeat || isEditableShortcutTarget(event.target)) return;
@@ -548,7 +584,16 @@ export const createPopupApp = ({
         : null,
     );
 
-    installUpdateNoticeView.showInstallUpdateNotice(stored);
+    const pendingNotice = getPendingInstallUpdateNotice({
+      stored,
+      currentVersion: chrome.runtime.getManifest().version,
+      isToolkitWindow: toolkitController.isToolkitWindow,
+    });
+    if (pendingNotice?.reason === "install") {
+      await onboardingGuideView.start();
+    } else {
+      installUpdateNoticeView.showInstallUpdateNotice(stored);
+    }
     await toolkitController.startTabCapture();
     await toolkitController.renderCapturedTabs();
   };

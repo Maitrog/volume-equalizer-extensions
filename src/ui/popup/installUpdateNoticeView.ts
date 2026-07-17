@@ -58,7 +58,7 @@ export const createInstallUpdateNoticeView = (deps: {
         currentVersion: deps.currentVersion,
         isToolkitWindow: deps.isToolkitWindow,
       });
-      if (!notice) return;
+      if (notice?.reason !== "update") return;
 
       deps.modal.style.display = "block";
     },

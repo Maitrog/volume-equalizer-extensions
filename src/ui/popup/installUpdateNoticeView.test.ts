@@ -1,5 +1,8 @@
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { getPendingInstallUpdateNotice } from "./installUpdateNoticeView";
+import {
+  createInstallUpdateNoticeView,
+  getPendingInstallUpdateNotice,
+} from "./installUpdateNoticeView";
 
 describe("getPendingInstallUpdateNotice", () => {
   const stored = {
@@ -40,5 +43,32 @@ describe("getPendingInstallUpdateNotice", () => {
         isToolkitWindow: false,
       }),
     ).toBeNull();
+  });
+
+  it("shows Patch Notes for updates but not installs", () => {
+    const modal = { style: { display: "none" } } as HTMLElement;
+    const closeButton = { addEventListener: vi.fn() } as unknown as HTMLElement;
+    const view = createInstallUpdateNoticeView({
+      modal,
+      closeButton,
+      currentVersion: "1.8.0",
+      isToolkitWindow: false,
+    });
+
+    view.showInstallUpdateNotice({
+      [STORAGE_KEYS.INSTALL_UPDATE_NOTICE]: {
+        reason: "install",
+        version: "1.8.0",
+      },
+    });
+    expect(modal.style.display).toBe("none");
+
+    view.showInstallUpdateNotice({
+      [STORAGE_KEYS.INSTALL_UPDATE_NOTICE]: {
+        reason: "update",
+        version: "1.8.0",
+      },
+    });
+    expect(modal.style.display).toBe("block");
   });
 });

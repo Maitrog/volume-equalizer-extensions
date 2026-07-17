@@ -22,6 +22,8 @@ const DEFAULT_THEME: ThemeName = "dark";
 export interface SettingsView {
   init(): Promise<void>;
   applyTheme(theme: unknown): ThemeName;
+  setTheme(theme: unknown): Promise<void>;
+  setPointCount(count: unknown): Promise<void>;
   updatePointCountSelect(count: unknown): void;
   getShortcutSettings(): ShortcutMap;
 }
@@ -84,6 +86,10 @@ export const createSettingsView = (deps: {
     return chrome.storage.local.set({ [STORAGE_KEYS.THEME]: theme });
   };
 
+  const setTheme = async (theme: unknown): Promise<void> => {
+    await saveTheme(applyTheme(theme));
+  };
+
   const shouldSkipPointsResetConfirm = async (): Promise<boolean> => {
     const result = await chrome.storage.local.get([STORAGE_KEYS.SKIP_POINTS_CONFIRM]);
     return (
@@ -108,6 +114,12 @@ export const createSettingsView = (deps: {
     deps.redraw();
     deps.refreshToolkitCaptureFilters();
     await deps.saveCurrentFilters();
+  };
+
+  const setPointCount = (count: unknown): Promise<void> => {
+    return applyPointCountChange(
+      clampPointCount(Number.parseInt(String(count), 10)),
+    );
   };
 
   const closePointsResetModal = (): void => {
@@ -196,8 +208,7 @@ export const createSettingsView = (deps: {
   });
 
   deps.themeSelect.addEventListener("change", () => {
-    const theme = applyTheme(deps.themeSelect.value);
-    void saveTheme(theme);
+    void setTheme(deps.themeSelect.value);
   });
 
   deps.pointsCount.addEventListener("change", () => {
@@ -367,6 +378,8 @@ export const createSettingsView = (deps: {
       renderShortcutInputs();
     },
     applyTheme,
+    setTheme,
+    setPointCount,
     updatePointCountSelect,
     getShortcutSettings: () => shortcutSettings,
   };

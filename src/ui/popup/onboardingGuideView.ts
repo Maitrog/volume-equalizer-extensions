@@ -138,7 +138,6 @@ export const getSpotlightPanels = (
 
 export interface OnboardingGuideView {
   start(): Promise<void>;
-  refresh(): void;
 }
 
 export const createOnboardingGuideView = (deps: {
@@ -368,9 +367,6 @@ export const createOnboardingGuideView = (deps: {
       render();
       window.addEventListener("resize", render);
       await deps.onShown();
-    },
-    refresh: () => {
-      if (started) render();
     },
   };
 };
