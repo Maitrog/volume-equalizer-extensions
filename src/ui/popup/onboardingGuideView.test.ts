@@ -3,6 +3,7 @@ import {
   getGuideNavigation,
   getNextFocusIndex,
   getSpotlightPanels,
+  shouldCompleteGuide,
 } from "./onboardingGuideView";
 
 describe("onboarding guide navigation", () => {
@@ -23,6 +24,13 @@ describe("onboarding guide navigation", () => {
 test("moves backward from the dialog title to the last control", () => {
   expect(getNextFocusIndex(-1, 3, true)).toBe(2);
   expect(getNextFocusIndex(2, 3, false)).toBe(0);
+});
+
+test("completes only after skip or the final next action", () => {
+  expect(shouldCompleteGuide("skip", 3)).toBe(true);
+  expect(shouldCompleteGuide("next", GUIDE_SCREENS.length - 1)).toBe(true);
+  expect(shouldCompleteGuide("next", 0)).toBe(false);
+  expect(shouldCompleteGuide("close", 5)).toBe(false);
 });
 
 test("splits the viewport into four panels around the target", () => {

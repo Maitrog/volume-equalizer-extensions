@@ -96,6 +96,15 @@ export const getGuideNavigation = (index: number): GuideNavigation => ({
   isLast: index === GUIDE_SCREENS.length - 1,
 });
 
+export type GuideExitAction = "close" | "next" | "skip";
+
+export const shouldCompleteGuide = (
+  action: GuideExitAction,
+  index: number,
+): boolean =>
+  action === "skip" ||
+  (action === "next" && getGuideNavigation(index).isLast);
+
 interface RectEdges {
   left: number;
   top: number;
@@ -163,7 +172,7 @@ export const createOnboardingGuideView = (deps: {
   setLanguage(language: string): Promise<void>;
   setTheme(theme: string): Promise<void>;
   setPointCount(count: string): Promise<void>;
-  onShown(): Promise<void>;
+  onComplete(): Promise<void>;
 }): OnboardingGuideView => {
   const getPart = <T extends Element>(selector: string): T => {
     const element = deps.root.querySelector<T>(selector);
@@ -341,19 +350,26 @@ export const createOnboardingGuideView = (deps: {
     started = false;
   };
 
+  const complete = async (): Promise<void> => {
+    await deps.onComplete();
+    close();
+  };
+
   backButton.addEventListener("click", () => {
     currentIndex = Math.max(0, currentIndex - 1);
     render();
   });
   nextButton.addEventListener("click", () => {
-    if (getGuideNavigation(currentIndex).isLast) {
-      close();
+    if (shouldCompleteGuide("next", currentIndex)) {
+      void complete();
       return;
     }
     currentIndex += 1;
     render();
   });
-  skipButton.addEventListener("click", close);
+  skipButton.addEventListener("click", () => {
+    if (shouldCompleteGuide("skip", currentIndex)) void complete();
+  });
   deps.root.addEventListener("keydown", (event) => {
     event.stopPropagation();
     if (event.key !== "Tab") return;
@@ -380,7 +396,6 @@ export const createOnboardingGuideView = (deps: {
       deps.root.hidden = false;
       render();
       window.addEventListener("resize", render);
-      await deps.onShown();
     },
   };
 };

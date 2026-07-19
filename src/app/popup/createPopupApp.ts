@@ -424,7 +424,7 @@ export const createPopupApp = ({
     },
     setTheme: (theme) => settingsView.setTheme(theme),
     setPointCount: (count) => settingsView.setPointCount(count),
-    onShown: () =>
+    onComplete: () =>
       chrome.storage.local.remove(STORAGE_KEYS.INSTALL_UPDATE_NOTICE),
   });
 
