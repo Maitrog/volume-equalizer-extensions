@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "आप इन शॉर्टकट को सेटिंग्स में बदल सकते हैं।" },
   "guide_canvas_hint": { "message": "इक्वलाइज़र सेट करने के लिए बिंदुओं को खींचें। सेटिंग्स में बिंदुओं की संख्या बदलें।" },
   "guide_volume_hint": { "message": "कुल वॉल्यूम बदलने के लिए इस स्लाइडर का उपयोग करें।" },
-  "guide_presets_hint": { "message": "यहाँ मौजूदा सेटअप सहेजें या कोई प्रीसेट लागू करें।" }
+  "guide_presets_hint": { "message": "यहाँ मौजूदा सेटअप सहेजें या कोई प्रीसेट लागू करें।" },
+  "donation_reminder_title": { "message": "डेवलपर का समर्थन करें" },
+  "donation_reminder_message": { "message": "यदि यह एक्सटेंशन आपके लिए उपयोगी है, तो आप इसके विकास में सहयोग कर सकते हैं।" },
+  "donation_reminder_link": { "message": "विकास में सहयोग करें" }
 }

@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Bu kısayolları Ayarlar bölümünde değiştirebilirsiniz." },
   "guide_canvas_hint": { "message": "Ekolayzırı ayarlamak için noktaları sürükleyin. Nokta sayısını Ayarlar bölümünde değiştirin." },
   "guide_volume_hint": { "message": "Genel ses düzeyini ayarlamak için bu kaydırıcıyı kullanın." },
-  "guide_presets_hint": { "message": "Geçerli ayarı kaydedin veya burada bir ön ayar uygulayın." }
+  "guide_presets_hint": { "message": "Geçerli ayarı kaydedin veya burada bir ön ayar uygulayın." },
+  "donation_reminder_title": { "message": "Geliştiriciyi destekleyin" },
+  "donation_reminder_message": { "message": "Bu uzantı işinize yarıyorsa geliştirilmesini destekleyebilirsiniz." },
+  "donation_reminder_link": { "message": "Geliştirmeyi destekle" }
 }

@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Vous pouvez modifier ces raccourcis dans les paramètres." },
   "guide_canvas_hint": { "message": "Faites glisser les points pour régler l’égaliseur. Modifiez leur nombre dans les paramètres." },
   "guide_volume_hint": { "message": "Utilisez ce curseur pour régler le volume général." },
-  "guide_presets_hint": { "message": "Enregistrez le réglage actuel ou appliquez un préréglage ici." }
+  "guide_presets_hint": { "message": "Enregistrez le réglage actuel ou appliquez un préréglage ici." },
+  "donation_reminder_title": { "message": "Soutenez le développeur" },
+  "donation_reminder_message": { "message": "Si cette extension vous est utile, vous pouvez soutenir son développement." },
+  "donation_reminder_link": { "message": "Soutenir le développement" }
 }

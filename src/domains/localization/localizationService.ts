@@ -126,6 +126,10 @@ export const createLocalizationService = (): LocalizationService => {
     setElementTextContent(root, "presets-settings-title", "presets_settings_title", getMessage);
     setElementTextContent(root, "hide-default-presets-label", "hide_default_presets_label", getMessage);
     setElementTextContent(root, "community-settings-title", "community_settings_title", getMessage);
+    setElementTextContent(root, "donation-reminder-title", "donation_reminder_title", getMessage);
+    setElementTextContent(root, "donation-reminder-message", "donation_reminder_message", getMessage);
+    setElementTextContent(root, "donation-reminder-link", "donation_reminder_link", getMessage);
+    setElementTextContent(root, "donation-reminder-close", "ok", getMessage);
     setFirstTextNodeContent(root, "translators-label", "translators_label", getMessage, " ");
     setFirstTextNodeContent(root, "donation-label", "support_me", getMessage, " ");
     setFirstTextNodeContent(root, "help-with-translation-label", "help_with_translation_label", getMessage);

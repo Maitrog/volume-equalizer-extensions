@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Du kannst diese Tastenkürzel in den Einstellungen ändern." },
   "guide_canvas_hint": { "message": "Ziehe die Punkte, um den Equalizer einzustellen. Die Anzahl kannst du in den Einstellungen ändern." },
   "guide_volume_hint": { "message": "Mit diesem Regler passt du die Gesamtlautstärke an." },
-  "guide_presets_hint": { "message": "Hier kannst du die aktuelle Einstellung speichern oder ein Preset anwenden." }
+  "guide_presets_hint": { "message": "Hier kannst du die aktuelle Einstellung speichern oder ein Preset anwenden." },
+  "donation_reminder_title": { "message": "Unterstütze den Entwickler" },
+  "donation_reminder_message": { "message": "Wenn dir diese Erweiterung hilft, kannst du ihre Entwicklung unterstützen." },
+  "donation_reminder_link": { "message": "Entwicklung unterstützen" }
 }

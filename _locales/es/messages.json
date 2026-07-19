@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Puedes cambiar estos atajos en Ajustes." },
   "guide_canvas_hint": { "message": "Arrastra los puntos para ajustar el ecualizador. Cambia su cantidad en Ajustes." },
   "guide_volume_hint": { "message": "Usa este control para ajustar el volumen general." },
-  "guide_presets_hint": { "message": "Aquí puedes guardar la configuración actual o aplicar un preajuste." }
+  "guide_presets_hint": { "message": "Aquí puedes guardar la configuración actual o aplicar un preajuste." },
+  "donation_reminder_title": { "message": "Apoya al desarrollador" },
+  "donation_reminder_message": { "message": "Si esta extensión te resulta útil, puedes apoyar su desarrollo." },
+  "donation_reminder_link": { "message": "Apoyar el desarrollo" }
 }

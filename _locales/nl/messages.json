@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Je kunt deze sneltoetsen wijzigen in Instellingen." },
   "guide_canvas_hint": { "message": "Sleep de punten om de equalizer in te stellen. Wijzig het aantal punten in Instellingen." },
   "guide_volume_hint": { "message": "Gebruik deze schuifregelaar om het algemene volume aan te passen." },
-  "guide_presets_hint": { "message": "Sla hier de huidige instelling op of pas een preset toe." }
+  "guide_presets_hint": { "message": "Sla hier de huidige instelling op of pas een preset toe." },
+  "donation_reminder_title": { "message": "Steun de ontwikkelaar" },
+  "donation_reminder_message": { "message": "Als deze extensie nuttig voor je is, kun je de ontwikkeling steunen." },
+  "donation_reminder_link": { "message": "Steun de ontwikkeling" }
 }

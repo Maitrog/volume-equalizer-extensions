@@ -88,4 +88,45 @@ describe("createLocalizationService", () => {
     expect(darkOption.textContent).toBe("Dark localized");
     expect(lightOption.textContent).toBe("Light localized");
   });
+
+  test("localizes the donation reminder", async () => {
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        createResponse({
+          donation_reminder_title: { message: "Title localized" },
+          donation_reminder_message: { message: "Message localized" },
+          donation_reminder_link: { message: "Link localized" },
+          ok: { message: "OK localized" },
+        }),
+      )
+      .mockResolvedValueOnce(createResponse({}));
+    const elements = new Map(
+      [
+        ["donation-reminder-title", ""],
+        ["donation-reminder-message", ""],
+        ["donation-reminder-link", ""],
+        ["donation-reminder-close", ""],
+      ].map(([id, textContent]) => [id, { textContent }]),
+    );
+    const root = {
+      getElementById: vi.fn((id: string) => elements.get(id) ?? null),
+    } as unknown as Document;
+    const service = createLocalizationService();
+    await service.ready;
+
+    service.applyLocalization(root);
+
+    expect(elements.get("donation-reminder-title")?.textContent).toBe(
+      "Title localized",
+    );
+    expect(elements.get("donation-reminder-message")?.textContent).toBe(
+      "Message localized",
+    );
+    expect(elements.get("donation-reminder-link")?.textContent).toBe(
+      "Link localized",
+    );
+    expect(elements.get("donation-reminder-close")?.textContent).toBe(
+      "OK localized",
+    );
+  });
 });

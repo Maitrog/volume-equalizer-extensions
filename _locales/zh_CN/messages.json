@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "你可以在设置中更改这些快捷键。" },
   "guide_canvas_hint": { "message": "拖动控制点以调节均衡器。可在设置中更改控制点数量。" },
   "guide_volume_hint": { "message": "使用此滑块调节整体音量。" },
-  "guide_presets_hint": { "message": "在这里保存当前设置或应用预设。" }
+  "guide_presets_hint": { "message": "在这里保存当前设置或应用预设。" },
+  "donation_reminder_title": { "message": "支持开发者" },
+  "donation_reminder_message": { "message": "如果这个扩展对您有帮助，您可以支持它的开发。" },
+  "donation_reminder_link": { "message": "支持开发" }
 }

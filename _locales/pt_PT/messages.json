@@ -179,5 +179,8 @@
   "guide_shortcuts_hint": { "message": "Pode alterar estes atalhos nas Definições." },
   "guide_canvas_hint": { "message": "Arraste os pontos para ajustar o equalizador. Altere o número de pontos nas Definições." },
   "guide_volume_hint": { "message": "Utilize este controlo para ajustar o volume geral." },
-  "guide_presets_hint": { "message": "Guarde a configuração atual ou aplique uma predefinição aqui." }
+  "guide_presets_hint": { "message": "Guarde a configuração atual ou aplique uma predefinição aqui." },
+  "donation_reminder_title": { "message": "Apoie o programador" },
+  "donation_reminder_message": { "message": "Se esta extensão lhe for útil, pode apoiar o seu desenvolvimento." },
+  "donation_reminder_link": { "message": "Apoiar o desenvolvimento" }
 }
