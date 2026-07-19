@@ -31,6 +31,7 @@ import {
   createInstallUpdateNoticeView,
   getPendingInstallUpdateNotice,
 } from "../../ui/popup/installUpdateNoticeView";
+import { createDonationReminderView } from "../../ui/popup/donationReminderView";
 import { createOnboardingGuideView } from "../../ui/popup/onboardingGuideView";
 import { createPresetsView, type PresetsView } from "../../ui/popup/presetsView";
 import { createSettingsView, type SettingsView } from "../../ui/popup/settingsView";
@@ -396,6 +397,11 @@ export const createPopupApp = ({
     closeButton: elements.installUpdateNoticeClose,
   });
 
+  const donationReminderView = createDonationReminderView({
+    modal: elements.donationReminderModal,
+    closeButton: elements.donationReminderClose,
+  });
+
   const onboardingGuideView = createOnboardingGuideView({
     root: elements.onboardingGuide,
     inertElements: Array.from(document.body.children).filter(
@@ -503,6 +509,7 @@ export const createPopupApp = ({
       STORAGE_KEYS.THEME,
       STORAGE_KEYS.SKIP_POINTS_CONFIRM,
       STORAGE_KEYS.INSTALL_UPDATE_NOTICE,
+      STORAGE_KEYS.DONATION_REMINDER_AT,
     ]);
     settingsView.applyTheme(stored[STORAGE_KEYS.THEME]);
 
@@ -589,8 +596,12 @@ export const createPopupApp = ({
     });
     if (pendingNotice?.reason === "install") {
       await onboardingGuideView.start();
-    } else {
+    } else if (pendingNotice?.reason === "update") {
       installUpdateNoticeView.showInstallUpdateNotice(pendingNotice);
+    } else if (!toolkitController.isToolkitWindow) {
+      donationReminderView.showDonationReminder(
+        stored[STORAGE_KEYS.DONATION_REMINDER_AT],
+      );
     }
     await toolkitController.startTabCapture();
     await toolkitController.renderCapturedTabs();

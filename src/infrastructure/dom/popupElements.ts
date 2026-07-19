@@ -88,6 +88,8 @@ export interface PopupElements {
   pointsResetConfirm: HTMLButtonElement;
   installUpdateNoticeModal: HTMLDivElement;
   installUpdateNoticeClose: HTMLButtonElement;
+  donationReminderModal: HTMLDivElement;
+  donationReminderClose: HTMLButtonElement;
   onboardingGuide: HTMLDivElement;
   volumeControlCard: HTMLElement;
 }
@@ -362,6 +364,16 @@ export const getPopupElements = (document: Document): PopupElements => ({
   installUpdateNoticeClose: getRequiredElement(
     document,
     "install-update-notice-close",
+    HTMLButtonElement,
+  ),
+  donationReminderModal: getRequiredElement(
+    document,
+    "donation-reminder-modal",
+    HTMLDivElement,
+  ),
+  donationReminderClose: getRequiredElement(
+    document,
+    "donation-reminder-close",
     HTMLButtonElement,
   ),
   onboardingGuide: getRequiredElement(
