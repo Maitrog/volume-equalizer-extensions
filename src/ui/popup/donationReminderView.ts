@@ -31,6 +31,7 @@ export const createDonationReminderView = (deps: {
     showDonationReminder: (nextReminderAt) => {
       if (isDonationReminderDue(nextReminderAt, now())) {
         deps.modal.style.display = "block";
+        deps.closeButton.focus();
       }
     },
   };

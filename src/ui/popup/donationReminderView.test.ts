@@ -13,7 +13,10 @@ afterEach(() => vi.unstubAllGlobals());
 
 test("shows only when the stored reminder is due", () => {
   const modal = { style: { display: "none" } } as HTMLElement;
-  const closeButton = { addEventListener: vi.fn() } as unknown as HTMLElement;
+  const closeButton = {
+    addEventListener: vi.fn(),
+    focus: vi.fn(),
+  } as unknown as HTMLElement;
   const view = createDonationReminderView({
     modal,
     closeButton,
@@ -24,6 +27,7 @@ test("shows only when the stored reminder is due", () => {
   expect(modal.style.display).toBe("none");
   view.showDonationReminder(1_000);
   expect(modal.style.display).toBe("block");
+  expect(closeButton.focus).toHaveBeenCalledOnce();
 });
 
 test("dismisses and schedules the next reminder", async () => {
