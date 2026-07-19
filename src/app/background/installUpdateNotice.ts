@@ -1,3 +1,4 @@
+import { getNextDonationReminderAt } from "../../domains/donation/donationReminder";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface InstallUpdateDetails {
@@ -5,7 +6,9 @@ export interface InstallUpdateDetails {
 }
 
 export const prepareInstallUpdateNotice = async (
-  details: InstallUpdateDetails
+  details: InstallUpdateDetails,
+  now = Date.now(),
+  random = Math.random(),
 ): Promise<void> => {
   if (!["install", "update"].includes(details.reason)) return;
 
@@ -14,5 +17,6 @@ export const prepareInstallUpdateNotice = async (
       reason: details.reason,
       version: chrome.runtime.getManifest().version,
     },
+    [STORAGE_KEYS.DONATION_REMINDER_AT]: getNextDonationReminderAt(now, random),
   });
 };

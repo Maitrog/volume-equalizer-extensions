@@ -14,6 +14,7 @@ export const STORAGE_KEYS = {
   UI_LANGUAGE: "uiLanguage",
   SHORTCUTS: "shortcuts",
   INSTALL_UPDATE_NOTICE: "installUpdateNotice",
+  DONATION_REMINDER_AT: "donationReminderAt",
   TOOLKIT_WINDOW_ID: "toolkitWindowId",
   TOOLKIT_WINDOW_TAB_IDS: "toolkitWindowTabIds",
   TOOLKIT_WINDOW_ACTIVE_TAB_ID: "toolkitWindowActiveTabId",

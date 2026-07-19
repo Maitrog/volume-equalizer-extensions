@@ -11,6 +11,7 @@ const CONSTANT_STORAGE_KEYS = [
   STORAGE_KEYS.UI_LANGUAGE,
   STORAGE_KEYS.SHORTCUTS,
   STORAGE_KEYS.INSTALL_UPDATE_NOTICE,
+  STORAGE_KEYS.DONATION_REMINDER_AT,
 ] as const;
 
 export const clearUnusedStorage = async (): Promise<void> => {
