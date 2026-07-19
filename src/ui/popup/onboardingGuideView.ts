@@ -172,7 +172,6 @@ export const createOnboardingGuideView = (deps: {
   };
   const title = getPart<HTMLHeadingElement>("#guide-title");
   const content = getPart<HTMLDivElement>(".guide-content");
-  const progress = getPart<HTMLDivElement>(".guide-progress");
   const card = getPart<HTMLElement>(".guide-card");
   const spotlight = getPart<HTMLDivElement>(".guide-spotlight");
   const backButton = getPart<HTMLButtonElement>("[data-guide-action='back']");
@@ -265,7 +264,7 @@ export const createOnboardingGuideView = (deps: {
   };
 
   const positionSpotlight = (target: HTMLElement): void => {
-    const padding = 6;
+    const padding = 3;
     const rect = target.getBoundingClientRect();
     const focus = {
       left: Math.max(0, rect.left - padding),
@@ -315,9 +314,6 @@ export const createOnboardingGuideView = (deps: {
     const navigation = getGuideNavigation(currentIndex);
     deps.root.classList.toggle("card-mode", screen.kind !== "spotlight");
     title.textContent = deps.getMessage(screen.titleKey);
-    progress.textContent = `${screen.stage}/8${
-      screen.substep ? ` · ${screen.substep[0]}/${screen.substep[1]}` : ""
-    }`;
     backButton.hidden = !navigation.canGoBack;
     skipButton.hidden = !navigation.canSkip;
     backButton.textContent = deps.getMessage("guide_back");

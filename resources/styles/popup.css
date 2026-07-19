@@ -762,6 +762,7 @@ button:disabled:active {
 
 .guide-spotlight {
   position: absolute;
+  box-sizing: border-box;
   border: 2px solid var(--accent-mid);
   border-radius: 8px;
   box-shadow: 0 0 18px var(--accent-mid);
@@ -827,11 +828,6 @@ button:disabled:active {
 
 .guide-shortcut kbd {
   color: var(--text);
-}
-
-.guide-progress {
-  color: var(--text-placeholder);
-  font-size: 12px;
 }
 
 .guide-actions {
