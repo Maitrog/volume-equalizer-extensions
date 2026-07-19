@@ -409,7 +409,7 @@ export const createPopupApp = ({
       autostart: elements.addToAutostartWhitelistButton,
       windowMode: elements.windowModeButton,
       equalizer: elements.equalizerCurveContainer,
-      volume: elements.masterVolume,
+      volume: elements.volumeControlCard,
       presets: elements.presetControlsCard,
     },
     sourceLanguageSelect: elements.languageSelect,

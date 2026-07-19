@@ -89,6 +89,7 @@ export interface PopupElements {
   installUpdateNoticeModal: HTMLDivElement;
   installUpdateNoticeClose: HTMLButtonElement;
   onboardingGuide: HTMLDivElement;
+  volumeControlCard: HTMLElement;
 }
 
 export const getPopupElements = (document: Document): PopupElements => ({
@@ -368,4 +369,9 @@ export const getPopupElements = (document: Document): PopupElements => ({
     "onboarding-guide",
     HTMLDivElement,
   ),
+  volumeControlCard: getRequiredElement(
+    document,
+    "volume-control-card",
+    HTMLElement
+  )
 });
