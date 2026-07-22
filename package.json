@@ -8,7 +8,7 @@
     "test": "vitest run",
     "build": "node tools/buildExtension.mjs",
     "prezip": "npm run build && node -e \"require('node:fs').mkdirSync('build/Release',{recursive:true})\"",
-    "zip": "bestzip ./build/Release/eq-toolkit_v1.8.0_unpacked.zip dist/**"
+    "zip": "bestzip ./build/Release/eq-toolkit_v2.0.0_unpacked.zip dist/**"
   },
   "devDependencies": {
     "@types/node": "^26.1.0",
