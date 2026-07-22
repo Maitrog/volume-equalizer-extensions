@@ -11,10 +11,6 @@ export interface PendingInstallUpdateNoticeOptions {
   isToolkitWindow: boolean;
 }
 
-export interface InstallUpdateNoticeView {
-  showInstallUpdateNotice(notice: InstallUpdateNotice | null): void;
-}
-
 export const getPendingInstallUpdateNotice = ({
   stored,
   currentVersion,
@@ -39,7 +35,7 @@ export const getPendingInstallUpdateNotice = ({
 export const createInstallUpdateNoticeView = (deps: {
   modal: HTMLElement;
   closeButton: HTMLElement;
-}): InstallUpdateNoticeView => {
+}) => {
   const closeInstallUpdateNotice = async (): Promise<void> => {
     deps.modal.style.display = "none";
     await chrome.storage.local.remove(STORAGE_KEYS.INSTALL_UPDATE_NOTICE);
@@ -50,7 +46,7 @@ export const createInstallUpdateNoticeView = (deps: {
   });
 
   return {
-    showInstallUpdateNotice: (notice) => {
+    showInstallUpdateNotice: (notice: InstallUpdateNotice | null) => {
       if (notice?.reason !== "update") return;
 
       deps.modal.style.display = "block";

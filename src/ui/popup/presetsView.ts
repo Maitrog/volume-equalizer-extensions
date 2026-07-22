@@ -9,14 +9,6 @@ import {
 import { validatePresetName } from "../../domains/presets/presetNameValidation";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
-export interface PresetsView {
-  addPresetToDropdown(name: string, options?: { deletable?: boolean }): void;
-  renderPresetNames(
-    userPresetNames: string[],
-    options?: { includeDefaultPresets?: boolean },
-  ): void;
-}
-
 export const createPresetsView = (deps: {
   dropdown: HTMLElement;
   toggle: HTMLElement;
@@ -36,7 +28,7 @@ export const createPresetsView = (deps: {
   saveLoadedFilters(filters: EqualizerPersistedFilter[]): Promise<void>;
   redraw(): void;
   refreshToolkitCaptureFilters(): void;
-}): PresetsView => {
+}) => {
   const addPresetToDropdown = (
     name: string,
     options: { deletable?: boolean } = {},

@@ -8,12 +8,6 @@ import {
 import { getAvailablePresetNames } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
-export interface AutostartView {
-  init(): Promise<void>;
-  refreshPresetSelects(): Promise<void>;
-  renderWhitelist(): Promise<void>;
-}
-
 const getActiveTab = async (): Promise<chrome.tabs.Tab | null> => {
   const [tab] = await chrome.tabs.query({
     active: true,
@@ -40,7 +34,7 @@ export const createAutostartView = (deps: {
   settingsError: HTMLElement;
   isToolkitWindow: boolean;
   getMessage(messageName: string): string;
-}): AutostartView => {
+}) => {
   const setError = (element: HTMLElement, messageName: string): void => {
     element.textContent = messageName ? deps.getMessage(messageName) : "";
     element.style.display = messageName ? "block" : "none";

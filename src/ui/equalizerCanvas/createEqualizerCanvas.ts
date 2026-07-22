@@ -1,9 +1,6 @@
 import type { EqualizerCanvasDimensions } from "../../domains/equalizer/equalizerState";
 import { createEqualizerTooltips } from "./equalizerTooltips";
-import {
-  attachEqualizerGestures,
-  type EqualizerGestureCleanup,
-} from "./equalizerGestures";
+import { attachEqualizerGestures } from "./equalizerGestures";
 import type { EqualizerCanvasRenderOptions } from "./types";
 import { drawEqualizer, resizeEqualizerCanvas } from "./draw/drawEqualizer";
 
@@ -13,16 +10,9 @@ export interface CreateEqualizerCanvasOptions extends EqualizerCanvasRenderOptio
   refreshToolkitCaptureFilters: () => void;
 }
 
-export interface EqualizerCanvasController {
-  draw: () => void;
-  resize: () => void;
-  getDimensions: () => EqualizerCanvasDimensions;
-  cleanup: EqualizerGestureCleanup;
-}
-
 export const createEqualizerCanvas = (
   options: CreateEqualizerCanvasOptions,
-): EqualizerCanvasController => {
+) => {
   const getDimensions = (): EqualizerCanvasDimensions => {
     return {
       canvasWidth: options.canvas.width,

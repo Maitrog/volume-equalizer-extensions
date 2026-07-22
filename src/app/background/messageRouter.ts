@@ -1,6 +1,5 @@
 import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
 import type { RuntimeMessage } from "../../infrastructure/chrome/runtimeMessages";
-import type { RuntimeMessageHandler } from "../../infrastructure/chrome/runtimeMessaging";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
 import type { CapturedTabsResult } from "./windowModeCoordinator";
@@ -9,6 +8,12 @@ interface BackgroundRuntimeMessage extends RuntimeMessage {
   message?: unknown;
   tabId?: number;
 }
+
+type RuntimeMessageHandler = (
+  message: BackgroundRuntimeMessage,
+  sender: chrome.runtime.MessageSender,
+  sendResponse: (response?: unknown) => void,
+) => boolean | void;
 
 export interface RuntimeMessageHandlerDependencies {
   applyAutostartForTab: (
@@ -26,7 +31,7 @@ export const createRuntimeMessageHandler = ({
   clearUnusedStorage,
   getCapturedTabs,
   toggleWindowMode,
-}: RuntimeMessageHandlerDependencies): RuntimeMessageHandler<BackgroundRuntimeMessage> => {
+}: RuntimeMessageHandlerDependencies): RuntimeMessageHandler => {
   return (request, sender, response) => {
     if (request.method === RUNTIME_MESSAGES.LOG) {
       console.log(request.message);

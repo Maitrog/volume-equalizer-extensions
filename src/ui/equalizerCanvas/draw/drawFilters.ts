@@ -9,9 +9,7 @@ import {
 } from "../../../domains/equalizer/equalizerState";
 import type { ThemeColors } from "../../../domains/theme/themeColors";
 import type { EqualizerCanvasRenderOptions } from "../types";
-import { drawHighpassFilter } from "./drawHighpassFilter";
-import { drawLowpassFilter } from "./drawLowpassFilter";
-import { drawPeakingFilter } from "./drawPeakingFilter";
+import { drawBiquadFilter } from "./drawBiquadFilter";
 
 const drawTypedPoint = (
   ctx: CanvasRenderingContext2D,
@@ -80,38 +78,48 @@ export const drawFilter = ({
   const highpassPoint = state.getHighpassPoint();
 
   if (highpassPoint) {
-    drawHighpassFilter({
+    drawBiquadFilter({
       canvas,
       ctx,
       audioContext,
+      type: "highpass",
       freq: xToFrequency(highpassPoint.x, canvasWidth),
       q: ensureQFactor(highpassPoint.q),
-      colors,
+      minDb: -80,
+      strokeStyle: colors.highpassFilterColor,
     });
   }
 
   state.getPoints().forEach((point) => {
-    drawPeakingFilter({
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+    gradient.addColorStop(0, colors.accentStart);
+    gradient.addColorStop(0.5, colors.accentMid);
+    gradient.addColorStop(1, colors.accentEnd);
+
+    drawBiquadFilter({
       canvas,
       ctx,
       audioContext,
+      type: "peaking",
       freq: xToFrequency(point.x, canvasWidth),
       q: ensureQFactor(point.q),
-      gainDb: yToDb(point.y, canvas.height),
-      colors,
+      gain: yToDb(point.y, canvas.height),
+      strokeStyle: gradient,
     });
   });
 
   const lowpassPoint = state.getLowpassPoint();
 
   if (lowpassPoint) {
-    drawLowpassFilter({
+    drawBiquadFilter({
       canvas,
       ctx,
       audioContext,
+      type: "lowpass",
       freq: xToFrequency(lowpassPoint.x, canvasWidth),
       q: ensureQFactor(lowpassPoint.q),
-      colors,
+      minDb: -80,
+      strokeStyle: colors.lowpassFilterColor,
     });
   }
 };

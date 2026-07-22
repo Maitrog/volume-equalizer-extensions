@@ -25,7 +25,6 @@ import { createAutostartView } from "../../ui/popup/autostartView";
 import {
   createControlsView,
   formatGainValue,
-  type ControlsView,
 } from "../../ui/popup/controlsView";
 import {
   createInstallUpdateNoticeView,
@@ -33,13 +32,8 @@ import {
 } from "../../ui/popup/installUpdateNoticeView";
 import { createDonationReminderView } from "../../ui/popup/donationReminderView";
 import { createOnboardingGuideView } from "../../ui/popup/onboardingGuideView";
-import { createPresetsView, type PresetsView } from "../../ui/popup/presetsView";
-import { createSettingsView, type SettingsView } from "../../ui/popup/settingsView";
-
-export interface PopupApp {
-  start(): Promise<void>;
-  resize(): void;
-}
+import { createPresetsView } from "../../ui/popup/presetsView";
+import { createSettingsView } from "../../ui/popup/settingsView";
 
 export interface PopupAppDependencies {
   elements: PopupElements;
@@ -60,7 +54,7 @@ export const createPopupApp = ({
   equalizerState,
   localization,
   readThemeColors,
-}: PopupAppDependencies): PopupApp => {
+}: PopupAppDependencies) => {
   const ctx = elements.eqCanvas.getContext("2d", { alpha: true });
   if (!ctx) {
     throw new Error("Equalizer canvas context is unavailable");
@@ -73,9 +67,9 @@ export const createPopupApp = ({
   spectrumCtx.imageSmoothingEnabled = true;
   spectrumCtx.imageSmoothingQuality = "high";
 
-  let controlsView: ControlsView;
-  let presetsView: PresetsView;
-  let settingsView: SettingsView;
+  let controlsView: ReturnType<typeof createControlsView>;
+  let presetsView: ReturnType<typeof createPresetsView>;
+  let settingsView: ReturnType<typeof createSettingsView>;
 
   const getColors = (): ThemeColors => readThemeColors(document.documentElement);
 

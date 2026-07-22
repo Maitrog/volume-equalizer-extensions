@@ -1,8 +1,3 @@
-export interface ControlsView {
-  setEnableButtonClass(enabled: boolean): void;
-  setMuteButtonClass(muted: boolean): void;
-}
-
 export const formatGainValue = (value: number): string => `${value.toFixed(1)} dB`;
 
 export const createControlsView = (deps: {
@@ -20,7 +15,7 @@ export const createControlsView = (deps: {
   onToggleMute(): Promise<void>;
   onWindowMode(): Promise<void>;
   onMuteStateApplied(): void;
-}): ControlsView => {
+}) => {
   deps.changeEqButton.addEventListener("click", () => {
     if (deps.isToolkitWindow) return;
     void deps.onToggleEqualizer();
@@ -45,11 +40,11 @@ export const createControlsView = (deps: {
   });
 
   return {
-    setEnableButtonClass: (enabled) => {
+    setEnableButtonClass: (enabled: boolean) => {
       deps.changeEqButton.classList.toggle("change-eq-active", enabled);
     },
 
-    setMuteButtonClass: (muted) => {
+    setMuteButtonClass: (muted: boolean) => {
       deps.volumeMuteButton.className = muted ? "volume-mute-active" : "volume-mute";
       deps.onMuteStateApplied();
     },

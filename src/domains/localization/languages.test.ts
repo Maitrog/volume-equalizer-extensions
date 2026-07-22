@@ -2,6 +2,7 @@ import {
   AVAILABLE_LANGUAGE_CODES,
   DEFAULT_LANGUAGE,
   getBrowserLanguage,
+  getLanguageName,
 } from "./languages";
 
 const setNavigatorLanguage = (language: string): void => {
@@ -38,4 +39,12 @@ describe("getBrowserLanguage", () => {
     expect(AVAILABLE_LANGUAGE_CODES).not.toContain("pt");
     expect(getBrowserLanguage()).toBe(DEFAULT_LANGUAGE);
   });
+});
+
+test("uses the native display name for Chrome locale codes", () => {
+  const expected = new Intl.DisplayNames(["en"], { type: "language" }).of(
+    "pt-PT",
+  );
+
+  expect(getLanguageName("pt_PT")).toBe(expected);
 });

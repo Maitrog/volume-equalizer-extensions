@@ -1,9 +1,9 @@
 import {
   AVAILABLE_LANGUAGE_CODES,
-  CHROME_I18N_LOCALES,
   DEFAULT_LANGUAGE,
   LANGUAGE_KEY,
   getBrowserLanguage,
+  getLanguageName,
 } from "./languages";
 
 type LocaleMessages = Record<string, { message?: string }>;
@@ -160,7 +160,7 @@ export const createLocalizationService = (): LocalizationService => {
     AVAILABLE_LANGUAGE_CODES.forEach((code) => {
       const option = root.createElement("option");
       option.value = code;
-      option.textContent = CHROME_I18N_LOCALES.get(code) ?? code;
+      option.textContent = getLanguageName(code);
       select.appendChild(option);
     });
     select.value = currentLanguage;

@@ -157,10 +157,6 @@ export const getNextFocusIndex = (
     : (currentIndex + 1) % length;
 };
 
-export interface OnboardingGuideView {
-  start(): Promise<void>;
-}
-
 export const createOnboardingGuideView = (deps: {
   root: HTMLElement;
   inertElements: HTMLElement[];
@@ -173,7 +169,7 @@ export const createOnboardingGuideView = (deps: {
   setTheme(theme: string): Promise<void>;
   setPointCount(count: string): Promise<void>;
   onComplete(): Promise<void>;
-}): OnboardingGuideView => {
+}) => {
   const getPart = <T extends Element>(selector: string): T => {
     const element = deps.root.querySelector<T>(selector);
     if (!element) throw new Error(`Missing onboarding element: ${selector}`);

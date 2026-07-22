@@ -14,12 +14,3 @@ export interface EqualizerCanvasPaintOptions {
   ctx: CanvasRenderingContext2D;
   getColors: () => ThemeColors;
 }
-
-export interface EqualizerFilterRenderOptions {
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  audioContext: BaseAudioContext;
-  freq: number;
-  q?: number;
-  colors: ThemeColors;
-}

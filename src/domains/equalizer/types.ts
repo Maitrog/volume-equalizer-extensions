@@ -6,12 +6,3 @@ export interface EqualizerFilter {
   q: number;
   type: EqualizerFilterType;
 }
-
-export interface EqualizerPoint {
-  x: number;
-  y: number;
-  freq: number;
-  gain: number;
-  q: number;
-  type: EqualizerFilterType;
-}

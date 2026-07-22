@@ -12,10 +12,6 @@ export interface CapturedTabsResponse {
   activeTabId: number | null;
 }
 
-export interface CapturedTabsView {
-  render(): Promise<void>;
-}
-
 const getCapturedTabs = (): Promise<CapturedTabsResponse> => {
   return (chrome.runtime.sendMessage({
     method: "getCapturedTabs",
@@ -30,7 +26,7 @@ export const createCapturedTabsView = (deps: {
   isToolkitWindow: boolean;
   onSelectTab(tabId: number): Promise<void>;
   onStopCapture(tabId: number): Promise<void>;
-}): CapturedTabsView => {
+}) => {
   const render = async (): Promise<void> => {
     if (!deps.isToolkitWindow) return;
 

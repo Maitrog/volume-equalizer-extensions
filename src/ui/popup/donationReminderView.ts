@@ -4,16 +4,12 @@ import {
 } from "../../domains/donation/donationReminder";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
-export interface DonationReminderView {
-  showDonationReminder(nextReminderAt: unknown): void;
-}
-
 export const createDonationReminderView = (deps: {
   modal: HTMLElement;
   closeButton: HTMLElement;
   now?: () => number;
   random?: () => number;
-}): DonationReminderView => {
+}) => {
   const now = deps.now ?? Date.now;
   const random = deps.random ?? Math.random;
 
@@ -28,7 +24,7 @@ export const createDonationReminderView = (deps: {
   });
 
   return {
-    showDonationReminder: (nextReminderAt) => {
+    showDonationReminder: (nextReminderAt: unknown) => {
       if (isDonationReminderDue(nextReminderAt, now())) {
         deps.modal.style.display = "block";
         deps.closeButton.focus();

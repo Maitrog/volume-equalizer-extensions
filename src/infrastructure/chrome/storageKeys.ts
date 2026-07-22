@@ -1,5 +1,3 @@
-export type StorageKey = string;
-
 type DynamicStorageKeyPart = number | string;
 
 export const STORAGE_KEYS = {

@@ -19,15 +19,6 @@ type ThemeName = "dark" | "light";
 
 const DEFAULT_THEME: ThemeName = "dark";
 
-export interface SettingsView {
-  init(): Promise<void>;
-  applyTheme(theme: unknown): ThemeName;
-  setTheme(theme: unknown): Promise<void>;
-  setPointCount(count: unknown): Promise<void>;
-  updatePointCountSelect(count: unknown): void;
-  getShortcutSettings(): ShortcutMap;
-}
-
 const isThemeName = (theme: unknown): theme is ThemeName => {
   return theme === "dark" || theme === "light";
 };
@@ -70,7 +61,7 @@ export const createSettingsView = (deps: {
   refreshToolkitCaptureFilters(): void;
   saveCurrentFilters(): Promise<void>;
   refreshDynamicContent(): Promise<void>;
-}): SettingsView => {
+}) => {
   let pendingPointCount: number | null = null;
   let shortcutSettings: ShortcutMap = resolveShortcuts(null);
 

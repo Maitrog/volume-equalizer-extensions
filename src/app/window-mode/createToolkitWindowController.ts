@@ -8,10 +8,7 @@ import {
 } from "../../domains/audio/biquadChain";
 import { dbToGain } from "../../domains/equalizer/equalizerMath";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import {
-  createCapturedTabsView,
-  type CapturedTabsView,
-} from "../../ui/popup/capturedTabsView";
+import { createCapturedTabsView } from "../../ui/popup/capturedTabsView";
 
 interface ToolkitCapture {
   streamId: string;
@@ -40,21 +37,6 @@ const toBiquadInput = (filter: EqualizerPersistedFilter) => ({
   type: filter.type,
 });
 
-export interface ToolkitWindowController {
-  readonly isToolkitWindow: boolean;
-  getCurrentTabId(): Promise<number | null>;
-  shouldShowToolkitWindowNotice(currentTabId: number | null): Promise<boolean>;
-  showToolkitWindowNotice(): void;
-  loadTabSettings(tabId: number | null): Promise<void>;
-  startTabCapture(): Promise<void>;
-  renderCapturedTabs(): Promise<void>;
-  refreshCaptureFilters(tabId?: number | null): void;
-  applyCaptureSettings(tabId?: number | null): void;
-  stopCapturedTabCapture(tabId: number): Promise<void>;
-  stopTabCapture(): void;
-  handleStorageChange(changes: Record<string, chrome.storage.StorageChange>): Promise<void>;
-}
-
 export const createToolkitWindowController = (deps: {
   body: HTMLElement;
   capturedTabs: HTMLElement;
@@ -76,11 +58,11 @@ export const createToolkitWindowController = (deps: {
   getMessage(messageName: string): string;
   onSpectrumMeta?(meta: ToolkitSpectrumMeta): void;
   onSpectrumFrame?(buffer: Float32Array | null): void;
-}): ToolkitWindowController => {
+}) => {
   const isToolkitWindow = new URLSearchParams(window.location.search).get("mode") === "window";
   let activeTabId: number | null = null;
   const captures = new Map<string, ToolkitCapture>();
-  let capturedTabsView: CapturedTabsView | null = null;
+  let capturedTabsView: ReturnType<typeof createCapturedTabsView> | null = null;
   let spectrumEnabled = false;
   let spectrumTimer: ReturnType<typeof setInterval> | null = null;
   let spectrumTabId: string | null = null;
@@ -533,7 +515,9 @@ export const createToolkitWindowController = (deps: {
     applyCaptureSettings,
     stopCapturedTabCapture,
     stopTabCapture,
-    handleStorageChange: async (changes) => {
+    handleStorageChange: async (
+      changes: Record<string, chrome.storage.StorageChange>,
+    ) => {
       if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]) {
         activeTabId =
           (changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID].newValue as
