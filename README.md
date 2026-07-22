@@ -3,6 +3,8 @@ Get the sound you want with EQ Toolkit. This tool lets you adjust different part
 
 Works with ANY audio on ANY website :)
 
+<img width="678" height="487" alt="image" src="https://github.com/user-attachments/assets/83a9c9aa-2791-496f-9690-b08a6b6b101b" />
+
 ## Features
 - Audio amplification.
 - Mute audio on the tab.
