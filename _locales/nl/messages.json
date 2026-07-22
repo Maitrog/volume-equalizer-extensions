@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio-equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit is een gratis open-source-extensie voor audiobediening."
+    "message": "Audio-equalizer en volumebooster voor elk tabblad: boost bass, stem geluid af, sla presets op en demp tabs."
   },
   "gain_slider_label": {
     "message": "Versterking:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Preset opslaan"
   },
-  "enter_preset_name": {
-    "message": "Voer naam in"
-  },
   "settings_title": {
     "message": "Instellingen"
   },
   "presets_settings_title": {
     "message": "Voorinstellingen"
   },
+  "hide_default_presets_label": {
+    "message": "Standaardpresets verbergen"
+  },
   "community_settings_title": {
     "message": "Community"
   },
   "help_with_translation_label": {
     "message": "Help met vertalen:"
+  },
+  "translators_label": {
+    "message": "Vertalers:"
   },
   "source_code_label": {
     "message": "Broncode:"
@@ -48,7 +51,7 @@
     "message": "Voorinstellingen exporteren"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spectrumvisualisatie inschakelen; pagina opnieuw laden vereist (hoge CPU-belasting)"
+    "message": "Spectrumvisualisatie inschakelen"
   },
   "points_count_setting_option": {
     "message": "Aantal EQ-punten"
@@ -78,7 +81,7 @@
     "message": "De equalizer is al geopend in een venster"
   },
   "support_me": {
-    "message": "Steun mij"
+    "message": "Steun mij:"
   },
   "settings_button_tooltip": {
     "message": "Instellingen"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Deze sneltoets wordt al door een andere opdracht gebruikt."
+  },
+  "global_controls_title": {
+    "message": "Algemene bediening"
+  },
+  "preset_controls_title": {
+    "message": "Voorinstellingsbediening"
+  },
+  "save": {
+    "message": "Opslaan"
+  },
+  "save_preset_modal_title": {
+    "message": "Voorinstelling opslaan"
+  },
+  "preset_name_label": {
+    "message": "Naam voorinstelling"
+  },
+  "preset_name_empty_error": {
+    "message": "Voer een naam voor de voorinstelling in."
+  },
+  "preset_name_reserved_error": {
+    "message": "Deze naam is gereserveerd voor een ingebouwde voorinstelling."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Er bestaat al een voorinstelling met deze naam."
+  },
+  "guide_back": {
+    "message": "Terug"
+  },
+  "guide_next": {
+    "message": "Volgende"
+  },
+  "guide_skip": {
+    "message": "Overslaan"
+  },
+  "guide_finish": {
+    "message": "Voltooien"
+  },
+  "guide_theme_dark": {
+    "message": "Donker"
+  },
+  "guide_theme_light": {
+    "message": "Licht"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Je kunt deze sneltoetsen wijzigen in Instellingen."
+  },
+  "guide_canvas_hint": {
+    "message": "Sleep de punten om de equalizer in te stellen. Wijzig het aantal punten in Instellingen."
+  },
+  "guide_volume_hint": {
+    "message": "Gebruik deze schuifregelaar om het algemene volume aan te passen."
+  },
+  "guide_presets_hint": {
+    "message": "Sla hier de huidige instelling op of pas een preset toe."
+  },
+  "donation_reminder_title": {
+    "message": "Steun de ontwikkelaar"
+  },
+  "donation_reminder_message": {
+    "message": "Als deze extensie nuttig voor je is, kun je de ontwikkeling steunen."
+  },
+  "donation_reminder_link": {
+    "message": "Steun de ontwikkeling"
   }
 }

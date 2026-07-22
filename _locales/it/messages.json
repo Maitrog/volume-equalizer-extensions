@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizzatore audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit è un'estensione gratuita e open source per controllare l'audio."
+    "message": "Equalizzatore audio e booster volume per ogni scheda: potenzia i bassi, regola il suono e salva preset."
   },
   "gain_slider_label": {
     "message": "Amplificazione:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Salva preset"
   },
-  "enter_preset_name": {
-    "message": "Inserisci nome"
-  },
   "settings_title": {
     "message": "Impostazioni"
   },
   "presets_settings_title": {
     "message": "Presets"
   },
+  "hide_default_presets_label": {
+    "message": "Nascondi preset predefiniti"
+  },
   "community_settings_title": {
     "message": "Community"
   },
   "help_with_translation_label": {
     "message": "Aiuta con la traduzione:"
+  },
+  "translators_label": {
+    "message": "Traduttori:"
   },
   "source_code_label": {
     "message": "Codice sorgente:"
@@ -48,7 +51,7 @@
     "message": "Esporta preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Abilita la visualizzazione dello spettro, è necessario ricaricare la pagina (carico CPU elevato)"
+    "message": "Abilita la visualizzazione dello spettro"
   },
   "points_count_setting_option": {
     "message": "Numero di punti EQ"
@@ -78,7 +81,7 @@
     "message": "L'equalizzatore è già aperto in una finestra"
   },
   "support_me": {
-    "message": "Sostienimi"
+    "message": "Sostienimi:"
   },
   "settings_button_tooltip": {
     "message": "Impostazioni"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Questa scorciatoia è già usata da un altro comando."
+  },
+  "global_controls_title": {
+    "message": "Controlli globali"
+  },
+  "preset_controls_title": {
+    "message": "Controlli delle preimpostazioni"
+  },
+  "save": {
+    "message": "Salva"
+  },
+  "save_preset_modal_title": {
+    "message": "Salva preimpostazione"
+  },
+  "preset_name_label": {
+    "message": "Nome preimpostazione"
+  },
+  "preset_name_empty_error": {
+    "message": "Inserisci un nome per la preimpostazione."
+  },
+  "preset_name_reserved_error": {
+    "message": "Questo nome è riservato a una preimpostazione integrata."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Esiste già una preimpostazione con questo nome."
+  },
+  "guide_back": {
+    "message": "Indietro"
+  },
+  "guide_next": {
+    "message": "Avanti"
+  },
+  "guide_skip": {
+    "message": "Salta"
+  },
+  "guide_finish": {
+    "message": "Fine"
+  },
+  "guide_theme_dark": {
+    "message": "Scuro"
+  },
+  "guide_theme_light": {
+    "message": "Chiaro"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Puoi modificare queste scorciatoie nelle Impostazioni."
+  },
+  "guide_canvas_hint": {
+    "message": "Trascina i punti per regolare l’equalizzatore. Modificane il numero nelle Impostazioni."
+  },
+  "guide_volume_hint": {
+    "message": "Usa questo cursore per regolare il volume generale."
+  },
+  "guide_presets_hint": {
+    "message": "Salva la configurazione corrente o applica un preset qui."
+  },
+  "donation_reminder_title": {
+    "message": "Sostieni lo sviluppatore"
+  },
+  "donation_reminder_message": {
+    "message": "Se questa estensione ti è utile, puoi sostenerne lo sviluppo."
+  },
+  "donation_reminder_link": {
+    "message": "Sostieni lo sviluppo"
   }
 }

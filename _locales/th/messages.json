@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - ตัวปรับสมดุลเสียง"
   },
   "extDescription": {
-    "message": "EQ Toolkit เป็นส่วนขยายฟรีและโอเพนซอร์สสำหรับควบคุมเสียง"
+    "message": "อีควอไลเซอร์และตัวเพิ่มเสียงสำหรับทุกแท็บ: เพิ่มเบส ปรับเสียง บันทึกพรีเซ็ต ปิดเสียงแท็บ"
   },
   "gain_slider_label": {
     "message": "การขยายเสียง:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "บันทึกพรีเซ็ต"
   },
-  "enter_preset_name": {
-    "message": "ใส่ชื่อ"
-  },
   "settings_title": {
     "message": "การตั้งค่า"
   },
   "presets_settings_title": {
     "message": "พรีเซ็ต"
   },
+  "hide_default_presets_label": {
+    "message": "ซ่อนพรีเซ็ตเริ่มต้น"
+  },
   "community_settings_title": {
     "message": "ชุมชน"
   },
   "help_with_translation_label": {
     "message": "ช่วยแปล:"
+  },
+  "translators_label": {
+    "message": "ผู้แปล:"
   },
   "source_code_label": {
     "message": "ซอร์สโค้ด:"
@@ -48,7 +51,7 @@
     "message": "ส่งออกพรีเซ็ต"
   },
   "enable_spectrum_setting_option": {
-    "message": "เปิดใช้งานการแสดงผลสเปกตรัม ต้องโหลดหน้าใหม่ (ใช้ CPU สูง)"
+    "message": "เปิดใช้งานการแสดงผลสเปกตรัม"
   },
   "points_count_setting_option": {
     "message": "จำนวนจุด EQ"
@@ -78,7 +81,7 @@
     "message": "อีควอไลเซอร์เปิดอยู่ในหน้าต่างแล้ว"
   },
   "support_me": {
-    "message": "สนับสนุนฉัน"
+    "message": "สนับสนุนฉัน:"
   },
   "settings_button_tooltip": {
     "message": "การตั้งค่า"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "ปุ่มลัดนี้ถูกใช้โดยคำสั่งอื่นแล้ว"
+  },
+  "global_controls_title": {
+    "message": "การควบคุมส่วนกลาง"
+  },
+  "preset_controls_title": {
+    "message": "การควบคุมค่าที่ตั้งไว้"
+  },
+  "save": {
+    "message": "บันทึก"
+  },
+  "save_preset_modal_title": {
+    "message": "บันทึกค่าที่ตั้งไว้"
+  },
+  "preset_name_label": {
+    "message": "ชื่อค่าที่ตั้งไว้"
+  },
+  "preset_name_empty_error": {
+    "message": "ป้อนชื่อค่าที่ตั้งไว้"
+  },
+  "preset_name_reserved_error": {
+    "message": "ชื่อนี้สงวนไว้สำหรับค่าที่ตั้งไว้ในตัว"
+  },
+  "preset_name_duplicate_error": {
+    "message": "มีค่าที่ตั้งไว้ชื่อนี้อยู่แล้ว"
+  },
+  "guide_back": {
+    "message": "ย้อนกลับ"
+  },
+  "guide_next": {
+    "message": "ถัดไป"
+  },
+  "guide_skip": {
+    "message": "ข้าม"
+  },
+  "guide_finish": {
+    "message": "เสร็จสิ้น"
+  },
+  "guide_theme_dark": {
+    "message": "มืด"
+  },
+  "guide_theme_light": {
+    "message": "สว่าง"
+  },
+  "guide_shortcuts_hint": {
+    "message": "คุณเปลี่ยนปุ่มลัดเหล่านี้ได้ในการตั้งค่า"
+  },
+  "guide_canvas_hint": {
+    "message": "ลากจุดเพื่อปรับอีควอไลเซอร์ และเปลี่ยนจำนวนจุดได้ในการตั้งค่า"
+  },
+  "guide_volume_hint": {
+    "message": "ใช้แถบเลื่อนนี้เพื่อปรับระดับเสียงโดยรวม"
+  },
+  "guide_presets_hint": {
+    "message": "บันทึกการตั้งค่าปัจจุบันหรือใช้ค่าที่ตั้งไว้ล่วงหน้าได้ที่นี่"
+  },
+  "donation_reminder_title": {
+    "message": "สนับสนุนนักพัฒนา"
+  },
+  "donation_reminder_message": {
+    "message": "หากส่วนขยายนี้มีประโยชน์ คุณสามารถสนับสนุนการพัฒนาได้"
+  },
+  "donation_reminder_link": {
+    "message": "สนับสนุนการพัฒนา"
   }
 }

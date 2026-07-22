@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit is a free and open-source extension that provides audio control."
+    "message": "Audio equalizer and volume booster for any tab: boost bass, tune sound, save presets, mute tabs, use shortcuts and auto-start."
   },
   "gain_slider_label": {
     "message": "Gain:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Save preset"
   },
-  "enter_preset_name": {
-    "message": "Enter name"
-  },
   "settings_title": {
     "message": "Settings"
   },
   "presets_settings_title": {
     "message": "Presets"
   },
+  "hide_default_presets_label": {
+    "message": "Hide default presets"
+  },
   "community_settings_title": {
     "message": "Community"
   },
   "help_with_translation_label": {
     "message": "Help with translation:"
+  },
+  "translators_label": {
+    "message": "Translators:"
   },
   "source_code_label": {
     "message": "Source code:"
@@ -48,7 +51,7 @@
     "message": "Export"
   },
   "enable_spectrum_setting_option": {
-    "message": "Enable spectrum visualisation, need to restart page (high CPU load)"
+    "message": "Enable spectrum visualisation"
   },
   "points_count_setting_option": {
     "message": "Number of EQ points"
@@ -78,7 +81,7 @@
     "message": "Equalizer is already open in a window"
   },
   "support_me": {
-    "message": "Support me"
+    "message": "Support me:"
   },
   "settings_button_tooltip": {
     "message": "Settings"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "This shortcut is already used by another command."
+  },
+  "global_controls_title": {
+    "message": "Global Controls"
+  },
+  "preset_controls_title": {
+    "message": "Preset Controls"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "save_preset_modal_title": {
+    "message": "Save preset"
+  },
+  "preset_name_label": {
+    "message": "Preset name"
+  },
+  "preset_name_empty_error": {
+    "message": "Enter a preset name."
+  },
+  "preset_name_reserved_error": {
+    "message": "This name is reserved for a built-in preset."
+  },
+  "preset_name_duplicate_error": {
+    "message": "A preset with this name already exists."
+  },
+  "guide_back": {
+    "message": "Back"
+  },
+  "guide_next": {
+    "message": "Next"
+  },
+  "guide_skip": {
+    "message": "Skip"
+  },
+  "guide_finish": {
+    "message": "Finish"
+  },
+  "guide_theme_dark": {
+    "message": "Dark"
+  },
+  "guide_theme_light": {
+    "message": "Light"
+  },
+  "guide_shortcuts_hint": {
+    "message": "You can change these shortcuts in Settings."
+  },
+  "guide_canvas_hint": {
+    "message": "Drag points to shape the equalizer. Change the number of points in Settings."
+  },
+  "guide_volume_hint": {
+    "message": "Use this slider to adjust the overall volume."
+  },
+  "guide_presets_hint": {
+    "message": "Save the current setup or apply a preset here."
+  },
+  "donation_reminder_title": {
+    "message": "Support the developer"
+  },
+  "donation_reminder_message": {
+    "message": "If this extension is useful to you, you can support its development."
+  },
+  "donation_reminder_link": {
+    "message": "Support development"
   }
 }

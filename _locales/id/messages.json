@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizer audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit adalah ekstensi gratis dan sumber terbuka untuk mengontrol audio."
+    "message": "Equalizer audio dan penguat volume untuk tab apa pun: boost bass, atur suara, simpan preset, mute tab."
   },
   "gain_slider_label": {
     "message": "Amplifikasi:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Simpan preset"
   },
-  "enter_preset_name": {
-    "message": "Masukkan nama"
-  },
   "settings_title": {
     "message": "Pengaturan"
   },
   "presets_settings_title": {
     "message": "Preset"
   },
+  "hide_default_presets_label": {
+    "message": "Sembunyikan preset bawaan"
+  },
   "community_settings_title": {
     "message": "Komunitas"
   },
   "help_with_translation_label": {
     "message": "Bantu terjemahan:"
+  },
+  "translators_label": {
+    "message": "Penerjemah:"
   },
   "source_code_label": {
     "message": "Kode sumber:"
@@ -48,7 +51,7 @@
     "message": "Ekspor preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Aktifkan visualisasi spektrum, perlu memuat ulang halaman (beban CPU tinggi)"
+    "message": "Aktifkan visualisasi spektrum"
   },
   "points_count_setting_option": {
     "message": "Jumlah titik EQ"
@@ -78,7 +81,7 @@
     "message": "Equalizer sudah terbuka di jendela"
   },
   "support_me": {
-    "message": "Dukung saya"
+    "message": "Dukung saya:"
   },
   "settings_button_tooltip": {
     "message": "Pengaturan"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Pintasan ini sudah digunakan oleh perintah lain."
+  },
+  "global_controls_title": {
+    "message": "Kontrol global"
+  },
+  "preset_controls_title": {
+    "message": "Kontrol preset"
+  },
+  "save": {
+    "message": "Simpan"
+  },
+  "save_preset_modal_title": {
+    "message": "Simpan preset"
+  },
+  "preset_name_label": {
+    "message": "Nama preset"
+  },
+  "preset_name_empty_error": {
+    "message": "Masukkan nama preset."
+  },
+  "preset_name_reserved_error": {
+    "message": "Nama ini disediakan untuk preset bawaan."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Preset dengan nama ini sudah ada."
+  },
+  "guide_back": {
+    "message": "Kembali"
+  },
+  "guide_next": {
+    "message": "Berikutnya"
+  },
+  "guide_skip": {
+    "message": "Lewati"
+  },
+  "guide_finish": {
+    "message": "Selesai"
+  },
+  "guide_theme_dark": {
+    "message": "Gelap"
+  },
+  "guide_theme_light": {
+    "message": "Terang"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Anda dapat mengubah pintasan ini di Pengaturan."
+  },
+  "guide_canvas_hint": {
+    "message": "Seret titik untuk mengatur equalizer. Ubah jumlah titik di Pengaturan."
+  },
+  "guide_volume_hint": {
+    "message": "Gunakan penggeser ini untuk menyesuaikan volume keseluruhan."
+  },
+  "guide_presets_hint": {
+    "message": "Simpan pengaturan saat ini atau terapkan preset di sini."
+  },
+  "donation_reminder_title": {
+    "message": "Dukung pengembang"
+  },
+  "donation_reminder_message": {
+    "message": "Jika ekstensi ini berguna, Anda dapat mendukung pengembangannya."
+  },
+  "donation_reminder_link": {
+    "message": "Dukung pengembangan"
   }
 }

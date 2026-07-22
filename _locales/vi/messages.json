@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Bộ cân bằng âm thanh"
   },
   "extDescription": {
-    "message": "EQ Toolkit là tiện ích mở rộng miễn phí và mã nguồn mở để điều khiển âm thanh."
+    "message": "Bộ cân bằng âm thanh và tăng âm lượng cho mọi thẻ: tăng bass, chỉnh âm, lưu preset, tắt tiếng thẻ."
   },
   "gain_slider_label": {
     "message": "Khuếch đại:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Lưu thiết lập trước"
   },
-  "enter_preset_name": {
-    "message": "Nhập tên"
-  },
   "settings_title": {
     "message": "Cài đặt"
   },
   "presets_settings_title": {
     "message": "Cấu hình sẵn"
   },
+  "hide_default_presets_label": {
+    "message": "Ẩn cấu hình sẵn mặc định"
+  },
   "community_settings_title": {
     "message": "Cộng đồng"
   },
   "help_with_translation_label": {
     "message": "Hỗ trợ dịch thuật:"
+  },
+  "translators_label": {
+    "message": "Người dịch:"
   },
   "source_code_label": {
     "message": "Mã nguồn:"
@@ -48,7 +51,7 @@
     "message": "Xuất preset"
   },
   "enable_spectrum_setting_option": {
-    "message": "Bật hiển thị phổ, cần tải lại trang (tốn CPU cao)"
+    "message": "Bật hiển thị phổ"
   },
   "points_count_setting_option": {
     "message": "Số điểm EQ"
@@ -78,7 +81,7 @@
     "message": "Bộ cân bằng đã được mở trong một cửa sổ"
   },
   "support_me": {
-    "message": "Hỗ trợ tôi"
+    "message": "Hỗ trợ tôi:"
   },
   "settings_button_tooltip": {
     "message": "Cài đặt"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Phím tắt này đã được lệnh khác sử dụng."
+  },
+  "global_controls_title": {
+    "message": "Điều khiển chung"
+  },
+  "preset_controls_title": {
+    "message": "Điều khiển cài đặt sẵn"
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "save_preset_modal_title": {
+    "message": "Lưu cài đặt sẵn"
+  },
+  "preset_name_label": {
+    "message": "Tên cài đặt sẵn"
+  },
+  "preset_name_empty_error": {
+    "message": "Nhập tên cài đặt sẵn."
+  },
+  "preset_name_reserved_error": {
+    "message": "Tên này được dành riêng cho cài đặt sẵn tích hợp."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Đã có cài đặt sẵn với tên này."
+  },
+  "guide_back": {
+    "message": "Quay lại"
+  },
+  "guide_next": {
+    "message": "Tiếp theo"
+  },
+  "guide_skip": {
+    "message": "Bỏ qua"
+  },
+  "guide_finish": {
+    "message": "Hoàn tất"
+  },
+  "guide_theme_dark": {
+    "message": "Tối"
+  },
+  "guide_theme_light": {
+    "message": "Sáng"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Bạn có thể đổi các phím tắt này trong phần Cài đặt."
+  },
+  "guide_canvas_hint": {
+    "message": "Kéo các điểm để chỉnh bộ cân bằng. Đổi số lượng điểm trong phần Cài đặt."
+  },
+  "guide_volume_hint": {
+    "message": "Dùng thanh trượt này để chỉnh âm lượng tổng thể."
+  },
+  "guide_presets_hint": {
+    "message": "Lưu thiết lập hiện tại hoặc áp dụng một cấu hình đặt trước tại đây."
+  },
+  "donation_reminder_title": {
+    "message": "Ủng hộ nhà phát triển"
+  },
+  "donation_reminder_message": {
+    "message": "Nếu tiện ích này hữu ích, bạn có thể ủng hộ việc phát triển."
+  },
+  "donation_reminder_link": {
+    "message": "Ủng hộ phát triển"
   }
 }

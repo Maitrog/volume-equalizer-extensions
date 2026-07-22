@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - オーディオイコライザー"
   },
   "extDescription": {
-    "message": "EQ Toolkit は、音声をコントロールできる無料のオープンソース拡張機能です。"
+    "message": "任意のタブで使える音声イコライザーと音量ブースター。低音強化、音質調整、プリセット保存、ミュート、ショートカットに対応。"
   },
   "gain_slider_label": {
     "message": "増幅"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "設定を保存"
   },
-  "enter_preset_name": {
-    "message": "名前を入力"
-  },
   "settings_title": {
     "message": "設定"
   },
   "presets_settings_title": {
     "message": "プリセット"
   },
+  "hide_default_presets_label": {
+    "message": "デフォルトプリセットを非表示"
+  },
   "community_settings_title": {
     "message": "コミュニティ"
   },
   "help_with_translation_label": {
     "message": "翻訳に協力:"
+  },
+  "translators_label": {
+    "message": "翻訳者:"
   },
   "source_code_label": {
     "message": "ソースコード:"
@@ -48,7 +51,7 @@
     "message": "プリセットをエクスポート"
   },
   "enable_spectrum_setting_option": {
-    "message": "スペクトラム可視化を有効にする（ページの再読み込みが必要・CPU負荷が高い）"
+    "message": "スペクトラム可視化を有効にする"
   },
   "points_count_setting_option": {
     "message": "EQポイント数"
@@ -78,7 +81,7 @@
     "message": "イコライザーはすでにウィンドウで開いています"
   },
   "support_me": {
-    "message": "私を支援する"
+    "message": "私を支援する:"
   },
   "settings_button_tooltip": {
     "message": "設定"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "このショートカットは別のコマンドですでに使用されています。"
+  },
+  "global_controls_title": {
+    "message": "グローバルコントロール"
+  },
+  "preset_controls_title": {
+    "message": "プリセットコントロール"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_preset_modal_title": {
+    "message": "プリセットを保存"
+  },
+  "preset_name_label": {
+    "message": "プリセット名"
+  },
+  "preset_name_empty_error": {
+    "message": "プリセット名を入力してください。"
+  },
+  "preset_name_reserved_error": {
+    "message": "この名前は組み込みプリセット用に予約されています。"
+  },
+  "preset_name_duplicate_error": {
+    "message": "この名前のプリセットは既に存在します。"
+  },
+  "guide_back": {
+    "message": "戻る"
+  },
+  "guide_next": {
+    "message": "次へ"
+  },
+  "guide_skip": {
+    "message": "スキップ"
+  },
+  "guide_finish": {
+    "message": "完了"
+  },
+  "guide_theme_dark": {
+    "message": "ダーク"
+  },
+  "guide_theme_light": {
+    "message": "ライト"
+  },
+  "guide_shortcuts_hint": {
+    "message": "これらのショートカットは設定で変更できます。"
+  },
+  "guide_canvas_hint": {
+    "message": "ポイントをドラッグしてイコライザーを調整します。ポイント数は設定で変更できます。"
+  },
+  "guide_volume_hint": {
+    "message": "このスライダーで全体の音量を調整します。"
+  },
+  "guide_presets_hint": {
+    "message": "ここで現在の設定を保存するか、プリセットを適用できます。"
+  },
+  "donation_reminder_title": {
+    "message": "開発者を支援"
+  },
+  "donation_reminder_message": {
+    "message": "この拡張機能が役立っている場合は、開発を支援できます。"
+  },
+  "donation_reminder_link": {
+    "message": "開発を支援"
   }
 }

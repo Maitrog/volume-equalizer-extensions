@@ -1,6 +1,9 @@
 {
+  "extName": {
+    "message": "EQ Toolkit - ຕົວປັບສຽງ"
+  },
   "extDescription": {
-    "message": "EQ Toolkit ແມ່ນສ່ວນຂະຫຍາຍຟຣີ ແລະ ເປັນໂອເພນຊອດ (Open-source) ທີ່ໃຫ້ບໍລິການຄວບຄຸມສຽງ."
+    "message": "ຕົວປັບສຽງ ແລະ ຕົວເພີ່ມລະດັບສຽງສຳລັບແຖບໃດກໍໄດ້: ເພີ່ມສຽງເບດ, ປັບສຽງ, ບັນທຶກຄ່າທີ່ຕັ້ງໄວ້ລ່ວງໜ້າ, ປິດສຽງແຖບ, ໃຊ້ທາງລັດ ແລະ ເລີ່ມຕົ້ນອັດຕະໂນມັດ."
   },
   "gain_slider_label": {
     "message": "ອັດຕາຂະຫຍາຍ (Gain):"
@@ -20,20 +23,23 @@
   "save_preset_button_label": {
     "message": "ບັນທຶກຄ່າທີ່ຕັ້ງໄວ້"
   },
-  "enter_preset_name": {
-    "message": "ປ້ອນຊື່"
-  },
   "settings_title": {
     "message": "ການຕັ້ງຄ່າ"
   },
   "presets_settings_title": {
     "message": "ຄ່າທີ່ຕັ້ງໄວ້"
   },
+  "hide_default_presets_label": {
+    "message": "ເຊື່ອງຄ່າທີ່ຕັ້ງໄວ້ເລີ່ມຕົ້ນ"
+  },
   "community_settings_title": {
     "message": "ຊຸມຊົນ"
   },
   "help_with_translation_label": {
     "message": "ຊ່ວຍແປພາສາ:"
+  },
+  "translators_label": {
+    "message": "ຜູ້ແປ:"
   },
   "source_code_label": {
     "message": "ຊອດໂຄດ (Source code):"
@@ -45,7 +51,7 @@
     "message": "ສົ່ງອອກ"
   },
   "enable_spectrum_setting_option": {
-    "message": "ເປີດໃຊ້ການສະແດງພາບສະເປັກຕຣຳ (Spectrum), ຕ້ອງໂຫຼດໜ້າເວັບຄືນໃໝ່ (ໃຊ້ CPU ສູງ)"
+    "message": "ເປີດໃຊ້ການສະແດງພາບສະເປັກຕຣຳ (Spectrum)"
   },
   "points_count_setting_option": {
     "message": "ຈຳນວນຈຸດ EQ"
@@ -140,7 +146,67 @@
   "shortcut_duplicate_error": {
     "message": "ປຸ່ມລັດນີ້ຖືກໃຊ້ໂດຍຄຳສັ່ງອື່ນແລ້ວ."
   },
-  "extName": {
-    "message": "EQ Toolkit - ຕົວປັບສຽງ"
+  "global_controls_title": {
+    "message": "ການຄວບຄຸມທົ່ວໄປ"
+  },
+  "preset_controls_title": {
+    "message": "ການຄວບຄຸມຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "save": {
+    "message": "ບັນທຶກ"
+  },
+  "save_preset_modal_title": {
+    "message": "ບັນທຶກຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "preset_name_label": {
+    "message": "ຊື່ຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "preset_name_empty_error": {
+    "message": "ປ້ອນຊື່ຄ່າທີ່ຕັ້ງໄວ້."
+  },
+  "preset_name_reserved_error": {
+    "message": "ຊື່ນີ້ສະຫງວນໄວ້ສຳລັບຄ່າທີ່ຕັ້ງໄວ້ໃນຕົວ."
+  },
+  "preset_name_duplicate_error": {
+    "message": "ມີຄ່າທີ່ຕັ້ງໄວ້ຊື່ນີ້ແລ້ວ."
+  },
+  "guide_back": {
+    "message": "ກັບຄືນ"
+  },
+  "guide_next": {
+    "message": "ຕໍ່ໄປ"
+  },
+  "guide_skip": {
+    "message": "ຂ້າມ"
+  },
+  "guide_finish": {
+    "message": "ສຳເລັດ"
+  },
+  "guide_theme_dark": {
+    "message": "ມືດ"
+  },
+  "guide_theme_light": {
+    "message": "ສະຫວ່າງ"
+  },
+  "guide_shortcuts_hint": {
+    "message": "ທ່ານສາມາດປ່ຽນປຸ່ມລັດເຫຼົ່ານີ້ໄດ້ໃນການຕັ້ງຄ່າ."
+  },
+  "guide_canvas_hint": {
+    "message": "ລາກຈຸດເພື່ອປັບແຕ່ງອີຄວອໄລເຊີ. ປ່ຽນຈຳນວນຈຸດໄດ້ໃນການຕັ້ງຄ່າ."
+  },
+  "guide_volume_hint": {
+    "message": "ໃຊ້ແຖບເລື່ອນນີ້ເພື່ອປັບລະດັບສຽງໂດຍລວມ."
+  },
+  "guide_presets_hint": {
+    "message": "ບັນທຶກການຕັ້ງຄ່າປັດຈຸບັນ ຫຼື ນຳໃຊ້ຄ່າທີ່ຕັ້ງໄວ້ຢູ່ບ່ອນນີ້."
+  },
+  "donation_reminder_title": {
+    "message": "ສະໜັບສະໜູນນັກພັດທະນາ"
+  },
+  "donation_reminder_message": {
+    "message": "ຖ້າສ່ວນຂະຫຍາຍນີ້ມີປະໂຫຍດຕໍ່ທ່ານ ທ່ານສາມາດສະໜັບສະໜູນການພັດທະນາໄດ້."
+  },
+  "donation_reminder_link": {
+    "message": "ສະໜັບສະໜູນການພັດທະນາ"
   }
 }

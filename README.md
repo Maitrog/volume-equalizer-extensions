@@ -45,6 +45,13 @@ You can help translate EQ Toolkit on [Weblate](https://hosted.weblate.org/projec
 
 [![Translation status](https://hosted.weblate.org/widget/eq-toolkit-chrome-extension/svg-badge.svg)](https://hosted.weblate.org/engage/eq-toolkit-chrome-extension/)
 
+## Development
+1. Install dependencies with `npm ci`.
+2. Build the extension with `npm run build`.
+3. Load `dist/` as an unpacked extension from your browser extensions page.
+
+Run `npm run typecheck` and `npm test` before packaging changes.
+
 ## Support
 The extention are provided for free. If you like the project, I would appreciate your [support](https://www.donationalerts.com/r/maitrog).
 

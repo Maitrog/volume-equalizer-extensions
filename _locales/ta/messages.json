@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "சம கருவித்தொகுப்பு என்பது ஒலி கட்டுப்பாட்டை வழங்கும் கட்டற்ற மற்றும் திறந்த மூல நீட்டிப்பாகும்."
+    "message": "எந்த தாவலுக்கும் ஆடியோ ஈக்வலைசர் மற்றும் ஒலி பூஸ்டர்: பேஸ் உயர்த்து, ஒலி அமை, முன்னமைவுகளை சேமி."
   },
   "gain_slider_label": {
     "message": "பெருக்கம்:"
@@ -18,10 +18,7 @@
     "message": "ஒன்றுமில்"
   },
   "save_preset_button_label": {
-    "message": "அமைவைச் சேமி"
-  },
-  "enter_preset_name": {
-    "message": "பெயரை உள்ளிடவும்"
+    "message": "சேமி"
   },
   "settings_title": {
     "message": "அமைப்புகள்"
@@ -29,11 +26,17 @@
   "presets_settings_title": {
     "message": "முன்னமைவுகள்"
   },
+  "hide_default_presets_label": {
+    "message": "இயல்புநிலை முன்னமைவுகளை மறை"
+  },
   "community_settings_title": {
     "message": "சமூகம்"
   },
   "help_with_translation_label": {
     "message": "மொழிபெயர்ப்பு உதவி:"
+  },
+  "translators_label": {
+    "message": "மொழிபெயர்ப்பாளர்கள்:"
   },
   "source_code_label": {
     "message": "மூல குறியீடு:"
@@ -45,7 +48,7 @@
     "message": "ஏற்றுமதி"
   },
   "enable_spectrum_setting_option": {
-    "message": "வானவில் காட்சிப்படுத்தலை இயக்கு, பக்கத்தை மறுதொடக்கம் செய்ய வேண்டும் (அதிக சிபியு சுமை)"
+    "message": "வானவில் காட்சிப்படுத்தலை இயக்கு"
   },
   "points_count_setting_option": {
     "message": "சமனாக்கி புள்ளிகளின் எண்ணிக்கை"
@@ -75,7 +78,7 @@
     "message": "சமனாக்கி ஏற்கனவே ஒரு சாளரத்தில் திறக்கப்பட்டுள்ளது"
   },
   "support_me": {
-    "message": "என்னை ஆதரிக்கவும்"
+    "message": "என்னை ஆதரிக்கவும்:"
   },
   "settings_button_tooltip": {
     "message": "அமைப்புகள்"
@@ -142,5 +145,68 @@
   },
   "extName": {
     "message": "EQ Toolkit - ஆடியோ சமநிலைப்படுத்தி"
+  },
+  "global_controls_title": {
+    "message": "உலகளாவிய கட்டுப்பாடுகள்"
+  },
+  "preset_controls_title": {
+    "message": "முன்னமைவுக் கட்டுப்பாடுகள்"
+  },
+  "save": {
+    "message": "சேமி"
+  },
+  "save_preset_modal_title": {
+    "message": "முன்னமைவைச் சேமி"
+  },
+  "preset_name_label": {
+    "message": "முன்னமைவின் பெயர்"
+  },
+  "preset_name_empty_error": {
+    "message": "முன்னமைவின் பெயரை உள்ளிடவும்."
+  },
+  "preset_name_reserved_error": {
+    "message": "இந்தப் பெயர் உள்ளமைந்த முன்னமைவுக்காக ஒதுக்கப்பட்டுள்ளது."
+  },
+  "preset_name_duplicate_error": {
+    "message": "இந்தப் பெயரில் ஒரு முன்னமைவு ஏற்கனவே உள்ளது."
+  },
+  "guide_back": {
+    "message": "பின்செல்"
+  },
+  "guide_next": {
+    "message": "அடுத்து"
+  },
+  "guide_skip": {
+    "message": "தவிர்"
+  },
+  "guide_finish": {
+    "message": "முடி"
+  },
+  "guide_theme_dark": {
+    "message": "இருண்ட"
+  },
+  "guide_theme_light": {
+    "message": "வெளிர்"
+  },
+  "guide_shortcuts_hint": {
+    "message": "இந்தக் குறுக்குவழிகளை அமைப்புகளில் மாற்றலாம்."
+  },
+  "guide_canvas_hint": {
+    "message": "சமப்படுத்தியை அமைக்க புள்ளிகளை இழுக்கவும். புள்ளிகளின் எண்ணிக்கையை அமைப்புகளில் மாற்றலாம்."
+  },
+  "guide_volume_hint": {
+    "message": "மொத்த ஒலியளவை மாற்ற இந்த நகர்த்தியைப் பயன்படுத்தவும்."
+  },
+  "guide_presets_hint": {
+    "message": "தற்போதைய அமைப்பைச் சேமிக்கவும் அல்லது முன்அமைவைப் பயன்படுத்தவும்."
+  },
+  "donation_reminder_title": {
+    "message": "உருவாக்குநரை ஆதரிக்கவும்"
+  },
+  "donation_reminder_message": {
+    "message": "இந்த நீட்சி உங்களுக்குப் பயனுள்ளதாக இருந்தால், அதன் உருவாக்கத்தை ஆதரிக்கலாம்."
+  },
+  "donation_reminder_link": {
+    "message": "உருவாக்கத்தை ஆதரிக்கவும்"
   }
 }

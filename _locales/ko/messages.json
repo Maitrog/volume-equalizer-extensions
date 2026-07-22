@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - 오디오 이퀄라이저"
   },
   "extDescription": {
-    "message": "EQ Toolkit은 오디오 제어 기능을 제공하는 무료 오픈 소스 확장 프로그램입니다."
+    "message": "모든 탭용 오디오 이퀄라이저와 볼륨 부스터: 베이스 강화, 사운드 조정, 프리셋 저장, 탭 음소거."
   },
   "gain_slider_label": {
     "message": "확대:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "프리셋 저장"
   },
-  "enter_preset_name": {
-    "message": "이름 입력"
-  },
   "settings_title": {
     "message": "설정"
   },
   "presets_settings_title": {
     "message": "프리셋"
   },
+  "hide_default_presets_label": {
+    "message": "기본 프리셋 숨기기"
+  },
   "community_settings_title": {
     "message": "커뮤니티"
   },
   "help_with_translation_label": {
     "message": "번역 돕기:"
+  },
+  "translators_label": {
+    "message": "번역가:"
   },
   "source_code_label": {
     "message": "소스 코드:"
@@ -48,7 +51,7 @@
     "message": "프리셋 내보내기"
   },
   "enable_spectrum_setting_option": {
-    "message": "스펙트럼 시각화 활성화, 페이지를 다시 로드해야 함(높은 CPU 부하)"
+    "message": "스펙트럼 시각화 활성화"
   },
   "points_count_setting_option": {
     "message": "EQ 포인트 수"
@@ -78,7 +81,7 @@
     "message": "이퀄라이저가 이미 창에서 열려 있습니다"
   },
   "support_me": {
-    "message": "나를 후원하기"
+    "message": "나를 후원하기:"
   },
   "settings_button_tooltip": {
     "message": "설정"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "이 단축키는 이미 다른 명령에서 사용 중입니다."
+  },
+  "global_controls_title": {
+    "message": "전역 컨트롤"
+  },
+  "preset_controls_title": {
+    "message": "프리셋 컨트롤"
+  },
+  "save": {
+    "message": "저장"
+  },
+  "save_preset_modal_title": {
+    "message": "프리셋 저장"
+  },
+  "preset_name_label": {
+    "message": "프리셋 이름"
+  },
+  "preset_name_empty_error": {
+    "message": "프리셋 이름을 입력하세요."
+  },
+  "preset_name_reserved_error": {
+    "message": "이 이름은 기본 제공 프리셋용으로 예약되어 있습니다."
+  },
+  "preset_name_duplicate_error": {
+    "message": "이 이름의 프리셋이 이미 있습니다."
+  },
+  "guide_back": {
+    "message": "뒤로"
+  },
+  "guide_next": {
+    "message": "다음"
+  },
+  "guide_skip": {
+    "message": "건너뛰기"
+  },
+  "guide_finish": {
+    "message": "완료"
+  },
+  "guide_theme_dark": {
+    "message": "어둡게"
+  },
+  "guide_theme_light": {
+    "message": "밝게"
+  },
+  "guide_shortcuts_hint": {
+    "message": "이 단축키는 설정에서 변경할 수 있습니다."
+  },
+  "guide_canvas_hint": {
+    "message": "포인트를 드래그해 이퀄라이저를 조정하세요. 포인트 수는 설정에서 변경할 수 있습니다."
+  },
+  "guide_volume_hint": {
+    "message": "이 슬라이더로 전체 볼륨을 조절하세요."
+  },
+  "guide_presets_hint": {
+    "message": "여기에서 현재 설정을 저장하거나 프리셋을 적용하세요."
+  },
+  "donation_reminder_title": {
+    "message": "개발자 후원"
+  },
+  "donation_reminder_message": {
+    "message": "이 확장 프로그램이 유용하다면 개발을 후원해 주세요."
+  },
+  "donation_reminder_link": {
+    "message": "개발 후원"
   }
 }

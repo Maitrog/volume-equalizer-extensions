@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Аудио эквалайзер"
   },
   "extDescription": {
-    "message": "EQ Toolkit — бесплатное расширение с открытым исходным кодом для управления звуком."
+    "message": "Эквалайзер и усилитель громкости для любой вкладки: бас буст, управление звуком, пресеты, отключение звука, хоткеи и автозапуск."
   },
   "gain_slider_label": {
     "message": "Усиление:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Сохранить пресет"
   },
-  "enter_preset_name": {
-    "message": "Введите название"
-  },
   "settings_title": {
     "message": "Настройки"
   },
   "presets_settings_title": {
     "message": "Пресеты"
   },
+  "hide_default_presets_label": {
+    "message": "Скрыть стандартные пресеты"
+  },
   "community_settings_title": {
     "message": "Сообщество"
   },
   "help_with_translation_label": {
     "message": "Помочь с переводом:"
+  },
+  "translators_label": {
+    "message": "Переводчики:"
   },
   "source_code_label": {
     "message": "Исходный код:"
@@ -48,7 +51,7 @@
     "message": "Экспорт"
   },
   "enable_spectrum_setting_option": {
-    "message": "Включить отображение АЧХ, требуется перезагрузка страницы (high CPU load)"
+    "message": "Включить отображение АЧХ"
   },
   "points_count_setting_option": {
     "message": "Количество точек эквалайзера"
@@ -78,7 +81,7 @@
     "message": "Эквалайзер уже открыт в оконном режиме"
   },
   "support_me": {
-    "message": "Поддержать"
+    "message": "Поддержать меня:"
   },
   "settings_button_tooltip": {
     "message": "Настройки"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Это сочетание уже используется другой командой."
+  },
+  "global_controls_title": {
+    "message": "Общие настройки"
+  },
+  "preset_controls_title": {
+    "message": "Управление пресетами"
+  },
+  "save": {
+    "message": "Сохранить"
+  },
+  "save_preset_modal_title": {
+    "message": "Сохранить пресет"
+  },
+  "preset_name_label": {
+    "message": "Название пресета"
+  },
+  "preset_name_empty_error": {
+    "message": "Введите название пресета."
+  },
+  "preset_name_reserved_error": {
+    "message": "Это название зарезервировано для встроенного пресета."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Пресет с таким названием уже существует."
+  },
+  "guide_back": {
+    "message": "Назад"
+  },
+  "guide_next": {
+    "message": "Далее"
+  },
+  "guide_skip": {
+    "message": "Пропустить"
+  },
+  "guide_finish": {
+    "message": "Завершить"
+  },
+  "guide_theme_dark": {
+    "message": "Тёмная"
+  },
+  "guide_theme_light": {
+    "message": "Светлая"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Эти сочетания можно изменить в настройках."
+  },
+  "guide_canvas_hint": {
+    "message": "Перетаскивайте точки для настройки эквалайзера. Их количество можно изменить в настройках."
+  },
+  "guide_volume_hint": {
+    "message": "Используйте этот слайдер для регулировки общей громкости."
+  },
+  "guide_presets_hint": {
+    "message": "Здесь можно сохранить текущую настройку или применить пресет."
+  },
+  "donation_reminder_title": {
+    "message": "Поддержите разработчика"
+  },
+  "donation_reminder_message": {
+    "message": "Если расширение вам полезно, вы можете поддержать его развитие."
+  },
+  "donation_reminder_link": {
+    "message": "Поддержать разработку"
   }
 }

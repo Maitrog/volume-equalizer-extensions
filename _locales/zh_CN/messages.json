@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - 音频均衡器"
   },
   "extDescription": {
-    "message": "EQ Toolkit 是一个免费开源的音频控制扩展程序。"
+    "message": "适用于任意标签页的音频均衡器和音量增强器：增强低音、调音、保存预设、静音标签页、使用快捷键和自动启动。"
   },
   "gain_slider_label": {
     "message": "放大"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "保存预设"
   },
-  "enter_preset_name": {
-    "message": "输入名称"
-  },
   "settings_title": {
     "message": "设置"
   },
   "presets_settings_title": {
     "message": "预设"
   },
+  "hide_default_presets_label": {
+    "message": "隐藏默认预设"
+  },
   "community_settings_title": {
     "message": "社区"
   },
   "help_with_translation_label": {
     "message": "帮助翻译:"
+  },
+  "translators_label": {
+    "message": "译者:"
   },
   "source_code_label": {
     "message": "源代码:"
@@ -48,7 +51,7 @@
     "message": "导出预设"
   },
   "enable_spectrum_setting_option": {
-    "message": "启用频谱可视化，需要重新加载页面（CPU 负载较高）"
+    "message": "启用频谱可视化"
   },
   "points_count_setting_option": {
     "message": "EQ点数"
@@ -78,7 +81,7 @@
     "message": "均衡器已在窗口中打开"
   },
   "support_me": {
-    "message": "支持我"
+    "message": "支持我:"
   },
   "settings_button_tooltip": {
     "message": "设置"
@@ -142,5 +145,42 @@
   },
   "shortcut_duplicate_error": {
     "message": "此快捷键已被另一个命令使用。"
-  }
+  },
+  "global_controls_title": {
+    "message": "全局控制"
+  },
+  "preset_controls_title": {
+    "message": "预设控制"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "save_preset_modal_title": {
+    "message": "保存预设"
+  },
+  "preset_name_label": {
+    "message": "预设名称"
+  },
+  "preset_name_empty_error": {
+    "message": "请输入预设名称。"
+  },
+  "preset_name_reserved_error": {
+    "message": "此名称为内置预设保留。"
+  },
+  "preset_name_duplicate_error": {
+    "message": "已存在同名预设。"
+  },
+  "guide_back": { "message": "返回" },
+  "guide_next": { "message": "下一步" },
+  "guide_skip": { "message": "跳过" },
+  "guide_finish": { "message": "完成" },
+  "guide_theme_dark": { "message": "深色" },
+  "guide_theme_light": { "message": "浅色" },
+  "guide_shortcuts_hint": { "message": "你可以在设置中更改这些快捷键。" },
+  "guide_canvas_hint": { "message": "拖动控制点以调节均衡器。可在设置中更改控制点数量。" },
+  "guide_volume_hint": { "message": "使用此滑块调节整体音量。" },
+  "guide_presets_hint": { "message": "在这里保存当前设置或应用预设。" },
+  "donation_reminder_title": { "message": "支持开发者" },
+  "donation_reminder_message": { "message": "如果这个扩展对您有帮助，您可以支持它的开发。" },
+  "donation_reminder_link": { "message": "支持开发" }
 }

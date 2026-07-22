@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - অডিও ইকুয়ালাইজার"
   },
   "extDescription": {
-    "message": "EQ Toolkit অডিও নিয়ন্ত্রণের জন্য একটি বিনামূল্যের ও ওপেন-সোর্স এক্সটেনশন।"
+    "message": "যেকোনো ট্যাবের অডিও ইকুয়ালাইজার ও ভলিউম বুস্টার: বেস বাড়ান, সাউন্ড টিউন করুন, প্রিসেট সেভ করুন।"
   },
   "gain_slider_label": {
     "message": "পরিবর্ধন:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "প্রিসেট সংরক্ষণ করুন"
   },
-  "enter_preset_name": {
-    "message": "নাম লিখুন"
-  },
   "settings_title": {
     "message": "সেটিংস"
   },
   "presets_settings_title": {
     "message": "প্রিসেট"
   },
+  "hide_default_presets_label": {
+    "message": "ডিফল্ট প্রিসেট লুকান"
+  },
   "community_settings_title": {
     "message": "কমিউনিটি"
   },
   "help_with_translation_label": {
     "message": "অনুবাদে সাহায্য করুন:"
+  },
+  "translators_label": {
+    "message": "অনুবাদকরা:"
   },
   "source_code_label": {
     "message": "সোর্স কোড:"
@@ -48,7 +51,7 @@
     "message": "প্রিসেট রপ্তানি করুন"
   },
   "enable_spectrum_setting_option": {
-    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন, পৃষ্ঠা পুনরায় লোড করতে হবে (উচ্চ CPU ব্যবহার)"
+    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন"
   },
   "points_count_setting_option": {
     "message": "EQ পয়েন্টের সংখ্যা"
@@ -78,7 +81,7 @@
     "message": "ইকুয়ালাইজার ইতিমধ্যে একটি উইন্ডোতে খোলা আছে"
   },
   "support_me": {
-    "message": "আমাকে সমর্থন করুন"
+    "message": "আমাকে সমর্থন করুন:"
   },
   "settings_button_tooltip": {
     "message": "সেটিংস"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "এই শর্টকাটটি ইতিমধ্যে অন্য কমান্ডে ব্যবহৃত হচ্ছে।"
+  },
+  "global_controls_title": {
+    "message": "সামগ্রিক নিয়ন্ত্রণ"
+  },
+  "preset_controls_title": {
+    "message": "প্রিসেট নিয়ন্ত্রণ"
+  },
+  "save": {
+    "message": "সংরক্ষণ করুন"
+  },
+  "save_preset_modal_title": {
+    "message": "প্রিসেট সংরক্ষণ করুন"
+  },
+  "preset_name_label": {
+    "message": "প্রিসেটের নাম"
+  },
+  "preset_name_empty_error": {
+    "message": "প্রিসেটের নাম লিখুন।"
+  },
+  "preset_name_reserved_error": {
+    "message": "এই নামটি একটি অন্তর্নির্মিত প্রিসেটের জন্য সংরক্ষিত।"
+  },
+  "preset_name_duplicate_error": {
+    "message": "এই নামে একটি প্রিসেট ইতিমধ্যে বিদ্যমান।"
+  },
+  "guide_back": {
+    "message": "পিছনে"
+  },
+  "guide_next": {
+    "message": "পরবর্তী"
+  },
+  "guide_skip": {
+    "message": "এড়িয়ে যান"
+  },
+  "guide_finish": {
+    "message": "শেষ করুন"
+  },
+  "guide_theme_dark": {
+    "message": "গাঢ়"
+  },
+  "guide_theme_light": {
+    "message": "হালকা"
+  },
+  "guide_shortcuts_hint": {
+    "message": "সেটিংসে এই শর্টকাটগুলো পরিবর্তন করতে পারেন।"
+  },
+  "guide_canvas_hint": {
+    "message": "ইকুয়ালাইজার সাজাতে পয়েন্ট টানুন। সেটিংসে পয়েন্টের সংখ্যা পরিবর্তন করুন।"
+  },
+  "guide_volume_hint": {
+    "message": "সামগ্রিক ভলিউম সামঞ্জস্য করতে এই স্লাইডার ব্যবহার করুন।"
+  },
+  "guide_presets_hint": {
+    "message": "এখানে বর্তমান সেটআপ সংরক্ষণ করুন বা একটি প্রিসেট প্রয়োগ করুন।"
+  },
+  "donation_reminder_title": {
+    "message": "ডেভেলপারকে সহায়তা করুন"
+  },
+  "donation_reminder_message": {
+    "message": "এই এক্সটেনশনটি আপনার কাজে লাগলে, এর উন্নয়নে সহায়তা করতে পারেন।"
+  },
+  "donation_reminder_link": {
+    "message": "উন্নয়নে সহায়তা করুন"
   }
 }

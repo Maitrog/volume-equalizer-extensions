@@ -11,54 +11,58 @@
 
 <body>
   <div class="header">
-    <text>EQ Toolkit</text>
-    <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
-    <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
-    <img id="add-to-autostart-whitelist-btn" class="add-to-autostart-whitelist-btn" src="resources/images/add_to_whitelist.svg">
-    <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
-    <a class="donation" href="https://www.donationalerts.com/r/maitrog" target="_blank">
-      <span id="support-me" class="support-me-text">Support me</span>
-    </a>
+    <div class="header-left">
+      <text>EQ Toolkit</text>
+      <img id="settings-btn" class="settings-btn" src="resources/images/settings.svg">
+      <img id="add-to-autostart-whitelist-btn" class="add-to-autostart-whitelist-btn" src="resources/images/add_to_whitelist.svg">
+      <img id="window-mod" class="window-mod" src="resources/images/window-mod.svg">
+    </div>
+    <div class="header-right">
+      <img id="volume-mute" class="volume-mute" src="resources/images/volume-mute.svg">
+      <img id="change-eq" class="change-eq" src="resources/images/on-off-button.svg">
+    </div>
   </div>
   <div id="capture-error" class="capture-error"></div>
   <div id="captured-tabs" class="captured-tabs"></div>
-  <div class="equalizer-curve-container">
+  <div id="equalizer-curve-container" class="equalizer-curve-container">
     <img id="info-btn" class="info-btn" src="resources/images/info.svg">
     <canvas class="eq-canvas" id="eq-canvas"></canvas>
     <canvas class="spectrum-canvas" id="spectrum-canvas"></canvas>
     <div class="info-tooltip" id="info-tooltip"></div>
   </div>
-  <div class="controls first-row">
-    <div class="volume-control">
-      <label for="master-volume" id="master-volume-label">Gain:</label>
-      <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
-      <div class="volume-scale">
-        <span>-24</span>
-        <span>-12</span>
-        <span>0</span>
-        <span>12</span>
-        <span>24</span>
+  <div class="controls-panel">
+    <section class="control-card" id="volume-control-card">
+      <h2 id="global-controls-title">Global Controls</h2>
+      <div class="global-actions">
+        <div class="volume-control">
+          <div class="gain-value-row">
+            <label for="master-volume" id="master-volume-label">Gain:</label>
+            <output id="master-volume-value" for="master-volume">0.0 dB</output>
+          </div>
+          <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
+        </div>
+        <button type="button" id="reset" class="reset-btn">Reset</button>
       </div>
-    </div>
-    <button type="button" id="reset" class="reset-btn">Reset</button>
-    <button type="button" id="change-eq">Enable eq on this tab</button>
-  </div>
-  <div class="controls second-row">
-    <div class="dropdown" id="presets">
-      <div class="dropdown-toggle" id="presets-toggle">none</div>
-      <div class="dropdown-menu" id="presets-menu">
-        <div class="dropdown-item" data-value="none" id="none-item">none</div>
+    </section>
+    <section id="preset-controls-card" class="control-card">
+      <h2 id="preset-controls-title">Preset Controls</h2>
+      <div class="preset-actions">
+        <button type="button" id="save-preset" class="save-preset">Save preset</button>
+        <div class="dropdown" id="presets">
+          <div class="dropdown-toggle" id="presets-toggle">none</div>
+          <div class="dropdown-menu" id="presets-menu">
+            <div class="dropdown-item" data-value="none" id="none-item">none</div>
+          </div>
+        </div>
       </div>
-    </div>
-    <input type="text" class="preset-name" id="preset-name" placeholder="Enter name">
-    <button type="button" id="save-preset">Save preset</button>
+    </section>
   </div>
 
   <div id="settings-modal" class="modal">
     <div class="modal-content">
       <span id="close-settings" class="close">&times;</span>
       <h2 id="settings-header">Settings</h2>
-      <label>
+      <label class="settings-row">
         <text id="enable-spectrum-label">
           Enable spectrum visualisation (high CPU load)
         </text>
@@ -79,13 +83,14 @@
         <select id="theme-select" class="settings-select">
           <option value="dark" id="theme-dark-option">Dark</option>
           <option value="light" id="theme-light-option">Lignt</option>
-          <option value="ny" id="theme-ny-option">Christmas</option>
         </select>
       </div>
       <div class="settings-row">
         <span id="language-label">Language</span>
         <select id="language-select" class="settings-select"></select>
       </div>
+      
+      <!--SHORTCUTS SECTION-->
       <div class="settings-section">
         <h3 id="shortcuts-settings-title">Shortcuts</h3>
         <div class="settings-row">
@@ -98,6 +103,8 @@
         </div>
         <div id="shortcuts-settings-error" class="settings-error"></div>
       </div>
+
+      <!--WHITELIST SECTION-->
       <div class="settings-section">
         <h3 id="autostart-settings-title">Whitelist</h3>
         <div id="autostart-settings-list" class="autostart-settings-list"></div>
@@ -116,16 +123,29 @@
       </div>
       <div class="settings-section">
         <h3 id="presets-settings-title">Presets</h3>
+        <label class="settings-row">
+          <text id="hide-default-presets-label">Hide default presets</text>
+          <input type="checkbox" id="hide-default-presets">
+        </label>
         <div class="settings-actions">
           <input type="file" id="import-input" hidden>
           <button type="input" id="import-presets">Import presets</button>
           <button type="button" id="export-presets">Export presets</button>
         </div>
       </div>
+
+      <!--COMMUNITY SECTION-->
       <div class="settings-section">
         <h3 id="community-settings-title">Community</h3>
-        <div class="notice-message">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">Feedback</a>
+        <div id="donation-label" class="notice-message">
+          Support me:
+          <a href="https://www.donationalerts.com/r/maitrog" target="_blank">Donation</a>
+        </div>
+        <div id="translators-label" class="notice-message">
+          Translators:
+          <a href="https://github.com/AntonioOliveira2" target="_blank">AntonioOliveira2</a>,
+          <a href="https://tamilneram.github.io/" target="_blank" style="margin-left: 4px">தமிழ்நேரம்</a>
+          <a href="https://github.com/bounkirdni-2025" target="_blank" style="margin-left: 4px">bounkirdni-2025</a>
         </div>
         <div id="help-with-translation-label" class="notice-message">
           Help with translation: 
@@ -134,6 +154,9 @@
         <div id="source-code-label" class="notice-message">
           Source code: 
           <a href="https://github.com/Maitrog/volume-equalizer-extensions" target="_blank" style="margin-left: 4px">Github</a>
+        </div>
+        <div class="notice-message">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLScAU6Fqb23jvnHb_Tn5nqqU-eaD8bziwm3NYHBKJZgvvzrOvQ/viewform?usp=header" target="_blank">Feedback</a>
         </div>
       </div>
     </div>
@@ -169,6 +192,20 @@
         <button type="button" id="autostart-modal-confirm">Add</button>
       </div>
     </div>
+  </div>
+
+  <div id="preset-save-modal" class="modal">
+    <form id="preset-save-form" class="modal-content confirm-modal">
+      <span id="preset-save-close" class="close">&times;</span>
+      <h3 id="preset-save-title">Save preset</h3>
+      <label for="preset-name" id="preset-name-label">Preset name</label>
+      <input type="text" id="preset-name" class="settings-input preset-name-input" autocomplete="off">
+      <div id="preset-save-error" class="settings-error" role="alert"></div>
+      <div class="confirm-actions">
+        <button type="button" id="preset-save-cancel">Cancel</button>
+        <button type="submit" id="preset-save-confirm">Save</button>
+      </div>
+    </form>
   </div>
 
   <div id="points-reset-modal" class="modal">
@@ -209,50 +246,41 @@
     </div>
   </div>
 
-  <div id="info-modal" class="modal">
-    <div class="modal-content">
-      <span id="close-info-modal" class="close">&times;</span>
-      <p id="info-modal-message">
-        Original author: Amber O'Brien
-        <p></p>
-        Original art: 
-        <a href="https://dribbble.com/shots/9179022-Whimsical-Christmas-Card-2019" target="_blank">
-          https://dribbble.com/shots/9179022-Whimsical-Christmas-Card-2019
-        </a>
+  <div id="donation-reminder-modal" class="modal">
+    <section class="modal-content notice-modal" role="dialog" aria-modal="true"
+      aria-labelledby="donation-reminder-title">
+      <h2 id="donation-reminder-title">Support the developer</h2>
+      <p id="donation-reminder-message" class="notice-message">
+        If this extension is useful to you, you can support its development.
       </p>
-    </div>
+      <p class="notice-message">
+        <a id="donation-reminder-link" href="https://www.donationalerts.com/r/maitrog"
+          target="_blank" rel="noreferrer">Support development</a>
+      </p>
+      <div class="notice-actions">
+        <button type="button" id="donation-reminder-close">OK</button>
+      </div>
+    </section>
   </div>
 
-  <script src="scripts/languages.js"></script>
-  <script src="scripts/shortcuts.js"></script>
-  <script src="scripts/localization.js"></script>
-  <script src="scripts/whitelist.js"></script>
-  <script src="scripts/themes.js"></script>
-  <script src="scripts/loadColors.js"></script>
-  <script src="scripts/popupState.js"></script>
+  <div id="onboarding-guide" class="onboarding-guide" hidden>
+    <div class="guide-blocker"></div>
+    <div class="guide-blur-panel" data-guide-panel="top"></div>
+    <div class="guide-blur-panel" data-guide-panel="left"></div>
+    <div class="guide-blur-panel" data-guide-panel="right"></div>
+    <div class="guide-blur-panel" data-guide-panel="bottom"></div>
+    <div class="guide-spotlight"></div>
+    <section class="guide-card" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+      <h2 id="guide-title" tabindex="-1"></h2>
+      <div class="guide-content"></div>
+      <div class="guide-actions">
+        <button type="button" data-guide-action="skip"></button>
+        <button type="button" data-guide-action="back"></button>
+        <button type="button" data-guide-action="next"></button>
+      </div>
+    </section>
+  </div>
 
-  <script src="scripts/equalizer/equalizerMath.js"></script>
-  <script src="scripts/equalizer/equalizerPoints.js"></script>
-  <script src="scripts/equalizer/equalizerTooltips.js"></script>
-  <script src="scripts/equalizer/equalizerGestures.js"></script>
-
-  <script src="scripts/equalizer/draw/drawPeakingFilter.js"></script>
-  <script src="scripts/equalizer/draw/drawHighpassFilter.js"></script>
-  <script src="scripts/equalizer/draw/drawLowpassFilter.js"></script>
-  <script src="scripts/equalizer/draw/drawFilters.js"></script>
-  <script src="scripts/equalizer/draw/drawFrequensyAxis.js"></script>
-  <script src="scripts/equalizer/draw/drawSpectrum.js"></script>
-
-  <script src="scripts/windowMod/windowMod.js"></script>
-  <script src="scripts/windowMod/windowModTabCapture.js"></script>
-  <script src="scripts/windowMod/windowModCapturedTabs.js"></script>
-
-  <script src="scripts/installUpdateModal.js"></script>
-
-  <script src="scripts/popupSettings.js"></script>
-  <script src="scripts/popupControls.js"></script>
-  <script src="scripts/popupWhitelist.js"></script>
-  <script src="scripts/popupPresets.js"></script>
   <script src="scripts/popup.js"></script>
 </body>
 

@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Ses eşitleyici"
   },
   "extDescription": {
-    "message": "EQ Toolkit, ses kontrolü sağlayan ücretsiz ve açık kaynaklı bir uzantıdır."
+    "message": "Her sekme için ses ekolayzırı ve ses yükseltici: bası güçlendir, sesi ayarla, preset kaydet, sekmeleri sustur."
   },
   "gain_slider_label": {
     "message": "Amplifikasyon:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Ön ayarı kaydet"
   },
-  "enter_preset_name": {
-    "message": "Ad girin"
-  },
   "settings_title": {
     "message": "Ayarlar"
   },
   "presets_settings_title": {
     "message": "Ön ayarlar"
   },
+  "hide_default_presets_label": {
+    "message": "Varsayılan ön ayarları gizle"
+  },
   "community_settings_title": {
     "message": "Topluluk"
   },
   "help_with_translation_label": {
     "message": "Çeviriye yardım edin:"
+  },
+  "translators_label": {
+    "message": "Çevirmenler:"
   },
   "source_code_label": {
     "message": "Kaynak kodu:"
@@ -48,7 +51,7 @@
     "message": "Ön ayarları dışa aktar"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spektrum görselleştirmesini etkinleştir; sayfayı yeniden yüklemek gerekir (yüksek CPU kullanımı)"
+    "message": "Spektrum görselleştirmesini etkinleştir"
   },
   "points_count_setting_option": {
     "message": "EQ nokta sayısı"
@@ -78,7 +81,7 @@
     "message": "Ekolayzer zaten bir pencerede açık"
   },
   "support_me": {
-    "message": "Beni destekle"
+    "message": "Beni destekle:"
   },
   "settings_button_tooltip": {
     "message": "Ayarlar"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Bu kısayol zaten başka bir komut tarafından kullanılıyor."
+  },
+  "global_controls_title": {
+    "message": "Genel kontroller"
+  },
+  "preset_controls_title": {
+    "message": "Ön ayar kontrolleri"
+  },
+  "save": {
+    "message": "Kaydet"
+  },
+  "save_preset_modal_title": {
+    "message": "Ön ayarı kaydet"
+  },
+  "preset_name_label": {
+    "message": "Ön ayar adı"
+  },
+  "preset_name_empty_error": {
+    "message": "Bir ön ayar adı girin."
+  },
+  "preset_name_reserved_error": {
+    "message": "Bu ad yerleşik bir ön ayar için ayrılmıştır."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Bu ada sahip bir ön ayar zaten var."
+  },
+  "guide_back": {
+    "message": "Geri"
+  },
+  "guide_next": {
+    "message": "İleri"
+  },
+  "guide_skip": {
+    "message": "Atla"
+  },
+  "guide_finish": {
+    "message": "Bitir"
+  },
+  "guide_theme_dark": {
+    "message": "Koyu"
+  },
+  "guide_theme_light": {
+    "message": "Açık"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Bu kısayolları Ayarlar bölümünde değiştirebilirsiniz."
+  },
+  "guide_canvas_hint": {
+    "message": "Ekolayzırı ayarlamak için noktaları sürükleyin. Nokta sayısını Ayarlar bölümünde değiştirin."
+  },
+  "guide_volume_hint": {
+    "message": "Genel ses düzeyini ayarlamak için bu kaydırıcıyı kullanın."
+  },
+  "guide_presets_hint": {
+    "message": "Geçerli ayarı kaydedin veya burada bir ön ayar uygulayın."
+  },
+  "donation_reminder_title": {
+    "message": "Geliştiriciyi destekleyin"
+  },
+  "donation_reminder_message": {
+    "message": "Bu uzantı işinize yarıyorsa geliştirilmesini destekleyebilirsiniz."
+  },
+  "donation_reminder_link": {
+    "message": "Geliştirmeyi destekle"
   }
 }

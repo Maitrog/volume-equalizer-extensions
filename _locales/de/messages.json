@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Audio-Equalizer"
   },
   "extDescription": {
-    "message": "EQ Toolkit ist eine kostenlose Open-Source-Erweiterung zur Audiosteuerung."
+    "message": "Audio-Equalizer und Lautstärke-Booster für jeden Tab: Bass verstärken, Sound anpassen, Presets speichern."
   },
   "gain_slider_label": {
     "message": "Verstärkung:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Preset speichern"
   },
-  "enter_preset_name": {
-    "message": "Name eingeben"
-  },
   "settings_title": {
     "message": "Einstellungen"
   },
   "presets_settings_title": {
     "message": "Voreinstellungen"
   },
+  "hide_default_presets_label": {
+    "message": "Standard-Presets ausblenden"
+  },
   "community_settings_title": {
     "message": "Community"
   },
   "help_with_translation_label": {
     "message": "Bei der Übersetzung helfen:"
+  },
+  "translators_label": {
+    "message": "Übersetzer:"
   },
   "source_code_label": {
     "message": "Quellcode:"
@@ -48,7 +51,7 @@
     "message": "Voreinstellungen exportieren"
   },
   "enable_spectrum_setting_option": {
-    "message": "Spektrumvisualisierung aktivieren, Seite muss neu geladen werden (hohe CPU-Last)"
+    "message": "Spektrumvisualisierung aktivieren"
   },
   "points_count_setting_option": {
     "message": "Anzahl der EQ-Punkte"
@@ -78,7 +81,7 @@
     "message": "Der Equalizer ist bereits in einem Fenster geöffnet"
   },
   "support_me": {
-    "message": "Unterstütze mich"
+    "message": "Unterstütze mich:"
   },
   "settings_button_tooltip": {
     "message": "Einstellungen"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Dieses Tastenkürzel wird bereits von einem anderen Befehl verwendet."
+  },
+  "global_controls_title": {
+    "message": "Globale Steuerelemente"
+  },
+  "preset_controls_title": {
+    "message": "Voreinstellungen"
+  },
+  "save": {
+    "message": "Speichern"
+  },
+  "save_preset_modal_title": {
+    "message": "Voreinstellung speichern"
+  },
+  "preset_name_label": {
+    "message": "Name der Voreinstellung"
+  },
+  "preset_name_empty_error": {
+    "message": "Geben Sie einen Namen für die Voreinstellung ein."
+  },
+  "preset_name_reserved_error": {
+    "message": "Dieser Name ist für eine integrierte Voreinstellung reserviert."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Eine Voreinstellung mit diesem Namen existiert bereits."
+  },
+  "guide_back": {
+    "message": "Zurück"
+  },
+  "guide_next": {
+    "message": "Weiter"
+  },
+  "guide_skip": {
+    "message": "Überspringen"
+  },
+  "guide_finish": {
+    "message": "Fertig"
+  },
+  "guide_theme_dark": {
+    "message": "Dunkel"
+  },
+  "guide_theme_light": {
+    "message": "Hell"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Du kannst diese Tastenkürzel in den Einstellungen ändern."
+  },
+  "guide_canvas_hint": {
+    "message": "Ziehe die Punkte, um den Equalizer einzustellen. Die Anzahl kannst du in den Einstellungen ändern."
+  },
+  "guide_volume_hint": {
+    "message": "Mit diesem Regler passt du die Gesamtlautstärke an."
+  },
+  "guide_presets_hint": {
+    "message": "Hier kannst du die aktuelle Einstellung speichern oder ein Preset anwenden."
+  },
+  "donation_reminder_title": {
+    "message": "Unterstütze den Entwickler"
+  },
+  "donation_reminder_message": {
+    "message": "Wenn dir diese Erweiterung hilft, kannst du ihre Entwicklung unterstützen."
+  },
+  "donation_reminder_link": {
+    "message": "Entwicklung unterstützen"
   }
 }

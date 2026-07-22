@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Ecualizador de audio"
   },
   "extDescription": {
-    "message": "EQ Toolkit es una extensión gratuita y de código abierto para controlar el audio."
+    "message": "Ecualizador de audio y amplificador de volumen para cualquier pestaña: potencia graves, ajusta sonido y guarda presets."
   },
   "gain_slider_label": {
     "message": "Amplificación:"
@@ -23,20 +23,23 @@
   "save_preset_button_label": {
     "message": "Guardar preset"
   },
-  "enter_preset_name": {
-    "message": "Ingrese nombre"
-  },
   "settings_title": {
     "message": "Configuración"
   },
   "presets_settings_title": {
     "message": "Preajustes"
   },
+  "hide_default_presets_label": {
+    "message": "Ocultar preajustes predeterminados"
+  },
   "community_settings_title": {
     "message": "Comunidad"
   },
   "help_with_translation_label": {
     "message": "Ayuda con la traducción:"
+  },
+  "translators_label": {
+    "message": "Traductores:"
   },
   "source_code_label": {
     "message": "Código fuente:"
@@ -48,7 +51,7 @@
     "message": "Exportar preajustes"
   },
   "enable_spectrum_setting_option": {
-    "message": "Activar la visualización del espectro; es necesario recargar la página (alto uso de CPU)"
+    "message": "Activar la visualización del espectro"
   },
   "points_count_setting_option": {
     "message": "Número de puntos de EQ"
@@ -78,7 +81,7 @@
     "message": "El ecualizador ya está abierto en una ventana"
   },
   "support_me": {
-    "message": "Apóyame"
+    "message": "Apóyame:"
   },
   "settings_button_tooltip": {
     "message": "Configuración"
@@ -142,5 +145,68 @@
   },
   "shortcut_duplicate_error": {
     "message": "Este atajo ya lo usa otro comando."
+  },
+  "global_controls_title": {
+    "message": "Controles globales"
+  },
+  "preset_controls_title": {
+    "message": "Controles de preajustes"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "save_preset_modal_title": {
+    "message": "Guardar preajuste"
+  },
+  "preset_name_label": {
+    "message": "Nombre del preajuste"
+  },
+  "preset_name_empty_error": {
+    "message": "Introduce un nombre para el preajuste."
+  },
+  "preset_name_reserved_error": {
+    "message": "Este nombre está reservado para un preajuste integrado."
+  },
+  "preset_name_duplicate_error": {
+    "message": "Ya existe un preajuste con este nombre."
+  },
+  "guide_back": {
+    "message": "Atrás"
+  },
+  "guide_next": {
+    "message": "Siguiente"
+  },
+  "guide_skip": {
+    "message": "Omitir"
+  },
+  "guide_finish": {
+    "message": "Finalizar"
+  },
+  "guide_theme_dark": {
+    "message": "Oscuro"
+  },
+  "guide_theme_light": {
+    "message": "Claro"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Puedes cambiar estos atajos en Ajustes."
+  },
+  "guide_canvas_hint": {
+    "message": "Arrastra los puntos para ajustar el ecualizador. Cambia su cantidad en Ajustes."
+  },
+  "guide_volume_hint": {
+    "message": "Usa este control para ajustar el volumen general."
+  },
+  "guide_presets_hint": {
+    "message": "Aquí puedes guardar la configuración actual o aplicar un preajuste."
+  },
+  "donation_reminder_title": {
+    "message": "Apoya al desarrollador"
+  },
+  "donation_reminder_message": {
+    "message": "Si esta extensión te resulta útil, puedes apoyar su desarrollo."
+  },
+  "donation_reminder_link": {
+    "message": "Apoyar el desarrollo"
   }
 }
