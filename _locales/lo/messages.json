@@ -1,0 +1,146 @@
+{
+  "extDescription": {
+    "message": "EQ Toolkit ແມ່ນສ່ວນຂະຫຍາຍຟຣີ ແລະ ເປັນໂອເພນຊອດ (Open-source) ທີ່ໃຫ້ບໍລິການຄວບຄຸມສຽງ."
+  },
+  "gain_slider_label": {
+    "message": "ອັດຕາຂະຫຍາຍ (Gain):"
+  },
+  "reset_button_label": {
+    "message": "ຕັ້ງຄ່າໃໝ່"
+  },
+  "enable_eq_button_label": {
+    "message": "ເປີດໃຊ້ EQ ໃນແທັບນີ້"
+  },
+  "stop_eq_button_label": {
+    "message": "ຢຸດໃຊ້ EQ ໃນແທັບນີ້"
+  },
+  "empty_preset_name": {
+    "message": "ບໍ່ມີ"
+  },
+  "save_preset_button_label": {
+    "message": "ບັນທຶກຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "enter_preset_name": {
+    "message": "ປ້ອນຊື່"
+  },
+  "settings_title": {
+    "message": "ການຕັ້ງຄ່າ"
+  },
+  "presets_settings_title": {
+    "message": "ຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "community_settings_title": {
+    "message": "ຊຸມຊົນ"
+  },
+  "help_with_translation_label": {
+    "message": "ຊ່ວຍແປພາສາ:"
+  },
+  "source_code_label": {
+    "message": "ຊອດໂຄດ (Source code):"
+  },
+  "import_presets_button_label": {
+    "message": "ນຳເຂົ້າ"
+  },
+  "export_presets_button_label": {
+    "message": "ສົ່ງອອກ"
+  },
+  "enable_spectrum_setting_option": {
+    "message": "ເປີດໃຊ້ການສະແດງພາບສະເປັກຕຣຳ (Spectrum), ຕ້ອງໂຫຼດໜ້າເວັບຄືນໃໝ່ (ໃຊ້ CPU ສູງ)"
+  },
+  "points_count_setting_option": {
+    "message": "ຈຳນວນຈຸດ EQ"
+  },
+  "points_reset_title": {
+    "message": "ປ່ຽນຈຳນວນຈຸດບໍ່?"
+  },
+  "points_reset_message": {
+    "message": "ການປ່ຽນຈຳນວນຈຸດຈະເຮັດໃຫ້ການຕັ້ງຄ່າ EQ ປັດຈຸບັນຖືກລ້າງອອກ."
+  },
+  "points_reset_skip": {
+    "message": "ບໍ່ຕ້ອງສະແດງອີກ"
+  },
+  "ok": {
+    "message": "ຕົກລົງ"
+  },
+  "cancel": {
+    "message": "ຍົກເລີກ"
+  },
+  "theme_setting_option": {
+    "message": "ຮູບແບບ (Theme)"
+  },
+  "capture_error_prefix": {
+    "message": "ບໍ່ສາມາດຈັບສັນຍານສຽງໄດ້. ກະລຸນາລອງໃຊ້ \"ໂໝດໜ້າຕ່າງ\" (Window mode)."
+  },
+  "toolkit_window_already_open": {
+    "message": "ເຄື່ອງປັບແຕ່ງສຽງ (Equalizer) ຖືກເປີດຢູ່ໃນໜ້າຕ່າງແລ້ວ"
+  },
+  "support_me": {
+    "message": "ສະໜັບສະໜູນຂ້ອຍ"
+  },
+  "settings_button_tooltip": {
+    "message": "ການຕັ້ງຄ່າ"
+  },
+  "volume_mute_button_tooltip": {
+    "message": "ປິດ/ເປີດສຽງ"
+  },
+  "window_mode_button_tooltip": {
+    "message": "ເປີດໂໝດໜ້າຕ່າງ"
+  },
+  "add_to_autostart_tooltip": {
+    "message": "ເພີ່ມເວັບໄຊນີ້ເຂົ້າໃນລາຍຊື່ທີ່ໃຫ້ເລີ່ມເຮັດວຽກອັດຕະໂນມັດ"
+  },
+  "autostart_modal_title": {
+    "message": "ເພີ່ມເຂົ້າໃນການເລີ່ມຕົ້ນອັດຕະໂນມັດ"
+  },
+  "autostart_settings_title": {
+    "message": "ເລີ່ມຕົ້ນອັດຕະໂນມັດ"
+  },
+  "autostart_rule_type_domain_label": {
+    "message": "ໂດເມນ (Domain)"
+  },
+  "autostart_rule_type_url_label": {
+    "message": "URL"
+  },
+  "autostart_modal_preset_label": {
+    "message": "ຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "autostart_settings_select_preset_placeholder": {
+    "message": "ເລືອກຄ່າທີ່ຕັ້ງໄວ້"
+  },
+  "autostart_whitelist_empty": {
+    "message": "ລາຍຊື່ທີ່ອະນຸຍາດຍັງວ່າງຢູ່"
+  },
+  "autostart_validation_error": {
+    "message": "ກະລຸນາປ້ອນໂດເມນ ຫຼື URL ທີ່ຖືກຕ້ອງ ແລະ ເລືອກຄ່າທີ່ຕັ້ງໄວ້."
+  },
+  "preset_delete_error": {
+    "message": "ຄ່າທີ່ຕັ້ງໄວ້ນີ້ກຳລັງຖືກໃຊ້ໃນກົດການເລີ່ມຕົ້ນອັດຕະໂນມັດ. ກະລຸນາລຶບກົດທີ່ກ່ຽວຂ້ອງອອກກ່ອນ."
+  },
+  "add": {
+    "message": "ເພີ່ມ"
+  },
+  "delete": {
+    "message": "ລຶບ"
+  },
+  "language_setting_option": {
+    "message": "ພາສາ"
+  },
+  "shortcuts_settings_title": {
+    "message": "ປຸ່ມລັດ"
+  },
+  "shortcut_mute_label": {
+    "message": "ປິດ/ເປີດສຽງ"
+  },
+  "shortcut_toggle_eq_label": {
+    "message": "ເປີດ/ປິດການໃຊ້ງານ"
+  },
+  "shortcut_validation_error": {
+    "message": "ໃຊ້ຢ່າງໜ້ອຍໜຶ່ງປຸ່ມຮ່ວມ (Ctrl, Alt, Shift, ຫຼື Meta) ແລະ ຕົວອັກສອນ ຫຼື ຕົວເລກໜຶ່ງຕົວ."
+  },
+  "shortcut_duplicate_error": {
+    "message": "ປຸ່ມລັດນີ້ຖືກໃຊ້ໂດຍຄຳສັ່ງອື່ນແລ້ວ."
+  },
+  "extName": {
+    "message": "EQ Toolkit - ຕົວປັບສຽງ"
+  }
+}
