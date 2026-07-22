@@ -225,20 +225,71 @@
     </div>
   </div>
 
-  <div id="install-update-notice-modal" class="modal">
+  <div id="update-notice-modal" class="modal">
     <div class="modal-content notice-modal">
-      <h3>Patch Notes 1.8.0</h3>
+      <h3>Patch Notes 2.0.0</h3>
       <div class="notice-message">
         <ul>
-          <li>Added configurable keyboard shortcuts for mute/unmute and enable/disable EQ.
+          <li>
+            Redesigned popup interface
             <ul>
-              <li>Alt + M by default for mute/unmute.</li>
-              <li>Alt + K by default for enable/disable.</li>
+              <li>Controls are now grouped into clear sections.</li>
+              <li>Added a compact equalizer enable/disable button with a visible active state.</li>
+              <li>The current gain value is displayed in dB.</li>
+              <li>Updated controls, checkboxes, settings, and modal styles.</li>
             </ul>
           </li>
-          <li>Added Tamil localization. Thanks <a href="https://github.com/TamilNeram" target="_blank">TamilNeram</a></li>
-          <li>Updated Portugal localization. Thanks <a href="https://github.com/AntonioOliveira2" target="_blank">AntonioOliveira2</a></li>
+
+          <li>
+            Built-in audio presets
+            <ul>
+              <li>Added 13 presets, including Bass Boost, Acoustic, Classical, Rock, and Pop.</li>
+              <li>Added an option to hide built-in presets.</li>
+            </ul>
+          </li>
+
+          <li>
+            Improved custom presets
+            <ul>
+              <li>Custom presets are now created in a dedicated modal.</li>
+              <li>Added validation for empty, duplicate, and reserved preset names.</li>
+            </ul>
+          </li>
+
+          <li>
+            Improved window mode
+            <ul>
+              <li>Added spectrum visualization for the active tab.</li>
+              <li>Added switching between captured tabs.</li>
+              <li>Added the ability to stop audio capture for an individual tab.</li>
+            </ul>
+          </li>
+
+          <li>
+            Real-time spectrum visualization
+            <ul>
+              <li>The spectrum now responds to filter and settings changes in real time.</li>
+            </ul>
+          </li>
+
+          <li>
+            New onboarding guide
+            <ul>
+              <li>Introduces themes, shortcuts, equalizer controls, volume, and presets.</li>
+              <li>Highlights relevant interface elements.</li>
+              <li>Supports Back, Next, Skip, and Finish actions.</li>
+              <li>Resumes automatically if onboarding was not completed.</li>
+            </ul>
+          </li>
+
+          <li>Added Lao localization. Thanks <a href="https://github.com/bounkirdni-2025" target="_blank">bounkirdni-2025</a></li>
+          <li>Updated localization files.</li>
+          <li>Added translator credits to the Community section.</li>
+          <li>Added an uninstall feedback form.</li>
+          <li>Removed the Christmas theme and its unused assets.</li>
         </ul>
+        <br />
+        If you like the extension please rate the EQ Toolkit in <a href="https://chromewebstore.google.com/detail/dlilpinpaihdcfdjnofegabgoijmmoja?utm_source=eq-toolkit" target="_blank">Chrome Web Store</a> and leave a review in there.
       </div>
       <div class="notice-actions">
         <button type="button" id="install-update-notice-close">Close</button>

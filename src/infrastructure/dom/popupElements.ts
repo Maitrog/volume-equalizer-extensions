@@ -358,7 +358,7 @@ export const getPopupElements = (document: Document): PopupElements => ({
   ),
   installUpdateNoticeModal: getRequiredElement(
     document,
-    "install-update-notice-modal",
+    "update-notice-modal",
     HTMLDivElement,
   ),
   installUpdateNoticeClose: getRequiredElement(
