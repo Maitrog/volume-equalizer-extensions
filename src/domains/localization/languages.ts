@@ -12,6 +12,7 @@ export const AVAILABLE_LANGUAGE_CODES = [
   "it",
   "ja",
   "ko",
+  "lo",
   "nl",
   "pt_PT",
   "ru",
