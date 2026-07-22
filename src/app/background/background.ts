@@ -12,6 +12,10 @@ import {
 
 chrome.runtime.onStartup.addListener(registerContentScripts);
 chrome.runtime.onInstalled.addListener(async (details) => {
+    await chrome.runtime.setUninstallURL(
+    "https://docs.google.com/forms/d/e/1FAIpQLSfuD6fR4XS3qo6SqfLmagq5z6Daw_o4Z7vwNI4mjcb86sJN5w/viewform",
+  );
+
   await registerContentScripts();
   await prepareInstallUpdateNotice(details);
 });
