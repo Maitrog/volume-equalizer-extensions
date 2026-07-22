@@ -139,5 +139,8 @@
   },
   "shortcut_duplicate_error": {
     "message": "ປຸ່ມລັດນີ້ຖືກໃຊ້ໂດຍຄຳສັ່ງອື່ນແລ້ວ."
+  },
+  "extName": {
+    "message": "EQ Toolkit - ຕົວປັບສຽງ"
   }
 }
