@@ -170,17 +170,43 @@
   "preset_name_duplicate_error": {
     "message": "Esiste già una preimpostazione con questo nome."
   },
-  "guide_back": { "message": "Indietro" },
-  "guide_next": { "message": "Avanti" },
-  "guide_skip": { "message": "Salta" },
-  "guide_finish": { "message": "Fine" },
-  "guide_theme_dark": { "message": "Scuro" },
-  "guide_theme_light": { "message": "Chiaro" },
-  "guide_shortcuts_hint": { "message": "Puoi modificare queste scorciatoie nelle Impostazioni." },
-  "guide_canvas_hint": { "message": "Trascina i punti per regolare l’equalizzatore. Modificane il numero nelle Impostazioni." },
-  "guide_volume_hint": { "message": "Usa questo cursore per regolare il volume generale." },
-  "guide_presets_hint": { "message": "Salva la configurazione corrente o applica un preset qui." },
-  "donation_reminder_title": { "message": "Sostieni lo sviluppatore" },
-  "donation_reminder_message": { "message": "Se questa estensione ti è utile, puoi sostenerne lo sviluppo." },
-  "donation_reminder_link": { "message": "Sostieni lo sviluppo" }
+  "guide_back": {
+    "message": "Indietro"
+  },
+  "guide_next": {
+    "message": "Avanti"
+  },
+  "guide_skip": {
+    "message": "Salta"
+  },
+  "guide_finish": {
+    "message": "Fine"
+  },
+  "guide_theme_dark": {
+    "message": "Scuro"
+  },
+  "guide_theme_light": {
+    "message": "Chiaro"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Puoi modificare queste scorciatoie nelle Impostazioni."
+  },
+  "guide_canvas_hint": {
+    "message": "Trascina i punti per regolare l’equalizzatore. Modificane il numero nelle Impostazioni."
+  },
+  "guide_volume_hint": {
+    "message": "Usa questo cursore per regolare il volume generale."
+  },
+  "guide_presets_hint": {
+    "message": "Salva la configurazione corrente o applica un preset qui."
+  },
+  "donation_reminder_title": {
+    "message": "Sostieni lo sviluppatore"
+  },
+  "donation_reminder_message": {
+    "message": "Se questa estensione ti è utile, puoi sostenerne lo sviluppo."
+  },
+  "donation_reminder_link": {
+    "message": "Sostieni lo sviluppo"
+  }
 }

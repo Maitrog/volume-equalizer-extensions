@@ -170,17 +170,43 @@
   "preset_name_duplicate_error": {
     "message": "Đã có cài đặt sẵn với tên này."
   },
-  "guide_back": { "message": "Quay lại" },
-  "guide_next": { "message": "Tiếp theo" },
-  "guide_skip": { "message": "Bỏ qua" },
-  "guide_finish": { "message": "Hoàn tất" },
-  "guide_theme_dark": { "message": "Tối" },
-  "guide_theme_light": { "message": "Sáng" },
-  "guide_shortcuts_hint": { "message": "Bạn có thể đổi các phím tắt này trong phần Cài đặt." },
-  "guide_canvas_hint": { "message": "Kéo các điểm để chỉnh bộ cân bằng. Đổi số lượng điểm trong phần Cài đặt." },
-  "guide_volume_hint": { "message": "Dùng thanh trượt này để chỉnh âm lượng tổng thể." },
-  "guide_presets_hint": { "message": "Lưu thiết lập hiện tại hoặc áp dụng một cấu hình đặt trước tại đây." },
-  "donation_reminder_title": { "message": "Ủng hộ nhà phát triển" },
-  "donation_reminder_message": { "message": "Nếu tiện ích này hữu ích, bạn có thể ủng hộ việc phát triển." },
-  "donation_reminder_link": { "message": "Ủng hộ phát triển" }
+  "guide_back": {
+    "message": "Quay lại"
+  },
+  "guide_next": {
+    "message": "Tiếp theo"
+  },
+  "guide_skip": {
+    "message": "Bỏ qua"
+  },
+  "guide_finish": {
+    "message": "Hoàn tất"
+  },
+  "guide_theme_dark": {
+    "message": "Tối"
+  },
+  "guide_theme_light": {
+    "message": "Sáng"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Bạn có thể đổi các phím tắt này trong phần Cài đặt."
+  },
+  "guide_canvas_hint": {
+    "message": "Kéo các điểm để chỉnh bộ cân bằng. Đổi số lượng điểm trong phần Cài đặt."
+  },
+  "guide_volume_hint": {
+    "message": "Dùng thanh trượt này để chỉnh âm lượng tổng thể."
+  },
+  "guide_presets_hint": {
+    "message": "Lưu thiết lập hiện tại hoặc áp dụng một cấu hình đặt trước tại đây."
+  },
+  "donation_reminder_title": {
+    "message": "Ủng hộ nhà phát triển"
+  },
+  "donation_reminder_message": {
+    "message": "Nếu tiện ích này hữu ích, bạn có thể ủng hộ việc phát triển."
+  },
+  "donation_reminder_link": {
+    "message": "Ủng hộ phát triển"
+  }
 }

@@ -170,17 +170,43 @@
   "preset_name_duplicate_error": {
     "message": "Un préréglage portant ce nom existe déjà."
   },
-  "guide_back": { "message": "Retour" },
-  "guide_next": { "message": "Suivant" },
-  "guide_skip": { "message": "Ignorer" },
-  "guide_finish": { "message": "Terminer" },
-  "guide_theme_dark": { "message": "Sombre" },
-  "guide_theme_light": { "message": "Clair" },
-  "guide_shortcuts_hint": { "message": "Vous pouvez modifier ces raccourcis dans les paramètres." },
-  "guide_canvas_hint": { "message": "Faites glisser les points pour régler l’égaliseur. Modifiez leur nombre dans les paramètres." },
-  "guide_volume_hint": { "message": "Utilisez ce curseur pour régler le volume général." },
-  "guide_presets_hint": { "message": "Enregistrez le réglage actuel ou appliquez un préréglage ici." },
-  "donation_reminder_title": { "message": "Soutenez le développeur" },
-  "donation_reminder_message": { "message": "Si cette extension vous est utile, vous pouvez soutenir son développement." },
-  "donation_reminder_link": { "message": "Soutenir le développement" }
+  "guide_back": {
+    "message": "Retour"
+  },
+  "guide_next": {
+    "message": "Suivant"
+  },
+  "guide_skip": {
+    "message": "Ignorer"
+  },
+  "guide_finish": {
+    "message": "Terminer"
+  },
+  "guide_theme_dark": {
+    "message": "Sombre"
+  },
+  "guide_theme_light": {
+    "message": "Clair"
+  },
+  "guide_shortcuts_hint": {
+    "message": "Vous pouvez modifier ces raccourcis dans les paramètres."
+  },
+  "guide_canvas_hint": {
+    "message": "Faites glisser les points pour régler l’égaliseur. Modifiez leur nombre dans les paramètres."
+  },
+  "guide_volume_hint": {
+    "message": "Utilisez ce curseur pour régler le volume général."
+  },
+  "guide_presets_hint": {
+    "message": "Enregistrez le réglage actuel ou appliquez un préréglage ici."
+  },
+  "donation_reminder_title": {
+    "message": "Soutenez le développeur"
+  },
+  "donation_reminder_message": {
+    "message": "Si cette extension vous est utile, vous pouvez soutenir son développement."
+  },
+  "donation_reminder_link": {
+    "message": "Soutenir le développement"
+  }
 }

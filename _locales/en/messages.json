@@ -170,17 +170,43 @@
   "preset_name_duplicate_error": {
     "message": "A preset with this name already exists."
   },
-  "guide_back": { "message": "Back" },
-  "guide_next": { "message": "Next" },
-  "guide_skip": { "message": "Skip" },
-  "guide_finish": { "message": "Finish" },
-  "guide_theme_dark": { "message": "Dark" },
-  "guide_theme_light": { "message": "Light" },
-  "guide_shortcuts_hint": { "message": "You can change these shortcuts in Settings." },
-  "guide_canvas_hint": { "message": "Drag points to shape the equalizer. Change the number of points in Settings." },
-  "guide_volume_hint": { "message": "Use this slider to adjust the overall volume." },
-  "guide_presets_hint": { "message": "Save the current setup or apply a preset here." },
-  "donation_reminder_title": { "message": "Support the developer" },
-  "donation_reminder_message": { "message": "If this extension is useful to you, you can support its development." },
-  "donation_reminder_link": { "message": "Support development" }
+  "guide_back": {
+    "message": "Back"
+  },
+  "guide_next": {
+    "message": "Next"
+  },
+  "guide_skip": {
+    "message": "Skip"
+  },
+  "guide_finish": {
+    "message": "Finish"
+  },
+  "guide_theme_dark": {
+    "message": "Dark"
+  },
+  "guide_theme_light": {
+    "message": "Light"
+  },
+  "guide_shortcuts_hint": {
+    "message": "You can change these shortcuts in Settings."
+  },
+  "guide_canvas_hint": {
+    "message": "Drag points to shape the equalizer. Change the number of points in Settings."
+  },
+  "guide_volume_hint": {
+    "message": "Use this slider to adjust the overall volume."
+  },
+  "guide_presets_hint": {
+    "message": "Save the current setup or apply a preset here."
+  },
+  "donation_reminder_title": {
+    "message": "Support the developer"
+  },
+  "donation_reminder_message": {
+    "message": "If this extension is useful to you, you can support its development."
+  },
+  "donation_reminder_link": {
+    "message": "Support development"
+  }
 }

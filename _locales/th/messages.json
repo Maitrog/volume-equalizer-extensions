@@ -170,17 +170,43 @@
   "preset_name_duplicate_error": {
     "message": "มีค่าที่ตั้งไว้ชื่อนี้อยู่แล้ว"
   },
-  "guide_back": { "message": "ย้อนกลับ" },
-  "guide_next": { "message": "ถัดไป" },
-  "guide_skip": { "message": "ข้าม" },
-  "guide_finish": { "message": "เสร็จสิ้น" },
-  "guide_theme_dark": { "message": "มืด" },
-  "guide_theme_light": { "message": "สว่าง" },
-  "guide_shortcuts_hint": { "message": "คุณเปลี่ยนปุ่มลัดเหล่านี้ได้ในการตั้งค่า" },
-  "guide_canvas_hint": { "message": "ลากจุดเพื่อปรับอีควอไลเซอร์ และเปลี่ยนจำนวนจุดได้ในการตั้งค่า" },
-  "guide_volume_hint": { "message": "ใช้แถบเลื่อนนี้เพื่อปรับระดับเสียงโดยรวม" },
-  "guide_presets_hint": { "message": "บันทึกการตั้งค่าปัจจุบันหรือใช้ค่าที่ตั้งไว้ล่วงหน้าได้ที่นี่" },
-  "donation_reminder_title": { "message": "สนับสนุนนักพัฒนา" },
-  "donation_reminder_message": { "message": "หากส่วนขยายนี้มีประโยชน์ คุณสามารถสนับสนุนการพัฒนาได้" },
-  "donation_reminder_link": { "message": "สนับสนุนการพัฒนา" }
+  "guide_back": {
+    "message": "ย้อนกลับ"
+  },
+  "guide_next": {
+    "message": "ถัดไป"
+  },
+  "guide_skip": {
+    "message": "ข้าม"
+  },
+  "guide_finish": {
+    "message": "เสร็จสิ้น"
+  },
+  "guide_theme_dark": {
+    "message": "มืด"
+  },
+  "guide_theme_light": {
+    "message": "สว่าง"
+  },
+  "guide_shortcuts_hint": {
+    "message": "คุณเปลี่ยนปุ่มลัดเหล่านี้ได้ในการตั้งค่า"
+  },
+  "guide_canvas_hint": {
+    "message": "ลากจุดเพื่อปรับอีควอไลเซอร์ และเปลี่ยนจำนวนจุดได้ในการตั้งค่า"
+  },
+  "guide_volume_hint": {
+    "message": "ใช้แถบเลื่อนนี้เพื่อปรับระดับเสียงโดยรวม"
+  },
+  "guide_presets_hint": {
+    "message": "บันทึกการตั้งค่าปัจจุบันหรือใช้ค่าที่ตั้งไว้ล่วงหน้าได้ที่นี่"
+  },
+  "donation_reminder_title": {
+    "message": "สนับสนุนนักพัฒนา"
+  },
+  "donation_reminder_message": {
+    "message": "หากส่วนขยายนี้มีประโยชน์ คุณสามารถสนับสนุนการพัฒนาได้"
+  },
+  "donation_reminder_link": {
+    "message": "สนับสนุนการพัฒนา"
+  }
 }
