@@ -45,7 +45,9 @@ Available soon
 ## Localization
 You can help translate EQ Toolkit on [Weblate](https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/).
 
-[![Translation status](https://hosted.weblate.org/widget/eq-toolkit-chrome-extension/svg-badge.svg)](https://hosted.weblate.org/engage/eq-toolkit-chrome-extension/)
+<a href="https://hosted.weblate.org/projects/eq-toolkit-chrome-extension/">
+<img src="https://hosted.weblate.org/widget/eq-toolkit-chrome-extension/multi-auto.svg" alt="Translation status" />
+</a>
 
 ## Development
 1. Install dependencies with `npm ci`.
