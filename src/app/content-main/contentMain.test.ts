@@ -68,6 +68,17 @@ class FakeAnalyserNode extends FakeAudioNode {
   }
 }
 
+class FakeHTMLMediaElement {
+  captured = false;
+  isConnected = true;
+
+  play(): Promise<void> {
+    return Promise.resolve();
+  }
+
+  setAttribute(): void {}
+}
+
 class FakeAudioContext {
   sampleRate = 48000;
   destination = new FakeAudioDestinationNode(this, "destination");
@@ -92,13 +103,24 @@ class FakeAudioContext {
   createAnalyser(): FakeAnalyserNode {
     return new FakeAnalyserNode(this, "analyser");
   }
+
+  createMediaElementSource(
+    target: FakeHTMLMediaElement,
+  ): FakeAudioNode {
+    target.captured = true;
+    return new FakeAudioNode(this, "media");
+  }
 }
 
-const loadContentMain = async (port: FakePort): Promise<void> => {
+const loadContentMain = async (
+  port: FakePort,
+  media: FakeHTMLMediaElement[] = [],
+): Promise<void> => {
   vi.resetModules();
 
   vi.stubGlobal("document", {
     getElementById: (id: string) => (id === "eq-tools-port" ? port : null),
+    querySelectorAll: () => media,
   });
   vi.stubGlobal("window", {
     addEventListener: vi.fn(),
@@ -108,13 +130,12 @@ const loadContentMain = async (port: FakePort): Promise<void> => {
   vi.stubGlobal("AudioNode", FakeAudioNode);
   vi.stubGlobal("AudioDestinationNode", FakeAudioDestinationNode);
   vi.stubGlobal("BiquadFilterNode", FakeBiquadFilterNode);
-  class FakeHTMLMediaElement {
-    play(): Promise<void> {
-      return Promise.resolve();
-    }
-  }
   vi.stubGlobal("HTMLMediaElement", FakeHTMLMediaElement);
-  vi.stubGlobal("setTimeout", vi.fn());
+  vi.stubGlobal("AudioContext", FakeAudioContext);
+  vi.stubGlobal("setTimeout", vi.fn((callback: () => void) => {
+    callback();
+    return 1;
+  }));
   vi.stubGlobal("setInterval", vi.fn((callback: () => void) => {
     callback();
     return 1;
@@ -193,5 +214,14 @@ describe("contentMain spectrum state", () => {
     port.dispatchEvent(new Event("spectrum-state-changed"));
 
     expect(getLastSpectrumFrame(frames)?.buffer).toBeNull();
+  });
+
+  test("captures media already present when the script loads", async () => {
+    const media = new FakeHTMLMediaElement();
+
+    await loadContentMain(new FakePort(), [media]);
+    await Promise.resolve();
+
+    expect(media.captured).toBe(true);
   });
 });

@@ -340,6 +340,7 @@ const convert = async (target: EventTarget | null): Promise<void> => {
 };
 
 window.addEventListener("playing", (event) => void convert(event.target), true);
+document.querySelectorAll("audio, video").forEach((target) => void convert(target));
 
 window.Audio = new Proxy(window.Audio, {
   construct(target, args, newTarget) {
