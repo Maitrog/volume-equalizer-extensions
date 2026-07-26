@@ -224,4 +224,23 @@ describe("contentMain spectrum state", () => {
 
     expect(media.captured).toBe(true);
   });
+
+  test("waits for isolated state before capturing existing media", async () => {
+    const port = new FakePort();
+    delete port.dataset.enabled;
+    delete port.dataset.freqs;
+    const media = new FakeHTMLMediaElement();
+
+    await loadContentMain(port, [media]);
+    await Promise.resolve();
+
+    expect(media.captured).toBe(false);
+
+    port.dataset.enabled = "true";
+    port.dataset.freqs = filters;
+    port.dispatchEvent(new Event("enabled-changed"));
+    await Promise.resolve();
+
+    expect(media.captured).toBe(true);
+  });
 });

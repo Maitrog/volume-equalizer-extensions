@@ -313,8 +313,15 @@ AudioNode.prototype.connect = new Proxy(nativeConnect, {
 const convert = async (target: EventTarget | null): Promise<void> => {
   if (!(target instanceof HTMLMediaElement)) return;
 
-  if (port.dataset.enabled === "false") {
+  console.log("[contentMain] Converting media", {
+    source: target.currentSrc || target.src,
+    enabled: port.dataset.enabled,
+    filtersReady: port.dataset.freqs !== undefined,
+  });
+
+  if (port.dataset.enabled !== "true") {
     cachedMedia.add(target);
+    console.log("[contentMain] Media cached until enabled");
     return;
   }
 
@@ -328,7 +335,9 @@ const convert = async (target: EventTarget | null): Promise<void> => {
     } else {
       port.dispatchEvent(new Event("connected"));
     }
+    console.log("[contentMain] Media captured");
   } catch (error) {
+    console.error("[contentMain] Media capture failed", error);
     port.dispatchEvent(
       new CustomEvent("capture-error", {
         detail: { message: getErrorMessage(error, "Unknown error") },
@@ -340,7 +349,13 @@ const convert = async (target: EventTarget | null): Promise<void> => {
 };
 
 window.addEventListener("playing", (event) => void convert(event.target), true);
-document.querySelectorAll("audio, video").forEach((target) => void convert(target));
+const existingMedia = document.querySelectorAll("audio, video");
+console.log("[contentMain] Loaded", {
+  media: existingMedia.length,
+  enabled: port.dataset.enabled,
+  filtersReady: port.dataset.freqs !== undefined,
+});
+existingMedia.forEach((target) => void convert(target));
 
 window.Audio = new Proxy(window.Audio, {
   construct(target, args, newTarget) {

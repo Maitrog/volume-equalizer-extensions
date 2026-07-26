@@ -117,6 +117,11 @@ getTabId((tabId) => {
       port.dataset.enabled = String(prefs[STORAGE_KEYS.tabEnabled(tabId)]);
       port.dataset.mute = String(prefs[STORAGE_KEYS.tabMute(tabId)]);
       port.dataset.enableSpectrum = String(prefs[STORAGE_KEYS.ENABLE_SPECTRUM]);
+      console.log("[contentIsolated] State ready", {
+        tabId,
+        enabled: port.dataset.enabled,
+        filters: freqsMapped.length,
+      });
 
       if (prefs[STORAGE_KEYS.tabMute(tabId)]) {
         port.dispatchEvent(new Event("mute-enabled"));
