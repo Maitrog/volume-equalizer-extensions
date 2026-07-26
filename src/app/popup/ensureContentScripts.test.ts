@@ -1,6 +1,10 @@
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import { ensureContentScripts } from "./ensureContentScripts";
+
+beforeEach(() => {
+  vi.spyOn(console, "log").mockImplementation(() => undefined);
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
