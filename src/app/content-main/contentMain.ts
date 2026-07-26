@@ -23,7 +23,6 @@ type CapturableMediaElement = HTMLMediaElement & {
 };
 
 const port = document.getElementById("eq-tools-port") as HTMLSpanElement;
-port.remove();
 
 const equalizerGraphs = new Map<AudioNode, EqualizerNodeChain>();
 let currentAudioCtx: AudioContext | null = null;
@@ -469,3 +468,5 @@ function stopSpectrum(): void {
     }),
   );
 }
+
+port.dataset.mainReady = "true";

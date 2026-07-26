@@ -243,4 +243,12 @@ describe("contentMain spectrum state", () => {
 
     expect(media.captured).toBe(true);
   });
+
+  test("marks the reusable main bridge as ready", async () => {
+    const port = new FakePort();
+
+    await loadContentMain(port);
+
+    expect(port.dataset.mainReady).toBe("true");
+  });
 });

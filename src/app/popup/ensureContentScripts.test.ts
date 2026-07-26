@@ -51,6 +51,45 @@ describe("ensureContentScripts", () => {
     ]);
   });
 
+  test("reuses an existing main script after injecting isolated", async () => {
+    const executeScript = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("chrome", {
+      tabs: {
+        sendMessage: vi
+          .fn()
+          .mockRejectedValueOnce(new Error("No receiver"))
+          .mockResolvedValueOnce(true),
+      },
+      scripting: { executeScript },
+    });
+
+    await ensureContentScripts(7);
+
+    expect(executeScript).toHaveBeenCalledTimes(1);
+    expect(executeScript).toHaveBeenCalledWith({
+      target: { tabId: 7, allFrames: true },
+      files: ["scripts/content-isolated.js"],
+      world: "ISOLATED",
+    });
+  });
+
+  test("injects only main when isolated reports it missing", async () => {
+    const executeScript = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("chrome", {
+      tabs: { sendMessage: vi.fn().mockResolvedValue(false) },
+      scripting: { executeScript },
+    });
+
+    await ensureContentScripts(7);
+
+    expect(executeScript).toHaveBeenCalledTimes(1);
+    expect(executeScript).toHaveBeenCalledWith({
+      target: { tabId: 7, allFrames: true },
+      files: ["scripts/content-main.js"],
+      world: "MAIN",
+    });
+  });
+
   test("does not reject when scripts cannot be injected", async () => {
     vi.spyOn(console, "error").mockImplementation(() => undefined);
     vi.stubGlobal("chrome", {

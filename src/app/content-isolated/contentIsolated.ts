@@ -25,14 +25,21 @@ type SendRuntimeMessageWithCallback = (
 const sendRuntimeMessageWithCallback =
   chrome.runtime.sendMessage as unknown as SendRuntimeMessageWithCallback;
 
-const port = document.createElement("span");
+const existingPort = document.getElementById("eq-tools-port");
+const port =
+  existingPort instanceof HTMLSpanElement
+    ? existingPort
+    : document.createElement("span");
 port.id = "eq-tools-port";
-document.documentElement.append(port);
+port.hidden = true;
+if (!port.isConnected) document.documentElement.append(port);
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.method !== RUNTIME_MESSAGES.CONTENT_SCRIPT_PING) return;
 
-  sendResponse();
+  (sendResponse as unknown as (response: boolean) => void)(
+    port.dataset.mainReady === "true",
+  );
 });
 
 let currentTabId: number | null = null;
