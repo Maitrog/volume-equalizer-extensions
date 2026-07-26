@@ -16,6 +16,7 @@ import {
   type RuntimeMessage,
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
+import { claimContentInstance } from "./contentInstance";
 
 type SendRuntimeMessageWithCallback = (
   message: RuntimeMessage,
@@ -33,9 +34,15 @@ const port =
 port.id = "eq-tools-port";
 port.hidden = true;
 if (!port.isConnected) document.documentElement.append(port);
+const isCurrentInstance = claimContentInstance(port);
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message?.method !== RUNTIME_MESSAGES.CONTENT_SCRIPT_PING) return;
+  if (
+    !isCurrentInstance() ||
+    message?.method !== RUNTIME_MESSAGES.CONTENT_SCRIPT_PING
+  ) {
+    return;
+  }
 
   (sendResponse as unknown as (response: boolean) => void)(
     port.dataset.mainReady === "true",
@@ -49,7 +56,7 @@ const getTabId = (callback: (tabId: number) => void): void => {
   sendRuntimeMessageWithCallback(
     { method: RUNTIME_MESSAGES.GET_TAB_ID },
     (tabId) => {
-      if (typeof tabId !== "number") return;
+      if (!isCurrentInstance() || typeof tabId !== "number") return;
 
       currentTabId = tabId;
       callback(tabId);
@@ -88,6 +95,8 @@ const getCaptureErrorMessage = (event: Event): string => {
 };
 
 port.addEventListener("connected", () => {
+  if (!isCurrentInstance()) return;
+
   clearCaptureError();
   chrome.runtime.sendMessage({
     method: RUNTIME_MESSAGES.CONNECTED,
@@ -95,12 +104,16 @@ port.addEventListener("connected", () => {
 });
 
 port.addEventListener("disconnected", () => {
+  if (!isCurrentInstance()) return;
+
   chrome.runtime.sendMessage({
     method: RUNTIME_MESSAGES.DISCONNECTED,
   });
 });
 
 port.addEventListener("capture-error", (event) => {
+  if (!isCurrentInstance()) return;
+
   setCaptureError(getCaptureErrorMessage(event));
 });
 
@@ -116,6 +129,8 @@ getTabId((tabId) => {
       [STORAGE_KEYS.tabMute(tabId)]: false,
     },
     (prefs) => {
+      if (!isCurrentInstance()) return;
+
       const filters = prefs[STORAGE_KEYS.tabFilters(tabId)] ?? defaultFilters;
       const freqsMapped = normalizeFilterSettings(filters);
       port.dataset.freqs = JSON.stringify(freqsMapped);
@@ -141,6 +156,8 @@ getTabId((tabId) => {
 });
 
 chrome.storage.onChanged.addListener((changes) => {
+  if (!isCurrentInstance()) return;
+
   if (changes[STORAGE_KEYS.SHORTCUTS]) {
     shortcuts = resolveShortcuts(
       changes[STORAGE_KEYS.SHORTCUTS].newValue as Partial<ShortcutMap> | null,
@@ -189,6 +206,8 @@ chrome.storage.onChanged.addListener((changes) => {
 });
 
 chrome.storage.local.get([STORAGE_KEYS.SHORTCUTS], (prefs) => {
+  if (!isCurrentInstance()) return;
+
   shortcuts = resolveShortcuts(
     prefs[STORAGE_KEYS.SHORTCUTS] as Partial<ShortcutMap> | null,
   );
@@ -200,6 +219,8 @@ const toggleTabStorageValue = (
   options: { enableTab?: boolean } = {},
 ): void => {
   chrome.storage.local.get([key]).then((prefs) => {
+    if (!isCurrentInstance()) return;
+
     const values: Record<string, boolean> = {
       [key]: !prefs[key],
     };
@@ -213,6 +234,8 @@ const toggleTabStorageValue = (
 document.addEventListener(
   "keydown",
   (event) => {
+    if (!isCurrentInstance()) return;
+
     if (event.repeat || isEditableShortcutTarget(event.target)) return;
 
     if (matchesShortcut(event, shortcuts[SHORTCUT_ACTION_MUTE_NAME])) {
@@ -238,6 +261,8 @@ document.addEventListener(
 );
 
 port.addEventListener("spectrum-frame", (event) => {
+  if (!isCurrentInstance()) return;
+
   chrome.runtime.sendMessage({
     method: RUNTIME_MESSAGES.SPECTRUM_FRAME,
     payload: (event as CustomEvent<unknown>).detail,
@@ -250,11 +275,15 @@ const start = (): void => {
   sendRuntimeMessageWithCallback(
     { method: RUNTIME_MESSAGES.GET_TAB_ID },
     () => {
+      if (!isCurrentInstance()) return;
+
       chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.PAGE_STARTED });
     },
   );
 
   setTimeout(() => {
+    if (!isCurrentInstance()) return;
+
     chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.CLEAR_STORAGE });
   }, 1000);
 };
