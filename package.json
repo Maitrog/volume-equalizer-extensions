@@ -8,7 +8,7 @@
     "test": "vitest run",
     "build": "node tools/buildExtension.mjs",
     "prezip": "npm run build && node -e \"require('node:fs').mkdirSync('build/Release',{recursive:true})\"",
-    "zip": "bestzip ./build/Release/eq-toolkit_v2.0.0_unpacked.zip dist/**"
+    "zip": "node -e \"const {version}=require('./manifest.json'); require('child_process').execFileSync('npx',['bestzip',`../build/Release/eq-toolkit_v${version}_unpacked.zip`,'*'],{cwd:'dist',stdio:'inherit',shell:true})\""
   },
   "devDependencies": {
     "@types/node": "^26.1.0",
