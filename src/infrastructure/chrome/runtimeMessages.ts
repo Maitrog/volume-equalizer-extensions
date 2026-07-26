@@ -8,6 +8,7 @@ export const RUNTIME_MESSAGES = {
   CONNECTED: "connected",
   DISCONNECTED: "disconnected",
   CLEAR_STORAGE: "clearStorage",
+  CONTENT_SCRIPT_PING: "contentScriptPing",
 } as const;
 
 export type RuntimeMessageMethod =

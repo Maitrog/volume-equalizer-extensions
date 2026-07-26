@@ -29,6 +29,12 @@ const port = document.createElement("span");
 port.id = "eq-tools-port";
 document.documentElement.append(port);
 
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.method !== RUNTIME_MESSAGES.CONTENT_SCRIPT_PING) return;
+
+  sendResponse();
+});
+
 let currentTabId: number | null = null;
 let shortcuts = resolveShortcuts(null);
 

@@ -34,6 +34,7 @@ import { createDonationReminderView } from "../../ui/popup/donationReminderView"
 import { createOnboardingGuideView } from "../../ui/popup/onboardingGuideView";
 import { createPresetsView } from "../../ui/popup/presetsView";
 import { createSettingsView } from "../../ui/popup/settingsView";
+import { ensureContentScripts } from "./ensureContentScripts";
 
 export interface PopupAppDependencies {
   elements: PopupElements;
@@ -507,9 +508,14 @@ export const createPopupApp = ({
     ]);
     settingsView.applyTheme(stored[STORAGE_KEYS.THEME]);
 
-    if (await toolkitController.shouldShowToolkitWindowNotice(await getCurrentTabId())) {
+    const tabId = await getCurrentTabId();
+    if (await toolkitController.shouldShowToolkitWindowNotice(tabId)) {
       toolkitController.showToolkitWindowNotice();
       return;
+    }
+
+    if (!toolkitController.isToolkitWindow && tabId != null) {
+      await ensureContentScripts(tabId);
     }
 
     resize();
@@ -518,7 +524,6 @@ export const createPopupApp = ({
     );
     settingsView.updatePointCountSelect(savedPointCount);
 
-    const tabId = await getCurrentTabId();
     if (tabId == null) {
       initPoints(savedPointCount);
       resize();
