@@ -8,6 +8,17 @@ const createResponse = (messages: MessageMap, ok = true): Response =>
     json: vi.fn(async () => messages),
   }) as unknown as Response;
 
+const createLocalizedElement = (i18n: string) => ({
+  dataset: { i18n },
+  textContent: "",
+});
+
+const createRoot = (elements: ReturnType<typeof createLocalizedElement>[]) =>
+  ({
+    querySelectorAll: vi.fn(() => elements),
+    getElementById: vi.fn(() => null),
+  }) as unknown as Document;
+
 describe("createLocalizationService", () => {
   beforeEach(() => {
     vi.stubGlobal("fetch", vi.fn());
@@ -71,22 +82,30 @@ describe("createLocalizationService", () => {
         }),
       )
       .mockResolvedValueOnce(createResponse({}));
-    const darkOption = { textContent: "" };
-    const lightOption = { textContent: "" };
-    const root = {
-      getElementById: vi.fn((id: string) => {
-        if (id === "theme-dark-option") return darkOption;
-        if (id === "theme-light-option") return lightOption;
-        return null;
-      }),
-    } as unknown as Document;
+    const darkOption = createLocalizedElement("guide_theme_dark");
+    const lightOption = createLocalizedElement("guide_theme_light");
     const service = createLocalizationService();
     await service.ready;
 
-    service.applyLocalization(root);
+    service.applyLocalization(createRoot([darkOption, lightOption]));
 
     expect(darkOption.textContent).toBe("Dark localized");
     expect(lightOption.textContent).toBe("Light localized");
+  });
+
+  test("localizes elements declared with data-i18n", async () => {
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        createResponse({ reset_button_label: { message: "Reset localized" } }),
+      )
+      .mockResolvedValueOnce(createResponse({}));
+    const element = createLocalizedElement("reset_button_label");
+    const service = createLocalizationService();
+    await service.ready;
+
+    service.applyLocalization(createRoot([element]));
+
+    expect(element.textContent).toBe("Reset localized");
   });
 
   test("localizes the donation reminder", async () => {
@@ -100,33 +119,22 @@ describe("createLocalizationService", () => {
         }),
       )
       .mockResolvedValueOnce(createResponse({}));
-    const elements = new Map(
-      [
-        ["donation-reminder-title", ""],
-        ["donation-reminder-message", ""],
-        ["donation-reminder-link", ""],
-        ["donation-reminder-close", ""],
-      ].map(([id, textContent]) => [id, { textContent }]),
-    );
-    const root = {
-      getElementById: vi.fn((id: string) => elements.get(id) ?? null),
-    } as unknown as Document;
+    const elements = [
+      createLocalizedElement("donation_reminder_title"),
+      createLocalizedElement("donation_reminder_message"),
+      createLocalizedElement("donation_reminder_link"),
+      createLocalizedElement("ok"),
+    ];
     const service = createLocalizationService();
     await service.ready;
 
-    service.applyLocalization(root);
+    service.applyLocalization(createRoot(elements));
 
-    expect(elements.get("donation-reminder-title")?.textContent).toBe(
+    expect(elements.map(({ textContent }) => textContent)).toEqual([
       "Title localized",
-    );
-    expect(elements.get("donation-reminder-message")?.textContent).toBe(
       "Message localized",
-    );
-    expect(elements.get("donation-reminder-link")?.textContent).toBe(
       "Link localized",
-    );
-    expect(elements.get("donation-reminder-close")?.textContent).toBe(
       "OK localized",
-    );
+    ]);
   });
 });

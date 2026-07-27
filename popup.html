@@ -32,26 +32,26 @@
   </div>
   <div class="controls-panel">
     <section class="control-card" id="volume-control-card">
-      <h2 id="global-controls-title">Global Controls</h2>
+      <h2 id="global-controls-title" data-i18n="global_controls_title">Global Controls</h2>
       <div class="global-actions">
         <div class="volume-control">
           <div class="gain-value-row">
-            <label for="master-volume" id="master-volume-label">Gain:</label>
+            <label for="master-volume" id="master-volume-label" data-i18n="gain_slider_label">Gain:</label>
             <output id="master-volume-value" for="master-volume">0.0 dB</output>
           </div>
           <input type="range" class="master-volume" id="master-volume" name="master-volume" min="-24" max="24" value="0">
         </div>
-        <button type="button" id="reset" class="reset-btn">Reset</button>
+        <button type="button" id="reset" class="reset-btn" data-i18n="reset_button_label">Reset</button>
       </div>
     </section>
     <section id="preset-controls-card" class="control-card">
-      <h2 id="preset-controls-title">Preset Controls</h2>
+      <h2 id="preset-controls-title" data-i18n="preset_controls_title">Preset Controls</h2>
       <div class="preset-actions">
-        <button type="button" id="save-preset" class="save-preset">Save preset</button>
+        <button type="button" id="save-preset" class="save-preset" data-i18n="save_preset_button_label">Save preset</button>
         <div class="dropdown" id="presets">
-          <div class="dropdown-toggle" id="presets-toggle">none</div>
+          <div class="dropdown-toggle" id="presets-toggle" data-i18n="empty_preset_name">none</div>
           <div class="dropdown-menu" id="presets-menu">
-            <div class="dropdown-item" data-value="none" id="none-item">none</div>
+            <div class="dropdown-item" data-value="none" id="none-item" data-i18n="empty_preset_name">none</div>
           </div>
         </div>
       </div>
@@ -61,15 +61,15 @@
   <div id="settings-modal" class="modal">
     <div class="modal-content">
       <span id="close-settings" class="close">&times;</span>
-      <h2 id="settings-header">Settings</h2>
+      <h2 id="settings-header" data-i18n="settings_title">Settings</h2>
       <label class="settings-row">
-        <text id="enable-spectrum-label">
+        <text id="enable-spectrum-label" data-i18n="enable_spectrum_setting_option">
           Enable spectrum visualisation (high CPU load)
         </text>
         <input type="checkbox" id="enable-spectrum">
       </label>
       <div class="settings-row">
-        <span id="points-count-label">EQ points</span>
+        <span id="points-count-label" data-i18n="points_count_setting_option">EQ points</span>
         <select id="points-count" class="settings-select">
           <option value="5">5</option>
           <option value="6">6</option>
@@ -79,26 +79,26 @@
         </select>
       </div>
       <div class="settings-row">
-        <span id="theme-label">Theme</span>
+        <span id="theme-label" data-i18n="theme_setting_option">Theme</span>
         <select id="theme-select" class="settings-select">
-          <option value="dark" id="theme-dark-option">Dark</option>
-          <option value="light" id="theme-light-option">Lignt</option>
+          <option value="dark" id="theme-dark-option" data-i18n="guide_theme_dark">Dark</option>
+          <option value="light" id="theme-light-option" data-i18n="guide_theme_light">Lignt</option>
         </select>
       </div>
       <div class="settings-row">
-        <span id="language-label">Language</span>
+        <span id="language-label" data-i18n="language_setting_option">Language</span>
         <select id="language-select" class="settings-select"></select>
       </div>
       
       <!--SHORTCUTS SECTION-->
       <div class="settings-section">
-        <h3 id="shortcuts-settings-title">Shortcuts</h3>
+        <h3 id="shortcuts-settings-title" data-i18n="shortcuts_settings_title">Shortcuts</h3>
         <div class="settings-row">
-          <span id="shortcut-mute-label">Mute/unmute</span>
+          <span id="shortcut-mute-label" data-i18n="shortcut_mute_label">Mute/unmute</span>
           <input type="text" id="shortcut-mute" class="settings-input shortcut-input" readonly>
         </div>
         <div class="settings-row">
-          <span id="shortcut-toggle-eq-label">Enable/disable</span>
+          <span id="shortcut-toggle-eq-label" data-i18n="shortcut_toggle_eq_label">Enable/disable</span>
           <input type="text" id="shortcut-toggle-eq" class="settings-input shortcut-input" readonly>
         </div>
         <div id="shortcuts-settings-error" class="settings-error"></div>
@@ -106,37 +106,37 @@
 
       <!--WHITELIST SECTION-->
       <div class="settings-section">
-        <h3 id="autostart-settings-title">Whitelist</h3>
+        <h3 id="autostart-settings-title" data-i18n="autostart_settings_title">Whitelist</h3>
         <div id="autostart-settings-list" class="autostart-settings-list"></div>
         <div class="autostart-settings-add-row">
           <select id="autostart-settings-type" class="settings-select autostart-settings-type-select">
-            <option value="domain" id="autostart-settings-type-domain">Domain</option>
-            <option value="url" id="autostart-settings-type-url">URL</option>
+            <option value="domain" id="autostart-settings-type-domain" data-i18n="autostart_rule_type_domain_label">Domain</option>
+            <option value="url" id="autostart-settings-type-url" data-i18n="autostart_rule_type_url_label">URL</option>
           </select>
           <input type="text" id="autostart-settings-add-value" class="settings-input autostart-settings-add-value-input" placeholder="example.com or https://example.com/page">
         </div>
         <div class="autostart-settings-add-row">
           <select id="autostart-settings-add-preset" class="settings-select autostart-preset-select"></select>
-          <button type="button" id="autostart-settings-add-btn">Add</button>
+          <button type="button" id="autostart-settings-add-btn" data-i18n="add">Add</button>
         </div>
         <div id="autostart-settings-error" class="settings-error"></div>
       </div>
       <div class="settings-section">
-        <h3 id="presets-settings-title">Presets</h3>
+        <h3 id="presets-settings-title" data-i18n="presets_settings_title">Presets</h3>
         <label class="settings-row">
-          <text id="hide-default-presets-label">Hide default presets</text>
+          <text id="hide-default-presets-label" data-i18n="hide_default_presets_label">Hide default presets</text>
           <input type="checkbox" id="hide-default-presets">
         </label>
         <div class="settings-actions">
           <input type="file" id="import-input" hidden>
-          <button type="input" id="import-presets">Import presets</button>
-          <button type="button" id="export-presets">Export presets</button>
+          <button type="input" id="import-presets" data-i18n="import_presets_button_label">Import presets</button>
+          <button type="button" id="export-presets" data-i18n="export_presets_button_label">Export presets</button>
         </div>
       </div>
 
       <!--COMMUNITY SECTION-->
       <div class="settings-section">
-        <h3 id="community-settings-title">Community</h3>
+        <h3 id="community-settings-title" data-i18n="community_settings_title">Community</h3>
         <div id="donation-label" class="notice-message">
           Support me:
           <a href="https://www.donationalerts.com/r/maitrog" target="_blank">Donation</a>
@@ -165,31 +165,31 @@
   <div id="autostart-modal" class="modal">
     <div class="modal-content confirm-modal">
       <span id="autostart-modal-close" class="close">&times;</span>
-      <h3 id="autostart-modal-title">Add to autostart whitelist</h3>
+      <h3 id="autostart-modal-title" data-i18n="autostart_modal_title">Add to autostart whitelist</h3>
       <div class="autostart-modal-choice-list">
         <label class="checkbox-row">
           <input type="radio" name="autostart-modal-add-type" value="domain" checked>
           <span>
-            <span id="autostart-modal-domain-label">Domain</span>
+            <span id="autostart-modal-domain-label" data-i18n="autostart_rule_type_domain_label">Domain</span>
             <small id="autostart-modal-domain-value" class="autostart-modal-choice-value"></small>
           </span>
         </label>
         <label class="checkbox-row">
           <input type="radio" name="autostart-modal-add-type" value="url">
           <span>
-            <span id="autostart-modal-url-label">Current URL</span>
+            <span id="autostart-modal-url-label" data-i18n="autostart_rule_type_url_label">Current URL</span>
             <small id="autostart-modal-url-value" class="autostart-modal-choice-value"></small>
           </span>
         </label>
       </div>
       <div class="settings-row">
-        <span id="autostart-modal-preset-label">Preset</span>
+        <span id="autostart-modal-preset-label" data-i18n="autostart_modal_preset_label">Preset</span>
         <select id="autostart-modal-preset" class="settings-select autostart-preset-select"></select>
       </div>
       <div id="autostart-modal-error" class="settings-error"></div>
       <div class="confirm-actions">
-        <button type="button" id="autostart-modal-cancel">Cancel</button>
-        <button type="button" id="autostart-modal-confirm">Add</button>
+        <button type="button" id="autostart-modal-cancel" data-i18n="cancel">Cancel</button>
+        <button type="button" id="autostart-modal-confirm" data-i18n="add">Add</button>
       </div>
     </div>
   </div>
@@ -197,30 +197,30 @@
   <div id="preset-save-modal" class="modal">
     <form id="preset-save-form" class="modal-content confirm-modal">
       <span id="preset-save-close" class="close">&times;</span>
-      <h3 id="preset-save-title">Save preset</h3>
-      <label for="preset-name" id="preset-name-label">Preset name</label>
+      <h3 id="preset-save-title" data-i18n="save_preset_modal_title">Save preset</h3>
+      <label for="preset-name" id="preset-name-label" data-i18n="preset_name_label">Preset name</label>
       <input type="text" id="preset-name" class="settings-input preset-name-input" autocomplete="off">
       <div id="preset-save-error" class="settings-error" role="alert"></div>
       <div class="confirm-actions">
-        <button type="button" id="preset-save-cancel">Cancel</button>
-        <button type="submit" id="preset-save-confirm">Save</button>
+        <button type="button" id="preset-save-cancel" data-i18n="cancel">Cancel</button>
+        <button type="submit" id="preset-save-confirm" data-i18n="save">Save</button>
       </div>
     </form>
   </div>
 
   <div id="points-reset-modal" class="modal">
     <div class="modal-content confirm-modal">
-      <h3 id="points-reset-title">Change points count?</h3>
-      <p id="points-reset-message">
+      <h3 id="points-reset-title" data-i18n="points_reset_title">Change points count?</h3>
+      <p id="points-reset-message" data-i18n="points_reset_message">
         Changing the number of points will reset the current EQ settings.
       </p>
       <label class="checkbox-row">
         <input type="checkbox" id="skip-reset-confirm">
-        <span id="skip-reset-label">Don't show again</span>
+        <span id="skip-reset-label" data-i18n="points_reset_skip">Don't show again</span>
       </label>
       <div class="confirm-actions">
-        <button type="button" id="points-reset-cancel">Cancel</button>
-        <button type="button" id="points-reset-confirm">Ok</button>
+        <button type="button" id="points-reset-cancel" data-i18n="cancel">Cancel</button>
+        <button type="button" id="points-reset-confirm" data-i18n="ok">Ok</button>
       </div>
     </div>
   </div>
@@ -300,16 +300,16 @@
   <div id="donation-reminder-modal" class="modal">
     <section class="modal-content notice-modal" role="dialog" aria-modal="true"
       aria-labelledby="donation-reminder-title">
-      <h2 id="donation-reminder-title">Support the developer</h2>
-      <p id="donation-reminder-message" class="notice-message">
+      <h2 id="donation-reminder-title" data-i18n="donation_reminder_title">Support the developer</h2>
+      <p id="donation-reminder-message" class="notice-message" data-i18n="donation_reminder_message">
         If this extension is useful to you, you can support its development.
       </p>
       <p class="notice-message">
-        <a id="donation-reminder-link" href="https://www.donationalerts.com/r/maitrog"
+        <a id="donation-reminder-link" href="https://www.donationalerts.com/r/maitrog" data-i18n="donation_reminder_link"
           target="_blank" rel="noreferrer">Support development</a>
       </p>
       <div class="notice-actions">
-        <button type="button" id="donation-reminder-close">OK</button>
+        <button type="button" id="donation-reminder-close" data-i18n="ok">OK</button>
       </div>
     </section>
   </div>
