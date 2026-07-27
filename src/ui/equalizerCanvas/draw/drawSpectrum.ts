@@ -111,15 +111,7 @@ export const createSpectrumRenderer = ({
 
     const sampleRate = meta.sampleRate || 48000;
     const maxFrequency = Math.min(24000, sampleRate / 2);
-    const colors = getColors();
-    const fill = ctx.createLinearGradient(0, 0, 0, height);
-    fill.addColorStop(0, colors.accentStart);
-    fill.addColorStop(1, colors.accentEnd);
-
-    ctx.beginPath();
-    ctx.moveTo(0, height);
-
-    let hasPoint = false;
+    const points: { x: number; y: number }[] = [];
 
     for (let i = 0; i < values.length; i++) {
       const frequency = spectrumBinToFrequency(i, values.length, meta);
@@ -137,14 +129,21 @@ export const createSpectrumRenderer = ({
       const x = frequencyToX(frequency, width - 10);
       const y = dbToSpectrumY(db, height, meta);
 
-      ctx.lineTo(x, y);
-      hasPoint = true;
+      points.push({ x, y });
     }
 
-    if (!hasPoint) {
+    if (!points.length) {
       return;
     }
 
+    const colors = getColors();
+    const fill = ctx.createLinearGradient(0, 0, 0, height);
+    fill.addColorStop(0, colors.accentStart);
+    fill.addColorStop(1, colors.accentEnd);
+
+    ctx.beginPath();
+    ctx.moveTo(0, height);
+    points.forEach(({ x, y }) => ctx.lineTo(x, y));
     ctx.lineTo(width, height);
     ctx.closePath();
     ctx.fillStyle = fill;
@@ -153,30 +152,9 @@ export const createSpectrumRenderer = ({
     ctx.globalAlpha = 1;
 
     ctx.beginPath();
-    hasPoint = false;
-
-    for (let i = 0; i < values.length; i++) {
-      const frequency = spectrumBinToFrequency(i, values.length, meta);
-
-      if (frequency > maxFrequency) {
-        break;
-      }
-
-      const db = values[i];
-
-      if (!Number.isFinite(db)) {
-        continue;
-      }
-
-      const x = frequencyToX(frequency, width - 10);
-      const y = dbToSpectrumY(db, height, meta);
-
-      if (!hasPoint) {
-        ctx.moveTo(x, y);
-        hasPoint = true;
-      } else {
-        ctx.lineTo(x, y);
-      }
+    ctx.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i < points.length; i++) {
+      ctx.lineTo(points[i].x, points[i].y);
     }
 
     ctx.strokeStyle = colors.accentMid;
