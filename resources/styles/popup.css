@@ -957,9 +957,25 @@ button:disabled:active {
 }
 
 .notice-modal {
+  position: relative;
   max-width: 380px;
   scrollbar-width: thin;
   scrollbar-color: var(--text-placeholder) transparent;
+}
+
+.notice-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: auto;
+  height: auto;
+  padding: 0;
+  background: transparent;
+  line-height: 1;
+}
+
+.notice-close:hover {
+  background: transparent;
 }
 
 .notice-modal ul {

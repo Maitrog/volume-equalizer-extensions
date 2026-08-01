@@ -5,6 +5,10 @@ import {
 } from "./installUpdateNoticeView";
 
 describe("getPendingInstallUpdateNotice", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   const stored = {
     [STORAGE_KEYS.INSTALL_UPDATE_NOTICE]: {
       reason: "update",
@@ -51,6 +55,7 @@ describe("getPendingInstallUpdateNotice", () => {
     const view = createInstallUpdateNoticeView({
       modal,
       closeButton,
+      topCloseButton: closeButton,
     });
 
     view.showInstallUpdateNotice({ reason: "install", version: "1.8.0" });
@@ -58,5 +63,32 @@ describe("getPendingInstallUpdateNotice", () => {
 
     view.showInstallUpdateNotice({ reason: "update", version: "1.8.0" });
     expect(modal.style.display).toBe("block");
+  });
+
+  it("closes Patch Notes from either close button", () => {
+    vi.stubGlobal("chrome", {
+      storage: { local: { remove: vi.fn().mockResolvedValue(undefined) } },
+    });
+    const listeners: Array<() => void> = [];
+    const createCloseButton = () =>
+      ({
+        addEventListener: (_event: string, listener: () => void) => {
+          listeners.push(listener);
+        },
+      }) as unknown as HTMLElement;
+    const modal = { style: { display: "block" } } as HTMLElement;
+
+    createInstallUpdateNoticeView({
+      modal,
+      closeButton: createCloseButton(),
+      topCloseButton: createCloseButton(),
+    });
+
+    expect(listeners).toHaveLength(2);
+    for (const listener of listeners) {
+      modal.style.display = "block";
+      listener();
+      expect(modal.style.display).toBe("none");
+    }
   });
 });

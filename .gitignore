@@ -137,3 +137,5 @@ dist
 **/docs
 **/.worktrees
 **/.superpowers
+**/.codex
+**/graphify-out

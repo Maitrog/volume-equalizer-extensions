@@ -389,6 +389,7 @@ export const createPopupApp = ({
 
   const installUpdateNoticeView = createInstallUpdateNoticeView({
     modal: elements.installUpdateNoticeModal,
+    topCloseButton: elements.installUpdateNoticeTopClose,
     closeButton: elements.installUpdateNoticeClose,
   });
 

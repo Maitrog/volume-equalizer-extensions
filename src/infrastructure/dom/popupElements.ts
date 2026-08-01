@@ -87,6 +87,7 @@ export interface PopupElements {
   pointsResetCancel: HTMLButtonElement;
   pointsResetConfirm: HTMLButtonElement;
   installUpdateNoticeModal: HTMLDivElement;
+  installUpdateNoticeTopClose: HTMLButtonElement;
   installUpdateNoticeClose: HTMLButtonElement;
   donationReminderModal: HTMLDivElement;
   donationReminderClose: HTMLButtonElement;
@@ -360,6 +361,11 @@ export const getPopupElements = (document: Document): PopupElements => ({
     document,
     "update-notice-modal",
     HTMLDivElement,
+  ),
+  installUpdateNoticeTopClose: getRequiredElement(
+    document,
+    "install-update-notice-top-close",
+    HTMLButtonElement,
   ),
   installUpdateNoticeClose: getRequiredElement(
     document,

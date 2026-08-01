@@ -35,14 +35,17 @@ export const getPendingInstallUpdateNotice = ({
 export const createInstallUpdateNoticeView = (deps: {
   modal: HTMLElement;
   closeButton: HTMLElement;
+  topCloseButton: HTMLElement;
 }) => {
   const closeInstallUpdateNotice = async (): Promise<void> => {
     deps.modal.style.display = "none";
     await chrome.storage.local.remove(STORAGE_KEYS.INSTALL_UPDATE_NOTICE);
   };
 
-  deps.closeButton.addEventListener("click", () => {
-    void closeInstallUpdateNotice();
+  [deps.closeButton, deps.topCloseButton].forEach((button) => {
+    button.addEventListener("click", () => {
+      void closeInstallUpdateNotice();
+    });
   });
 
   return {
