@@ -3,7 +3,7 @@
     "message": "EQ Toolkit - Equalizador de áudio"
   },
   "extDescription": {
-    "message": "Equalizador de áudio e amplificador de volume para qualquer separador: aumente graves, ajuste som e guarde predefinições."
+    "message": "Equalizador de áudio e amplificador de volume para qualquer separador: aumente graves, ajuste som, guarde predefinições, silencie separadores, utilize atalhos e começo automático."
   },
   "gain_slider_label": {
     "message": "Amplificação:"
@@ -21,7 +21,7 @@
     "message": "Nenhum"
   },
   "save_preset_button_label": {
-    "message": "Guardar"
+    "message": "Guardar predefinição"
   },
   "settings_title": {
     "message": "Definições"
@@ -147,10 +147,10 @@
     "message": "Este atalho já está a ser utilizado por outro comando."
   },
   "global_controls_title": {
-    "message": "Controlos globais"
+    "message": "Controlos Globais"
   },
   "preset_controls_title": {
-    "message": "Controlos de predefinições"
+    "message": "Controlos Predefinidos"
   },
   "save": {
     "message": "Guardar"
