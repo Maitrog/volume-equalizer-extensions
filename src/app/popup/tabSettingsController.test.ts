@@ -258,4 +258,26 @@ describe("tab settings selection", () => {
       );
     },
   );
+
+  test("shows the stored ordinary equalizer state for a non-captured tab", async () => {
+    const { controller, storage, effects } = setup();
+    storage.localValues[STORAGE_KEYS.tabEnabled(1)] = true;
+
+    await controller.load(1);
+
+    expect(effects.setEnableButtonClass).toHaveBeenCalledWith(true);
+    expect(storage.localGet).toHaveBeenCalledWith(
+      expect.arrayContaining([STORAGE_KEYS.tabEnabled(1)]),
+    );
+  });
+
+  test("prefers live capture bypass state over ordinary tabEnabled", async () => {
+    const { controller, storage, captures, effects } = setup();
+    storage.localValues[STORAGE_KEYS.tabEnabled(1)] = true;
+    captures.set(1, { enabled: false, filterSettings: [] });
+
+    await controller.load(1);
+
+    expect(effects.setEnableButtonClass).toHaveBeenCalledWith(false);
+  });
 });

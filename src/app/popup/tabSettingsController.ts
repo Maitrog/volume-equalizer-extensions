@@ -42,12 +42,14 @@ export const createTabSettingsController = (deps: {
     activeTabId = tabId;
     if (tabId == null) return true;
 
+    const tabEnabledKey = STORAGE_KEYS.tabEnabled(tabId);
     const result = await deps.localStorage.get([
       STORAGE_KEYS.FILTERS,
       STORAGE_KEYS.tabFilters(tabId),
       STORAGE_KEYS.tabGain(tabId),
       STORAGE_KEYS.tabMute(tabId),
       STORAGE_KEYS.tabCaptureError(tabId),
+      tabEnabledKey,
     ]);
     const tabFilters = readPersistedFilters(result[STORAGE_KEYS.tabFilters(tabId)]);
     const defaultFilters = readPersistedFilters(result[STORAGE_KEYS.FILTERS]);
@@ -74,7 +76,9 @@ export const createTabSettingsController = (deps: {
     if (filters) deps.setFilters(filters);
     else deps.initPoints(pointCount as number);
     deps.resize();
-    deps.setEnableButtonClass(capture?.enabled === true);
+    // A captured tab reports the live bypass state; an ordinary tab reports
+    // its stored page-equalizer state.
+    deps.setEnableButtonClass(capture ? capture.enabled : result[tabEnabledKey] === true);
     deps.setMuteButtonClass(muted);
     deps.renderCaptureError(
       typeof result[STORAGE_KEYS.tabCaptureError(tabId)] === "string"
