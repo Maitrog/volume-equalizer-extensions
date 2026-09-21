@@ -72,4 +72,38 @@ describe("applyAutostartForTab", () => {
       [STORAGE_KEYS.tabEnabled(123)]: false,
     });
   });
+
+  test("keeps the page equalizer disabled for a legacy toolkit-window tab", async () => {
+    const set = vi.fn();
+    vi.stubGlobal("chrome", {
+      storage: {
+        local: {
+          get: vi.fn().mockResolvedValue({
+            [STORAGE_KEYS.AUTOSTART_RULES]: [
+              {
+                type: "domain",
+                value: "example.com",
+                presetName: DEFAULT_PRESETS[0].name,
+              },
+            ],
+            [STORAGE_KEYS.PRESETS]: {},
+          }),
+          set,
+        },
+        session: {
+          get: vi.fn().mockResolvedValue({
+            [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [123],
+          }),
+        },
+      },
+    });
+
+    await applyAutostartForTab(123, "https://example.com/watch");
+
+    expect(set).toHaveBeenCalledWith({
+      [STORAGE_KEYS.tabFilters(123)]: DEFAULT_PRESETS[0].filters,
+      [STORAGE_KEYS.FILTERS]: DEFAULT_PRESETS[0].filters,
+      [STORAGE_KEYS.tabEnabled(123)]: false,
+    });
+  });
 });
