@@ -1,10 +1,15 @@
 import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
-import type { RuntimeMessage, SpectrumPayload } from "../../infrastructure/chrome/runtimeMessages";
+import type {
+  CaptureReply,
+  RuntimeMessage,
+  SpectrumPayload,
+} from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
-import type { CapturedTabsResult } from "./windowModeCoordinator";
+import type { CapturedTabsResult } from "./captureCoordinator";
 
 interface BackgroundRuntimeMessage extends RuntimeMessage {
+  target?: string;
   message?: unknown;
   tabId?: number;
 }
@@ -26,7 +31,13 @@ export interface RuntimeMessageHandlerDependencies {
   getCapturedTabs: () => Promise<CapturedTabsResult>;
   restoreSpectrumDemand: (sender: chrome.runtime.MessageSender) => void;
   toggleWindowMode: (tabId?: number) => Promise<void> | void;
+  startCapture: (tabId?: number) => Promise<CaptureReply>;
+  stopCapture: (tabId?: number) => Promise<CaptureReply>;
+  handleCaptureEnded: (tabId: number, sender: chrome.runtime.MessageSender) => void;
 }
+
+const isTabId = (value: unknown): value is number =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
@@ -35,6 +46,9 @@ export const createRuntimeMessageHandler = ({
   getCapturedTabs,
   restoreSpectrumDemand,
   toggleWindowMode,
+  startCapture,
+  stopCapture,
+  handleCaptureEnded,
 }: RuntimeMessageHandlerDependencies): RuntimeMessageHandler => {
   const updateBadge = (tabId: number, text: string): void => {
     void chrome.action.setBadgeText({ text, tabId }).catch((error: unknown) => {
@@ -62,6 +76,30 @@ export const createRuntimeMessageHandler = ({
           });
         });
       return true;
+    }
+
+    if (
+      request.method === RUNTIME_MESSAGES.START_TAB_CAPTURE ||
+      request.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE
+    ) {
+      const capture =
+        request.method === RUNTIME_MESSAGES.START_TAB_CAPTURE
+          ? startCapture(request.tabId ?? sender.tab?.id)
+          : stopCapture(request.tabId ?? sender.tab?.id);
+      void Promise.resolve(capture)
+        .then(response)
+        .catch((error: unknown) => {
+          response({
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        });
+      return true;
+    }
+
+    if (request.method === RUNTIME_MESSAGES.CAPTURE_ENDED) {
+      if (isTabId(request.tabId)) handleCaptureEnded(request.tabId, sender);
+      return;
     }
 
     if (request.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {

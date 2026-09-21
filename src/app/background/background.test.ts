@@ -4,6 +4,13 @@ const mocks = vi.hoisted(() => ({
   applyAutostartForTab: vi.fn(),
   clearTabStorage: vi.fn(),
   clearUnusedStorage: vi.fn(),
+  captureCoordinator: {
+    getCapturedTabs: vi.fn(),
+    handleCaptureEnded: vi.fn(),
+    handleTabRemoved: vi.fn(),
+    startCapture: vi.fn(),
+    stopCapture: vi.fn(),
+  },
   getCapturedTabs: vi.fn(),
   getToolkitWindowId: vi.fn(),
   removeTabIdFromToolkitWindowStore: vi.fn(),
@@ -19,6 +26,9 @@ const mocks = vi.hoisted(() => ({
 vi.mock("./autostartOnTab", () => ({
   applyAutostartForTab: mocks.applyAutostartForTab,
 }));
+vi.mock("./captureCoordinator", () => ({
+  captureCoordinator: mocks.captureCoordinator,
+}));
 vi.mock("./installUpdateNotice", () => ({
   prepareInstallUpdateNotice: vi.fn(),
 }));
@@ -30,6 +40,7 @@ vi.mock("./spectrumRelay", () => ({
   createSpectrumRelay: vi.fn(() => mocks.spectrumRelay),
 }));
 vi.mock("./storageCleanup", () => ({
+  clearLegacyToolkitWindowState: vi.fn(),
   clearTabStorage: mocks.clearTabStorage,
   clearUnusedStorage: mocks.clearUnusedStorage,
 }));
@@ -60,6 +71,7 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
       onUpdated: { addListener: vi.fn() },
       sendMessage: vi.fn(),
     },
+    tabCapture: { onStatusChanged: { addListener: vi.fn() } },
     windows: { onRemoved: { addListener: vi.fn() } },
   });
   return { onActivated };
@@ -107,5 +119,6 @@ describe("background tab activation", () => {
     );
 
     expect(mocks.clearTabStorage).toHaveBeenCalledWith(12);
+    expect(mocks.captureCoordinator.handleTabRemoved).toHaveBeenCalledWith(12);
   });
 });

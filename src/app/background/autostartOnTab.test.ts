@@ -56,7 +56,9 @@ describe("applyAutostartForTab", () => {
         },
         session: {
           get: vi.fn().mockResolvedValue({
-            [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [123],
+            [STORAGE_KEYS.CAPTURE_TAB_IDS]: [
+              { tabId: 123, previousTabEnabled: false, status: "active" },
+            ],
           }),
         },
       },

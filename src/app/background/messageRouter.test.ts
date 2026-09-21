@@ -58,6 +58,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler({ method: RUNTIME_MESSAGES.GET_CAPTURED_TABS }, {}, response);
@@ -77,6 +80,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler({ method: RUNTIME_MESSAGES.GET_CAPTURED_TABS }, {}, response);
@@ -96,6 +102,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn().mockResolvedValue(undefined),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -119,6 +128,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn().mockRejectedValue(new Error("capture failed")),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -145,6 +157,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -172,6 +187,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -196,6 +214,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -219,6 +240,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -246,6 +270,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     handler(
@@ -271,6 +298,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
 
     const result = handler(
@@ -292,6 +322,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame,
       restoreSpectrumDemand: vi.fn(),
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
     const payload = {
       type: "spectrum" as const,
@@ -319,6 +352,9 @@ describe("createRuntimeMessageHandler", () => {
       acceptSpectrumFrame: vi.fn(),
       restoreSpectrumDemand,
       toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
     });
     const routedSender = {
       tab: { id: 12 } as chrome.tabs.Tab,
@@ -334,5 +370,104 @@ describe("createRuntimeMessageHandler", () => {
 
     expect(restoreSpectrumDemand).toHaveBeenCalledOnce();
     expect(restoreSpectrumDemand).toHaveBeenCalledWith(routedSender);
+  });
+
+  test("starts tab capture and responds with its reply", async () => {
+    createChromeMock();
+    const response = vi.fn();
+    const startCapture = vi.fn().mockResolvedValue({ ok: true, captures: [] });
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture,
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    const result = handler({ method: RUNTIME_MESSAGES.START_TAB_CAPTURE, tabId: 12 }, {}, response);
+    await flushPromises();
+
+    expect(result).toBe(true);
+    expect(startCapture).toHaveBeenCalledWith(12);
+    expect(response).toHaveBeenCalledWith({ ok: true, captures: [] });
+  });
+
+  test("responds with a tab capture failure", async () => {
+    createChromeMock();
+    const response = vi.fn();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn().mockResolvedValue({ ok: false, error: "capture failed" }),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    const result = handler({ method: RUNTIME_MESSAGES.START_TAB_CAPTURE, tabId: 12 }, {}, response);
+    await flushPromises();
+
+    expect(result).toBe(true);
+    expect(response).toHaveBeenCalledWith({ ok: false, error: "capture failed" });
+  });
+
+  test("stops tab capture for the sender tab when no id is sent", async () => {
+    createChromeMock();
+    const response = vi.fn();
+    const stopCapture = vi.fn().mockResolvedValue({ ok: true, captures: [] });
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture,
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.STOP_TAB_CAPTURE },
+      { tab: { id: 5 } as chrome.tabs.Tab },
+      response,
+    );
+    await flushPromises();
+
+    expect(stopCapture).toHaveBeenCalledWith(5);
+    expect(response).toHaveBeenCalledWith({ ok: true, captures: [] });
+  });
+
+  test("routes a capture-ended background message with its sender", () => {
+    createChromeMock();
+    const handleCaptureEnded = vi.fn();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded,
+    });
+    const sender = { id: "test-extension" } as chrome.runtime.MessageSender;
+
+    expect(
+      handler(
+        { target: "background", method: RUNTIME_MESSAGES.CAPTURE_ENDED, tabId: 9 },
+        sender,
+        vi.fn(),
+      ),
+    ).toBeUndefined();
+    expect(handleCaptureEnded).toHaveBeenCalledWith(9, sender);
   });
 });

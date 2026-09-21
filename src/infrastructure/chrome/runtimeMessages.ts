@@ -21,6 +21,8 @@ export const RUNTIME_MESSAGES = {
   CAPTURE_LIST: "capture-list",
   CAPTURE_SPECTRUM_DEMAND: "capture-spectrum-demand",
   CAPTURE_ENDED: "capture-ended",
+  START_TAB_CAPTURE: "start-tab-capture",
+  STOP_TAB_CAPTURE: "stop-tab-capture",
 } as const;
 
 export type RuntimeMessageMethod = (typeof RUNTIME_MESSAGES)[keyof typeof RUNTIME_MESSAGES];

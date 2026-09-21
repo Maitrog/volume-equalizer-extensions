@@ -29,3 +29,12 @@ export const clearUnusedStorage = async (): Promise<void> => {
 
   if (unusedKeys.length > 0) await chrome.storage.local.remove(unusedKeys);
 };
+
+export const clearLegacyToolkitWindowState = async (): Promise<void> => {
+  await chrome.storage.session.remove([
+    STORAGE_KEYS.TOOLKIT_WINDOW_ID,
+    STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
+    STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+    STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
+  ]);
+};

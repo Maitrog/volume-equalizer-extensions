@@ -1,13 +1,17 @@
 import { applyAutostartForTab } from "./autostartOnTab";
+import { captureCoordinator } from "./captureCoordinator";
 import { prepareInstallUpdateNotice } from "./installUpdateNotice";
 import { createRuntimeMessageHandler } from "./messageRouter";
 import { registerContentScripts } from "./registerContentScripts";
 import { createSpectrumRelay } from "./spectrumRelay";
-import { clearTabStorage, clearUnusedStorage } from "./storageCleanup";
+import {
+  clearLegacyToolkitWindowState,
+  clearTabStorage,
+  clearUnusedStorage,
+} from "./storageCleanup";
 import { RUNTIME_MESSAGES, SPECTRUM_PORT_NAME } from "../../infrastructure/chrome/runtimeMessages";
 import {
   clearToolkitWindowState,
-  getCapturedTabs,
   getToolkitWindowId,
   removeTabIdFromToolkitWindowStore,
   toggleWindowMode,
@@ -23,6 +27,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 
   await registerContentScripts();
   await prepareInstallUpdateNotice(details);
+  await clearLegacyToolkitWindowState();
 });
 
 const spectrumRelay = createSpectrumRelay({
@@ -53,9 +58,16 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   acceptSpectrumFrame: spectrumRelay.acceptFrame,
   applyAutostartForTab,
   clearUnusedStorage,
-  getCapturedTabs,
+  getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
   toggleWindowMode,
+  startCapture: captureCoordinator.startCapture,
+  stopCapture: captureCoordinator.stopCapture,
+  handleCaptureEnded: (tabId, sender) => {
+    const offscreenUrl = chrome.runtime.getURL("offscreen.html");
+    if (sender.id !== chrome.runtime.id || sender.url !== offscreenUrl) return;
+    void captureCoordinator.handleCaptureEnded(tabId);
+  },
 });
 
 chrome.runtime.onMessage.addListener(
@@ -69,6 +81,7 @@ const queueTabCleanup = (tabId: number): Promise<void> => {
   spectrumRelay.removeTab(tabId);
   tabRemovalQueue = tabRemovalQueue
     .then(async () => {
+      await captureCoordinator.handleTabRemoved(tabId);
       await removeTabIdFromToolkitWindowStore(tabId);
       await clearTabStorage(tabId);
     })
@@ -130,6 +143,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.tabs.onRemoved.addListener((tabId) => {
   void queueTabCleanup(tabId);
+});
+
+chrome.tabCapture.onStatusChanged.addListener(({ tabId, status }) => {
+  if (status !== "stopped") return;
+  void captureCoordinator.handleCaptureEnded(tabId);
 });
 
 chrome.windows.onRemoved.addListener(async (windowId) => {

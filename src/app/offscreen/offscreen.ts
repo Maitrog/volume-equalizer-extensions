@@ -98,11 +98,14 @@ if (typeof chrome !== "undefined") {
   const engine = createCaptureEngine({
     audioContext: new AudioContext(),
     onCaptureEnded: (tabId) => {
-      void chrome.runtime.sendMessage({
-        target: "background",
-        method: RUNTIME_MESSAGES.CAPTURE_ENDED,
-        tabId,
-      });
+      // The service worker may be dormant; nothing can consume the rejection.
+      void chrome.runtime
+        .sendMessage({
+          target: "background",
+          method: RUNTIME_MESSAGES.CAPTURE_ENDED,
+          tabId,
+        })
+        .catch(() => undefined);
     },
   });
   const handler = createOffscreenMessageHandler({
