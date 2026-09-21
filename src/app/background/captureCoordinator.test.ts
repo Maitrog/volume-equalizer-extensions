@@ -328,6 +328,26 @@ describe("captureCoordinator", () => {
     expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
   });
 
+  test("clears stale capture state before restoring ordinary mode", async () => {
+    const harness = createHarness();
+    harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS] = [
+      { tabId: 5, previousTabEnabled: true, status: "active" },
+    ];
+    harness.session[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = 5;
+    harness.local[STORAGE_KEYS.tabEnabled(5)] = false;
+    const notifyCaptureModeChanged = vi.fn(async () => {
+      expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
+      expect(harness.session[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBeNull();
+    });
+    const coordinator = createCaptureCoordinator({ notifyCaptureModeChanged });
+
+    expect(await coordinator.getCaptures()).toEqual([]);
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(5)]).toBe(true);
+    expect(notifyCaptureModeChanged).toHaveBeenCalledOnce();
+    expect(notifyCaptureModeChanged).toHaveBeenCalledWith(5);
+  });
+
   test("keeps live captures and syncs storage after a service worker restart", async () => {
     const harness = createHarness();
     const first = createCaptureCoordinator();

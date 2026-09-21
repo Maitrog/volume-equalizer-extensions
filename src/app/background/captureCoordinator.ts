@@ -210,11 +210,14 @@ export const createCaptureCoordinator = (
 
   const clearStaleStateIfNoDocument = async (): Promise<void> => {
     const snapshots = await readCaptureTabSnapshots();
-    for (const snapshot of snapshots) {
-      await restoreTabEnabled(snapshot.tabId, snapshot.previousTabEnabled);
-    }
+    // Clear the capture state first so a content script re-checking its mode
+    // during the notify below already resolves to page mode.
     if (snapshots.length > 0) await writeSnapshots([]);
     if ((await readActiveTabId()) != null) await writeActiveTabId(null);
+    for (const snapshot of snapshots) {
+      await restoreTabEnabled(snapshot.tabId, snapshot.previousTabEnabled);
+      await notifyModeChanged(snapshot.tabId);
+    }
   };
 
   const readLiveCaptures = async (): Promise<CaptureState[]> => {
