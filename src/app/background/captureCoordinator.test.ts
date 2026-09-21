@@ -353,13 +353,27 @@ describe("captureCoordinator", () => {
     const first = createCaptureCoordinator();
     await first.startCapture(1);
 
+    harness.closeDocument.mockClear();
     const restarted = createCaptureCoordinator();
     const captures = await restarted.getCaptures();
 
     expect(captures.map((capture) => capture.tabId)).toEqual([1]);
+    expect(harness.closeDocument).not.toHaveBeenCalled();
+    expect(harness.open).toBe(true);
     expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([
       { tabId: 1, previousTabEnabled: false, status: "active" },
     ]);
+  });
+
+  test("closes a surviving offscreen document when reconciliation finds no captures", async () => {
+    const harness = createHarness();
+    harness.open = true;
+    const coordinator = createCaptureCoordinator();
+
+    expect(await coordinator.getCaptures()).toEqual([]);
+
+    expect(harness.closeDocument).toHaveBeenCalledOnce();
+    expect(harness.open).toBe(false);
   });
 
   test("closes the document when the last capture ends", async () => {

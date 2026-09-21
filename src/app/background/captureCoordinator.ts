@@ -281,6 +281,9 @@ export const createCaptureCoordinator = (
     for (const snapshot of dropped) {
       await notifyModeChanged(snapshot.tabId);
     }
+    // `captures` is the fresh authoritative list and the queue blocks
+    // concurrent start/stop, so an empty list means the document is idle.
+    if (captures.length === 0) await chrome.offscreen.closeDocument();
   };
 
   const ensureReconciled = (): Promise<void> => {
