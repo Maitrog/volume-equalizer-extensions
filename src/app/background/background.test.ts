@@ -1,5 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
+
 const mocks = vi.hoisted(() => ({
   applyAutostartForTab: vi.fn(),
   clearTabStorage: vi.fn(),
@@ -16,12 +18,21 @@ const mocks = vi.hoisted(() => ({
   },
   getCapturedTabs: vi.fn(),
   getToolkitWindowId: vi.fn(),
+  messageRouterDeps: null as null | {
+    startCapture(tabId?: number): Promise<unknown>;
+    stopCapture(tabId?: number): Promise<unknown>;
+  },
   removeTabIdFromToolkitWindowStore: vi.fn(),
   spectrumRelay: {
     acceptFrame: vi.fn(),
+    acceptCaptureFrame: vi.fn(),
     connect: vi.fn(),
     contentReady: vi.fn(),
     removeTab: vi.fn(),
+    resetSources: vi.fn(),
+  },
+  spectrumRelayDeps: null as null | {
+    setDemand(tabId: number, enabled: boolean, frameId?: number): void;
   },
   toggleWindowMode: vi.fn(),
 }));
@@ -36,11 +47,24 @@ vi.mock("./installUpdateNotice", () => ({
   prepareInstallUpdateNotice: vi.fn(),
 }));
 vi.mock("./messageRouter", () => ({
-  createRuntimeMessageHandler: vi.fn(() => vi.fn()),
+  createRuntimeMessageHandler: vi.fn(
+    (deps: {
+      startCapture(tabId?: number): Promise<unknown>;
+      stopCapture(tabId?: number): Promise<unknown>;
+    }) => {
+      mocks.messageRouterDeps = deps;
+      return vi.fn();
+    },
+  ),
 }));
 vi.mock("./registerContentScripts", () => ({ registerContentScripts: vi.fn() }));
 vi.mock("./spectrumRelay", () => ({
-  createSpectrumRelay: vi.fn(() => mocks.spectrumRelay),
+  createSpectrumRelay: vi.fn(
+    (deps: { setDemand(tabId: number, enabled: boolean, frameId?: number): void }) => {
+      mocks.spectrumRelayDeps = deps;
+      return mocks.spectrumRelay;
+    },
+  ),
 }));
 vi.mock("./storageCleanup", () => ({
   clearLegacyToolkitWindowState: vi.fn(),
@@ -57,13 +81,18 @@ vi.mock("./windowModeCoordinator", () => ({
 
 const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
   const onActivated = vi.fn();
+  const runtimeSendMessage = vi.fn(() => Promise.resolve(undefined));
+  const tabsSendMessage = vi.fn(() => Promise.resolve(undefined));
   vi.stubGlobal("chrome", {
     action: { setBadgeText: vi.fn() },
     runtime: {
+      id: "extension-id",
+      getURL: vi.fn((path: string) => `chrome-extension://extension-id/${path}`),
       onConnect: { addListener: vi.fn() },
       onInstalled: { addListener: vi.fn() },
       onMessage: { addListener: vi.fn() },
       onStartup: { addListener: vi.fn() },
+      sendMessage: runtimeSendMessage,
       setUninstallURL: vi.fn(),
     },
     storage: {
@@ -76,12 +105,12 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
       onActivated: { addListener: onActivated },
       onRemoved: { addListener: vi.fn() },
       onUpdated: { addListener: vi.fn() },
-      sendMessage: vi.fn(),
+      sendMessage: tabsSendMessage,
     },
     tabCapture: { onStatusChanged: { addListener: vi.fn() } },
     windows: { onRemoved: { addListener: vi.fn() } },
   });
-  return { onActivated };
+  return { onActivated, runtimeSendMessage, tabsSendMessage };
 };
 
 describe("background tab activation", () => {
@@ -127,5 +156,56 @@ describe("background tab activation", () => {
 
     expect(mocks.clearTabStorage).toHaveBeenCalledWith(12);
     expect(mocks.captureCoordinator.handleTabRemoved).toHaveBeenCalledWith(12);
+  });
+
+  test("routes spectrum demand to the offscreen capture for a live tab", async () => {
+    const { runtimeSendMessage, tabsSendMessage } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.getCaptures.mockResolvedValue([{ tabId: 7, settings: {} }] as never);
+    await import("./background");
+
+    mocks.spectrumRelayDeps?.setDemand(7, true);
+
+    await vi.waitFor(() =>
+      expect(runtimeSendMessage).toHaveBeenCalledWith({
+        target: "offscreen",
+        method: RUNTIME_MESSAGES.CAPTURE_SPECTRUM_DEMAND,
+        tabId: 7,
+        enabled: true,
+      }),
+    );
+    expect(tabsSendMessage).not.toHaveBeenCalled();
+  });
+
+  test("resets spectrum sources when capture starts and stops", async () => {
+    createChromeMock(vi.fn());
+    mocks.captureCoordinator.startCapture.mockResolvedValue({ ok: true, captures: [] });
+    mocks.captureCoordinator.stopCapture.mockResolvedValue({ ok: true, captures: [] });
+    await import("./background");
+
+    await mocks.messageRouterDeps?.startCapture(7);
+    expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7);
+    await mocks.messageRouterDeps?.stopCapture(7);
+    expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledTimes(2);
+    expect(mocks.spectrumRelay.resetSources).toHaveBeenLastCalledWith(7);
+  });
+
+  test("routes spectrum demand to the page for an ordinary tab", async () => {
+    const { runtimeSendMessage, tabsSendMessage } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.getCaptures.mockResolvedValue([]);
+    await import("./background");
+
+    mocks.spectrumRelayDeps?.setDemand(7, true, 3);
+
+    await vi.waitFor(() =>
+      expect(tabsSendMessage).toHaveBeenCalledWith(
+        7,
+        {
+          method: RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND,
+          payload: { enabled: true },
+        },
+        { frameId: 3 },
+      ),
+    );
+    expect(runtimeSendMessage).not.toHaveBeenCalled();
   });
 });

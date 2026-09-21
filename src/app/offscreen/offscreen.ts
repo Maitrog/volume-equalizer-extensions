@@ -97,6 +97,17 @@ export const createOffscreenMessageHandler = (deps: {
 if (typeof chrome !== "undefined") {
   const engine = createCaptureEngine({
     audioContext: new AudioContext(),
+    sendSpectrumFrame: (tabId, payload) => {
+      // The service worker may be dormant; nothing can consume the rejection.
+      void chrome.runtime
+        .sendMessage({
+          target: "background",
+          method: RUNTIME_MESSAGES.SPECTRUM_FRAME,
+          tabId,
+          payload,
+        })
+        .catch(() => undefined);
+    },
     onCaptureEnded: (tabId) => {
       // The service worker may be dormant; nothing can consume the rejection.
       void chrome.runtime

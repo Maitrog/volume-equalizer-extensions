@@ -6,9 +6,11 @@ import {
   type ShortcutMap,
 } from "../../domains/shortcuts/shortcuts";
 import {
+  isSameSpectrumSource,
   SPECTRUM_PORT_NAME,
   type RelayedSpectrumMessage,
   type SpectrumMetaPayload,
+  type SpectrumSource,
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
@@ -32,7 +34,7 @@ export const attachPopupSubscriptions = (deps: {
   onPagehide(): void;
 }) => {
   let disposed = false;
-  let activeFrameId: number | null = null;
+  let activeSource: SpectrumSource | null = null;
   let spectrumTabId: number | null = null;
   let currentPort: chrome.runtime.Port | null = null;
   let reconnectTimer: ReturnType<typeof setTimeout> | null = null;
@@ -130,23 +132,23 @@ export const attachPopupSubscriptions = (deps: {
         return;
       }
       const message = value as Partial<RelayedSpectrumMessage>;
-      if (message.tabId !== tabId || !Number.isInteger(message.frameId)) return;
+      const source = message.source;
       const payload = message.payload;
-      if (payload?.type === "meta") {
-        activeFrameId = message.frameId as number;
+      if (message.tabId !== tabId || !source || !payload) return;
+      if (payload.type === "meta") {
+        activeSource = source;
         deps.onSpectrumMeta(payload);
         return;
       }
-      if (payload?.type !== "spectrum" || message.frameId !== activeFrameId) {
-        return;
-      }
+      if (payload.type !== "spectrum") return;
+      if (activeSource === null || !isSameSpectrumSource(source, activeSource)) return;
       deps.onSpectrumFrame(payload.buffer, payload.clipping);
-      if (payload.buffer === null) activeFrameId = null;
+      if (payload.buffer === null) activeSource = null;
     });
     port.onDisconnect.addListener(() => {
       if (disposed || currentPort !== port) return;
       currentPort = null;
-      activeFrameId = null;
+      activeSource = null;
       deps.onSpectrumFrame(null, false);
       reconnectTimer = setTimeout(connectPort, 100);
     });
@@ -160,7 +162,7 @@ export const attachPopupSubscriptions = (deps: {
     const previousPort = currentPort;
     currentPort = null;
     previousPort?.disconnect();
-    activeFrameId = null;
+    activeSource = null;
     spectrumTabId = tabId;
     connectPort();
   };
@@ -175,7 +177,7 @@ export const attachPopupSubscriptions = (deps: {
     if (reconnectTimer !== null) clearTimeout(reconnectTimer);
     reconnectTimer = null;
     spectrumTabId = null;
-    activeFrameId = null;
+    activeSource = null;
     const port = currentPort;
     currentPort = null;
     port?.disconnect();

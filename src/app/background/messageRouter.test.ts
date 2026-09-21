@@ -553,6 +553,111 @@ describe("createRuntimeMessageHandler", () => {
     expect(response).toHaveBeenCalledWith({ ok: true, captures: [] });
   });
 
+  test("accepts an offscreen capture frame only from a verified live capture", async () => {
+    createChromeMock();
+    const acceptCaptureFrame = vi.fn();
+    const acceptSpectrumFrame = vi.fn();
+    const isOffscreenSender = (candidate: chrome.runtime.MessageSender) =>
+      candidate.id === "extension-id" &&
+      candidate.url === "chrome-extension://extension-id/offscreen.html";
+    const isLiveCapture = vi.fn(() => true);
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame,
+      acceptCaptureFrame,
+      isLiveCapture,
+      isOffscreenSender,
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+    const payload = {
+      type: "spectrum" as const,
+      buffer: [-42, -38],
+      clipping: false,
+    };
+    const offscreenSender = {
+      id: "extension-id",
+      url: "chrome-extension://extension-id/offscreen.html",
+    } as chrome.runtime.MessageSender;
+
+    handler(
+      { target: "background", method: RUNTIME_MESSAGES.SPECTRUM_FRAME, tabId: 12, payload },
+      offscreenSender,
+      vi.fn(),
+    );
+    await flushPromises();
+
+    expect(acceptCaptureFrame).toHaveBeenCalledWith(12, payload);
+    expect(acceptSpectrumFrame).not.toHaveBeenCalled();
+  });
+
+  test("rejects capture frames without a live session or a verified sender", async () => {
+    createChromeMock();
+    const acceptCaptureFrame = vi.fn();
+    const acceptSpectrumFrame = vi.fn();
+    const isLiveCapture = vi.fn(() => false);
+    const isOffscreenSender = (candidate: chrome.runtime.MessageSender) =>
+      candidate.id === "extension-id" &&
+      candidate.url === "chrome-extension://extension-id/offscreen.html";
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame,
+      acceptCaptureFrame,
+      isLiveCapture,
+      isOffscreenSender,
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+    const payload = {
+      type: "spectrum" as const,
+      buffer: [-42, -38],
+      clipping: false,
+    };
+
+    handler(
+      { target: "background", method: RUNTIME_MESSAGES.SPECTRUM_FRAME, tabId: 12, payload },
+      {
+        id: "extension-id",
+        url: "chrome-extension://extension-id/offscreen.html",
+      } as chrome.runtime.MessageSender,
+      vi.fn(),
+    );
+    await flushPromises();
+    expect(acceptCaptureFrame).not.toHaveBeenCalled();
+
+    handler(
+      { target: "background", method: RUNTIME_MESSAGES.SPECTRUM_FRAME, tabId: 12, payload },
+      { id: "other-extension", url: "chrome-extension://other/offscreen.html" } as never,
+      vi.fn(),
+    );
+    await flushPromises();
+    expect(acceptCaptureFrame).not.toHaveBeenCalled();
+
+    handler(
+      { method: RUNTIME_MESSAGES.SPECTRUM_FRAME, payload },
+      { tab: { id: 13 } as chrome.tabs.Tab, frameId: 1 } as chrome.runtime.MessageSender,
+      vi.fn(),
+    );
+    await flushPromises();
+    expect(acceptSpectrumFrame).toHaveBeenCalledWith(payload, {
+      tab: { id: 13 },
+      frameId: 1,
+    });
+    expect(acceptCaptureFrame).not.toHaveBeenCalled();
+  });
+
   test("routes a capture-ended background message with its sender", () => {
     createChromeMock();
     const handleCaptureEnded = vi.fn();

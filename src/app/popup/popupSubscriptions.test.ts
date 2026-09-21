@@ -192,26 +192,30 @@ describe("popup subscriptions", () => {
 
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-42], clipping: false },
     });
-    port.onMessage.fire({ tabId: 13, frameId: 3, payload: meta });
+    port.onMessage.fire({
+      tabId: 13,
+      source: { kind: "content", frameId: 3 },
+      payload: meta,
+    });
     expect(callbacks.onSpectrumFrame).not.toHaveBeenCalled();
 
-    port.onMessage.fire({ tabId: 12, frameId: 3, payload: meta });
+    port.onMessage.fire({ tabId: 12, source: { kind: "content", frameId: 3 }, payload: meta });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-42], clipping: true },
     });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: null, clipping: false },
     });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-30], clipping: false },
     });
 
@@ -219,6 +223,49 @@ describe("popup subscriptions", () => {
     expect(callbacks.onSpectrumFrame.mock.calls).toEqual([
       [[-42], true],
       [null, false],
+    ]);
+    subscriptions.dispose();
+  });
+
+  test("switches between content and capture sources and follows the new metadata", () => {
+    const { subscriptions, callbacks, port } = setup();
+    subscriptions.connectSpectrum(12);
+    const meta = {
+      type: "meta" as const,
+      sampleRate: 48000,
+      fftSize: 2048,
+      minDb: -100,
+      maxDb: -30,
+      frequencyBinCount: 1024,
+    };
+    const captureSource = { kind: "capture" as const };
+
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: meta,
+    });
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: { type: "spectrum", buffer: [-40], clipping: false },
+    });
+    port.onMessage.fire({ tabId: 12, source: captureSource, payload: meta });
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: { type: "spectrum", buffer: [-10], clipping: false },
+    });
+    port.onMessage.fire({
+      tabId: 12,
+      source: captureSource,
+      payload: { type: "spectrum", buffer: [-20], clipping: false },
+    });
+
+    expect(callbacks.onSpectrumMeta).toHaveBeenCalledTimes(2);
+    expect(callbacks.onSpectrumFrame.mock.calls).toEqual([
+      [[-40], false],
+      [[-20], false],
     ]);
     subscriptions.dispose();
   });

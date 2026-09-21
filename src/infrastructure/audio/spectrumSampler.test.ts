@@ -1,6 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
 
-import { createSpectrumSampler } from "./spectrumSampler";
+import { createSpectrumSampler, serializeSpectrumBuffer } from "./spectrumSampler";
 
 class FakeNode {
   connections: object[] = [];
@@ -49,6 +49,12 @@ class FakeContext {
 
 afterEach(() => {
   vi.unstubAllGlobals();
+});
+
+test("serializes buffers to finite numbers using the floor for silent bins", () => {
+  const buffer = new Float32Array([-42, -Infinity, NaN, 0, Infinity]);
+
+  expect(serializeSpectrumBuffer(buffer, -100)).toEqual([-42, -100, -100, 0, -100]);
 });
 
 test("disconnects only its analyser while switching outputs and stopping", () => {

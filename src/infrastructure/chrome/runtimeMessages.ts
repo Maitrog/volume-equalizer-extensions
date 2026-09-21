@@ -87,11 +87,16 @@ export interface SpectrumSubscribeMessage {
   tabId: number;
 }
 
+export type SpectrumSource = { kind: "content"; frameId: number } | { kind: "capture" };
+
 export interface RelayedSpectrumMessage {
   tabId: number;
-  frameId: number;
+  source: SpectrumSource;
   payload: SpectrumPayload;
 }
+
+export const isSameSpectrumSource = (a: SpectrumSource, b: SpectrumSource): boolean =>
+  a.kind === "capture" ? b.kind === "capture" : b.kind === "content" && a.frameId === b.frameId;
 
 export const normalizeSpectrumPayload = (value: unknown): SpectrumPayload | null => {
   if (!value || typeof value !== "object") return null;

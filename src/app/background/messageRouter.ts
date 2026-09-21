@@ -1,4 +1,7 @@
-import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
+import {
+  normalizeSpectrumPayload,
+  RUNTIME_MESSAGES,
+} from "../../infrastructure/chrome/runtimeMessages";
 import type {
   CaptureReply,
   RuntimeMessage,
@@ -23,6 +26,9 @@ type RuntimeMessageHandler = (
 
 export interface RuntimeMessageHandlerDependencies {
   acceptSpectrumFrame: (payload: SpectrumPayload, sender: chrome.runtime.MessageSender) => void;
+  acceptCaptureFrame?: (tabId: number, payload: SpectrumPayload) => void;
+  isLiveCapture?: (tabId: number) => boolean;
+  isOffscreenSender?: (sender: chrome.runtime.MessageSender) => boolean;
   applyAutostartForTab: (
     tabId: number | undefined,
     url: string | undefined,
@@ -43,6 +49,9 @@ const isTabId = (value: unknown): value is number =>
 
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
+  acceptCaptureFrame = () => undefined,
+  isLiveCapture = () => false,
+  isOffscreenSender = () => false,
   applyAutostartForTab,
   applyToolkitShortcut,
   clearUnusedStorage,
@@ -116,6 +125,19 @@ export const createRuntimeMessageHandler = ({
           response({ tabs: [], activeTabId: null });
         });
       return true;
+    }
+
+    // The offscreen document has no sender.tab, so capture frames carry the tab id
+    // explicitly and are accepted only from a verified offscreen sender with a live session.
+    if (
+      request.method === RUNTIME_MESSAGES.SPECTRUM_FRAME &&
+      isOffscreenSender(sender) &&
+      isTabId(request.tabId)
+    ) {
+      const captureTabId = request.tabId;
+      const payload = normalizeSpectrumPayload(request.payload);
+      if (payload && isLiveCapture(captureTabId)) acceptCaptureFrame(captureTabId, payload);
+      return;
     }
 
     const tabId = sender.tab?.id;

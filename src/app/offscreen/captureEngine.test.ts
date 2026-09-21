@@ -1,8 +1,12 @@
-import { expect, test, vi } from "vitest";
+import { afterEach, expect, test, vi } from "vitest";
 
 import type { CaptureSettings } from "../../infrastructure/chrome/runtimeMessages";
 import type { CaptureGraph } from "./captureGraph";
 import { createCaptureEngine } from "./captureEngine";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 const settings: CaptureSettings = {
   enabled: true,
@@ -200,6 +204,125 @@ test("track ended stops only the matching session and notifies once", async () =
   expect(onCaptureEnded).toHaveBeenCalledOnce();
   expect(onCaptureEnded).toHaveBeenCalledWith(1);
   expect(engine.list()).toEqual([{ tabId: 2, settings }]);
+});
+
+class FakeSpectrumNode {
+  connect = vi.fn();
+  disconnect = vi.fn();
+}
+
+class FakeAnalyser extends FakeSpectrumNode {
+  fftSize = 4;
+  smoothingTimeConstant = 0;
+  minDecibels = -100;
+  maxDecibels = -30;
+  frequencyBinCount = 2;
+
+  getFloatFrequencyData(buffer: Float32Array): void {
+    buffer.fill(-Infinity);
+  }
+
+  getFloatTimeDomainData(buffer: Float32Array): void {
+    buffer.fill(0);
+  }
+}
+
+class FakeSpectrumContext {
+  sampleRate = 48000;
+  resume = vi.fn(async () => undefined);
+  createAnalyser = vi.fn(() => new FakeAnalyser());
+}
+
+test("samples demand per tab, serializes non-finite bins, and keeps the audio graph alive", async () => {
+  const ticks: Array<() => void> = [];
+  vi.stubGlobal(
+    "setInterval",
+    vi.fn((tick: () => void) => {
+      ticks.push(tick);
+      return ticks.length;
+    }),
+  );
+  const clearIntervalSpy = vi.fn();
+  vi.stubGlobal("clearInterval", clearIntervalSpy);
+
+  const mediaA = fakeStream();
+  const mediaB = fakeStream();
+  const graphA = {
+    dispose: vi.fn(),
+    update: vi.fn(),
+    output: new FakeSpectrumNode(),
+  } as unknown as CaptureGraph;
+  const graphB = {
+    dispose: vi.fn(),
+    update: vi.fn(),
+    output: new FakeSpectrumNode(),
+  } as unknown as CaptureGraph;
+  const frames: Array<{ tabId: number; payload: unknown }> = [];
+  const engine = createCaptureEngine({
+    audioContext: new FakeSpectrumContext() as unknown as AudioContext,
+    acquireStream: vi.fn(async (tabId: number) => (tabId === 7 ? mediaA.stream : mediaB.stream)),
+    createGraph: vi.fn(async (tabId: number) => (tabId === 7 ? graphA : graphB)),
+    sendSpectrumFrame: (tabId, payload) => frames.push({ tabId, payload }),
+  });
+
+  await engine.start(7, "stream-a", settings);
+  await engine.start(8, "stream-b", settings);
+  engine.setSpectrumDemand(7, true);
+  engine.setSpectrumDemand(8, true);
+
+  const metaFrames = frames.filter(({ payload }) => (payload as { type: string }).type === "meta");
+  expect(metaFrames.map(({ tabId }) => tabId)).toEqual([7, 8]);
+
+  ticks[0]();
+
+  const spectrumFrames = frames.filter(
+    ({ payload }) =>
+      (payload as { type: string; buffer: number[] | null }).type === "spectrum" &&
+      (payload as { buffer: number[] | null }).buffer !== null,
+  );
+  expect(spectrumFrames).toHaveLength(1);
+  const spectrumPayload = spectrumFrames[0].payload as { buffer: number[]; clipping: boolean };
+  expect(spectrumFrames[0].tabId).toBe(7);
+  expect(spectrumPayload.buffer.every((value) => Number.isFinite(value))).toBe(true);
+  expect(spectrumPayload.buffer).toEqual([-100, -100]);
+
+  engine.setSpectrumDemand(7, false);
+
+  expect(clearIntervalSpy).toHaveBeenCalled();
+  expect(graphA.dispose).not.toHaveBeenCalled();
+  expect(mediaA.stop).not.toHaveBeenCalled();
+  expect(engine.list()).toEqual([
+    { tabId: 7, settings },
+    { tabId: 8, settings },
+  ]);
+});
+
+test("re-emits metadata when demand is restored after a relay restart", async () => {
+  vi.stubGlobal(
+    "setInterval",
+    vi.fn(() => 1),
+  );
+  vi.stubGlobal("clearInterval", vi.fn());
+  const media = fakeStream();
+  const graph = {
+    dispose: vi.fn(),
+    update: vi.fn(),
+    output: new FakeSpectrumNode(),
+  } as unknown as CaptureGraph;
+  const frames: unknown[] = [];
+  const engine = createCaptureEngine({
+    audioContext: new FakeSpectrumContext() as unknown as AudioContext,
+    acquireStream: vi.fn(async () => media.stream),
+    createGraph: vi.fn(async () => graph),
+    sendSpectrumFrame: (_tabId, payload) => frames.push(payload),
+  });
+
+  await engine.start(7, "stream-a", settings);
+  engine.setSpectrumDemand(7, true);
+  engine.setSpectrumDemand(7, true);
+
+  const metas = frames.filter((payload) => (payload as { type: string }).type === "meta");
+  expect(metas.length).toBeGreaterThanOrEqual(2);
 });
 
 test("a late track ended does not stop a replacement capture", async () => {

@@ -9,6 +9,10 @@ export interface SpectrumMeta {
   frequencyBinCount: number;
 }
 
+// The relay contract only carries finite numbers; silent bins read as -Infinity.
+export const serializeSpectrumBuffer = (buffer: Float32Array, floor: number): number[] =>
+  Array.from(buffer, (value) => (Number.isFinite(value) ? value : floor));
+
 export const createSpectrumSampler = (
   onMeta: (meta: SpectrumMeta) => void,
   onFrame: (buffer: Float32Array | null, clipping: boolean) => void,

@@ -1,6 +1,16 @@
-import type { CaptureSettings, CaptureState } from "../../infrastructure/chrome/runtimeMessages";
+import type {
+  CaptureSettings,
+  CaptureState,
+  SpectrumPayload,
+} from "../../infrastructure/chrome/runtimeMessages";
+import {
+  createSpectrumSampler,
+  serializeSpectrumBuffer,
+} from "../../infrastructure/audio/spectrumSampler";
 import { createCaptureGraph, type CaptureGraph } from "./captureGraph";
 import { createCaptureSession } from "./captureSession";
+
+const DEFAULT_SPECTRUM_FLOOR = -100;
 
 const copySettings = (settings: CaptureSettings): CaptureSettings => ({
   ...settings,
@@ -16,9 +26,12 @@ export const createCaptureEngine = (deps: {
     settings: CaptureSettings,
   ): Promise<CaptureGraph>;
   onCaptureEnded?(tabId: number): void;
+  sendSpectrumFrame?(tabId: number, payload: SpectrumPayload): void;
 }) => {
   const settingsByTab = new Map<string, { streamId: string; settings: CaptureSettings }>();
   const spectrumDemand = new Set<string>();
+  const spectrumFloors = new Map<string, number>();
+  const spectrumSamplers = new Map<string, ReturnType<typeof createSpectrumSampler>>();
   const watchedStreams = new WeakSet<MediaStream>();
 
   const acquireStream =
@@ -36,14 +49,14 @@ export const createCaptureEngine = (deps: {
 
   const createGraph =
     deps.createGraph ??
-    ((_tabId: number, stream: MediaStream, settings: CaptureSettings) =>
+    ((tabId: number, stream: MediaStream, settings: CaptureSettings) =>
       Promise.resolve(
         createCaptureGraph({
           audioContext: deps.audioContext,
           source: deps.audioContext.createMediaStreamSource(stream),
           ...settings,
-          onBeforeOutputChange: () => undefined,
-          onOutputChange: () => undefined,
+          onBeforeOutputChange: () => stopSpectrum(tabId),
+          onOutputChange: () => startSpectrum(tabId),
         }),
       ));
 
@@ -58,8 +71,53 @@ export const createCaptureEngine = (deps: {
     },
   });
 
+  const getSpectrumSampler = (tabId: number) => {
+    const key = String(tabId);
+    let sampler = spectrumSamplers.get(key);
+    if (!sampler) {
+      sampler = createSpectrumSampler(
+        (meta) => {
+          spectrumFloors.set(key, meta.minDb);
+          deps.sendSpectrumFrame?.(tabId, meta);
+        },
+        (buffer, clipping) =>
+          deps.sendSpectrumFrame?.(tabId, {
+            type: "spectrum",
+            buffer: buffer
+              ? serializeSpectrumBuffer(buffer, spectrumFloors.get(key) ?? DEFAULT_SPECTRUM_FLOOR)
+              : null,
+            clipping,
+          }),
+      );
+      spectrumSamplers.set(key, sampler);
+    }
+    return sampler;
+  };
+
+  const stopSpectrum = (tabId: number): void => {
+    spectrumSamplers.get(String(tabId))?.stop();
+  };
+
+  const startSpectrum = (tabId: number): void => {
+    const key = String(tabId);
+    if (!spectrumDemand.has(key)) return;
+    const capture = session.get(tabId);
+    if (!capture) return;
+    getSpectrumSampler(tabId).start(deps.audioContext, capture.graph.output);
+  };
+
+  // Demand is re-issued on subscribe and after a background restart, so restart the
+  // sampler to re-emit metadata the relay may have lost.
+  const restartSpectrum = (tabId: number): void => {
+    stopSpectrum(tabId);
+    startSpectrum(tabId);
+  };
+
   const stop = (tabId: number): void => {
     const key = String(tabId);
+    spectrumSamplers.get(key)?.dispose();
+    spectrumSamplers.delete(key);
+    spectrumFloors.delete(key);
     session.stopTab(tabId);
     settingsByTab.delete(key);
     spectrumDemand.delete(key);
@@ -101,6 +159,7 @@ export const createCaptureEngine = (deps: {
         }
         watchStream(tabId, streamId, capture.stream);
         capture.graph.update(currentSettings.settings);
+        startSpectrum(tabId);
         await deps.audioContext.resume();
       } catch (error) {
         const capture = session.get(tabId);
@@ -136,10 +195,18 @@ export const createCaptureEngine = (deps: {
       }),
     setSpectrumDemand: (tabId: number, enabled: boolean): void => {
       const key = String(tabId);
-      if (enabled) spectrumDemand.add(key);
-      else spectrumDemand.delete(key);
+      if (enabled) {
+        spectrumDemand.add(key);
+        restartSpectrum(tabId);
+      } else {
+        spectrumDemand.delete(key);
+        stopSpectrum(tabId);
+      }
     },
     dispose: async (): Promise<void> => {
+      spectrumSamplers.forEach((sampler) => sampler.dispose());
+      spectrumSamplers.clear();
+      spectrumFloors.clear();
       session.stop();
       settingsByTab.clear();
       spectrumDemand.clear();

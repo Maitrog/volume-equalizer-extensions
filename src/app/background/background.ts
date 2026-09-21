@@ -11,7 +11,11 @@ import {
 } from "./storageCleanup";
 import { createTabMuteToggle } from "./tabMute";
 import { applyToolkitShortcut as runToolkitShortcut } from "./toolkitShortcut";
-import { RUNTIME_MESSAGES, SPECTRUM_PORT_NAME } from "../../infrastructure/chrome/runtimeMessages";
+import {
+  RUNTIME_MESSAGES,
+  SPECTRUM_PORT_NAME,
+  type CaptureReply,
+} from "../../infrastructure/chrome/runtimeMessages";
 import {
   clearToolkitWindowState,
   getToolkitWindowId,
@@ -32,17 +36,46 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   await clearLegacyToolkitWindowState();
 });
 
+const isTabId = (value: unknown): value is number =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0;
+
+const isOffscreenSender = (sender: chrome.runtime.MessageSender): boolean =>
+  sender.id === chrome.runtime.id && sender.url === chrome.runtime.getURL("offscreen.html");
+
+// Spectrum frames arrive every 50 ms, so the live-session check must stay synchronous.
+const liveCaptureTabs = new Set<number>();
+
+const refreshLiveCaptureTabs = async (): Promise<void> => {
+  const captures = await captureCoordinator.getCaptures();
+  liveCaptureTabs.clear();
+  for (const capture of captures) liveCaptureTabs.add(capture.tabId);
+};
+
+const isLiveCapture = (tabId: number): boolean => liveCaptureTabs.has(tabId);
+
 const spectrumRelay = createSpectrumRelay({
   setDemand: (tabId, enabled, frameId) => {
-    const message = {
-      method: RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND,
-      payload: { enabled },
-    };
-    const sent =
-      frameId == null
+    void (async () => {
+      await refreshLiveCaptureTabs();
+      if (isLiveCapture(tabId)) {
+        // Page frames do not own the spectrum demand of a captured tab.
+        if (frameId != null) return;
+        await chrome.runtime.sendMessage({
+          target: "offscreen",
+          method: RUNTIME_MESSAGES.CAPTURE_SPECTRUM_DEMAND,
+          tabId,
+          enabled,
+        });
+        return;
+      }
+      const message = {
+        method: RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND,
+        payload: { enabled },
+      };
+      await (frameId == null
         ? chrome.tabs.sendMessage(tabId, message)
-        : chrome.tabs.sendMessage(tabId, message, { frameId });
-    void sent.catch((error: unknown) => {
+        : chrome.tabs.sendMessage(tabId, message, { frameId }));
+    })().catch((error: unknown) => {
       const text = error instanceof Error ? error.message : String(error);
       if (text.includes("Receiving end does not exist") || text.includes("No tab with id")) {
         return;
@@ -52,26 +85,47 @@ const spectrumRelay = createSpectrumRelay({
   },
 });
 
+const resetSpectrumSources = (tabId: number | undefined): void => {
+  if (isTabId(tabId)) spectrumRelay.resetSources(tabId);
+};
+
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === SPECTRUM_PORT_NAME) spectrumRelay.connect(port);
 });
 
 const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender): void => {
-  const offscreenUrl = chrome.runtime.getURL("offscreen.html");
-  if (sender.id !== chrome.runtime.id || sender.url !== offscreenUrl) return;
-  void captureCoordinator.handleCaptureEnded(tabId).catch((error: unknown) => {
-    console.error("Failed to handle capture end", {
-      operation: "handleCaptureEnded",
-      tabId,
-      error,
+  if (!isOffscreenSender(sender)) return;
+  void captureCoordinator
+    .handleCaptureEnded(tabId)
+    .then(() => resetSpectrumSources(tabId))
+    .catch((error: unknown) => {
+      console.error("Failed to handle capture end", {
+        operation: "handleCaptureEnded",
+        tabId,
+        error,
+      });
     });
-  });
+};
+
+const startCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
+  const reply = await captureCoordinator.startCapture(tabId);
+  if (reply.ok) resetSpectrumSources(tabId);
+  return reply;
+};
+
+const stopCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
+  const reply = await captureCoordinator.stopCapture(tabId);
+  if (reply.ok) resetSpectrumSources(tabId);
+  return reply;
 };
 
 const toggleTabMute = createTabMuteToggle(chrome.storage.local);
 
 const runtimeMessageHandler = createRuntimeMessageHandler({
   acceptSpectrumFrame: spectrumRelay.acceptFrame,
+  acceptCaptureFrame: spectrumRelay.acceptCaptureFrame,
+  isLiveCapture,
+  isOffscreenSender,
   applyAutostartForTab,
   applyToolkitShortcut: (shortcut) =>
     runToolkitShortcut(shortcut, {
@@ -84,8 +138,8 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
   toggleWindowMode,
-  startCapture: captureCoordinator.startCapture,
-  stopCapture: captureCoordinator.stopCapture,
+  startCapture,
+  stopCapture,
   handleCaptureEnded,
 });
 
@@ -176,13 +230,16 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 chrome.tabCapture.onStatusChanged.addListener(({ tabId, status }) => {
   if (status !== "stopped") return;
-  void captureCoordinator.handleCaptureEnded(tabId).catch((error: unknown) => {
-    console.error("Failed to handle capture end", {
-      operation: "handleCaptureEnded",
-      tabId,
-      error,
+  void captureCoordinator
+    .handleCaptureEnded(tabId)
+    .then(() => resetSpectrumSources(tabId))
+    .catch((error: unknown) => {
+      console.error("Failed to handle capture end", {
+        operation: "handleCaptureEnded",
+        tabId,
+        error,
+      });
     });
-  });
 });
 
 chrome.windows.onRemoved.addListener(async (windowId) => {
