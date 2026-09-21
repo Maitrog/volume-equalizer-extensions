@@ -89,7 +89,7 @@ export const createTabSettingsController = (deps: {
     const readGeneration = ++selectionReadGeneration;
     if (selectionWrites > 0) return;
     const generation = settingsGeneration;
-    const stored = await deps.sessionStorage.get(STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID);
+    const stored = await deps.sessionStorage.get(STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID);
     if (
       selectionWrites > 0 ||
       generation !== settingsGeneration ||
@@ -97,7 +97,7 @@ export const createTabSettingsController = (deps: {
     ) {
       return;
     }
-    const tabId = (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? null;
+    const tabId = (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? null;
     if (tabId === activeTabId) return;
     if (!(await load(tabId))) return;
     const appliedGeneration = settingsGeneration;
@@ -111,7 +111,7 @@ export const createTabSettingsController = (deps: {
     selectionWrites++;
     const writing = selectionWriteChain.then(() =>
       deps.sessionStorage.set({
-        [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: tabId,
+        [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: tabId,
       }),
     );
     selectionWriteChain = writing.then(

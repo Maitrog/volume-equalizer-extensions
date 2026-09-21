@@ -75,10 +75,7 @@
     "message": "Theme"
   },
   "capture_error_prefix": {
-    "message": "Failed to capture the audio stream. Try using \"Window mode\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "Equalizer is already open in a window"
+    "message": "Failed to capture the audio stream. Try using \"Tab capture\"."
   },
   "support_me": {
     "message": "Support me:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Mute/unmute volume"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Open window mode"
   },
   "add_to_autostart_tooltip": {
     "message": "Add current site to autostart whitelist"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Select a band with Home, End, Page Up or Page Down. Use arrows for frequency and gain, Shift+Up/Down for Q, and Enter to reset."
   },
-  "window_mode_start_error": {
-    "message": "Could not open Window mode. Please try again."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Automatic volume compensation"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Capture tab audio"
+  },
+  "tab_capture_mode_label": {
+    "message": "Tab capture"
+  },
+  "tab_capture_start_error": {
+    "message": "Could not start tab audio capture."
+  },
+  "tab_capture_help": {
+    "message": "Use this mode if the equalizer does not work on a site. Audio processing continues when the popup is closed."
   }
 }

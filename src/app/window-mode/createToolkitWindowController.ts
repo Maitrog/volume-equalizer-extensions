@@ -131,9 +131,9 @@ export const createToolkitWindowController = (deps: {
       const activeTabId = tabSettingsController.getActiveTabId();
       if (activeTabId != null) return activeTabId;
 
-      const stored = await chrome.storage.session.get(STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID);
+      const stored = await chrome.storage.session.get(STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID);
       const storedTabId =
-        (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? null;
+        (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? null;
       tabSettingsController.setActiveTabId(storedTabId);
       return storedTabId;
     }
@@ -311,7 +311,7 @@ export const createToolkitWindowController = (deps: {
 
   capturedTabsView = createCapturedTabsView({
     root: deps.capturedTabs,
-    isToolkitWindow,
+    getSelectedTabId: () => tabSettingsController.getActiveTabId(),
     getMessage: deps.getMessage,
     onSelectTab: selectTab,
     onStopCapture: async (tabId) => {
@@ -345,7 +345,7 @@ export const createToolkitWindowController = (deps: {
 
     const stored = await chrome.storage.session.get([
       STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
-      STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+      STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID,
       STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
     ]);
     const remainingTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
@@ -360,13 +360,13 @@ export const createToolkitWindowController = (deps: {
     delete streamIds[tabId];
 
     const storedActiveTabId =
-      (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? activeTabId;
+      (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? activeTabId;
     const nextActiveTabId =
       storedActiveTabId === tabId ? (remainingTabIds[0] ?? null) : storedActiveTabId;
 
     await chrome.storage.session.set({
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: remainingTabIds,
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: nextActiveTabId,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: nextActiveTabId,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: streamIds,
     });
     await reconcileSelectedTab();
@@ -414,7 +414,7 @@ export const createToolkitWindowController = (deps: {
     stopCapturedTabCapture,
     stopTabCapture,
     handleStorageChange: async (changes: Record<string, chrome.storage.StorageChange>) => {
-      if (isToolkitWindow && changes[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]) {
+      if (isToolkitWindow && changes[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]) {
         await reconcileSelectedTab();
       }
 

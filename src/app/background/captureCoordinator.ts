@@ -16,6 +16,7 @@ export interface CapturedTab {
   url: string | undefined;
   favIconUrl: string | undefined;
   active: boolean;
+  enabled: boolean;
 }
 
 export interface CapturedTabsResult {
@@ -500,6 +501,7 @@ export const createCaptureCoordinator = (
           url: tab.url,
           favIconUrl: tab.favIconUrl,
           active: tab.id === storedActiveTabId,
+          enabled: capture.settings.enabled,
         });
       } catch (error) {
         if (error instanceof Error && error.message.includes("No tab with id")) {

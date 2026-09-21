@@ -75,10 +75,7 @@
     "message": "ธีม"
   },
   "capture_error_prefix": {
-    "message": "ไม่สามารถจับสตรีมเสียงได้ ลองใช้ \"โหมดหน้าต่าง\""
-  },
-  "toolkit_window_already_open": {
-    "message": "อีควอไลเซอร์เปิดอยู่ในหน้าต่างแล้ว"
+    "message": "ไม่สามารถจับสตรีมเสียงได้ ลองใช้ \"การจับเสียงแท็บ\""
   },
   "support_me": {
     "message": "สนับสนุนฉัน:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "ปิด/เปิดเสียง"
-  },
-  "window_mode_button_tooltip": {
-    "message": "เปิดโหมดหน้าต่าง"
   },
   "add_to_autostart_tooltip": {
     "message": "เพิ่มเว็บไซต์ปัจจุบันไปยังรายการเริ่มอัตโนมัติ"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "เลือกย่านด้วย Home, End, Page Up หรือ Page Down ใช้ปุ่มลูกศรสำหรับความถี่และเกน Shift+ขึ้น/ลง สำหรับ Q และ Enter เพื่อรีเซ็ต"
   },
-  "window_mode_start_error": {
-    "message": "ไม่สามารถเปิดโหมดหน้าต่างได้ โปรดลองอีกครั้ง"
-  },
   "enable_volume_compensation_setting_option": {
     "message": "การชดเชยระดับเสียงอัตโนมัติ"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "จับเสียงแท็บ"
+  },
+  "tab_capture_mode_label": {
+    "message": "การจับเสียงแท็บ"
+  },
+  "tab_capture_start_error": {
+    "message": "ไม่สามารถเริ่มการจับเสียงแท็บได้"
+  },
+  "tab_capture_help": {
+    "message": "ใช้โหมดนี้หากอีควอไลเซอร์ไม่ทำงานบนเว็บไซต์ การประมวลผลเสียงยังคงดำเนินต่อเมื่อปิดป๊อปอัป"
   }
 }

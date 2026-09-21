@@ -75,10 +75,7 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Impossibile acquisire il flusso audio. Prova a usare la \"modalità finestra\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "L'equalizzatore è già aperto in una finestra"
+    "message": "Impossibile acquisire il flusso audio. Prova a usare la \"acquisizione scheda\"."
   },
   "support_me": {
     "message": "Sostienimi:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Disattiva/riattiva audio"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Apri modalità finestra"
   },
   "add_to_autostart_tooltip": {
     "message": "Aggiungi il sito corrente all'elenco di avvio automatico"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Seleziona una banda con Home, Fine, Pagina su o Pagina giù. Usa le frecce per frequenza e guadagno, Maiusc+Su/Giù per Q e Invio per ripristinare."
   },
-  "window_mode_start_error": {
-    "message": "Impossibile aprire la modalità finestra. Riprova."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Compensazione automatica del volume"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Acquisisci audio della scheda"
+  },
+  "tab_capture_mode_label": {
+    "message": "Acquisizione scheda"
+  },
+  "tab_capture_start_error": {
+    "message": "Impossibile avviare l'acquisizione audio della scheda."
+  },
+  "tab_capture_help": {
+    "message": "Usa questa modalità se l'equalizzatore non funziona su un sito. L'elaborazione audio continua quando il popup viene chiuso."
   }
 }

@@ -156,11 +156,9 @@ describe("tab settings selection", () => {
     pendingWrites[2].resolve();
     await Promise.all([firstA, tabB, finalA]);
 
-    expect(storage.sessionValues[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]).toBe(1);
+    expect(storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(1);
     expect(
-      storage.sessionSet.mock.calls.map(
-        ([values]) => values[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID],
-      ),
+      storage.sessionSet.mock.calls.map(([values]) => values[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]),
     ).toEqual([1, 2, 1]);
   });
 
@@ -213,9 +211,9 @@ describe("tab settings selection", () => {
 
     const stale = controller.reconcile();
     const latest = controller.reconcile();
-    tabC.resolve({ [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 3 });
+    tabC.resolve({ [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 3 });
     await latest;
-    tabB.resolve({ [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 2 });
+    tabB.resolve({ [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 2 });
     await stale;
 
     expect(controller.getActiveTabId()).toBe(3);

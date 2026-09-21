@@ -87,7 +87,7 @@ test("renders every equalizer hint and keeps them intact when the popup resizes"
       changeEq: target,
       settings: target,
       autostart: target,
-      windowMode: target,
+      tabCapture: target,
       equalizer: target,
       volume: target,
       presets: target,

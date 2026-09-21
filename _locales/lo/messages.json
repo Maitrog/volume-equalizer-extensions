@@ -75,10 +75,7 @@
     "message": "ຮູບແບບ (Theme)"
   },
   "capture_error_prefix": {
-    "message": "ບໍ່ສາມາດຈັບສັນຍານສຽງໄດ້. ກະລຸນາລອງໃຊ້ \"ໂໝດໜ້າຕ່າງ\" (Window mode)."
-  },
-  "toolkit_window_already_open": {
-    "message": "ເຄື່ອງປັບແຕ່ງສຽງ (Equalizer) ຖືກເປີດຢູ່ໃນໜ້າຕ່າງແລ້ວ"
+    "message": "ບໍ່ສາມາດຈັບສັນຍານສຽງໄດ້. ກະລຸນາລອງໃຊ້ \"ການຈັບແທັບ\"."
   },
   "support_me": {
     "message": "ສະໜັບສະໜູນຂ້ອຍ"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "ປິດ/ເປີດສຽງ"
-  },
-  "window_mode_button_tooltip": {
-    "message": "ເປີດໂໝດໜ້າຕ່າງ"
   },
   "add_to_autostart_tooltip": {
     "message": "ເພີ່ມເວັບໄຊນີ້ເຂົ້າໃນລາຍຊື່ທີ່ໃຫ້ເລີ່ມເຮັດວຽກອັດຕະໂນມັດ"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "ເລືອກແຖບດ້ວຍ Home, End, Page Up ຫຼື Page Down. ໃຊ້ລູກສອນສຳລັບຄວາມຖີ່ແລະເກນ, Shift+Up/Down ສຳລັບ Q ແລະ Enter ເພື່ອຣີເຊັດ."
   },
-  "window_mode_start_error": {
-    "message": "ບໍ່ສາມາດເປີດໂໝດໜ້າຕ່າງໄດ້. ກະລຸນາລອງໃໝ່."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "ການຊົດເຊີຍລະດັບສຽງອັດຕະໂນມັດ"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "ຈັບສຽງແທັບ"
+  },
+  "tab_capture_mode_label": {
+    "message": "ການຈັບແທັບ"
+  },
+  "tab_capture_start_error": {
+    "message": "ບໍ່ສາມາດເລີ່ມຈັບສຽງແທັບໄດ້."
+  },
+  "tab_capture_help": {
+    "message": "ໃຊ້ໂໝດນີ້ຖ້າຕົວປັບສຽງບໍ່ເຮັດວຽກໃນເວັບໄຊ. ການປະມວນຜົນສຽງຈະສືບຕໍ່ເມື່ອປິດປ໊ອບອັບ."
   }
 }

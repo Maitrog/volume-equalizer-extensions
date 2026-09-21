@@ -9,13 +9,13 @@ export const createControlsView = (deps: {
   masterVolumeValue: HTMLOutputElement;
   clippingIndicator: HTMLElement;
   volumeMuteButton: HTMLElement;
-  windowModeButton: HTMLElement;
+  tabCaptureButton: HTMLElement;
   getMessage(messageName: string): string;
   onToggleEqualizer(): Promise<void>;
   onReset(): Promise<void>;
   onVolumeInput(value: number): Promise<void>;
   onToggleMute(): Promise<void>;
-  onWindowMode(): Promise<void>;
+  onTabCapture(): Promise<void>;
   onMuteStateApplied(): void;
 }) => {
   let clippingTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -52,8 +52,8 @@ export const createControlsView = (deps: {
     void deps.onToggleMute();
   });
 
-  deps.windowModeButton.addEventListener("click", () => {
-    void deps.onWindowMode();
+  deps.tabCaptureButton.addEventListener("click", () => {
+    void deps.onTabCapture();
   });
 
   return {

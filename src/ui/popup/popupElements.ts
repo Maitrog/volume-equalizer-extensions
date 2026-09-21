@@ -4,7 +4,7 @@ export interface PopupElements {
   settingsButton: HTMLButtonElement;
   volumeMuteButton: HTMLButtonElement;
   addToAutostartWhitelistButton: HTMLButtonElement;
-  windowModeButton: HTMLButtonElement;
+  tabCaptureButton: HTMLButtonElement;
   captureError: HTMLDivElement;
   capturedTabs: HTMLDivElement;
   infoButton: HTMLButtonElement;
@@ -106,7 +106,7 @@ export const getPopupElements = (document: Document): PopupElements => ({
     "add-to-autostart-whitelist-btn",
     HTMLButtonElement,
   ),
-  windowModeButton: getRequiredElement(document, "window-mod", HTMLButtonElement),
+  tabCaptureButton: getRequiredElement(document, "tab-capture", HTMLButtonElement),
   captureError: getRequiredElement(document, "capture-error", HTMLDivElement),
   capturedTabs: getRequiredElement(document, "captured-tabs", HTMLDivElement),
   infoButton: getRequiredElement(document, "info-btn", HTMLButtonElement),

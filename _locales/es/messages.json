@@ -75,10 +75,7 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "No se pudo capturar el flujo de audio. Intenta usar el \"modo ventana\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "El ecualizador ya está abierto en una ventana"
+    "message": "No se pudo capturar el flujo de audio. Intenta usar \"Captura de pestaña\"."
   },
   "support_me": {
     "message": "Apóyame:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Silenciar/activar sonido"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Abrir modo ventana"
   },
   "add_to_autostart_tooltip": {
     "message": "Añadir el sitio actual a la lista de inicio automático"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Selecciona una banda con Inicio, Fin, Re Pág o Av Pág. Usa las flechas para frecuencia y ganancia, Mayús+Arriba/Abajo para Q y Enter para restablecer."
   },
-  "window_mode_start_error": {
-    "message": "No se pudo abrir el modo ventana. Inténtalo de nuevo."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Compensación automática de volumen"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Capturar audio de la pestaña"
+  },
+  "tab_capture_mode_label": {
+    "message": "Captura de pestaña"
+  },
+  "tab_capture_start_error": {
+    "message": "No se pudo iniciar la captura de audio de la pestaña."
+  },
+  "tab_capture_help": {
+    "message": "Usa este modo si el ecualizador no funciona en un sitio. El procesamiento de audio continúa cuando se cierra la ventana emergente."
   }
 }

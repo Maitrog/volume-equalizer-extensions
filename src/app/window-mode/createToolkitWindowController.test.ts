@@ -116,7 +116,7 @@ const createChromeStorage = () => {
     [STORAGE_KEYS.ENABLE_SPECTRUM]: true,
   };
   const sessionValues: Record<string, unknown> = {
-    [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 123,
+    [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 123,
     [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: { 123: "stream-123" },
   };
 
@@ -729,9 +729,9 @@ describe("createToolkitWindowController spectrum", () => {
       throw new Error("Expected a spectrum analyser");
     }
     audioContext.createdAnalyser.peakAmplitude = 0.95;
-    storage.sessionValues[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] = 456;
+    storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = 456;
     await controller.handleStorageChange({
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: {
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: {
         oldValue: 123,
         newValue: 456,
       },
@@ -865,9 +865,9 @@ describe("createToolkitWindowController spectrum", () => {
       .connections[0] as FakeAudioNode;
     const analyser = audioContext.createdAnalyser;
 
-    storage.sessionValues[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] = 456;
+    storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = 456;
     await controller.handleStorageChange({
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: {
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: {
         oldValue: 123,
         newValue: 456,
       },
@@ -1108,7 +1108,7 @@ describe("createToolkitWindowController spectrum", () => {
 
     expect(storage.session.set).toHaveBeenCalledWith({
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [456],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 456,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 456,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         456: "stream-456",
       },

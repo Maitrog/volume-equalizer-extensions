@@ -75,10 +75,7 @@
     "message": "Design"
   },
   "capture_error_prefix": {
-    "message": "Der Audiostream konnte nicht erfasst werden. Versuchen Sie, den \"Fenstermodus\" zu verwenden."
-  },
-  "toolkit_window_already_open": {
-    "message": "Der Equalizer ist bereits in einem Fenster geöffnet"
+    "message": "Der Audiostream konnte nicht erfasst werden. Versuchen Sie, \"Tab-Aufnahme\" zu verwenden."
   },
   "support_me": {
     "message": "Unterstütze mich:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Stummschalten/Stummschaltung aufheben"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Fenstermodus öffnen"
   },
   "add_to_autostart_tooltip": {
     "message": "Aktuelle Website zur Autostart-Liste hinzufügen"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Wähle mit Pos1, Ende, Bild auf oder Bild ab ein Band. Pfeiltasten ändern Frequenz und Verstärkung, Umschalt+Auf/Ab ändert Q, Eingabe setzt zurück."
   },
-  "window_mode_start_error": {
-    "message": "Der Fenstermodus konnte nicht geöffnet werden. Bitte versuche es erneut."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Automatische Lautstärkekompensation"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Tab-Audio erfassen"
+  },
+  "tab_capture_mode_label": {
+    "message": "Tab-Aufnahme"
+  },
+  "tab_capture_start_error": {
+    "message": "Die Tab-Audioaufnahme konnte nicht gestartet werden."
+  },
+  "tab_capture_help": {
+    "message": "Verwende diesen Modus, wenn der Equalizer auf einer Website nicht funktioniert. Die Audiobearbeitung läuft weiter, wenn das Popup geschlossen wird."
   }
 }

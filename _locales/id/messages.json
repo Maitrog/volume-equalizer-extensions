@@ -75,10 +75,7 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Gagal menangkap stream audio. Coba gunakan “Mode jendela”."
-  },
-  "toolkit_window_already_open": {
-    "message": "Equalizer sudah terbuka di jendela"
+    "message": "Gagal menangkap stream audio. Coba gunakan “Tangkapan tab”."
   },
   "support_me": {
     "message": "Dukung saya:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Bisukan/suarakan volume"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Buka mode jendela"
   },
   "add_to_autostart_tooltip": {
     "message": "Tambahkan situs saat ini ke daftar putih mulai otomatis"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Pilih band dengan Home, End, Page Up, atau Page Down. Gunakan panah untuk frekuensi dan gain, Shift+Atas/Bawah untuk Q, dan Enter untuk mereset."
   },
-  "window_mode_start_error": {
-    "message": "Mode jendela tidak dapat dibuka. Silakan coba lagi."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Kompensasi volume otomatis"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Tangkap audio tab"
+  },
+  "tab_capture_mode_label": {
+    "message": "Tangkapan tab"
+  },
+  "tab_capture_start_error": {
+    "message": "Tidak dapat memulai tangkapan audio tab."
+  },
+  "tab_capture_help": {
+    "message": "Gunakan mode ini jika ekualiser tidak berfungsi di situs. Pemrosesan audio tetap berlanjut saat popup ditutup."
   }
 }

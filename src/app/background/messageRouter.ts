@@ -39,6 +39,7 @@ export interface RuntimeMessageHandlerDependencies {
   getCapturedTabs: () => Promise<CapturedTabsResult>;
   restoreSpectrumDemand: (sender: chrome.runtime.MessageSender) => void;
   toggleWindowMode: (tabId?: number) => Promise<void> | void;
+  toggleCaptureEnabled?: (tabId: number) => Promise<void> | void;
   startCapture: (tabId?: number) => Promise<CaptureReply>;
   stopCapture: (tabId?: number) => Promise<CaptureReply>;
   handleCaptureEnded: (tabId: number, sender: chrome.runtime.MessageSender) => void;
@@ -58,6 +59,7 @@ export const createRuntimeMessageHandler = ({
   getCapturedTabs,
   restoreSpectrumDemand,
   toggleWindowMode,
+  toggleCaptureEnabled = () => undefined,
   startCapture,
   stopCapture,
   handleCaptureEnded,
@@ -100,6 +102,20 @@ export const createRuntimeMessageHandler = ({
           : stopCapture(request.tabId ?? sender.tab?.id);
       void Promise.resolve(capture)
         .then(response)
+        .catch((error: unknown) => {
+          response({
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        });
+      return true;
+    }
+
+    // The popup has no sender.tab, so its explicit tab id is the capture-bypass target.
+    if (request.method === RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED && isTabId(request.tabId)) {
+      const tabId = request.tabId;
+      void Promise.resolve(toggleCaptureEnabled(tabId))
+        .then(() => response({ ok: true }))
         .catch((error: unknown) => {
           response({
             ok: false,

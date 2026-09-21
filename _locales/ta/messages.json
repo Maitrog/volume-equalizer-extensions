@@ -72,10 +72,7 @@
     "message": "கருப்பொருள்"
   },
   "capture_error_prefix": {
-    "message": "ஒலி ஓடையைப் பிடிக்க முடியவில்லை. \"சாளர பயன்முறையை\" பயன்படுத்தி முயற்சி."
-  },
-  "toolkit_window_already_open": {
-    "message": "சமனாக்கி ஏற்கனவே ஒரு சாளரத்தில் திறக்கப்பட்டுள்ளது"
+    "message": "ஒலி ஓடையைப் பிடிக்க முடியவில்லை. \"தாவல் பிடிப்பை\" பயன்படுத்தி முயற்சி."
   },
   "support_me": {
     "message": "என்னை ஆதரிக்கவும்:"
@@ -85,9 +82,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "ஒலியளவை முடக்கு/இயக்கு"
-  },
-  "window_mode_button_tooltip": {
-    "message": "சாளர பயன்முறையைத் திற"
   },
   "add_to_autostart_tooltip": {
     "message": "தானியங்கு தொடக்கத்தில் அனுமதிப்பட்டியலுக்கு தற்போதைய தளத்தைச் சேர்"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Home, End, Page Up அல்லது Page Down மூலம் பட்டையைத் தேர்ந்தெடுக்கவும். அதிர்வெண் மற்றும் gain-க்கு அம்புகள், Q-க்கு Shift+மேல்/கீழ், மீட்டமைக்க Enter பயன்படுத்தவும்."
   },
-  "window_mode_start_error": {
-    "message": "சாளரப் பயன்முறையைத் திறக்க முடியவில்லை. மீண்டும் முயலவும்."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "தானியங்கி ஒலியளவு ஈடுசெய்தல்"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "தாவல் ஆடியோவைப் பிடி"
+  },
+  "tab_capture_mode_label": {
+    "message": "தாவல் பிடிப்பு"
+  },
+  "tab_capture_start_error": {
+    "message": "தாவல் ஆடியோ பிடிப்பைத் தொடங்க முடியவில்லை."
+  },
+  "tab_capture_help": {
+    "message": "ஒரு தளத்தில் equalizer வேலை செய்யவில்லை என்றால் இந்தப் பயன்முறையைப் பயன்படுத்தவும். பாப்அப் மூடப்பட்டாலும் ஆடியோ செயலாக்கம் தொடர்கிறது."
   }
 }

@@ -157,6 +157,7 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
   toggleWindowMode,
+  toggleCaptureEnabled: (tabId) => captureCoordinator.toggleCaptureEnabled(tabId),
   startCapture,
   stopCapture,
   handleCaptureEnded,

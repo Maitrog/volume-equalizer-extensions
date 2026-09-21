@@ -75,10 +75,7 @@
     "message": "Тема"
   },
   "capture_error_prefix": {
-    "message": "Не удалось захватить аудиопоток. Попробуйте использовать \"Оконный режим\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "Эквалайзер уже открыт в оконном режиме"
+    "message": "Не удалось захватить аудиопоток. Попробуйте использовать \"Захват вкладки\"."
   },
   "support_me": {
     "message": "Поддержать меня:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Выключить/включить звук"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Открыть оконный режим"
   },
   "autostart_settings_title": {
     "message": "Автозапуск"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Выберите полосу клавишами Home, End, Page Up или Page Down. Стрелки меняют частоту и усиление, Shift+Вверх/Вниз — Q, Enter сбрасывает полосу."
   },
-  "window_mode_start_error": {
-    "message": "Не удалось открыть оконный режим. Попробуйте ещё раз."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Автоматическая компенсация громкости"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Захватить звук вкладки"
+  },
+  "tab_capture_mode_label": {
+    "message": "Захват вкладки"
+  },
+  "tab_capture_start_error": {
+    "message": "Не удалось запустить захват звука вкладки."
+  },
+  "tab_capture_help": {
+    "message": "Используйте этот режим, если эквалайзер не работает на сайте. Обработка звука продолжается после закрытия всплывающего окна."
   }
 }

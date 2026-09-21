@@ -38,13 +38,13 @@ describe("createControlsView", () => {
       masterVolumeValue: new FakeElement() as unknown as HTMLOutputElement,
       clippingIndicator: new FakeElement() as unknown as HTMLElement,
       volumeMuteButton: new FakeElement() as unknown as HTMLElement,
-      windowModeButton: new FakeElement() as unknown as HTMLElement,
+      tabCaptureButton: new FakeElement() as unknown as HTMLElement,
       getMessage: (name) => name,
       onToggleEqualizer,
       onReset: async () => undefined,
       onVolumeInput: async () => undefined,
       onToggleMute: async () => undefined,
-      onWindowMode: async () => undefined,
+      onTabCapture: async () => undefined,
       onMuteStateApplied: () => undefined,
     });
 
@@ -65,13 +65,13 @@ describe("createControlsView", () => {
       masterVolumeValue: masterVolumeValue as unknown as HTMLOutputElement,
       clippingIndicator: new FakeElement() as unknown as HTMLElement,
       volumeMuteButton: new FakeElement() as unknown as HTMLElement,
-      windowModeButton: new FakeElement() as unknown as HTMLElement,
+      tabCaptureButton: new FakeElement() as unknown as HTMLElement,
       getMessage: (name) => name,
       onToggleEqualizer: async () => undefined,
       onReset: async () => undefined,
       onVolumeInput,
       onToggleMute: async () => undefined,
-      onWindowMode: async () => undefined,
+      onTabCapture: async () => undefined,
       onMuteStateApplied: () => undefined,
     });
 
@@ -92,13 +92,13 @@ describe("createControlsView", () => {
       masterVolumeValue: new FakeElement() as unknown as HTMLOutputElement,
       clippingIndicator: clippingIndicator as unknown as HTMLElement,
       volumeMuteButton: new FakeElement() as unknown as HTMLElement,
-      windowModeButton: new FakeElement() as unknown as HTMLElement,
+      tabCaptureButton: new FakeElement() as unknown as HTMLElement,
       getMessage: (name) => name,
       onToggleEqualizer: async () => undefined,
       onReset: async () => undefined,
       onVolumeInput: async () => undefined,
       onToggleMute: async () => undefined,
-      onWindowMode: async () => undefined,
+      onTabCapture: async () => undefined,
       onMuteStateApplied: () => undefined,
     });
 

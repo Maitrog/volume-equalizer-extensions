@@ -23,6 +23,7 @@ export const RUNTIME_MESSAGES = {
   CAPTURE_ENDED: "capture-ended",
   START_TAB_CAPTURE: "start-tab-capture",
   STOP_TAB_CAPTURE: "stop-tab-capture",
+  TOGGLE_CAPTURE_ENABLED: "toggle-capture-enabled",
   CAPTURE_MODE_CHANGED: "capture-mode-changed",
 } as const;
 

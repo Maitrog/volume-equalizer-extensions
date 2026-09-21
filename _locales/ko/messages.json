@@ -75,10 +75,7 @@
     "message": "테마"
   },
   "capture_error_prefix": {
-    "message": "오디오 스트림을 캡처하지 못했습니다. \"창 모드\"를 사용해 보세요."
-  },
-  "toolkit_window_already_open": {
-    "message": "이퀄라이저가 이미 창에서 열려 있습니다"
+    "message": "오디오 스트림을 캡처하지 못했습니다. \"탭 캡처\"를 사용해 보세요."
   },
   "support_me": {
     "message": "나를 후원하기:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "음소거/해제"
-  },
-  "window_mode_button_tooltip": {
-    "message": "창 모드 열기"
   },
   "add_to_autostart_tooltip": {
     "message": "현재 사이트를 자동 시작 목록에 추가"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Home, End, Page Up 또는 Page Down으로 밴드를 선택하세요. 화살표로 주파수와 게인을, Shift+위/아래로 Q를 조절하고 Enter로 초기화하세요."
   },
-  "window_mode_start_error": {
-    "message": "창 모드를 열 수 없습니다. 다시 시도해 주세요."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "자동 볼륨 보정"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "탭 오디오 캡처"
+  },
+  "tab_capture_mode_label": {
+    "message": "탭 캡처"
+  },
+  "tab_capture_start_error": {
+    "message": "탭 오디오 캡처를 시작할 수 없습니다."
+  },
+  "tab_capture_help": {
+    "message": "사이트에서 이퀄라이저가 작동하지 않으면 이 모드를 사용하세요. 팝업을 닫아도 오디오 처리가 계속됩니다."
   }
 }

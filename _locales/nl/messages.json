@@ -75,10 +75,7 @@
     "message": "Thema"
   },
   "capture_error_prefix": {
-    "message": "Kan de audiostream niet vastleggen. Probeer de \"Venstermodus\" te gebruiken."
-  },
-  "toolkit_window_already_open": {
-    "message": "De equalizer is al geopend in een venster"
+    "message": "Kan de audiostream niet vastleggen. Probeer \"Tab-opname\" te gebruiken."
   },
   "support_me": {
     "message": "Steun mij:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Volume dempen/inschakelen"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Venstermodus openen"
   },
   "add_to_autostart_tooltip": {
     "message": "Huidige site aan autostart-lijst toevoegen"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "Selecteer een band met Home, End, Page Up of Page Down. Gebruik pijlen voor frequentie en versterking, Shift+Omhoog/Omlaag voor Q en Enter om te resetten."
   },
-  "window_mode_start_error": {
-    "message": "De venstermodus kan niet worden geopend. Probeer het opnieuw."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Automatische volumecompensatie"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Tab-audio vastleggen"
+  },
+  "tab_capture_mode_label": {
+    "message": "Tab-opname"
+  },
+  "tab_capture_start_error": {
+    "message": "Kan de tab-audio-opname niet starten."
+  },
+  "tab_capture_help": {
+    "message": "Gebruik deze modus als de equalizer niet werkt op een site. De audioprocessing gaat door wanneer de pop-up wordt gesloten."
   }
 }

@@ -5,6 +5,7 @@ export interface CapturedTabInfo {
   title?: string;
   url?: string;
   favIconUrl?: string;
+  enabled?: boolean;
 }
 
 export interface CapturedTabsResponse {
@@ -28,21 +29,20 @@ const getCapturedTabs = (): Promise<CapturedTabsResponse> => {
 
 export const createCapturedTabsView = (deps: {
   root: HTMLElement;
-  isToolkitWindow: boolean;
+  getSelectedTabId(): number | null;
   getMessage(messageName: string): string;
   onSelectTab(tabId: number): Promise<void>;
   onStopCapture(tabId: number): Promise<void>;
 }) => {
   deps.root.tabIndex = -1;
   const render = async (): Promise<void> => {
-    if (!deps.isToolkitWindow) return;
-
     const result = await getCapturedTabs();
     if (!Array.isArray(result.tabs)) {
-      console.error("Invalid toolkit tabs response", result);
+      console.error("Invalid captured tabs response", result);
       return;
     }
 
+    const selectedTabId = deps.getSelectedTabId();
     const focused =
       document.activeElement instanceof HTMLElement && deps.root.contains(document.activeElement)
         ? document.activeElement
@@ -55,14 +55,15 @@ export const createCapturedTabsView = (deps: {
     result.tabs.forEach((tab) => {
       const item = document.createElement("div");
       item.className = "captured-tab";
-      if (tab.id === result.activeTabId) item.classList.add("active");
+      item.classList.toggle("active", tab.id === selectedTabId);
+      if (tab.enabled === false) item.classList.add("bypassed");
       item.dataset.tabId = String(tab.id);
       item.title = tab.title || tab.url || String(tab.id);
 
       const selectButton = document.createElement("button");
       selectButton.type = "button";
       selectButton.className = "captured-tab-select";
-      selectButton.setAttribute("aria-pressed", String(tab.id === result.activeTabId));
+      selectButton.setAttribute("aria-pressed", String(tab.id === selectedTabId));
       item.appendChild(selectButton);
       if (tab.favIconUrl) {
         const icon = document.createElement("img");

@@ -75,10 +75,7 @@
     "message": "থিম"
   },
   "capture_error_prefix": {
-    "message": "অডিও স্ট্রিম ক্যাপচার করা যায়নি। \"উইন্ডো মোড\" ব্যবহার করে দেখুন।"
-  },
-  "toolkit_window_already_open": {
-    "message": "ইকুয়ালাইজার ইতিমধ্যে একটি উইন্ডোতে খোলা আছে"
+    "message": "অডিও স্ট্রিম ক্যাপচার করা যায়নি। \"ট্যাব ক্যাপচার\" ব্যবহার করে দেখুন।"
   },
   "support_me": {
     "message": "আমাকে সমর্থন করুন:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "শব্দ বন্ধ/চালু করুন"
-  },
-  "window_mode_button_tooltip": {
-    "message": "উইন্ডো মোড খুলুন"
   },
   "add_to_autostart_tooltip": {
     "message": "বর্তমান সাইটটি অটোস্টার্ট তালিকায় যোগ করুন"
@@ -263,10 +257,19 @@
   "equalizer_keyboard_help": {
     "message": "একটি ব্যান্ড নির্বাচন করতে Home, End, Page Up বা Page Down চাপুন। ফ্রিকোয়েন্সি ও গেইনের জন্য তীর চিহ্ন, Q-এর জন্য Shift+Up/Down এবং রিসেট করতে Enter চাপুন।"
   },
-  "window_mode_start_error": {
-    "message": "উইন্ডো মোড খোলা যায়নি। আবার চেষ্টা করুন।"
-  },
   "enable_volume_compensation_setting_option": {
     "message": "স্বয়ংক্রিয় ভলিউম ক্ষতিপূরণ"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "ট্যাব অডিও ক্যাপচার করুন"
+  },
+  "tab_capture_mode_label": {
+    "message": "ট্যাব ক্যাপচার"
+  },
+  "tab_capture_start_error": {
+    "message": "ট্যাব অডিও ক্যাপচার শুরু করা যায়নি।"
+  },
+  "tab_capture_help": {
+    "message": "সাইটে ইকুয়ালাইজার কাজ না করলে এই মোডটি ব্যবহার করুন। পপআপ বন্ধ থাকলেও অডিও প্রক্রিয়াকরণ চলতে থাকে।"
   }
 }

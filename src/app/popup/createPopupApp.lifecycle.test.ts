@@ -3,13 +3,13 @@ import { afterEach, expect, test, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   canvasCleanup: vi.fn(),
   filterDispose: vi.fn(() => Promise.resolve()),
-  stopTabCapture: vi.fn(),
   connectSpectrum: vi.fn(),
   disposeSubscriptions: vi.fn(),
-  startTabCapture: vi.fn(() => Promise.resolve()),
-  renderCapturedTabs: vi.fn(() => Promise.resolve()),
   ensureContentScripts: vi.fn(() => Promise.resolve()),
-  toolkitWindowMode: false,
+  syncSnapshot: vi.fn(() => Promise.resolve()),
+  handleStorageChange: vi.fn(() => Promise.resolve()),
+  stopCapture: vi.fn(() => Promise.resolve()),
+  renderCapturedTabs: vi.fn(() => Promise.resolve()),
 }));
 
 vi.mock("../../ui/equalizerCanvas/createEqualizerCanvas", () => ({
@@ -27,25 +27,22 @@ vi.mock("./filterPersistence", () => ({
     dispose: mocks.filterDispose,
   }),
 }));
-vi.mock("../window-mode/createToolkitWindowController", () => ({
-  createToolkitWindowController: () => ({
-    get isToolkitWindow() {
-      return mocks.toolkitWindowMode;
-    },
-    getCurrentTabId: vi.fn(() => Promise.resolve(12)),
-    getResolvedTabId: vi.fn(() => 12),
-    shouldShowToolkitWindowNotice: vi.fn(() => Promise.resolve(false)),
-    showToolkitWindowNotice: vi.fn(),
+vi.mock("./captureController", () => ({
+  createCaptureController: () => ({
+    init: vi.fn(() => Promise.resolve()),
+    startCapture: vi.fn(() => Promise.resolve({ ok: true })),
+    stopCapture: mocks.stopCapture,
     selectTab: vi.fn(() => Promise.resolve()),
-    startTabCapture: mocks.startTabCapture,
-    renderCapturedTabs: mocks.renderCapturedTabs,
-    refreshCaptureFilters: vi.fn(),
-    applyCaptureSettings: vi.fn(),
-    hasCapture: vi.fn(() => false),
-    setCaptureMuted: vi.fn(),
-    toggleEqualizer: vi.fn(),
-    stopTabCapture: mocks.stopTabCapture,
-    handleStorageChange: vi.fn(() => Promise.resolve()),
+    toggleCaptureEnabled: vi.fn(() => Promise.resolve()),
+    handleStorageChange: mocks.handleStorageChange,
+    isTabCaptured: vi.fn(() => false),
+    getSelectedTabId: vi.fn(() => 12),
+    syncSnapshot: mocks.syncSnapshot,
+  }),
+}));
+vi.mock("../../ui/popup/capturedTabsView", () => ({
+  createCapturedTabsView: () => ({
+    render: mocks.renderCapturedTabs,
   }),
 }));
 vi.mock("./popupSubscriptions", () => ({
@@ -154,7 +151,7 @@ const deferred = () => {
 
 class FakeElement {}
 
-const createTestApp = (ready: Promise<void>) => {
+const createTestApp = (ready: Promise<void>, audioContext: AudioContext = {} as AudioContext) => {
   const genericElement = {
     style: {},
     classList: { add: vi.fn(), remove: vi.fn(), toggle: vi.fn() },
@@ -194,7 +191,7 @@ const createTestApp = (ready: Promise<void>) => {
   });
   return createPopupApp({
     elements,
-    audioContext: {} as AudioContext,
+    audioContext,
     equalizerState: {
       getFilters: vi.fn(() => []),
       setPoints: vi.fn(),
@@ -225,26 +222,31 @@ test("dispose blocks a late popup start and releases app resources once", async 
   await starting;
 
   expect(mocks.connectSpectrum).not.toHaveBeenCalled();
-  expect(mocks.startTabCapture).not.toHaveBeenCalled();
+  expect(mocks.syncSnapshot).not.toHaveBeenCalled();
   expect(mocks.disposeSubscriptions).toHaveBeenCalledOnce();
   expect(mocks.canvasCleanup).toHaveBeenCalledOnce();
   expect(mocks.filterDispose).toHaveBeenCalledOnce();
-  expect(mocks.stopTabCapture).toHaveBeenCalledOnce();
 });
 
-test("connects the spectrum port only in normal popup mode", async () => {
-  mocks.toolkitWindowMode = false;
+test("closing the popup frees only local resources and keeps capture running", async () => {
+  // The popup AudioContext feeds createEqualizerCanvas only; the offscreen
+  // document owns the audio graph that produces sound.
+  const popupAudioContext = { close: vi.fn() } as unknown as AudioContext;
+  const app = createTestApp(Promise.resolve(), popupAudioContext);
+  await app.start();
+  app.dispose();
+
+  expect(mocks.stopCapture).not.toHaveBeenCalled();
+  expect(mocks.canvasCleanup).toHaveBeenCalledOnce();
+  expect(mocks.disposeSubscriptions).toHaveBeenCalledOnce();
+  expect(popupAudioContext.close).not.toHaveBeenCalled();
+});
+
+test("connects the spectrum port for the selected tab", async () => {
   const popup = createTestApp(Promise.resolve());
   await popup.start();
-  expect(mocks.connectSpectrum).toHaveBeenCalledOnce();
+
+  expect(mocks.connectSpectrum).toHaveBeenCalledWith(12);
+  expect(mocks.handleStorageChange).toBeDefined();
   popup.dispose();
-
-  vi.clearAllMocks();
-  mocks.toolkitWindowMode = true;
-  const toolkitWindow = createTestApp(Promise.resolve());
-  await toolkitWindow.start();
-
-  expect(mocks.connectSpectrum).not.toHaveBeenCalled();
-  expect(mocks.startTabCapture).toHaveBeenCalledOnce();
-  toolkitWindow.dispose();
 });
