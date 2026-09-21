@@ -11,7 +11,7 @@ import {
 const createChromeMock = (activeTabId: number) => {
   const stored = {
     [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 13, 14],
-    [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: activeTabId,
+    [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: activeTabId,
     [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
       12: "stream-12",
       13: "stream-13",
@@ -45,7 +45,7 @@ describe("removeTabIdFromToolkitWindowStore", () => {
 
     expect(set).toHaveBeenCalledWith({
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 14],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 12,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 12,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         12: "stream-12",
         14: "stream-14",
@@ -60,7 +60,7 @@ describe("removeTabIdFromToolkitWindowStore", () => {
 
     expect(set).toHaveBeenCalledWith({
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 14],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 12,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 12,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         12: "stream-12",
         14: "stream-14",
@@ -71,7 +71,7 @@ describe("removeTabIdFromToolkitWindowStore", () => {
   test("serializes concurrent additions and removals", async () => {
     const state: Record<string, unknown> = {
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 13],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 12,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 12,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         12: "stream-12",
         13: "stream-13",
@@ -100,7 +100,7 @@ describe("removeTabIdFromToolkitWindowStore", () => {
 
     expect(state).toEqual({
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 14],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 12,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 12,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         12: "stream-12",
       },
@@ -112,7 +112,7 @@ describe("getCapturedTabs", () => {
   test("removes a captured tab that disappeared", async () => {
     const state: Record<string, unknown> = {
       [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 13],
-      [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: 13,
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 13,
       [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: {
         12: "stream-12",
         13: "stream-13",
@@ -149,10 +149,10 @@ describe("getCapturedTabs", () => {
 describe("capture transaction", () => {
   const setupCapture = () => {
     const state: Record<string, unknown> = {
-      toolkitWindowId: 5,
-      toolkitWindowTabIds: [12, 13],
-      toolkitWindowActiveTabId: 12,
-      toolkitWindowCaptureStreamIds: { 12: "old-12", 13: "old-13" },
+      [STORAGE_KEYS.TOOLKIT_WINDOW_ID]: 5,
+      [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [12, 13],
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: 12,
+      [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: { 12: "old-12", 13: "old-13" },
     };
     let resolveStream!: (value: string) => void;
     const stream = new Promise<string>((resolve) => {
@@ -187,9 +187,22 @@ describe("capture transaction", () => {
     const removed = removeTabIdFromToolkitWindowStore(13);
     resolveStream("new-13");
     await Promise.all([capture, removed]);
-    expect(state.toolkitWindowTabIds).toEqual([12]);
-    expect(state.toolkitWindowActiveTabId).toBe(12);
-    expect(state.toolkitWindowCaptureStreamIds).toEqual({ 12: "old-12" });
+    expect(state[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]).toEqual([12]);
+    expect(state[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(12);
+    expect(state[STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]).toEqual({ 12: "old-12" });
+  });
+
+  test("hands the active tab off through captureActiveTabId for the legacy window", async () => {
+    const { state, resolveStream, getMediaStreamId } = setupCapture();
+    const capture = toggleWindowMode(13);
+    await vi.waitFor(() => expect(getMediaStreamId).toHaveBeenCalled());
+    resolveStream("new-13");
+    await capture;
+
+    // The legacy window controller reconciles on CAPTURE_ACTIVE_TAB_ID, the
+    // same key captureCoordinator writes when the popup selects a tab.
+    expect(state[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(13);
+    expect(state).not.toHaveProperty(STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID);
   });
 
   test("propagates session failures without relabeling them as capture errors", async () => {

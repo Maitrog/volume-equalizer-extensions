@@ -102,7 +102,7 @@ const updateCaptureStreamId = async (tabId: number, streamId: string | null): Pr
     streamIds[tabId] = streamId;
   }
   await chrome.storage.session.set({
-    [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: tabId,
+    [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: tabId,
     [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: streamIds,
   });
 };
@@ -110,7 +110,7 @@ const updateCaptureStreamId = async (tabId: number, streamId: string | null): Pr
 const removeTabIdFromToolkitWindowStoreInternal = async (tabId: number): Promise<void> => {
   const stored = await chrome.storage.session.get([
     STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
-    STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+    STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID,
     STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
   ]);
   const tabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
@@ -124,12 +124,12 @@ const removeTabIdFromToolkitWindowStoreInternal = async (tabId: number): Promise
   };
   delete streamIds[tabId];
   const storedActiveTabId =
-    (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? null;
+    (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? null;
   const activeTabId = storedActiveTabId === tabId ? (tabIds[0] ?? null) : storedActiveTabId;
 
   await chrome.storage.session.set({
     [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: tabIds,
-    [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: activeTabId,
+    [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: activeTabId,
     [STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS]: streamIds,
   });
 };
@@ -137,13 +137,12 @@ const removeTabIdFromToolkitWindowStoreInternal = async (tabId: number): Promise
 export const getCapturedTabs = async (): Promise<CapturedTabsResult> => {
   const stored = await chrome.storage.session.get([
     STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
-    STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+    STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID,
   ]);
   const tabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
     ? stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]
     : [];
-  const activeTabId =
-    (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? null;
+  const activeTabId = (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? null;
   const tabs: CapturedTab[] = [];
   let activeTabIsMissing = false;
 
@@ -197,7 +196,7 @@ const clearToolkitWindowStateInternal = async (): Promise<void> => {
   await chrome.storage.session.remove([
     STORAGE_KEYS.TOOLKIT_WINDOW_ID,
     STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
-    STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
+    STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID,
     STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
   ]);
 };
