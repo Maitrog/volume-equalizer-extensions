@@ -354,6 +354,140 @@ describe("captureCoordinator", () => {
     expect(settingsCommands[0]).toMatchObject({ tabId: 1 });
   });
 
+  test("applies a per-tab storage change only to its live session", async () => {
+    const harness = createHarness();
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+    await coordinator.startCapture(2);
+    harness.local[STORAGE_KEYS.tabGain(1)] = -6;
+    harness.local[STORAGE_KEYS.tabMute(1)] = true;
+
+    await coordinator.handleStorageChange({
+      [STORAGE_KEYS.tabGain(1)]: { newValue: -6, oldValue: 0 },
+      [STORAGE_KEYS.tabMute(1)]: { newValue: true, oldValue: false },
+    });
+
+    const settingsCommands = harness.commands.filter(
+      (command) => command.method === "capture-settings",
+    );
+    expect(settingsCommands).toHaveLength(1);
+    expect(settingsCommands[0]).toMatchObject({
+      tabId: 1,
+      settings: { gainValue: -6, muted: true },
+    });
+    expect(harness.captures.get(2)?.settings.gainValue).toBe(0);
+  });
+
+  test("applies global storage changes to every live session", async () => {
+    const harness = createHarness();
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+    await coordinator.startCapture(2);
+    harness.local[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION] = false;
+
+    await coordinator.handleStorageChange({
+      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: { newValue: false, oldValue: true },
+    });
+
+    const settingsCommands = harness.commands.filter(
+      (command) => command.method === "capture-settings",
+    );
+    expect(settingsCommands.map((command) => command.tabId).sort()).toEqual([1, 2]);
+    expect(harness.captures.get(1)?.settings.volumeCompensationEnabled).toBe(false);
+    expect(harness.captures.get(2)?.settings.volumeCompensationEnabled).toBe(false);
+  });
+
+  test("ignores storage changes for tabs without a live session", async () => {
+    const harness = createHarness();
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+
+    await coordinator.handleStorageChange({
+      [STORAGE_KEYS.tabGain(99)]: { newValue: -6, oldValue: 0 },
+    });
+
+    expect(
+      harness.commands.filter((command) => command.method === "capture-settings"),
+    ).toHaveLength(0);
+  });
+
+  test("notifies content scripts to bypass before the capture graph connects", async () => {
+    const harness = createHarness();
+    const notifyCaptureModeChanged = vi.fn(async (tabId: number) => {
+      harness.events.push(`mode-changed:${tabId}`);
+    });
+    const coordinator = createCaptureCoordinator({ notifyCaptureModeChanged });
+
+    await coordinator.startCapture(1);
+
+    expect(harness.events).toEqual([
+      "create-document",
+      "mode-changed:1",
+      "stream-id:1",
+      "send:capture-start",
+    ]);
+  });
+
+  test("notifies content scripts when a capture stops", async () => {
+    createHarness();
+    const notifyCaptureModeChanged = vi.fn(() => Promise.resolve());
+    const coordinator = createCaptureCoordinator({ notifyCaptureModeChanged });
+    await coordinator.startCapture(1);
+    notifyCaptureModeChanged.mockClear();
+
+    await coordinator.stopCapture(1);
+
+    expect(notifyCaptureModeChanged).toHaveBeenCalledWith(1);
+  });
+
+  test("toggles bypass in the live offscreen session without stopping audio", async () => {
+    const harness = createHarness();
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+
+    await coordinator.toggleCaptureEnabled(1);
+
+    expect(harness.captures.get(1)?.settings.enabled).toBe(false);
+    expect(harness.commands.some((command) => command.method === "capture-stop")).toBe(false);
+    expect(harness.captures.has(1)).toBe(true);
+
+    await coordinator.toggleCaptureEnabled(1);
+
+    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
+  });
+
+  test("keeps ordinary mode off after stop and lets a normal enable through", async () => {
+    const harness = createHarness();
+    harness.local[STORAGE_KEYS.tabEnabled(1)] = true;
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+    expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(false);
+
+    await coordinator.stopCapture(1);
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(false);
+    expect(await coordinator.getCaptures()).toEqual([]);
+
+    harness.local[STORAGE_KEYS.tabEnabled(1)] = true;
+    await coordinator.handleStorageChange({
+      [STORAGE_KEYS.tabEnabled(1)]: { newValue: true, oldValue: false },
+    });
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(true);
+    expect(harness.open).toBe(false);
+  });
+
+  test("starts the offscreen session while disabling an active page equalizer", async () => {
+    const harness = createHarness();
+    harness.local[STORAGE_KEYS.tabEnabled(1)] = true;
+    const coordinator = createCaptureCoordinator();
+
+    await coordinator.startCapture(1);
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(false);
+    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
+  });
+
   test("returns captured tabs with metadata and the selected active tab", async () => {
     const harness = createHarness();
     const coordinator = createCaptureCoordinator();

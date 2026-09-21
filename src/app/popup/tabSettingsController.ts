@@ -1,3 +1,4 @@
+import { readStoredGain } from "../../domains/equalizer/persistedGain";
 import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
@@ -12,12 +13,6 @@ interface CaptureSettingsUpdate {
   gainValue: number;
   muted: boolean;
 }
-
-export const readStoredGain = (value: unknown): number => {
-  if (typeof value !== "string" && typeof value !== "number") return 0;
-  const gain = Number(value);
-  return Number.isFinite(gain) ? gain : 0;
-};
 
 export const createTabSettingsController = (deps: {
   localStorage: chrome.storage.StorageArea;

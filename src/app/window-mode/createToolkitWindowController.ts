@@ -1,10 +1,11 @@
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
+import { readStoredGain } from "../../domains/equalizer/persistedGain";
 import { isEqualizerFilterEnabled } from "../../domains/equalizer/defaultFilters";
 import { createSpectrumSampler } from "../../infrastructure/audio/spectrumSampler";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import { createCapturedTabsView } from "../../ui/popup/capturedTabsView";
-import { createTabSettingsController, readStoredGain } from "../popup/tabSettingsController";
+import { createTabSettingsController } from "../popup/tabSettingsController";
 import { createCaptureGraph, type CaptureGraph } from "../offscreen/captureGraph";
 import { createCaptureSession } from "../offscreen/captureSession";
 

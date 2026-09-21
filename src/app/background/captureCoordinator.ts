@@ -1,4 +1,5 @@
 import { isEqualizerFilterEnabled } from "../../domains/equalizer/defaultFilters";
+import { readStoredGain } from "../../domains/equalizer/persistedGain";
 import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import type {
   CaptureReply,
@@ -8,7 +9,6 @@ import type {
 } from "../../infrastructure/chrome/runtimeMessages";
 import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { readStoredGain } from "../popup/tabSettingsController";
 
 export interface CapturedTab {
   id: number | undefined;
@@ -66,7 +66,7 @@ const isCaptureReply = (value: unknown): value is CaptureReply => {
   return reply.ok === false && typeof reply.error === "string";
 };
 
-const isCaptureTabSnapshot = (value: unknown): value is CaptureTabSnapshot => {
+export const isCaptureTabSnapshot = (value: unknown): value is CaptureTabSnapshot => {
   if (!value || typeof value !== "object") return false;
   const snapshot = value as Record<string, unknown>;
   return (
@@ -76,6 +76,30 @@ const isCaptureTabSnapshot = (value: unknown): value is CaptureTabSnapshot => {
   );
 };
 
+const GLOBAL_SETTINGS_KEYS: string[] = [
+  STORAGE_KEYS.FILTERS,
+  STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION,
+];
+
+export const resolveAffectedTabIds = (
+  changes: Record<string, chrome.storage.StorageChange>,
+  liveTabIds: readonly number[],
+): number[] => {
+  const globalChange = GLOBAL_SETTINGS_KEYS.some((key) => key in changes);
+  const affected = new Set<number>();
+  for (const tabId of liveTabIds) {
+    if (
+      globalChange ||
+      STORAGE_KEYS.tabFilters(tabId) in changes ||
+      STORAGE_KEYS.tabGain(tabId) in changes ||
+      STORAGE_KEYS.tabMute(tabId) in changes
+    ) {
+      affected.add(tabId);
+    }
+  }
+  return [...affected];
+};
+
 export const readCaptureTabSnapshots = async (): Promise<CaptureTabSnapshot[]> => {
   const stored = await chrome.storage.session.get(STORAGE_KEYS.CAPTURE_TAB_IDS);
   const value = stored[STORAGE_KEYS.CAPTURE_TAB_IDS];
@@ -83,10 +107,28 @@ export const readCaptureTabSnapshots = async (): Promise<CaptureTabSnapshot[]> =
   return value.filter(isCaptureTabSnapshot);
 };
 
-export const createCaptureCoordinator = () => {
+const notifyTabCaptureModeChanged = (tabId: number): Promise<void> =>
+  chrome.tabs
+    .sendMessage(tabId, { method: RUNTIME_MESSAGES.CAPTURE_MODE_CHANGED })
+    .then(() => undefined)
+    .catch((error: unknown) => {
+      const text = error instanceof Error ? error.message : String(error);
+      // A page without a content script must not fail an otherwise allowed capture.
+      if (text.includes("Receiving end does not exist") || text.includes("No tab with id")) return;
+      console.error("Failed to notify capture mode change", { tabId, error });
+    });
+
+export const createCaptureCoordinator = (
+  deps: {
+    notifyCaptureModeChanged?: (tabId: number) => Promise<void>;
+  } = {},
+) => {
   // ponytail: one coordinator transaction at a time; add per-tab queues only if capture throughput warrants it.
   let queue: Promise<unknown> = Promise.resolve();
   let reconciled = false;
+
+  const notifyModeChanged = (tabId: number): Promise<void> =>
+    (deps.notifyCaptureModeChanged ?? (() => Promise.resolve()))(tabId).catch(() => undefined);
 
   const runExclusive = <T>(operation: () => Promise<T>): Promise<T> => {
     const result = queue.then(operation);
@@ -296,6 +338,8 @@ export const createCaptureCoordinator = () => {
         ]);
         await chrome.storage.local.set({ [STORAGE_KEYS.tabEnabled(tabId)]: false });
         await writeActiveTabId(tabId);
+        // Let available frames apply the page bypass before the offscreen graph connects.
+        await notifyModeChanged(tabId);
 
         const streamId = await chrome.tabCapture.getMediaStreamId({ targetTabId: tabId });
         const settings = await readSettings(tabId, true);
@@ -342,6 +386,7 @@ export const createCaptureCoordinator = () => {
           if (!reply.ok) throw new Error(reply.error);
         }
         await removeSnapshot(tabId);
+        await notifyModeChanged(tabId);
         await reconcileActiveTabId();
         await closeOffscreenIfIdle();
         return { ok: true, captures: await readLiveCaptures() };
@@ -356,6 +401,16 @@ export const createCaptureCoordinator = () => {
     return runExclusive(readLiveCaptures);
   };
 
+  const applySettings = async (tabId: number, settings: CaptureSettings): Promise<void> => {
+    const reply = await sendCommand({
+      target: "offscreen",
+      method: RUNTIME_MESSAGES.CAPTURE_SETTINGS,
+      tabId,
+      settings,
+    });
+    if (!reply.ok) throw new Error(reply.error);
+  };
+
   const updateCaptureSettings = async (tabId: number | undefined): Promise<void> => {
     if (!isTabId(tabId)) return;
     await ensureReconciled();
@@ -363,14 +418,45 @@ export const createCaptureCoordinator = () => {
       const captures = await readLiveCaptures();
       const capture = captures.find((candidate) => candidate.tabId === tabId);
       if (!capture) return;
-      const settings = await readSettings(tabId, capture.settings.enabled);
-      const reply = await sendCommand({
-        target: "offscreen",
-        method: RUNTIME_MESSAGES.CAPTURE_SETTINGS,
-        tabId,
-        settings,
-      });
-      if (!reply.ok) throw new Error(reply.error);
+      await applySettings(tabId, await readSettings(tabId, capture.settings.enabled));
+    });
+  };
+
+  const toggleCaptureEnabled = async (tabId: number | undefined): Promise<void> => {
+    if (!isTabId(tabId)) return;
+    await ensureReconciled();
+    await runExclusive(async () => {
+      const captures = await readLiveCaptures();
+      const capture = captures.find((candidate) => candidate.tabId === tabId);
+      if (!capture) return;
+      await applySettings(tabId, { ...capture.settings, enabled: !capture.settings.enabled });
+    });
+  };
+
+  const handleStorageChange = async (
+    changes: Record<string, chrome.storage.StorageChange>,
+  ): Promise<void> => {
+    if (!changes || typeof changes !== "object") return;
+    await ensureReconciled();
+    await runExclusive(async () => {
+      const captures = await readLiveCaptures();
+      const affectedTabIds = resolveAffectedTabIds(
+        changes,
+        captures.map((capture) => capture.tabId),
+      );
+      for (const tabId of affectedTabIds) {
+        const capture = captures.find((candidate) => candidate.tabId === tabId);
+        if (!capture) continue;
+        try {
+          await applySettings(tabId, await readSettings(tabId, capture.settings.enabled));
+        } catch (error) {
+          console.error("Failed to apply capture settings change", {
+            operation: "handleStorageChange",
+            tabId,
+            error,
+          });
+        }
+      }
     });
   };
 
@@ -379,6 +465,7 @@ export const createCaptureCoordinator = () => {
     await ensureReconciled();
     await runExclusive(async () => {
       await removeSnapshot(tabId);
+      await notifyModeChanged(tabId);
       await reconcileActiveTabId();
       await closeOffscreenIfIdle();
     });
@@ -438,10 +525,14 @@ export const createCaptureCoordinator = () => {
     stopCapture,
     getCaptures,
     updateCaptureSettings,
+    toggleCaptureEnabled,
+    handleStorageChange,
     handleCaptureEnded,
     handleTabRemoved,
     getCapturedTabs,
   };
 };
 
-export const captureCoordinator = createCaptureCoordinator();
+export const captureCoordinator = createCaptureCoordinator({
+  notifyCaptureModeChanged: notifyTabCaptureModeChanged,
+});

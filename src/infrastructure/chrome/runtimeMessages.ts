@@ -23,6 +23,7 @@ export const RUNTIME_MESSAGES = {
   CAPTURE_ENDED: "capture-ended",
   START_TAB_CAPTURE: "start-tab-capture",
   STOP_TAB_CAPTURE: "stop-tab-capture",
+  CAPTURE_MODE_CHANGED: "capture-mode-changed",
 } as const;
 
 export type RuntimeMessageMethod = (typeof RUNTIME_MESSAGES)[keyof typeof RUNTIME_MESSAGES];

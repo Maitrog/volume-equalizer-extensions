@@ -6,10 +6,13 @@ const mocks = vi.hoisted(() => ({
   clearUnusedStorage: vi.fn(),
   captureCoordinator: {
     getCapturedTabs: vi.fn(),
+    getCaptures: vi.fn(() => Promise.resolve([])),
     handleCaptureEnded: vi.fn(),
+    handleStorageChange: vi.fn(() => Promise.resolve()),
     handleTabRemoved: vi.fn(),
     startCapture: vi.fn(),
     stopCapture: vi.fn(),
+    toggleCaptureEnabled: vi.fn(),
   },
   getCapturedTabs: vi.fn(),
   getToolkitWindowId: vi.fn(),
@@ -63,7 +66,11 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
       onStartup: { addListener: vi.fn() },
       setUninstallURL: vi.fn(),
     },
-    storage: { session: { remove: vi.fn() } },
+    storage: {
+      local: { get: vi.fn(), set: vi.fn() },
+      session: { remove: vi.fn() },
+      onChanged: { addListener: vi.fn() },
+    },
     tabs: {
       get: getTab,
       onActivated: { addListener: onActivated },

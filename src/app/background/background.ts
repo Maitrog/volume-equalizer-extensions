@@ -9,6 +9,8 @@ import {
   clearTabStorage,
   clearUnusedStorage,
 } from "./storageCleanup";
+import { createTabMuteToggle } from "./tabMute";
+import { applyToolkitShortcut as runToolkitShortcut } from "./toolkitShortcut";
 import { RUNTIME_MESSAGES, SPECTRUM_PORT_NAME } from "../../infrastructure/chrome/runtimeMessages";
 import {
   clearToolkitWindowState,
@@ -54,20 +56,47 @@ chrome.runtime.onConnect.addListener((port) => {
   if (port.name === SPECTRUM_PORT_NAME) spectrumRelay.connect(port);
 });
 
+const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender): void => {
+  const offscreenUrl = chrome.runtime.getURL("offscreen.html");
+  if (sender.id !== chrome.runtime.id || sender.url !== offscreenUrl) return;
+  void captureCoordinator.handleCaptureEnded(tabId).catch((error: unknown) => {
+    console.error("Failed to handle capture end", {
+      operation: "handleCaptureEnded",
+      tabId,
+      error,
+    });
+  });
+};
+
+const toggleTabMute = createTabMuteToggle(chrome.storage.local);
+
 const runtimeMessageHandler = createRuntimeMessageHandler({
   acceptSpectrumFrame: spectrumRelay.acceptFrame,
   applyAutostartForTab,
+  applyToolkitShortcut: (shortcut) =>
+    runToolkitShortcut(shortcut, {
+      hasCapture: async (tabId) =>
+        (await captureCoordinator.getCaptures()).some((capture) => capture.tabId === tabId),
+      toggleMute: toggleTabMute,
+      toggleEqualizer: (tabId) => captureCoordinator.toggleCaptureEnabled(tabId),
+    }),
   clearUnusedStorage,
   getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
   toggleWindowMode,
   startCapture: captureCoordinator.startCapture,
   stopCapture: captureCoordinator.stopCapture,
-  handleCaptureEnded: (tabId, sender) => {
-    const offscreenUrl = chrome.runtime.getURL("offscreen.html");
-    if (sender.id !== chrome.runtime.id || sender.url !== offscreenUrl) return;
-    void captureCoordinator.handleCaptureEnded(tabId);
-  },
+  handleCaptureEnded,
+});
+
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== "local") return;
+  void captureCoordinator.handleStorageChange(changes).catch((error: unknown) => {
+    console.error("Failed to apply capture settings change", {
+      operation: "handleStorageChange",
+      error,
+    });
+  });
 });
 
 chrome.runtime.onMessage.addListener(
@@ -147,7 +176,13 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 chrome.tabCapture.onStatusChanged.addListener(({ tabId, status }) => {
   if (status !== "stopped") return;
-  void captureCoordinator.handleCaptureEnded(tabId);
+  void captureCoordinator.handleCaptureEnded(tabId).catch((error: unknown) => {
+    console.error("Failed to handle capture end", {
+      operation: "handleCaptureEnded",
+      tabId,
+      error,
+    });
+  });
 });
 
 chrome.windows.onRemoved.addListener(async (windowId) => {

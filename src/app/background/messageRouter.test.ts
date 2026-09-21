@@ -53,6 +53,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn().mockResolvedValue(capturedTabs),
       acceptSpectrumFrame: vi.fn(),
@@ -75,6 +76,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn().mockRejectedValue(new Error("gone")),
       acceptSpectrumFrame: vi.fn(),
@@ -97,6 +99,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -123,6 +126,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -152,6 +156,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -182,6 +187,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -204,11 +210,105 @@ describe("createRuntimeMessageHandler", () => {
     expect(response).toHaveBeenCalledWith(true);
   });
 
+  test("reports a pending offscreen capture as captured mode", () => {
+    const chromeMock = createChromeMock();
+    chromeMock.sessionGet.mockImplementation((_keys, callback) => {
+      callback({
+        [STORAGE_KEYS.CAPTURE_TAB_IDS]: [
+          { tabId: 7, previousTabEnabled: false, status: "starting" },
+        ],
+      });
+    });
+    const response = vi.fn();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    const result = handler(
+      { method: RUNTIME_MESSAGES.IS_TOOLKIT_CAPTURED },
+      { tab: { id: 7 } as chrome.tabs.Tab },
+      response,
+    );
+
+    expect(result).toBe(true);
+    expect(response).toHaveBeenCalledWith(true);
+  });
+
+  test("reports an uncaptured tab as ordinary mode", () => {
+    const chromeMock = createChromeMock();
+    chromeMock.sessionGet.mockImplementation((_keys, callback) => {
+      callback({
+        [STORAGE_KEYS.CAPTURE_TAB_IDS]: [{ tabId: 8, previousTabEnabled: false, status: "active" }],
+        [STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]: [9],
+      });
+    });
+    const response = vi.fn();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.IS_TOOLKIT_CAPTURED },
+      { tab: { id: 7 } as chrome.tabs.Tab },
+      response,
+    );
+
+    expect(response).toHaveBeenCalledWith(false);
+  });
+
+  test("routes a captured tab shortcut to background handling", async () => {
+    createChromeMock();
+    const applyToolkitShortcut = vi.fn(() => Promise.resolve(true));
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut,
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleWindowMode: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      {
+        method: RUNTIME_MESSAGES.TOOLKIT_SHORTCUT,
+        payload: { action: "mute" },
+      },
+      { tab: { id: 7 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    await flushPromises();
+
+    expect(applyToolkitShortcut).toHaveBeenCalledWith({ tabId: 7, action: "mute" });
+  });
+
   test("applies autostart with reset when page starts", () => {
     createChromeMock();
     const applyAutostartForTab = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab,
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -235,6 +335,7 @@ describe("createRuntimeMessageHandler", () => {
     const chromeMock = createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -265,6 +366,7 @@ describe("createRuntimeMessageHandler", () => {
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -293,6 +395,7 @@ describe("createRuntimeMessageHandler", () => {
     createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -317,6 +420,7 @@ describe("createRuntimeMessageHandler", () => {
     const acceptSpectrumFrame = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame,
@@ -347,6 +451,7 @@ describe("createRuntimeMessageHandler", () => {
     const restoreSpectrumDemand = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -378,6 +483,7 @@ describe("createRuntimeMessageHandler", () => {
     const startCapture = vi.fn().mockResolvedValue({ ok: true, captures: [] });
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -401,6 +507,7 @@ describe("createRuntimeMessageHandler", () => {
     const response = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -424,6 +531,7 @@ describe("createRuntimeMessageHandler", () => {
     const stopCapture = vi.fn().mockResolvedValue({ ok: true, captures: [] });
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),
@@ -450,6 +558,7 @@ describe("createRuntimeMessageHandler", () => {
     const handleCaptureEnded = vi.fn();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
       clearUnusedStorage: vi.fn(),
       getCapturedTabs: vi.fn(),
       acceptSpectrumFrame: vi.fn(),

@@ -10,8 +10,7 @@ export interface ToolkitShortcutMessage {
 }
 
 export interface ToolkitShortcutHandlers {
-  hasCapture(tabId: number): boolean;
-  selectTab(tabId: number): Promise<void>;
+  hasCapture(tabId: number): Promise<boolean>;
   toggleMute(tabId: number): Promise<void>;
   toggleEqualizer(tabId: number): Promise<void>;
 }
@@ -19,10 +18,8 @@ export interface ToolkitShortcutHandlers {
 export const resolveToolkitShortcutMessage = (
   message: unknown,
   sender: chrome.runtime.MessageSender,
-  isToolkitWindow: boolean,
 ): ToolkitShortcutMessage | null => {
   if (
-    !isToolkitWindow ||
     message == null ||
     typeof message !== "object" ||
     !("method" in message) ||
@@ -44,13 +41,12 @@ export const resolveToolkitShortcutMessage = (
   return { tabId, action };
 };
 
-export const applyToolkitShortcutMessage = async (
+export const applyToolkitShortcut = async (
   shortcut: ToolkitShortcutMessage,
   handlers: ToolkitShortcutHandlers,
 ): Promise<boolean> => {
-  if (!handlers.hasCapture(shortcut.tabId)) return false;
+  if (!(await handlers.hasCapture(shortcut.tabId))) return false;
 
-  await handlers.selectTab(shortcut.tabId);
   if (shortcut.action === TOOLKIT_SHORTCUT_ACTIONS.MUTE) {
     await handlers.toggleMute(shortcut.tabId);
   } else {

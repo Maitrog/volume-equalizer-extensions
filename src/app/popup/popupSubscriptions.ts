@@ -7,12 +7,10 @@ import {
 } from "../../domains/shortcuts/shortcuts";
 import {
   SPECTRUM_PORT_NAME,
-  TOOLKIT_SHORTCUT_ACTIONS,
   type RelayedSpectrumMessage,
   type SpectrumMetaPayload,
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { resolveToolkitShortcutMessage } from "./toolkitShortcutMessage";
 
 export const attachPopupSubscriptions = (deps: {
   isToolkitWindow: boolean;
@@ -26,8 +24,6 @@ export const attachPopupSubscriptions = (deps: {
   renderCaptureError(message: string | null): void;
   refreshCaptureFilters(): void;
   getShortcutSettings(): ShortcutMap;
-  hasCapture(tabId: number): boolean;
-  selectTab(tabId: number): Promise<void>;
   toggleMute(tabId?: number): Promise<void>;
   toggleEqualizer(tabId?: number): Promise<void>;
   onSpectrumMeta(meta: SpectrumMetaPayload): void;
@@ -43,27 +39,6 @@ export const attachPopupSubscriptions = (deps: {
 
   const reportFailure = (operation: string, error: unknown): void => {
     console.error(`Failed to ${operation}`, { operation, error });
-  };
-
-  const onRuntimeMessage = (
-    message: unknown,
-    sender: chrome.runtime.MessageSender,
-  ): boolean | undefined => {
-    if (disposed) return;
-    const shortcut = resolveToolkitShortcutMessage(message, sender, deps.isToolkitWindow);
-    if (!shortcut || !deps.hasCapture(shortcut.tabId)) return;
-    void (async () => {
-      await deps.selectTab(shortcut.tabId);
-      if (disposed) return;
-      if (shortcut.action === TOOLKIT_SHORTCUT_ACTIONS.MUTE) {
-        await deps.toggleMute(shortcut.tabId);
-      } else {
-        await deps.toggleEqualizer(shortcut.tabId);
-      }
-    })().catch((error: unknown) => {
-      reportFailure("apply toolkit shortcut", error);
-    });
-    return undefined;
   };
 
   const onKeydown = (event: KeyboardEvent): void => {
@@ -193,7 +168,6 @@ export const attachPopupSubscriptions = (deps: {
   const dispose = (): void => {
     if (disposed) return;
     disposed = true;
-    chrome.runtime.onMessage.removeListener(onRuntimeMessage);
     chrome.storage.onChanged.removeListener(onStorageChange);
     document.removeEventListener("keydown", onKeydown);
     window.removeEventListener("resize", onResize);
@@ -207,7 +181,6 @@ export const attachPopupSubscriptions = (deps: {
     port?.disconnect();
   };
 
-  chrome.runtime.onMessage.addListener(onRuntimeMessage);
   chrome.storage.onChanged.addListener(onStorageChange);
   document.addEventListener("keydown", onKeydown);
   window.addEventListener("resize", onResize);

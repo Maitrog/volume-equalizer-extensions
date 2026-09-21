@@ -488,8 +488,6 @@ export const createPopupApp = ({
     renderCaptureError,
     refreshCaptureFilters: () => toolkitController.refreshCaptureFilters(),
     getShortcutSettings: settingsView.getShortcutSettings,
-    hasCapture: toolkitController.hasCapture,
-    selectTab: toolkitController.selectTab,
     toggleMute: onToggleMute,
     toggleEqualizer: onToggleEqualizer,
     onSpectrumMeta: (meta) => spectrumRenderer.setMeta(meta),

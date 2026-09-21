@@ -6,7 +6,8 @@ import type {
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
-import type { CapturedTabsResult } from "./captureCoordinator";
+import { isCaptureTabSnapshot, type CapturedTabsResult } from "./captureCoordinator";
+import { resolveToolkitShortcutMessage, type ToolkitShortcutMessage } from "./toolkitShortcut";
 
 interface BackgroundRuntimeMessage extends RuntimeMessage {
   target?: string;
@@ -27,6 +28,7 @@ export interface RuntimeMessageHandlerDependencies {
     url: string | undefined,
     options?: ApplyAutostartOptions,
   ) => Promise<void> | void;
+  applyToolkitShortcut: (shortcut: ToolkitShortcutMessage) => Promise<boolean> | boolean;
   clearUnusedStorage: () => Promise<void> | void;
   getCapturedTabs: () => Promise<CapturedTabsResult>;
   restoreSpectrumDemand: (sender: chrome.runtime.MessageSender) => void;
@@ -42,6 +44,7 @@ const isTabId = (value: unknown): value is number =>
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
   applyAutostartForTab,
+  applyToolkitShortcut,
   clearUnusedStorage,
   getCapturedTabs,
   restoreSpectrumDemand,
@@ -118,6 +121,20 @@ export const createRuntimeMessageHandler = ({
     const tabId = sender.tab?.id;
     if (tabId == null) return;
 
+    if (request.method === RUNTIME_MESSAGES.TOOLKIT_SHORTCUT) {
+      const shortcut = resolveToolkitShortcutMessage(request, sender);
+      if (shortcut) {
+        void Promise.resolve(applyToolkitShortcut(shortcut)).catch((error: unknown) => {
+          console.error("Failed to apply toolkit shortcut", {
+            operation: "applyToolkitShortcut",
+            tabId: shortcut.tabId,
+            error,
+          });
+        });
+      }
+      return;
+    }
+
     if (request.method === RUNTIME_MESSAGES.SPECTRUM_READY && Number.isInteger(sender.frameId)) {
       restoreSpectrumDemand(sender);
       return;
@@ -129,12 +146,22 @@ export const createRuntimeMessageHandler = ({
     }
 
     if (request.method === RUNTIME_MESSAGES.IS_TOOLKIT_CAPTURED) {
-      chrome.storage.session.get(STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS, (stored) => {
-        const capturedTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
-          ? stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]
-          : [];
-        response(capturedTabIds.includes(tabId));
-      });
+      chrome.storage.session.get(
+        [STORAGE_KEYS.CAPTURE_TAB_IDS, STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS],
+        (stored) => {
+          const snapshots = Array.isArray(stored[STORAGE_KEYS.CAPTURE_TAB_IDS])
+            ? stored[STORAGE_KEYS.CAPTURE_TAB_IDS]
+            : [];
+          const capturedByCapture = snapshots.some(
+            (snapshot: unknown) => isCaptureTabSnapshot(snapshot) && snapshot.tabId === tabId,
+          );
+          // ponytail: legacy union disappears in task 6 with the old window-mode path.
+          const legacyTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
+            ? (stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] as number[])
+            : [];
+          response(capturedByCapture || legacyTabIds.includes(tabId));
+        },
+      );
       return true;
     }
 

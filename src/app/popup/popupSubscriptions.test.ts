@@ -73,8 +73,6 @@ const setup = () => {
     renderCaptureError: vi.fn(),
     refreshCaptureFilters: vi.fn(),
     getShortcutSettings: vi.fn(() => DEFAULT_SHORTCUTS),
-    hasCapture: vi.fn(() => true),
-    selectTab: vi.fn(() => Promise.resolve()),
     toggleMute: vi.fn(() => Promise.resolve()),
     toggleEqualizer: vi.fn(() => Promise.resolve()),
     onSpectrumMeta: vi.fn(),
@@ -106,14 +104,7 @@ afterEach(() => {
 
 describe("popup subscriptions", () => {
   test("routes events before disposal and ignores them afterward", async () => {
-    const { subscriptions, callbacks, runtimeMessage, storageChange, documentTarget } = setup();
-    runtimeMessage.fire(
-      {
-        method: RUNTIME_MESSAGES.TOOLKIT_SHORTCUT,
-        payload: { action: TOOLKIT_SHORTCUT_ACTIONS.MUTE },
-      },
-      { tab: { id: 12 } } as chrome.runtime.MessageSender,
-    );
+    const { subscriptions, callbacks, storageChange, documentTarget } = setup();
     storageChange.fire({
       [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
     });
@@ -133,13 +124,25 @@ describe("popup subscriptions", () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(callbacks.selectTab).toHaveBeenCalledWith(12);
-    expect(callbacks.toggleMute).toHaveBeenCalledTimes(2);
+    expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
     expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
     expect(keydown.preventDefault).toHaveBeenCalledOnce();
 
     subscriptions.dispose();
     subscriptions.dispose();
+    storageChange.fire({
+      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
+    });
+    documentTarget.fire("keydown", keydown);
+    await Promise.resolve();
+
+    expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
+    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+  });
+
+  test("leaves captured tab shortcuts to the background", async () => {
+    const { subscriptions, callbacks, runtimeMessage } = setup();
+
     runtimeMessage.fire(
       {
         method: RUNTIME_MESSAGES.TOOLKIT_SHORTCUT,
@@ -147,15 +150,11 @@ describe("popup subscriptions", () => {
       },
       { tab: { id: 12 } } as chrome.runtime.MessageSender,
     );
-    storageChange.fire({
-      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
-    });
-    documentTarget.fire("keydown", keydown);
     await Promise.resolve();
 
-    expect(callbacks.selectTab).toHaveBeenCalledOnce();
-    expect(callbacks.toggleMute).toHaveBeenCalledTimes(2);
-    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+    expect(callbacks.toggleMute).not.toHaveBeenCalled();
+    expect(callbacks.toggleEqualizer).not.toHaveBeenCalled();
+    subscriptions.dispose();
   });
 
   test("blocks late async work and clears a pending port reconnect", async () => {

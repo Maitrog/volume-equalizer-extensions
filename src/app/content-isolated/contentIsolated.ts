@@ -20,7 +20,7 @@ import {
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import { claimContentInstance } from "./contentInstance";
-import { resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
+import { isLatestModeCheck, resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
 
 type SendRuntimeMessageWithCallback = (
   message: RuntimeMessage,
@@ -54,19 +54,34 @@ port.dataset.enabled = "false";
 port.dataset.spectrumDemand = "false";
 port.dispatchEvent(new Event("enabled-changed"));
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (!isCurrentInstance()) return;
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse): boolean | undefined => {
+  if (!isCurrentInstance()) return undefined;
 
   if (message?.method === RUNTIME_MESSAGES.CONTENT_SCRIPT_PING) {
     (sendResponse as unknown as (response: boolean) => void)(port.dataset.mainReady === "true");
-    return;
+    return undefined;
   }
 
-  if (message?.method !== RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND) return;
+  if (message?.method === RUNTIME_MESSAGES.CAPTURE_MODE_CHANGED) {
+    void applyTabEnabledState(lastRequestedEnabled).then(
+      () => (sendResponse as unknown as (response: boolean) => void)(true),
+      (error: unknown) => {
+        console.error("Failed to apply capture mode change", {
+          operation: "captureModeChanged",
+          error,
+        });
+        (sendResponse as unknown as (response: boolean) => void)(false);
+      },
+    );
+    return true;
+  }
+
+  if (message?.method !== RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND) return undefined;
   const enabled = (message.payload as { enabled?: unknown } | undefined)?.enabled;
-  if (typeof enabled !== "boolean") return;
+  if (typeof enabled !== "boolean") return undefined;
   port.dataset.spectrumDemand = String(enabled);
   port.dispatchEvent(new Event("spectrum-state-changed"));
+  return undefined;
 });
 
 let currentTabId: number | null = null;
@@ -98,9 +113,15 @@ const isToolkitCaptured = (): Promise<boolean> => {
   });
 };
 
+let lastRequestedEnabled = false;
+let modeCheckGeneration = 0;
+
 const applyTabEnabledState = async (requestedEnabled: boolean): Promise<void> => {
+  lastRequestedEnabled = requestedEnabled;
+  const generation = ++modeCheckGeneration;
   const captured = await isToolkitCaptured();
-  if (!isCurrentInstance()) return;
+  // A newer mode check (for example after capture-mode-changed) must win over a stale reply.
+  if (!isCurrentInstance() || !isLatestModeCheck(generation, modeCheckGeneration)) return;
 
   port.dataset.enabled = String(resolveTabEnabled(requestedEnabled, captured));
   port.dispatchEvent(new Event("enabled-changed"));

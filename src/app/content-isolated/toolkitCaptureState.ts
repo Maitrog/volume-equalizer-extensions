@@ -7,6 +7,9 @@ export const resolveTabEnabled = (
   return requestedEnabled && !isToolkitCaptured;
 };
 
+export const isLatestModeCheck = (generation: number, currentGeneration: number): boolean =>
+  generation === currentGeneration;
+
 export const resolveShortcutToggle = ({
   key,
   currentValue,
