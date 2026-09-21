@@ -90,7 +90,6 @@ export const createPopupApp = ({
       if (tabId != null) filterPersistence.schedule(tabId, getCurrentFilters());
     },
     flushCurrentFilters: () => filterPersistence.flush(),
-    refreshToolkitCaptureFilters: () => undefined,
   });
 
   const spectrumRenderer = createSpectrumRenderer({
@@ -139,6 +138,11 @@ export const createPopupApp = ({
     elements.captureError.style.display = "block";
   };
 
+  const renderTabCaptureStopError = (): void => {
+    elements.captureError.textContent = localization.getMessage("tab_capture_stop_error");
+    elements.captureError.style.display = "block";
+  };
+
   const captureController = createCaptureController({
     getPointCount,
     setFilters: setCurrentFilters,
@@ -149,6 +153,7 @@ export const createPopupApp = ({
     setMuteButtonClass: (muted) => controlsView?.setMuteButtonClass(muted),
     renderCaptureError,
     renderTabCaptureError,
+    renderTabCaptureStopError,
     onSpectrumTabChange: (tabId) => {
       if (tabId != null) subscriptions?.connectSpectrum(tabId);
     },
@@ -293,7 +298,6 @@ export const createPopupApp = ({
     onVolumeInput,
     onToggleMute,
     onTabCapture,
-    onMuteStateApplied: () => undefined,
   });
 
   presetsView = createPresetsView({
@@ -315,7 +319,6 @@ export const createPopupApp = ({
     setCurrentFilters,
     saveLoadedFilters,
     redraw: resize,
-    refreshToolkitCaptureFilters: () => undefined,
   });
 
   const autostartView = createAutostartView({
@@ -378,7 +381,6 @@ export const createPopupApp = ({
     addPresetToDropdown: presetsView.addPresetToDropdown,
     initPoints,
     redraw: resize,
-    refreshToolkitCaptureFilters: () => undefined,
     saveCurrentFilters,
     refreshDynamicContent,
   });
@@ -451,6 +453,7 @@ export const createPopupApp = ({
     refreshAutostartPresetSelects: autostartView.refreshPresetSelects,
     refreshPresetDropdown,
     getCurrentTabId: async () => getSelectedTabId(),
+    isTabCaptured: captureController.isTabCaptured,
     setEnableButtonClass: controlsView.setEnableButtonClass,
     setMuteButtonClass: controlsView.setMuteButtonClass,
     renderCaptureError,

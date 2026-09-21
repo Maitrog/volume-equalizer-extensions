@@ -16,7 +16,6 @@ export const createControlsView = (deps: {
   onVolumeInput(value: number): Promise<void>;
   onToggleMute(): Promise<void>;
   onTabCapture(): Promise<void>;
-  onMuteStateApplied(): void;
 }) => {
   let clippingTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -68,7 +67,6 @@ export const createControlsView = (deps: {
     setMuteButtonClass: (muted: boolean) => {
       deps.volumeMuteButton.className = muted ? "volume-mute-active" : "volume-mute";
       deps.volumeMuteButton.setAttribute("aria-pressed", String(muted));
-      deps.onMuteStateApplied();
     },
   };
 };

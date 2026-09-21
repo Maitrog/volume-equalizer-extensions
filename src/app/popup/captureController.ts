@@ -1,6 +1,6 @@
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 import type { CaptureReply } from "../../infrastructure/chrome/runtimeMessages";
-import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
+import { isTabId, RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import { createTabSettingsController } from "./tabSettingsController";
 
@@ -16,9 +16,6 @@ export interface CapturedTabsSnapshot {
   tabs: CapturedTabSnapshot[];
   activeTabId: number | null;
 }
-
-const isTabId = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 const normalizeCapturedTabs = (value: unknown): CapturedTabsSnapshot => {
   if (!value || typeof value !== "object") return { tabs: [], activeTabId: null };
@@ -89,6 +86,7 @@ export interface CaptureControllerDependencies {
   setMuteButtonClass(muted: boolean): void;
   renderCaptureError(message: string | null): void;
   renderTabCaptureError(): void;
+  renderTabCaptureStopError(): void;
   onSpectrumTabChange(tabId: number | null): void;
   renderCapturedTabs(): Promise<void>;
 }
@@ -185,7 +183,7 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
   const stopCapture = async (tabId: number): Promise<void> => {
     const reply = await requestStopTabCapture(tabId);
     if (!reply.ok) {
-      deps.renderCaptureError(reply.error);
+      deps.renderTabCaptureStopError();
       return;
     }
     captureEnabled.delete(tabId);

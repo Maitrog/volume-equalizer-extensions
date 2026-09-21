@@ -344,3 +344,31 @@ test("a late track ended does not stop a replacement capture", async () => {
   expect(newMedia.stop).not.toHaveBeenCalled();
   expect(engine.list()).toEqual([{ tabId: 7, settings }]);
 });
+
+test("dispose is terminal: it stops every session, clears state, and closes the context", async () => {
+  const mediaA = fakeStream();
+  const mediaB = fakeStream();
+  const graphA = fakeGraph();
+  const graphB = fakeGraph();
+  const close = vi.fn(async () => undefined);
+  const engine = createCaptureEngine({
+    audioContext: {
+      resume: vi.fn(async () => undefined),
+      close,
+    } as unknown as AudioContext,
+    acquireStream: vi.fn(async (tabId: number) => (tabId === 1 ? mediaA.stream : mediaB.stream)),
+    createGraph: vi.fn(async (tabId: number) => (tabId === 1 ? graphA : graphB)),
+  });
+
+  await engine.start(1, "stream-a", settings);
+  await engine.start(2, "stream-b", settings);
+  await engine.dispose();
+
+  expect(mediaA.stop).toHaveBeenCalledOnce();
+  expect(mediaB.stop).toHaveBeenCalledOnce();
+  expect(graphA.dispose).toHaveBeenCalledOnce();
+  expect(graphB.dispose).toHaveBeenCalledOnce();
+  expect(engine.list()).toEqual([]);
+  expect(close).toHaveBeenCalledOnce();
+  await expect(engine.start(3, "stream-c", settings)).rejects.toThrow();
+});

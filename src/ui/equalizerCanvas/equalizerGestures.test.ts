@@ -27,14 +27,12 @@ const setup = () => {
   const save = vi.fn();
   const flush = vi.fn();
   const draw = vi.fn();
-  const refresh = vi.fn();
   const cleanup = attachEqualizerGestures({
     canvas: canvas as HTMLCanvasElement,
     state,
     draw,
     saveCurrentFilters: save,
     flushCurrentFilters: flush,
-    refreshToolkitCaptureFilters: refresh,
     tooltips: { updateInfoTooltip: vi.fn(), hideInfoTooltip: vi.fn() },
   });
   const key = (key: string, modifiers = {}) => {
@@ -48,7 +46,6 @@ const setup = () => {
     save,
     flush,
     draw,
-    refresh,
     runFrame: () => {
       const callback = frame;
       frame = null;
@@ -88,7 +85,7 @@ test("Home/End/Page keys select bands, arrows edit gain/frequency, Shift arrows 
 });
 
 test("coalesces a drag to one visual update and flushes persistence on mouseup", () => {
-  const { canvas, state, draw, refresh, save, flush, runFrame, cleanup } = setup();
+  const { canvas, state, draw, save, flush, runFrame, cleanup } = setup();
   const point = state.getPoints()[0];
   canvas.dispatchEvent(
     Object.assign(new Event("mousedown"), { clientX: point.x, clientY: point.y, shiftKey: false }),
@@ -99,10 +96,8 @@ test("coalesces a drag to one visual update and flushes persistence on mouseup",
     );
   }
   expect(draw).not.toHaveBeenCalled();
-  expect(refresh).not.toHaveBeenCalled();
   runFrame();
   expect(draw).toHaveBeenCalledOnce();
-  expect(refresh).toHaveBeenCalledOnce();
   expect(save).toHaveBeenCalledTimes(100);
   window.dispatchEvent(new Event("mouseup"));
   expect(flush).toHaveBeenCalledOnce();

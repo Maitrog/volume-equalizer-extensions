@@ -29,7 +29,6 @@ export const createPresetsView = (deps: {
   setCurrentFilters(filters: EqualizerFilter[]): void;
   saveLoadedFilters(filters: EqualizerFilter[]): Promise<void>;
   redraw(): void;
-  refreshToolkitCaptureFilters(): void;
 }) => {
   const saveModalFocus = attachModalFocus(deps.saveModal, deps.saveButton);
   const dropdown = attachPresetDropdown(deps.dropdown, deps.toggle, deps.menu);
@@ -148,7 +147,6 @@ export const createPresetsView = (deps: {
       deps.setCurrentFilters(filters);
       await deps.saveLoadedFilters(deps.getCurrentFilters());
       deps.redraw();
-      deps.refreshToolkitCaptureFilters();
       dropdown.close(true);
     })().catch((error: unknown) => {
       console.error("Failed to update preset selection", { error });

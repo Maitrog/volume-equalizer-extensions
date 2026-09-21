@@ -119,7 +119,6 @@ const setup = (options: {
     addPresetToDropdown,
     initPoints: vi.fn(),
     redraw: vi.fn(),
-    refreshToolkitCaptureFilters: vi.fn(),
     saveCurrentFilters: vi.fn(async () => undefined),
     refreshDynamicContent,
   });

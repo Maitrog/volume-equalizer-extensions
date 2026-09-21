@@ -37,9 +37,10 @@ const mocks = vi.hoisted(() => ({
 vi.mock("./autostartOnTab", () => ({
   applyAutostartForTab: mocks.applyAutostartForTab,
 }));
-vi.mock("./captureCoordinator", () => ({
-  captureCoordinator: mocks.captureCoordinator,
-}));
+vi.mock("./captureCoordinator", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./captureCoordinator")>();
+  return { ...actual, captureCoordinator: mocks.captureCoordinator };
+});
 vi.mock("./installUpdateNotice", () => ({
   prepareInstallUpdateNotice: vi.fn(),
 }));
@@ -195,7 +196,24 @@ describe("background tab activation", () => {
     listener({ [STORAGE_KEYS.ENABLE_SPECTRUM]: { oldValue: true, newValue: false } }, "local");
 
     await vi.waitFor(() => expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7));
-    expect(mocks.captureCoordinator.handleStorageChange).toHaveBeenCalled();
+  });
+
+  test("forwards only capture-relevant storage changes to the coordinator", async () => {
+    const { onStorageChanged } = createChromeMock(vi.fn());
+    await import("./background");
+    const listener = onStorageChanged.mock.calls[0][0];
+
+    listener({ [STORAGE_KEYS.THEME]: { oldValue: "dark", newValue: "light" } }, "local");
+    listener({ [STORAGE_KEYS.tabVolume(7)]: { oldValue: 1, newValue: 0.5 } }, "local");
+    await Promise.resolve();
+
+    expect(mocks.captureCoordinator.handleStorageChange).not.toHaveBeenCalled();
+
+    const gainChange = { [STORAGE_KEYS.tabGain(7)]: { oldValue: 0, newValue: -6 } };
+    listener(gainChange, "local");
+    await vi.waitFor(() =>
+      expect(mocks.captureCoordinator.handleStorageChange).toHaveBeenCalledWith(gainChange),
+    );
   });
 
   test("resets spectrum sources when capture starts and stops", async () => {

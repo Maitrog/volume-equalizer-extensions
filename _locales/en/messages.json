@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Use this mode if the equalizer does not work on a site. Audio processing continues when the popup is closed."
+  },
+  "tab_capture_stop_error": {
+    "message": "Could not stop tab audio capture."
   }
 }

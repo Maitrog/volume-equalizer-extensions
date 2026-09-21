@@ -76,7 +76,6 @@ export const createSettingsView = (deps: {
   addPresetToDropdown(name: string): void;
   initPoints(count: number): void;
   redraw(): void;
-  refreshToolkitCaptureFilters(): void;
   saveCurrentFilters(): Promise<void>;
   refreshDynamicContent(): Promise<void>;
 }) => {
@@ -113,7 +112,6 @@ export const createSettingsView = (deps: {
     await deps.savePointCount(newCount);
     deps.initPoints(newCount);
     deps.redraw();
-    deps.refreshToolkitCaptureFilters();
     await deps.saveCurrentFilters();
   };
 

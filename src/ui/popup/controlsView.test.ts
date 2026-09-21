@@ -45,7 +45,6 @@ describe("createControlsView", () => {
       onVolumeInput: async () => undefined,
       onToggleMute: async () => undefined,
       onTabCapture: async () => undefined,
-      onMuteStateApplied: () => undefined,
     });
 
     changeEqButton.dispatchEvent(new Event("click"));
@@ -72,7 +71,6 @@ describe("createControlsView", () => {
       onVolumeInput,
       onToggleMute: async () => undefined,
       onTabCapture: async () => undefined,
-      onMuteStateApplied: () => undefined,
     });
 
     masterVolume.value = "12";
@@ -99,7 +97,6 @@ describe("createControlsView", () => {
       onVolumeInput: async () => undefined,
       onToggleMute: async () => undefined,
       onTabCapture: async () => undefined,
-      onMuteStateApplied: () => undefined,
     });
 
     view.setClipping(true);

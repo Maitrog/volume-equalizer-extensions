@@ -1,4 +1,5 @@
 import {
+  isTabId,
   normalizeSpectrumPayload,
   RUNTIME_MESSAGES,
 } from "../../infrastructure/chrome/runtimeMessages";
@@ -43,9 +44,6 @@ export interface RuntimeMessageHandlerDependencies {
   stopCapture: (tabId?: number) => Promise<CaptureReply>;
   handleCaptureEnded: (tabId: number, sender: chrome.runtime.MessageSender) => void;
 }
-
-const isTabId = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
@@ -98,7 +96,12 @@ export const createRuntimeMessageHandler = ({
     }
 
     // The popup has no sender.tab, so its explicit tab id is the capture-bypass target.
-    if (request.method === RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED && isTabId(request.tabId)) {
+    // Content scripts carry sender.tab and must not toggle another tab's bypass.
+    if (
+      request.method === RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED &&
+      isTabId(request.tabId) &&
+      !sender.tab
+    ) {
       const tabId = request.tabId;
       void Promise.resolve(toggleCaptureEnabled(tabId))
         .then(() => response({ ok: true }))

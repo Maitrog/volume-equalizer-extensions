@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Verwende diesen Modus, wenn der Equalizer auf einer Website nicht funktioniert. Die Audiobearbeitung läuft weiter, wenn das Popup geschlossen wird."
+  },
+  "tab_capture_stop_error": {
+    "message": "Tab-Audioaufnahme konnte nicht beendet werden."
   }
 }

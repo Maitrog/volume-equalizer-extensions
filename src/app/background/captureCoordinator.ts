@@ -7,7 +7,7 @@ import type {
   CaptureState,
   OffscreenCommand,
 } from "../../infrastructure/chrome/runtimeMessages";
-import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
+import { isTabId, RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export interface CapturedTab {
@@ -35,9 +35,6 @@ const OFFSCREEN_URL = "offscreen.html";
 const OFFSCREEN_USER_MEDIA: chrome.offscreen.Reason = "USER_MEDIA";
 const OFFSCREEN_JUSTIFICATION =
   "Process captured tab audio with Web Audio while the popup is closed.";
-
-const isTabId = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 const isCaptureSettings = (value: unknown): value is CaptureSettings => {
   if (!value || typeof value !== "object") return false;
@@ -101,6 +98,16 @@ export const resolveAffectedTabIds = (
   return [...affected];
 };
 
+// Changes that can affect a live capture session's settings, checked before an
+// offscreen roundtrip. Keep in sync with resolveAffectedTabIds.
+const CAPTURE_SETTINGS_KEY_PATTERN = /^(filters|gain|mute)\./;
+
+export const hasCaptureRelevantStorageChange = (
+  changes: Record<string, chrome.storage.StorageChange>,
+): boolean =>
+  GLOBAL_SETTINGS_KEYS.some((key) => key in changes) ||
+  Object.keys(changes).some((key) => CAPTURE_SETTINGS_KEY_PATTERN.test(key));
+
 export const readCaptureTabSnapshots = async (): Promise<CaptureTabSnapshot[]> => {
   const stored = await chrome.storage.session.get(STORAGE_KEYS.CAPTURE_TAB_IDS);
   const value = stored[STORAGE_KEYS.CAPTURE_TAB_IDS];
@@ -129,7 +136,7 @@ export const createCaptureCoordinator = (
   let reconciled = false;
 
   const notifyModeChanged = (tabId: number): Promise<void> =>
-    (deps.notifyCaptureModeChanged ?? (() => Promise.resolve()))(tabId).catch(() => undefined);
+    (deps.notifyCaptureModeChanged ?? (() => Promise.resolve()))(tabId);
 
   const runExclusive = <T>(operation: () => Promise<T>): Promise<T> => {
     const result = queue.then(operation);
@@ -204,9 +211,7 @@ export const createCaptureCoordinator = (
   const clearStaleStateIfNoDocument = async (): Promise<void> => {
     const snapshots = await readCaptureTabSnapshots();
     for (const snapshot of snapshots) {
-      if (snapshot.status === "starting") {
-        await restoreTabEnabled(snapshot.tabId, snapshot.previousTabEnabled);
-      }
+      await restoreTabEnabled(snapshot.tabId, snapshot.previousTabEnabled);
     }
     if (snapshots.length > 0) await writeSnapshots([]);
     if ((await readActiveTabId()) != null) await writeActiveTabId(null);
@@ -250,6 +255,12 @@ export const createCaptureCoordinator = (
     const snapshots = await readCaptureTabSnapshots();
     const captures = await requestCaptureList();
     const liveTabIds = new Set(captures.map((capture) => capture.tabId));
+    const dropped = snapshots.filter((snapshot) => !liveTabIds.has(snapshot.tabId));
+    for (const snapshot of dropped) {
+      if (snapshot.status === "starting") {
+        await restoreTabEnabled(snapshot.tabId, snapshot.previousTabEnabled);
+      }
+    }
     const nextSnapshots: CaptureTabSnapshot[] = snapshots
       .filter((snapshot) => liveTabIds.has(snapshot.tabId))
       .map((snapshot) => ({ ...snapshot, status: "active" }));
@@ -262,6 +273,10 @@ export const createCaptureCoordinator = (
     const activeTabId = await readActiveTabId();
     if (activeTabId == null || !liveTabIds.has(activeTabId)) {
       await writeActiveTabId(nextSnapshots[0]?.tabId ?? null);
+    }
+    // Snapshot state is settled, so a dropped tab now resolves to page mode.
+    for (const snapshot of dropped) {
+      await notifyModeChanged(snapshot.tabId);
     }
   };
 

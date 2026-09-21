@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Usa questa modalità se l'equalizzatore non funziona su un sito. L'elaborazione audio continua quando il popup viene chiuso."
+  },
+  "tab_capture_stop_error": {
+    "message": "Impossibile interrompere la cattura audio della scheda."
   }
 }

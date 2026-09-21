@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Ekolayzer bir sitede çalışmıyorsa bu modu kullanın. Açılır pencere kapandığında ses işleme devam eder."
+  },
+  "tab_capture_stop_error": {
+    "message": "Sekme ses yakalaması durdurulamadı."
   }
 }

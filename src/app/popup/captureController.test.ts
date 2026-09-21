@@ -57,6 +57,7 @@ const createEffects = (): CaptureControllerDependencies => ({
   setMuteButtonClass: vi.fn(),
   renderCaptureError: vi.fn(),
   renderTabCaptureError: vi.fn(),
+  renderTabCaptureStopError: vi.fn(),
   onSpectrumTabChange: vi.fn(),
   renderCapturedTabs: vi.fn(() => Promise.resolve()),
 });
@@ -222,6 +223,25 @@ describe("capture controller commands", () => {
     expect(effects.renderTabCaptureError).toHaveBeenCalledOnce();
     // Controls stay usable: a later successful start is still possible.
     await expect(controller.startCapture()).resolves.toEqual(reply);
+  });
+
+  test("shows a localized stop error when stopping fails", async () => {
+    const { controller, effects, sendMessage } = setup({
+      browserTabId: 12,
+      capturedTabs: [{ id: 20, enabled: true }],
+    });
+    await controller.init();
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE) {
+        return Promise.resolve({ ok: false, error: "stop denied" });
+      }
+      return Promise.resolve(undefined);
+    });
+
+    await controller.stopCapture(20);
+
+    expect(effects.renderTabCaptureStopError).toHaveBeenCalledOnce();
+    expect(effects.renderCaptureError).not.toHaveBeenCalledWith("stop denied");
   });
 
   test("stops A while B stays alive and reverts selection to the browser tab", async () => {

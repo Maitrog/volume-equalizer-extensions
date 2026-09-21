@@ -1,4 +1,5 @@
 import {
+  isTabId,
   RUNTIME_MESSAGES,
   type CaptureReply,
   type CaptureSettings,
@@ -10,9 +11,6 @@ type CaptureEngine = Pick<
   ReturnType<typeof createCaptureEngine>,
   "start" | "stop" | "update" | "list" | "setSpectrumDemand"
 >;
-
-const isTabId = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 const isCaptureSettings = (value: unknown): value is CaptureSettings => {
   if (!value || typeof value !== "object") return false;

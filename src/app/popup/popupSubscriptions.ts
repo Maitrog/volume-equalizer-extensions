@@ -20,6 +20,7 @@ export const attachPopupSubscriptions = (deps: {
   refreshAutostartPresetSelects(): Promise<void>;
   refreshPresetDropdown(): Promise<void>;
   getCurrentTabId(): Promise<number | null>;
+  isTabCaptured(tabId: number): boolean;
   setEnableButtonClass(enabled: boolean): void;
   setMuteButtonClass(muted: boolean): void;
   renderCaptureError(message: string | null): void;
@@ -81,7 +82,7 @@ export const attachPopupSubscriptions = (deps: {
 
       const tabId = await deps.getCurrentTabId();
       if (disposed || tabId == null) return;
-      if (changes[STORAGE_KEYS.tabEnabled(tabId)]) {
+      if (changes[STORAGE_KEYS.tabEnabled(tabId)] && !deps.isTabCaptured(tabId)) {
         deps.setEnableButtonClass(changes[STORAGE_KEYS.tabEnabled(tabId)].newValue === true);
       }
       if (changes[STORAGE_KEYS.tabMute(tabId)]) {

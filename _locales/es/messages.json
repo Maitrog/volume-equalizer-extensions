@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Usa este modo si el ecualizador no funciona en un sitio. El procesamiento de audio continúa cuando se cierra la ventana emergente."
+  },
+  "tab_capture_stop_error": {
+    "message": "No se pudo detener la captura de audio de la pestaña."
   }
 }

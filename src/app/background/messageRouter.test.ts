@@ -422,6 +422,61 @@ describe("createRuntimeMessageHandler", () => {
     expect(response).toHaveBeenCalledWith({ ok: false, error: "capture failed" });
   });
 
+  test("ignores a capture toggle from a content-script sender", async () => {
+    createChromeMock();
+    const toggleCaptureEnabled = vi.fn(() => Promise.resolve());
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleCaptureEnabled,
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED, tabId: 7 },
+      { tab: { id: 3 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    await flushPromises();
+
+    expect(toggleCaptureEnabled).not.toHaveBeenCalled();
+  });
+
+  test("toggles capture bypass for a popup sender without a tab", async () => {
+    createChromeMock();
+    const response = vi.fn();
+    const toggleCaptureEnabled = vi.fn(() => Promise.resolve());
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      toggleCaptureEnabled,
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    const result = handler(
+      { method: RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED, tabId: 7 },
+      {},
+      response,
+    );
+    await flushPromises();
+
+    expect(result).toBe(true);
+    expect(toggleCaptureEnabled).toHaveBeenCalledWith(7);
+    expect(response).toHaveBeenCalledWith({ ok: true });
+  });
+
   test("stops tab capture for the sender tab when no id is sent", async () => {
     createChromeMock();
     const response = vi.fn();

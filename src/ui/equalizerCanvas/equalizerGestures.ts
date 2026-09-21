@@ -18,7 +18,6 @@ export interface EqualizerGestureOptions {
   draw: () => void;
   saveCurrentFilters: () => Promise<void> | void;
   flushCurrentFilters?: () => Promise<void> | void;
-  refreshToolkitCaptureFilters: () => void;
   tooltips: Pick<EqualizerTooltipHelpers, "updateInfoTooltip" | "hideInfoTooltip">;
   getDimensions?: () => EqualizerCanvasDimensions;
   onKeyboardSelection?: (target: EqualizerDragTarget | null, index: number) => void;
@@ -51,7 +50,6 @@ export const attachEqualizerGestures = ({
   draw,
   saveCurrentFilters,
   flushCurrentFilters = saveCurrentFilters,
-  refreshToolkitCaptureFilters,
   tooltips,
   onKeyboardSelection = () => {},
   getDimensions = () => getCanvasDimensions(canvas),
@@ -72,7 +70,6 @@ export const attachEqualizerGestures = ({
     visualFrame = window.requestAnimationFrame(() => {
       visualFrame = null;
       draw();
-      refreshToolkitCaptureFilters();
     });
   };
 

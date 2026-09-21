@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Utilisez ce mode si l'égaliseur ne fonctionne pas sur un site. Le traitement audio continue lorsque la fenêtre contextuelle est fermée."
+  },
+  "tab_capture_stop_error": {
+    "message": "Impossible d'arrêter la capture audio de l'onglet."
   }
 }

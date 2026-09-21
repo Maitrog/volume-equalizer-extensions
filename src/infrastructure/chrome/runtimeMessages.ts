@@ -28,6 +28,9 @@ export const RUNTIME_MESSAGES = {
 
 export type RuntimeMessageMethod = (typeof RUNTIME_MESSAGES)[keyof typeof RUNTIME_MESSAGES];
 
+export const isTabId = (value: unknown): value is number =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0;
+
 export interface RuntimeMessage {
   method: RuntimeMessageMethod;
   payload?: unknown;

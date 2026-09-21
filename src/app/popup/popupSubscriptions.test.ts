@@ -68,6 +68,7 @@ const setup = () => {
     refreshAutostartPresetSelects: vi.fn(() => Promise.resolve()),
     refreshPresetDropdown: vi.fn(() => Promise.resolve()),
     getCurrentTabId: vi.fn(() => Promise.resolve(12)),
+    isTabCaptured: vi.fn(() => false),
     setEnableButtonClass: vi.fn(),
     setMuteButtonClass: vi.fn(),
     renderCaptureError: vi.fn(),
@@ -174,6 +175,19 @@ describe("popup subscriptions", () => {
     expect(callbacks.refreshAutostartPresetSelects).not.toHaveBeenCalled();
     expect(callbacks.refreshPresetDropdown).not.toHaveBeenCalled();
     expect(connect).toHaveBeenCalledOnce();
+  });
+
+  test("does not let a late tabEnabled write override an active capture button", async () => {
+    const { subscriptions, callbacks, storageChange } = setup();
+    callbacks.isTabCaptured.mockReturnValue(true);
+    storageChange.fire({
+      [STORAGE_KEYS.tabEnabled(12)]: { newValue: false, oldValue: true },
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(callbacks.setEnableButtonClass).not.toHaveBeenCalled();
+    subscriptions.dispose();
   });
 
   test("pairs spectrum frames with current metadata", () => {

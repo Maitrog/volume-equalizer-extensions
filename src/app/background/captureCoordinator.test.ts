@@ -297,6 +297,37 @@ describe("captureCoordinator", () => {
     expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
   });
 
+  test("restores ordinary mode and notifies an interrupted start when the document survives", async () => {
+    const harness = createHarness();
+    harness.open = true;
+    harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS] = [
+      { tabId: 4, previousTabEnabled: true, status: "starting" },
+    ];
+    harness.local[STORAGE_KEYS.tabEnabled(4)] = false;
+    const notifyCaptureModeChanged = vi.fn(() => Promise.resolve());
+    const coordinator = createCaptureCoordinator({ notifyCaptureModeChanged });
+
+    expect(await coordinator.getCaptures()).toEqual([]);
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(4)]).toBe(true);
+    expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
+    expect(notifyCaptureModeChanged).toHaveBeenCalledWith(4);
+  });
+
+  test("restores ordinary mode for a vanished active session when the document is gone", async () => {
+    const harness = createHarness();
+    harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS] = [
+      { tabId: 5, previousTabEnabled: true, status: "active" },
+    ];
+    harness.local[STORAGE_KEYS.tabEnabled(5)] = false;
+    const coordinator = createCaptureCoordinator();
+
+    expect(await coordinator.getCaptures()).toEqual([]);
+
+    expect(harness.local[STORAGE_KEYS.tabEnabled(5)]).toBe(true);
+    expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
+  });
+
   test("keeps live captures and syncs storage after a service worker restart", async () => {
     const harness = createHarness();
     const first = createCaptureCoordinator();

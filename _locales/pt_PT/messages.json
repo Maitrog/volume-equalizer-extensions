@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Use este modo se o equalizador não funcionar num site. O processamento de áudio continua quando o pop-up é fechado."
+  },
+  "tab_capture_stop_error": {
+    "message": "Não foi possível parar a captura de áudio do separador."
   }
 }

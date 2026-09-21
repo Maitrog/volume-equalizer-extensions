@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Gunakan mode ini jika ekualiser tidak berfungsi di situs. Pemrosesan audio tetap berlanjut saat popup ditutup."
+  },
+  "tab_capture_stop_error": {
+    "message": "Tidak dapat menghentikan penangkapan audio tab."
   }
 }

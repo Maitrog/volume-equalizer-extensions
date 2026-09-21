@@ -1,5 +1,5 @@
 import { applyAutostartForTab } from "./autostartOnTab";
-import { captureCoordinator } from "./captureCoordinator";
+import { captureCoordinator, hasCaptureRelevantStorageChange } from "./captureCoordinator";
 import { prepareInstallUpdateNotice } from "./installUpdateNotice";
 import { createRuntimeMessageHandler } from "./messageRouter";
 import { registerContentScripts } from "./registerContentScripts";
@@ -12,6 +12,7 @@ import {
 import { createTabMuteToggle } from "./tabMute";
 import { applyToolkitShortcut as runToolkitShortcut } from "./toolkitShortcut";
 import {
+  isTabId,
   RUNTIME_MESSAGES,
   SPECTRUM_PORT_NAME,
   type CaptureReply,
@@ -30,9 +31,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   await prepareInstallUpdateNotice(details);
   await clearLegacyToolkitWindowState();
 });
-
-const isTabId = (value: unknown): value is number =>
-  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 const isOffscreenSender = (sender: chrome.runtime.MessageSender): boolean =>
   sender.id === chrome.runtime.id && sender.url === chrome.runtime.getURL("offscreen.html");
@@ -166,6 +164,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
       });
     });
   }
+  if (!hasCaptureRelevantStorageChange(changes)) return;
   void captureCoordinator.handleStorageChange(changes).catch((error: unknown) => {
     console.error("Failed to apply capture settings change", {
       operation: "handleStorageChange",

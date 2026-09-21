@@ -271,5 +271,8 @@
   },
   "tab_capture_help": {
     "message": "Dùng chế độ này nếu bộ cân bằng không hoạt động trên trang web. Quá trình xử lý âm thanh vẫn tiếp tục khi đóng cửa sổ bật lên."
+  },
+  "tab_capture_stop_error": {
+    "message": "Không thể dừng ghi âm thanh của tab."
   }
 }
