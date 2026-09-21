@@ -17,12 +17,6 @@ import {
   type CaptureReply,
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import {
-  clearToolkitWindowState,
-  getToolkitWindowId,
-  removeTabIdFromToolkitWindowStore,
-  toggleWindowMode,
-} from "./windowModeCoordinator";
 
 void chrome.storage.session.remove("tabs");
 
@@ -156,7 +150,6 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   clearUnusedStorage,
   getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
-  toggleWindowMode,
   toggleCaptureEnabled: (tabId) => captureCoordinator.toggleCaptureEnabled(tabId),
   startCapture,
   stopCapture,
@@ -193,7 +186,6 @@ const queueTabCleanup = (tabId: number): Promise<void> => {
   tabRemovalQueue = tabRemovalQueue
     .then(async () => {
       await captureCoordinator.handleTabRemoved(tabId);
-      await removeTabIdFromToolkitWindowStore(tabId);
       await clearTabStorage(tabId);
     })
     .catch((error) => {
@@ -268,9 +260,4 @@ chrome.tabCapture.onStatusChanged.addListener(({ tabId, status }) => {
         error,
       });
     });
-});
-
-chrome.windows.onRemoved.addListener(async (windowId) => {
-  const id = await getToolkitWindowId();
-  if (id === windowId) await clearToolkitWindowState();
 });

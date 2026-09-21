@@ -126,10 +126,10 @@ describe("clearLegacyToolkitWindowState", () => {
     await clearLegacyToolkitWindowState();
 
     expect(remove).toHaveBeenCalledWith([
-      STORAGE_KEYS.TOOLKIT_WINDOW_ID,
-      STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS,
-      STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID,
-      STORAGE_KEYS.TOOLKIT_WINDOW_CAPTURE_STREAM_IDS,
+      "toolkitWindowId",
+      "toolkitWindowTabIds",
+      "toolkitWindowActiveTabId",
+      "toolkitWindowCaptureStreamIds",
     ]);
   });
 });

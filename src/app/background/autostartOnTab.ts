@@ -33,13 +33,9 @@ export const applyAutostartForTab = async (
     return;
   }
 
-  const snapshotTabIds = (await readCaptureTabSnapshots()).map((snapshot) => snapshot.tabId);
-  const legacySession = await chrome.storage.session.get(STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS);
-  const legacyTabIds = Array.isArray(legacySession[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
-    ? (legacySession[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] as number[])
-    : [];
-  // ponytail: the legacy union disappears in task 6 with the old window-mode path.
-  const capturedTabIds = new Set([...snapshotTabIds, ...legacyTabIds]);
+  const capturedTabIds = new Set(
+    (await readCaptureTabSnapshots()).map((snapshot) => snapshot.tabId),
+  );
 
   await chrome.storage.local.set({
     [STORAGE_KEYS.tabFilters(tabId)]: preset,

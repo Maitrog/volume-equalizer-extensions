@@ -17,13 +17,10 @@ const mocks = vi.hoisted(() => ({
     stopCapture: vi.fn(),
     toggleCaptureEnabled: vi.fn(),
   },
-  getCapturedTabs: vi.fn(),
-  getToolkitWindowId: vi.fn(),
   messageRouterDeps: null as null | {
     startCapture(tabId?: number): Promise<unknown>;
     stopCapture(tabId?: number): Promise<unknown>;
   },
-  removeTabIdFromToolkitWindowStore: vi.fn(),
   spectrumRelay: {
     acceptFrame: vi.fn(),
     acceptCaptureFrame: vi.fn(),
@@ -35,7 +32,6 @@ const mocks = vi.hoisted(() => ({
   spectrumRelayDeps: null as null | {
     setDemand(tabId: number, enabled: boolean, frameId?: number): void;
   },
-  toggleWindowMode: vi.fn(),
 }));
 
 vi.mock("./autostartOnTab", () => ({
@@ -72,14 +68,6 @@ vi.mock("./storageCleanup", () => ({
   clearTabStorage: mocks.clearTabStorage,
   clearUnusedStorage: mocks.clearUnusedStorage,
 }));
-vi.mock("./windowModeCoordinator", () => ({
-  clearToolkitWindowState: vi.fn(),
-  getCapturedTabs: mocks.getCapturedTabs,
-  getToolkitWindowId: mocks.getToolkitWindowId,
-  removeTabIdFromToolkitWindowStore: mocks.removeTabIdFromToolkitWindowStore,
-  toggleWindowMode: mocks.toggleWindowMode,
-}));
-
 const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
   const onActivated = vi.fn();
   const onStorageChanged = vi.fn();
@@ -113,7 +101,6 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
       sendMessage: tabsSendMessage,
     },
     tabCapture: { onStatusChanged: { addListener: vi.fn() } },
-    windows: { onRemoved: { addListener: vi.fn() } },
   });
   return { onActivated, onStorageChanged, runtimeSendMessage, storageGet, tabsSendMessage };
 };
@@ -143,7 +130,6 @@ describe("background tab activation", () => {
       tabId: 12,
       error: failure,
     });
-    expect(mocks.removeTabIdFromToolkitWindowStore).not.toHaveBeenCalled();
     expect(mocks.clearTabStorage).not.toHaveBeenCalled();
   });
 
@@ -156,11 +142,10 @@ describe("background tab activation", () => {
 
     listener({ tabId: 12 });
     await vi.waitFor(() =>
-      expect(mocks.removeTabIdFromToolkitWindowStore).toHaveBeenCalledWith(12),
+      expect(mocks.captureCoordinator.handleTabRemoved).toHaveBeenCalledWith(12),
     );
 
     expect(mocks.clearTabStorage).toHaveBeenCalledWith(12);
-    expect(mocks.captureCoordinator.handleTabRemoved).toHaveBeenCalledWith(12);
   });
 
   test("routes spectrum demand to the offscreen capture for a live tab", async () => {

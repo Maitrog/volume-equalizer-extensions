@@ -71,7 +71,6 @@ const setup = () => {
     setEnableButtonClass: vi.fn(),
     setMuteButtonClass: vi.fn(),
     renderCaptureError: vi.fn(),
-    refreshCaptureFilters: vi.fn(),
     getShortcutSettings: vi.fn(() => DEFAULT_SHORTCUTS),
     toggleMute: vi.fn(() => Promise.resolve()),
     toggleEqualizer: vi.fn(() => Promise.resolve()),
@@ -81,7 +80,6 @@ const setup = () => {
     onPagehide: vi.fn(),
   };
   const subscriptions = attachPopupSubscriptions({
-    isToolkitWindow: true,
     ...callbacks,
   });
   return {

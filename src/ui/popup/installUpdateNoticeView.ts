@@ -9,16 +9,13 @@ export interface InstallUpdateNotice {
 export interface PendingInstallUpdateNoticeOptions {
   stored: Record<string, unknown>;
   currentVersion: string;
-  isToolkitWindow: boolean;
 }
 
 export const getPendingInstallUpdateNotice = ({
   stored,
   currentVersion,
-  isToolkitWindow,
 }: PendingInstallUpdateNoticeOptions): InstallUpdateNotice | null => {
   const notice = stored[STORAGE_KEYS.INSTALL_UPDATE_NOTICE];
-  if (isToolkitWindow) return null;
   if (!notice || typeof notice !== "object") return null;
 
   const pendingNotice = notice as Partial<InstallUpdateNotice>;

@@ -84,7 +84,6 @@ const setup = (options: { rejectAdd?: boolean } = {}) => {
     settingsAddPreset: settingsAddPreset as unknown as HTMLSelectElement,
     settingsAddButton: settingsAddButton as unknown as HTMLButtonElement,
     settingsError: new FakeElement() as unknown as HTMLElement,
-    isToolkitWindow: false,
     getMessage: (name) => name,
     getActiveTab: vi.fn(
       async () =>

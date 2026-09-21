@@ -334,7 +334,6 @@ export const createPopupApp = ({
     settingsAddPreset: elements.autostartSettingsAddPreset,
     settingsAddButton: elements.autostartSettingsAddButton,
     settingsError: elements.autostartSettingsError,
-    isToolkitWindow: false,
     getMessage: localization.getMessage,
     getActiveTab: autostartActions.getActiveTab,
     loadRules: autostartActions.load,
@@ -447,7 +446,6 @@ export const createPopupApp = ({
   };
 
   subscriptions = attachPopupSubscriptions({
-    isToolkitWindow: false,
     handleToolkitStorageChange: captureController.handleStorageChange,
     renderAutostartWhitelist: autostartView.renderWhitelist,
     refreshAutostartPresetSelects: autostartView.refreshPresetSelects,
@@ -456,7 +454,6 @@ export const createPopupApp = ({
     setEnableButtonClass: controlsView.setEnableButtonClass,
     setMuteButtonClass: controlsView.setMuteButtonClass,
     renderCaptureError,
-    refreshCaptureFilters: () => undefined,
     getShortcutSettings: settingsView.getShortcutSettings,
     toggleMute: onToggleMute,
     toggleEqualizer: onToggleEqualizer,
@@ -511,7 +508,6 @@ export const createPopupApp = ({
     const pendingNotice = getPendingInstallUpdateNotice({
       stored,
       currentVersion: chrome.runtime.getManifest().version,
-      isToolkitWindow: false,
     });
     if (pendingNotice?.reason === "install") {
       await onboardingGuideView.start();

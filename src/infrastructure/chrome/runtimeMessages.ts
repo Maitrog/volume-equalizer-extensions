@@ -2,7 +2,6 @@ import type { EqualizerFilter } from "../../domains/equalizer/types";
 
 export const RUNTIME_MESSAGES = {
   LOG: "log",
-  ENABLE_WINDOW_MODE: "enableWindowMode",
   GET_CAPTURED_TABS: "getCapturedTabs",
   SPECTRUM_FRAME: "spectrum-frame",
   GET_TAB_ID: "getTabId",
@@ -61,8 +60,6 @@ export type OffscreenCommand =
   | { target: "offscreen"; method: "capture-spectrum-demand"; tabId: number; enabled: boolean };
 
 export type CaptureReply = { ok: true; captures: CaptureState[] } | { ok: false; error: string };
-
-export type EnableWindowModeResponse = { ok: true } | { ok: false; error: string };
 
 export const SPECTRUM_PORT_NAME = "eq-spectrum";
 

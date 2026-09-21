@@ -15,7 +15,6 @@ import {
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export const attachPopupSubscriptions = (deps: {
-  isToolkitWindow: boolean;
   handleToolkitStorageChange(changes: Record<string, chrome.storage.StorageChange>): Promise<void>;
   renderAutostartWhitelist(): Promise<void>;
   refreshAutostartPresetSelects(): Promise<void>;
@@ -24,7 +23,6 @@ export const attachPopupSubscriptions = (deps: {
   setEnableButtonClass(enabled: boolean): void;
   setMuteButtonClass(muted: boolean): void;
   renderCaptureError(message: string | null): void;
-  refreshCaptureFilters(): void;
   getShortcutSettings(): ShortcutMap;
   toggleMute(tabId?: number): Promise<void>;
   toggleEqualizer(tabId?: number): Promise<void>;
@@ -83,7 +81,7 @@ export const attachPopupSubscriptions = (deps: {
 
       const tabId = await deps.getCurrentTabId();
       if (disposed || tabId == null) return;
-      if (!deps.isToolkitWindow && changes[STORAGE_KEYS.tabEnabled(tabId)]) {
+      if (changes[STORAGE_KEYS.tabEnabled(tabId)]) {
         deps.setEnableButtonClass(changes[STORAGE_KEYS.tabEnabled(tabId)].newValue === true);
       }
       if (changes[STORAGE_KEYS.tabMute(tabId)]) {
@@ -92,9 +90,6 @@ export const attachPopupSubscriptions = (deps: {
       if (changes[STORAGE_KEYS.tabCaptureError(tabId)]) {
         const error = changes[STORAGE_KEYS.tabCaptureError(tabId)].newValue;
         deps.renderCaptureError(typeof error === "string" ? error : null);
-      }
-      if (deps.isToolkitWindow && changes[STORAGE_KEYS.tabFilters(tabId)]) {
-        deps.refreshCaptureFilters();
       }
     })().catch((error: unknown) => {
       reportFailure("handle popup storage change", error);

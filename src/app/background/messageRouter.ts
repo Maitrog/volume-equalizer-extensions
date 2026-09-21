@@ -38,7 +38,6 @@ export interface RuntimeMessageHandlerDependencies {
   clearUnusedStorage: () => Promise<void> | void;
   getCapturedTabs: () => Promise<CapturedTabsResult>;
   restoreSpectrumDemand: (sender: chrome.runtime.MessageSender) => void;
-  toggleWindowMode: (tabId?: number) => Promise<void> | void;
   toggleCaptureEnabled?: (tabId: number) => Promise<void> | void;
   startCapture: (tabId?: number) => Promise<CaptureReply>;
   stopCapture: (tabId?: number) => Promise<CaptureReply>;
@@ -58,7 +57,6 @@ export const createRuntimeMessageHandler = ({
   clearUnusedStorage,
   getCapturedTabs,
   restoreSpectrumDemand,
-  toggleWindowMode,
   toggleCaptureEnabled = () => undefined,
   startCapture,
   stopCapture,
@@ -78,18 +76,6 @@ export const createRuntimeMessageHandler = ({
     if (request.method === RUNTIME_MESSAGES.LOG) {
       console.log(request.message);
       return;
-    }
-
-    if (request.method === RUNTIME_MESSAGES.ENABLE_WINDOW_MODE) {
-      void Promise.resolve(toggleWindowMode(request.tabId))
-        .then(() => response({ ok: true }))
-        .catch((error: unknown) => {
-          response({
-            ok: false,
-            error: error instanceof Error ? error.message : String(error),
-          });
-        });
-      return true;
     }
 
     if (
@@ -184,22 +170,16 @@ export const createRuntimeMessageHandler = ({
     }
 
     if (request.method === RUNTIME_MESSAGES.IS_TOOLKIT_CAPTURED) {
-      chrome.storage.session.get(
-        [STORAGE_KEYS.CAPTURE_TAB_IDS, STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS],
-        (stored) => {
-          const snapshots = Array.isArray(stored[STORAGE_KEYS.CAPTURE_TAB_IDS])
-            ? stored[STORAGE_KEYS.CAPTURE_TAB_IDS]
-            : [];
-          const capturedByCapture = snapshots.some(
+      chrome.storage.session.get(STORAGE_KEYS.CAPTURE_TAB_IDS, (stored) => {
+        const snapshots = Array.isArray(stored[STORAGE_KEYS.CAPTURE_TAB_IDS])
+          ? stored[STORAGE_KEYS.CAPTURE_TAB_IDS]
+          : [];
+        response(
+          snapshots.some(
             (snapshot: unknown) => isCaptureTabSnapshot(snapshot) && snapshot.tabId === tabId,
-          );
-          // ponytail: legacy union disappears in task 6 with the old window-mode path.
-          const legacyTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
-            ? (stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS] as number[])
-            : [];
-          response(capturedByCapture || legacyTabIds.includes(tabId));
-        },
-      );
+          ),
+        );
+      });
       return true;
     }
 

@@ -21,7 +21,6 @@ export const createAutostartView = (deps: {
   settingsAddPreset: HTMLSelectElement;
   settingsAddButton: HTMLButtonElement;
   settingsError: HTMLElement;
-  isToolkitWindow: boolean;
   getMessage(messageName: string): string;
   getActiveTab(): Promise<{ url?: string } | null>;
   loadRules(): Promise<AutostartWhitelistEntry[]>;
@@ -136,7 +135,6 @@ export const createAutostartView = (deps: {
 
   deps.addToWhitelistButton.addEventListener("click", () => {
     void (async () => {
-      if (deps.isToolkitWindow) return;
       const tab = await deps.getActiveTab();
       deps.modalDomainValue.textContent = getWhitelistDomain(tab?.url ?? "");
       deps.modalUrlValue.textContent = normalizeWhitelistUrl(tab?.url ?? "");
