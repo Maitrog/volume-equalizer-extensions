@@ -16,6 +16,7 @@ import {
   SPECTRUM_PORT_NAME,
   type CaptureReply,
 } from "../../infrastructure/chrome/runtimeMessages";
+import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import {
   clearToolkitWindowState,
   getToolkitWindowId,
@@ -53,40 +54,58 @@ const refreshLiveCaptureTabs = async (): Promise<void> => {
 
 const isLiveCapture = (tabId: number): boolean => liveCaptureTabs.has(tabId);
 
+const readSpectrumEnabled = async (): Promise<boolean> => {
+  const stored = await chrome.storage.local.get(STORAGE_KEYS.ENABLE_SPECTRUM);
+  return stored[STORAGE_KEYS.ENABLE_SPECTRUM] === true;
+};
+
+const applyDemand = async (tabId: number, enabled: boolean, frameId?: number): Promise<void> => {
+  await refreshLiveCaptureTabs();
+  if (isLiveCapture(tabId)) {
+    // Page frames do not own the spectrum demand of a captured tab.
+    if (frameId != null) return;
+    // An offscreen session is only sampled for spectrum when the user enabled it.
+    await chrome.runtime.sendMessage({
+      target: "offscreen",
+      method: RUNTIME_MESSAGES.CAPTURE_SPECTRUM_DEMAND,
+      tabId,
+      enabled: enabled && (await readSpectrumEnabled()),
+    });
+    return;
+  }
+  const message = {
+    method: RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND,
+    payload: { enabled },
+  };
+  await (frameId == null
+    ? chrome.tabs.sendMessage(tabId, message)
+    : chrome.tabs.sendMessage(tabId, message, { frameId }));
+};
+
+// Serialize demand so the setting read and the resulting message stay in order.
+let demandQueue: Promise<void> = Promise.resolve();
+
 const spectrumRelay = createSpectrumRelay({
   setDemand: (tabId, enabled, frameId) => {
-    void (async () => {
-      await refreshLiveCaptureTabs();
-      if (isLiveCapture(tabId)) {
-        // Page frames do not own the spectrum demand of a captured tab.
-        if (frameId != null) return;
-        await chrome.runtime.sendMessage({
-          target: "offscreen",
-          method: RUNTIME_MESSAGES.CAPTURE_SPECTRUM_DEMAND,
-          tabId,
-          enabled,
-        });
-        return;
-      }
-      const message = {
-        method: RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND,
-        payload: { enabled },
-      };
-      await (frameId == null
-        ? chrome.tabs.sendMessage(tabId, message)
-        : chrome.tabs.sendMessage(tabId, message, { frameId }));
-    })().catch((error: unknown) => {
-      const text = error instanceof Error ? error.message : String(error);
-      if (text.includes("Receiving end does not exist") || text.includes("No tab with id")) {
-        return;
-      }
-      console.error("Failed to update spectrum demand", { tabId, frameId, error });
-    });
+    demandQueue = demandQueue
+      .then(() => applyDemand(tabId, enabled, frameId))
+      .catch((error: unknown) => {
+        const text = error instanceof Error ? error.message : String(error);
+        if (text.includes("Receiving end does not exist") || text.includes("No tab with id")) {
+          return;
+        }
+        console.error("Failed to update spectrum demand", { tabId, frameId, error });
+      });
   },
 });
 
 const resetSpectrumSources = (tabId: number | undefined): void => {
   if (isTabId(tabId)) spectrumRelay.resetSources(tabId);
+};
+
+const reissueCaptureDemand = async (): Promise<void> => {
+  const captures = await captureCoordinator.getCaptures();
+  for (const capture of captures) spectrumRelay.resetSources(capture.tabId);
 };
 
 chrome.runtime.onConnect.addListener((port) => {
@@ -145,6 +164,14 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== "local") return;
+  if (changes[STORAGE_KEYS.ENABLE_SPECTRUM]) {
+    void reissueCaptureDemand().catch((error: unknown) => {
+      console.error("Failed to re-evaluate capture spectrum demand", {
+        operation: "reissueCaptureDemand",
+        error,
+      });
+    });
+  }
   void captureCoordinator.handleStorageChange(changes).catch((error: unknown) => {
     console.error("Failed to apply capture settings change", {
       operation: "handleStorageChange",

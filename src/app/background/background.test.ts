@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
+import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 const mocks = vi.hoisted(() => ({
   applyAutostartForTab: vi.fn(),
@@ -81,7 +82,11 @@ vi.mock("./windowModeCoordinator", () => ({
 
 const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
   const onActivated = vi.fn();
+  const onStorageChanged = vi.fn();
   const runtimeSendMessage = vi.fn(() => Promise.resolve(undefined));
+  const storageGet = vi.fn((): Promise<Record<string, unknown>> =>
+    Promise.resolve({ [STORAGE_KEYS.ENABLE_SPECTRUM]: true }),
+  );
   const tabsSendMessage = vi.fn(() => Promise.resolve(undefined));
   vi.stubGlobal("chrome", {
     action: { setBadgeText: vi.fn() },
@@ -96,9 +101,9 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
       setUninstallURL: vi.fn(),
     },
     storage: {
-      local: { get: vi.fn(), set: vi.fn() },
+      local: { get: storageGet, set: vi.fn() },
       session: { remove: vi.fn() },
-      onChanged: { addListener: vi.fn() },
+      onChanged: { addListener: onStorageChanged },
     },
     tabs: {
       get: getTab,
@@ -110,7 +115,7 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
     tabCapture: { onStatusChanged: { addListener: vi.fn() } },
     windows: { onRemoved: { addListener: vi.fn() } },
   });
-  return { onActivated, runtimeSendMessage, tabsSendMessage };
+  return { onActivated, onStorageChanged, runtimeSendMessage, storageGet, tabsSendMessage };
 };
 
 describe("background tab activation", () => {
@@ -174,6 +179,38 @@ describe("background tab activation", () => {
       }),
     );
     expect(tabsSendMessage).not.toHaveBeenCalled();
+  });
+
+  test("keeps capture spectrum demand off while the enabled setting is disabled", async () => {
+    const { runtimeSendMessage, storageGet, tabsSendMessage } = createChromeMock(vi.fn());
+    storageGet.mockResolvedValue({});
+    mocks.captureCoordinator.getCaptures.mockResolvedValue([{ tabId: 7, settings: {} }] as never);
+    await import("./background");
+
+    mocks.spectrumRelayDeps?.setDemand(7, true);
+
+    await vi.waitFor(() =>
+      expect(runtimeSendMessage).toHaveBeenCalledWith({
+        target: "offscreen",
+        method: RUNTIME_MESSAGES.CAPTURE_SPECTRUM_DEMAND,
+        tabId: 7,
+        enabled: false,
+      }),
+    );
+    expect(runtimeSendMessage).not.toHaveBeenCalledWith(expect.objectContaining({ enabled: true }));
+    expect(tabsSendMessage).not.toHaveBeenCalled();
+  });
+
+  test("re-evaluates capture demand when the enabled setting changes", async () => {
+    const { onStorageChanged } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.getCaptures.mockResolvedValue([{ tabId: 7, settings: {} }] as never);
+    await import("./background");
+    const listener = onStorageChanged.mock.calls[0][0];
+
+    listener({ [STORAGE_KEYS.ENABLE_SPECTRUM]: { oldValue: true, newValue: false } }, "local");
+
+    await vi.waitFor(() => expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7));
+    expect(mocks.captureCoordinator.handleStorageChange).toHaveBeenCalled();
   });
 
   test("resets spectrum sources when capture starts and stops", async () => {
