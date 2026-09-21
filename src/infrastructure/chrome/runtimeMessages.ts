@@ -1,3 +1,5 @@
+import type { EqualizerFilter } from "../../domains/equalizer/types";
+
 export const RUNTIME_MESSAGES = {
   LOG: "log",
   ENABLE_WINDOW_MODE: "enableWindowMode",
@@ -13,6 +15,12 @@ export const RUNTIME_MESSAGES = {
   CONTENT_SCRIPT_PING: "contentScriptPing",
   SPECTRUM_READY: "spectrum-ready",
   SET_SPECTRUM_DEMAND: "set-spectrum-demand",
+  CAPTURE_START: "capture-start",
+  CAPTURE_STOP: "capture-stop",
+  CAPTURE_SETTINGS: "capture-settings",
+  CAPTURE_LIST: "capture-list",
+  CAPTURE_SPECTRUM_DEMAND: "capture-spectrum-demand",
+  CAPTURE_ENDED: "capture-ended",
 } as const;
 
 export type RuntimeMessageMethod = (typeof RUNTIME_MESSAGES)[keyof typeof RUNTIME_MESSAGES];
@@ -21,6 +29,34 @@ export interface RuntimeMessage {
   method: RuntimeMessageMethod;
   payload?: unknown;
 }
+
+export interface CaptureSettings {
+  enabled: boolean;
+  gainValue: number;
+  muted: boolean;
+  volumeCompensationEnabled: boolean;
+  filterSettings: EqualizerFilter[];
+}
+
+export interface CaptureState {
+  tabId: number;
+  settings: CaptureSettings;
+}
+
+export type OffscreenCommand =
+  | {
+      target: "offscreen";
+      method: "capture-start";
+      tabId: number;
+      streamId: string;
+      settings: CaptureSettings;
+    }
+  | { target: "offscreen"; method: "capture-stop"; tabId: number }
+  | { target: "offscreen"; method: "capture-settings"; tabId: number; settings: CaptureSettings }
+  | { target: "offscreen"; method: "capture-list" }
+  | { target: "offscreen"; method: "capture-spectrum-demand"; tabId: number; enabled: boolean };
+
+export type CaptureReply = { ok: true; captures: CaptureState[] } | { ok: false; error: string };
 
 export type EnableWindowModeResponse = { ok: true } | { ok: false; error: string };
 

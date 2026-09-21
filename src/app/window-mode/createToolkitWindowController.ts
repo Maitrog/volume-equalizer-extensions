@@ -5,8 +5,8 @@ import { createSpectrumSampler } from "../../infrastructure/audio/spectrumSample
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import { createCapturedTabsView } from "../../ui/popup/capturedTabsView";
 import { createTabSettingsController, readStoredGain } from "../popup/tabSettingsController";
-import { createCaptureGraph, type CaptureGraph } from "./captureGraph";
-import { createCaptureSession } from "./captureSession";
+import { createCaptureGraph, type CaptureGraph } from "../offscreen/captureGraph";
+import { createCaptureSession } from "../offscreen/captureSession";
 
 export interface ToolkitSpectrumMeta {
   type: "meta";

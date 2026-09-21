@@ -12,6 +12,7 @@ const entries = {
   popup: resolve(rootDir, "src/app/popup/popup.ts"),
   "content-isolated": resolve(rootDir, "src/app/content-isolated/contentIsolated.ts"),
   "content-main": resolve(rootDir, "src/app/content-main/contentMain.ts"),
+  offscreen: resolve(rootDir, "src/app/offscreen/offscreen.ts"),
 };
 
 const expectedEntryFiles = new Set(Object.keys(entries).map((entryName) => `${entryName}.js`));
@@ -43,6 +44,7 @@ for (const [entryName, entryPath] of Object.entries(entries)) {
 await Promise.all([
   cp(resolve(rootDir, "manifest.json"), resolve(distDir, "manifest.json")),
   cp(resolve(rootDir, "popup.html"), resolve(distDir, "popup.html")),
+  cp(resolve(rootDir, "offscreen.html"), resolve(distDir, "offscreen.html")),
   cp(resolve(rootDir, "resources"), resolve(distDir, "resources"), {
     recursive: true,
   }),
