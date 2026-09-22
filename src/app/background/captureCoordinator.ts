@@ -245,7 +245,7 @@ export const createCaptureCoordinator = (
       enabled,
       gainValue: readStoredGain(stored[STORAGE_KEYS.tabGain(tabId)]),
       muted: stored[STORAGE_KEYS.tabMute(tabId)] === true,
-      volumeCompensationEnabled: stored[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION] !== false,
+      volumeCompensationEnabled: stored[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION] === true,
       filterSettings,
     };
   };

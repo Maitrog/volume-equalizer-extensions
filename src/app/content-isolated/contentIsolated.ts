@@ -176,8 +176,8 @@ void getTabId().then(
         [STORAGE_KEYS.tabVolume(tabId)]: 1,
         [STORAGE_KEYS.tabPan(tabId)]: 0,
         [STORAGE_KEYS.tabFilters(tabId)]: defaultFilters,
-        [STORAGE_KEYS.ENABLE_SPECTRUM]: false,
-        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
+        [STORAGE_KEYS.ENABLE_SPECTRUM]: true,
+        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: false,
         [STORAGE_KEYS.tabEnabled(tabId)]: false,
         [STORAGE_KEYS.tabMute(tabId)]: false,
       },
@@ -231,7 +231,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
   if (changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]) {
     port.dataset.enableVolumeCompensation = String(
-      changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION].newValue !== false,
+      changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION].newValue === true,
     );
     port.dispatchEvent(new Event("volume-compensation-changed"));
   }

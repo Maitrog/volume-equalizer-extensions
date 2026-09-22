@@ -169,7 +169,7 @@ describe("background tab activation", () => {
 
   test("keeps capture spectrum demand off while the enabled setting is disabled", async () => {
     const { runtimeSendMessage, storageGet, tabsSendMessage } = createChromeMock(vi.fn());
-    storageGet.mockResolvedValue({});
+    storageGet.mockResolvedValue({ [STORAGE_KEYS.ENABLE_SPECTRUM]: false });
     mocks.captureCoordinator.getCaptures.mockResolvedValue([{ tabId: 7, settings: {} }] as never);
     await import("./background");
 

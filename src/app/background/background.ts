@@ -49,7 +49,7 @@ const isLiveCapture = (tabId: number): boolean => liveCaptureTabs.has(tabId);
 
 const readSpectrumEnabled = async (): Promise<boolean> => {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.ENABLE_SPECTRUM);
-  return stored[STORAGE_KEYS.ENABLE_SPECTRUM] === true;
+  return stored[STORAGE_KEYS.ENABLE_SPECTRUM] !== false;
 };
 
 const applyDemand = async (tabId: number, enabled: boolean, frameId?: number): Promise<void> => {
