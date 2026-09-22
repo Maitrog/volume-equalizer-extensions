@@ -245,7 +245,7 @@ describe("capture controller commands", () => {
   });
 
   test("stops A while B stays alive and reverts selection to the browser tab", async () => {
-    const { controller, effects, sendMessage } = setup({
+    const { controller, effects, sendMessage, storage } = setup({
       browserTabId: 12,
       capturedTabs: [
         { id: 20, enabled: true },
@@ -268,6 +268,58 @@ describe("capture controller commands", () => {
     expect(controller.isTabCaptured(21)).toBe(true);
     expect(controller.getSelectedTabId()).toBe(12);
     expect(effects.renderCapturedTabs).toHaveBeenCalled();
+
+    storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = 21;
+    await controller.handleStorageChange({
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: { oldValue: 20, newValue: 21 },
+    });
+
+    expect(controller.getSelectedTabId()).toBe(12);
+  });
+
+  test("keeps the browser tab selected after a late active-capture removal", async () => {
+    const { controller, sendMessage, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [{ id: 12, enabled: true }],
+    });
+    await controller.init();
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [], activeTabId: null });
+      }
+      return Promise.resolve({ ok: true, captures: [] });
+    });
+
+    await controller.stopCapture(12);
+    storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = null;
+    await controller.handleStorageChange({
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: { oldValue: 12, newValue: null },
+    });
+
+    expect(controller.getSelectedTabId()).toBe(12);
+  });
+
+  test("falls back to the browser tab when capture ends outside the popup", async () => {
+    const { controller, sendMessage, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [{ id: 12, enabled: true }],
+    });
+    await controller.init();
+
+    sendMessage.mockImplementation((message) =>
+      message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS
+        ? Promise.resolve({ tabs: [], activeTabId: null })
+        : Promise.resolve({ ok: true }),
+    );
+    storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = null;
+
+    await controller.handleStorageChange({
+      [STORAGE_KEYS.CAPTURE_TAB_IDS]: { oldValue: [{ tabId: 12 }], newValue: [] },
+      [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: { oldValue: 12, newValue: null },
+    });
+
+    expect(controller.getSelectedTabId()).toBe(12);
   });
 
   test("toggles the live bypass of the selected capture and refreshes the button", async () => {

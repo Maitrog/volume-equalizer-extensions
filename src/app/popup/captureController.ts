@@ -218,16 +218,12 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
   ): Promise<void> => {
     if (!changes || typeof changes !== "object") return;
 
-    if (changes[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]) {
-      await settings.reconcile();
-    }
-
     if (changes[STORAGE_KEYS.CAPTURE_TAB_IDS] || changes[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]) {
       await readSnapshot();
       const selected = settings.getActiveTabId();
-      if (selected != null && !captureEnabled.has(selected)) {
+      if (selected == null || !captureEnabled.has(selected)) {
         await selectCurrentBrowserTab();
-      } else if (selected != null) {
+      } else {
         deps.setEnableButtonClass(captureEnabled.get(selected) === true);
       }
       await deps.renderCapturedTabs();
