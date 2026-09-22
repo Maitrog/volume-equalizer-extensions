@@ -87,22 +87,24 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse): boolean |
 let currentTabId: number | null = null;
 let shortcuts = resolveShortcuts(null);
 
-const getTabId = (callback: (tabId: number) => void): void => {
-  sendRuntimeMessageWithCallback({ method: RUNTIME_MESSAGES.GET_TAB_ID }, (tabId) => {
-    if (!isCurrentInstance() || typeof tabId !== "number") return;
+const getTabId = (): Promise<number> => {
+  if (currentTabId !== null) return Promise.resolve(currentTabId);
 
-    currentTabId = tabId;
-    callback(tabId);
+  return new Promise((resolve, reject) => {
+    sendRuntimeMessageWithCallback({ method: RUNTIME_MESSAGES.GET_TAB_ID }, (tabId) => {
+      if (!isCurrentInstance() || typeof tabId !== "number") {
+        reject(new Error("Failed to resolve tab id"));
+        return;
+      }
+
+      currentTabId = tabId;
+      resolve(tabId);
+    });
   });
 };
 
 const withTabId = (callback: (tabId: number) => void): void => {
-  if (currentTabId !== null) {
-    callback(currentTabId);
-    return;
-  }
-
-  getTabId(callback);
+  void getTabId().then(callback, () => undefined);
 };
 
 const isToolkitCaptured = (): Promise<boolean> => {
@@ -128,23 +130,13 @@ const applyTabEnabledState = async (requestedEnabled: boolean): Promise<void> =>
 };
 
 const setCaptureError = (message: string): void => {
-  withTabId((tabId) => {
-    reportAsyncFailure(
-      "store capture error",
-      chrome.storage.local.set({
-        [STORAGE_KEYS.tabCaptureError(tabId)]: message,
-      }),
-    );
-  });
-};
-
-const clearCaptureError = (): void => {
-  withTabId((tabId) => {
-    reportAsyncFailure(
-      "clear capture error",
-      chrome.storage.local.remove(STORAGE_KEYS.tabCaptureError(tabId)),
-    );
-  });
+  reportAsyncFailure(
+    "report capture error",
+    chrome.runtime.sendMessage({
+      method: RUNTIME_MESSAGES.CAPTURE_ERROR,
+      payload: { message },
+    }),
+  );
 };
 
 const getCaptureErrorMessage = (event: Event): string => {
@@ -155,7 +147,6 @@ const getCaptureErrorMessage = (event: Event): string => {
 port.addEventListener("connected", () => {
   if (!isCurrentInstance()) return;
 
-  clearCaptureError();
   reportAsyncFailure(
     "report connected state",
     chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.CONNECTED }),
@@ -177,47 +168,50 @@ port.addEventListener("capture-error", (event) => {
   setCaptureError(getCaptureErrorMessage(event));
 });
 
-getTabId((tabId) => {
-  const defaultFilters = createDefaultFilterSettings();
-  chrome.storage.local.get(
-    {
-      [STORAGE_KEYS.tabVolume(tabId)]: 1,
-      [STORAGE_KEYS.tabPan(tabId)]: 0,
-      [STORAGE_KEYS.tabFilters(tabId)]: defaultFilters,
-      [STORAGE_KEYS.ENABLE_SPECTRUM]: false,
-      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
-      [STORAGE_KEYS.tabEnabled(tabId)]: false,
-      [STORAGE_KEYS.tabMute(tabId)]: false,
-    },
-    (prefs) => {
-      void (async () => {
-        if (!isCurrentInstance()) return;
+void getTabId().then(
+  (tabId) => {
+    const defaultFilters = createDefaultFilterSettings();
+    chrome.storage.local.get(
+      {
+        [STORAGE_KEYS.tabVolume(tabId)]: 1,
+        [STORAGE_KEYS.tabPan(tabId)]: 0,
+        [STORAGE_KEYS.tabFilters(tabId)]: defaultFilters,
+        [STORAGE_KEYS.ENABLE_SPECTRUM]: false,
+        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
+        [STORAGE_KEYS.tabEnabled(tabId)]: false,
+        [STORAGE_KEYS.tabMute(tabId)]: false,
+      },
+      (prefs) => {
+        void (async () => {
+          if (!isCurrentInstance()) return;
 
-        const filters = prefs[STORAGE_KEYS.tabFilters(tabId)] ?? defaultFilters;
-        const freqsMapped = normalizeFilterSettings(filters);
-        port.dataset.freqs = JSON.stringify(freqsMapped);
-        port.dataset.pan = String(prefs[STORAGE_KEYS.tabPan(tabId)]);
-        port.dataset.preamp = String(prefs[STORAGE_KEYS.tabVolume(tabId)]);
-        port.dataset.mute = String(prefs[STORAGE_KEYS.tabMute(tabId)]);
-        port.dataset.enableSpectrum = String(prefs[STORAGE_KEYS.ENABLE_SPECTRUM]);
-        port.dataset.enableVolumeCompensation = String(
-          prefs[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION],
-        );
-        await applyTabEnabledState(prefs[STORAGE_KEYS.tabEnabled(tabId)] === true);
-        if (!isCurrentInstance()) return;
-        console.log("[contentIsolated] State ready", {
-          tabId,
-          enabled: port.dataset.enabled,
-          filters: freqsMapped.length,
-        });
+          const filters = prefs[STORAGE_KEYS.tabFilters(tabId)] ?? defaultFilters;
+          const freqsMapped = normalizeFilterSettings(filters);
+          port.dataset.freqs = JSON.stringify(freqsMapped);
+          port.dataset.pan = String(prefs[STORAGE_KEYS.tabPan(tabId)]);
+          port.dataset.preamp = String(prefs[STORAGE_KEYS.tabVolume(tabId)]);
+          port.dataset.mute = String(prefs[STORAGE_KEYS.tabMute(tabId)]);
+          port.dataset.enableSpectrum = String(prefs[STORAGE_KEYS.ENABLE_SPECTRUM]);
+          port.dataset.enableVolumeCompensation = String(
+            prefs[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION],
+          );
+          await applyTabEnabledState(prefs[STORAGE_KEYS.tabEnabled(tabId)] === true);
+          if (!isCurrentInstance()) return;
+          console.log("[contentIsolated] State ready", {
+            tabId,
+            enabled: port.dataset.enabled,
+            filters: freqsMapped.length,
+          });
 
-        if (prefs[STORAGE_KEYS.tabMute(tabId)]) {
-          port.dispatchEvent(new Event("mute-enabled"));
-        }
-      })();
-    },
-  );
-});
+          if (prefs[STORAGE_KEYS.tabMute(tabId)]) {
+            port.dispatchEvent(new Event("mute-enabled"));
+          }
+        })();
+      },
+    );
+  },
+  () => undefined,
+);
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (!isCurrentInstance()) return;

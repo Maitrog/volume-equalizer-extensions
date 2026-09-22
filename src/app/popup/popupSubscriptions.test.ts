@@ -190,6 +190,21 @@ describe("popup subscriptions", () => {
     subscriptions.dispose();
   });
 
+  test("hides the capture error when a removal reports no new value", async () => {
+    const { subscriptions, callbacks, storageChange } = setup();
+    storageChange.fire({
+      [STORAGE_KEYS.tabCaptureError(12)]: {
+        oldValue: "Audio capture failed",
+        newValue: undefined,
+      },
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(callbacks.renderCaptureError).toHaveBeenCalledWith(null);
+    subscriptions.dispose();
+  });
+
   test("pairs spectrum frames with current metadata", () => {
     const { subscriptions, callbacks, port } = setup();
     subscriptions.connectSpectrum(12);

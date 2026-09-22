@@ -10,6 +10,7 @@ import type {
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
+import type { CaptureErrorController } from "./captureErrorController";
 import { isCaptureTabSnapshot, type CapturedTabsResult } from "./captureCoordinator";
 import { resolveToolkitShortcutMessage, type ToolkitShortcutMessage } from "./toolkitShortcut";
 
@@ -43,7 +44,15 @@ export interface RuntimeMessageHandlerDependencies {
   startCapture: (tabId?: number) => Promise<CaptureReply>;
   stopCapture: (tabId?: number) => Promise<CaptureReply>;
   handleCaptureEnded: (tabId: number, sender: chrome.runtime.MessageSender) => void;
+  captureErrors?: CaptureErrorController;
 }
+
+const noopCaptureErrors: CaptureErrorController = {
+  trackFrameConnected: async () => undefined,
+  trackFrameDisconnected: async () => undefined,
+  reportError: async () => undefined,
+  clearTabFrames: async () => undefined,
+};
 
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
@@ -59,6 +68,7 @@ export const createRuntimeMessageHandler = ({
   startCapture,
   stopCapture,
   handleCaptureEnded,
+  captureErrors = noopCaptureErrors,
 }: RuntimeMessageHandlerDependencies): RuntimeMessageHandler => {
   const updateBadge = (tabId: number, text: string): void => {
     void chrome.action.setBadgeText({ text, tabId }).catch((error: unknown) => {
@@ -67,6 +77,12 @@ export const createRuntimeMessageHandler = ({
         tabId,
         error,
       });
+    });
+  };
+
+  const trackCaptureErrorState = (operation: Promise<void> | void): void => {
+    void Promise.resolve(operation).catch((error: unknown) => {
+      console.error("Failed to track capture error state", { error });
     });
   };
 
@@ -189,6 +205,7 @@ export const createRuntimeMessageHandler = ({
     if (request.method === RUNTIME_MESSAGES.GET_TAB_ID) {
       response(tabId);
     } else if (request.method === RUNTIME_MESSAGES.PAGE_STARTED) {
+      trackCaptureErrorState(captureErrors.clearTabFrames(tabId));
       const applied = applyAutostartForTab(tabId, sender.tab?.url, {
         resetWhenNoMatch: true,
       });
@@ -202,9 +219,22 @@ export const createRuntimeMessageHandler = ({
         });
       }
     } else if (request.method === RUNTIME_MESSAGES.CONNECTED) {
+      const frameId = sender.frameId;
+      if (typeof frameId === "number" && Number.isInteger(frameId)) {
+        trackCaptureErrorState(captureErrors.trackFrameConnected(tabId, frameId));
+      }
       updateBadge(tabId, "ON");
     } else if (request.method === RUNTIME_MESSAGES.DISCONNECTED) {
+      const frameId = sender.frameId;
+      if (typeof frameId === "number" && Number.isInteger(frameId)) {
+        trackCaptureErrorState(captureErrors.trackFrameDisconnected(tabId, frameId));
+      }
       updateBadge(tabId, "OFF");
+    } else if (request.method === RUNTIME_MESSAGES.CAPTURE_ERROR) {
+      const message = (request.payload as { message?: unknown } | undefined)?.message;
+      if (typeof message === "string") {
+        trackCaptureErrorState(captureErrors.reportError(tabId, message));
+      }
     } else if (request.method === RUNTIME_MESSAGES.CLEAR_STORAGE) {
       const cleared = clearUnusedStorage();
       if (cleared) {

@@ -10,6 +10,7 @@ export const RUNTIME_MESSAGES = {
   PAGE_STARTED: "pageStarted",
   CONNECTED: "connected",
   DISCONNECTED: "disconnected",
+  CAPTURE_ERROR: "capture-error",
   CLEAR_STORAGE: "clearStorage",
   CONTENT_SCRIPT_PING: "contentScriptPing",
   SPECTRUM_READY: "spectrum-ready",

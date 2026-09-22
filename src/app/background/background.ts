@@ -1,5 +1,6 @@
 import { applyAutostartForTab } from "./autostartOnTab";
 import { captureCoordinator, hasCaptureRelevantStorageChange } from "./captureCoordinator";
+import { createCaptureErrorController } from "./captureErrorController";
 import { prepareInstallUpdateNotice } from "./installUpdateNotice";
 import { createRuntimeMessageHandler } from "./messageRouter";
 import { registerContentScripts } from "./registerContentScripts";
@@ -132,6 +133,8 @@ const stopCapture = async (tabId: number | undefined): Promise<CaptureReply> => 
 
 const toggleTabMute = createTabMuteToggle(chrome.storage.local);
 
+const captureErrors = createCaptureErrorController({ storage: chrome.storage.local });
+
 const runtimeMessageHandler = createRuntimeMessageHandler({
   acceptSpectrumFrame: spectrumRelay.acceptFrame,
   acceptCaptureFrame: spectrumRelay.acceptCaptureFrame,
@@ -152,6 +155,7 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   startCapture,
   stopCapture,
   handleCaptureEnded,
+  captureErrors,
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -186,6 +190,7 @@ const queueTabCleanup = (tabId: number): Promise<void> => {
     .then(async () => {
       await captureCoordinator.handleTabRemoved(tabId);
       await clearTabStorage(tabId);
+      await captureErrors.clearTabFrames(tabId);
     })
     .catch((error) => {
       console.error("Failed to clean up closed tab state", {

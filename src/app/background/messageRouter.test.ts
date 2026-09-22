@@ -262,6 +262,49 @@ describe("createRuntimeMessageHandler", () => {
     });
   });
 
+  test("tracks the sending frame and reports capture errors through the controller", async () => {
+    createChromeMock();
+    const captureErrors = {
+      trackFrameConnected: vi.fn(),
+      trackFrameDisconnected: vi.fn(),
+      reportError: vi.fn(),
+      clearTabFrames: vi.fn(),
+    };
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+      captureErrors,
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab, frameId: 2 } as chrome.runtime.MessageSender,
+      vi.fn(),
+    );
+    handler(
+      { method: RUNTIME_MESSAGES.CAPTURE_ERROR, payload: { message: "Audio capture failed" } },
+      { tab: { id: 11 } as chrome.tabs.Tab, frameId: 3 } as chrome.runtime.MessageSender,
+      vi.fn(),
+    );
+    handler(
+      { method: RUNTIME_MESSAGES.CAPTURE_ERROR, payload: { message: 42 } },
+      { tab: { id: 11 } as chrome.tabs.Tab, frameId: 3 } as chrome.runtime.MessageSender,
+      vi.fn(),
+    );
+    await flushPromises();
+
+    expect(captureErrors.trackFrameConnected).toHaveBeenCalledWith(11, 2);
+    expect(captureErrors.reportError).toHaveBeenCalledTimes(1);
+    expect(captureErrors.reportError).toHaveBeenCalledWith(11, "Audio capture failed");
+  });
+
   test("reports a badge update failure with its operation and tab", async () => {
     const chromeMock = createChromeMock();
     const failure = new Error("badge failed");
