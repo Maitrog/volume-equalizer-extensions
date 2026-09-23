@@ -444,14 +444,16 @@ export const createCaptureCoordinator = (
     });
   };
 
-  const toggleCaptureEnabled = async (tabId: number | undefined): Promise<void> => {
-    if (!isTabId(tabId)) return;
+  const toggleCaptureEnabled = async (tabId: number | undefined): Promise<boolean | null> => {
+    if (!isTabId(tabId)) return null;
     await ensureReconciled();
-    await runExclusive(async () => {
+    return runExclusive(async () => {
       const captures = await readLiveCaptures();
       const capture = captures.find((candidate) => candidate.tabId === tabId);
-      if (!capture) return;
-      await applySettings(tabId, { ...capture.settings, enabled: !capture.settings.enabled });
+      if (!capture) return null;
+      const enabled = !capture.settings.enabled;
+      await applySettings(tabId, { ...capture.settings, enabled });
+      return enabled;
     });
   };
 

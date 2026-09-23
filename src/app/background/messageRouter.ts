@@ -12,6 +12,7 @@ import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
 import type { CaptureErrorController } from "./captureErrorController";
 import { isCaptureTabSnapshot, type CapturedTabsResult } from "./captureCoordinator";
+import { setTabBadge } from "./tabBadge";
 import { resolveToolkitShortcutMessage, type ToolkitShortcutMessage } from "./toolkitShortcut";
 
 interface BackgroundRuntimeMessage extends RuntimeMessage {
@@ -30,6 +31,7 @@ export interface RuntimeMessageHandlerDependencies {
   acceptSpectrumFrame: (payload: SpectrumPayload, sender: chrome.runtime.MessageSender) => void;
   acceptCaptureFrame?: (tabId: number, payload: SpectrumPayload) => void;
   isLiveCapture?: (tabId: number) => boolean;
+  isCaptureBadgeTab?: (tabId: number) => boolean;
   isOffscreenSender?: (sender: chrome.runtime.MessageSender) => boolean;
   applyAutostartForTab: (
     tabId: number | undefined,
@@ -58,6 +60,7 @@ export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
   acceptCaptureFrame = () => undefined,
   isLiveCapture = () => false,
+  isCaptureBadgeTab = () => false,
   isOffscreenSender = () => false,
   applyAutostartForTab,
   applyToolkitShortcut,
@@ -70,16 +73,6 @@ export const createRuntimeMessageHandler = ({
   handleCaptureEnded,
   captureErrors = noopCaptureErrors,
 }: RuntimeMessageHandlerDependencies): RuntimeMessageHandler => {
-  const updateBadge = (tabId: number, text: string): void => {
-    void chrome.action.setBadgeText({ text, tabId }).catch((error: unknown) => {
-      console.error("Failed to update tab badge", {
-        operation: "setBadgeText",
-        tabId,
-        error,
-      });
-    });
-  };
-
   const trackCaptureErrorState = (operation: Promise<void> | void): void => {
     void Promise.resolve(operation).catch((error: unknown) => {
       console.error("Failed to track capture error state", { error });
@@ -223,13 +216,14 @@ export const createRuntimeMessageHandler = ({
       if (typeof frameId === "number" && Number.isInteger(frameId)) {
         trackCaptureErrorState(captureErrors.trackFrameConnected(tabId, frameId));
       }
-      updateBadge(tabId, "ON");
+      // A captured tab's badge reflects the offscreen session, not the page graph.
+      if (!isCaptureBadgeTab(tabId)) setTabBadge(tabId, true);
     } else if (request.method === RUNTIME_MESSAGES.DISCONNECTED) {
       const frameId = sender.frameId;
       if (typeof frameId === "number" && Number.isInteger(frameId)) {
         trackCaptureErrorState(captureErrors.trackFrameDisconnected(tabId, frameId));
       }
-      updateBadge(tabId, "OFF");
+      if (!isCaptureBadgeTab(tabId)) setTabBadge(tabId, false);
     } else if (request.method === RUNTIME_MESSAGES.CAPTURE_ERROR) {
       const message = (request.payload as { message?: unknown } | undefined)?.message;
       if (typeof message === "string") {

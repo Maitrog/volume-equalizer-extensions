@@ -305,6 +305,35 @@ describe("createRuntimeMessageHandler", () => {
     expect(captureErrors.reportError).toHaveBeenCalledWith(11, "Audio capture failed");
   });
 
+  test("ignores page badge events for a tab with a live capture", () => {
+    const chromeMock = createChromeMock();
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      isCaptureBadgeTab: (tabId) => tabId === 11,
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    handler(
+      { method: RUNTIME_MESSAGES.DISCONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+
+    expect(chromeMock.setBadgeText).not.toHaveBeenCalled();
+  });
+
   test("reports a badge update failure with its operation and tab", async () => {
     const chromeMock = createChromeMock();
     const failure = new Error("badge failed");

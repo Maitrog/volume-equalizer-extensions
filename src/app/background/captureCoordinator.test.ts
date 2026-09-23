@@ -521,6 +521,16 @@ describe("captureCoordinator", () => {
     expect(harness.captures.get(1)?.settings.enabled).toBe(true);
   });
 
+  test("reports the resulting enabled state so a caller can update the tab badge", async () => {
+    createHarness();
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+
+    expect(await coordinator.toggleCaptureEnabled(1)).toBe(false);
+    expect(await coordinator.toggleCaptureEnabled(1)).toBe(true);
+    expect(await coordinator.toggleCaptureEnabled(99)).toBeNull();
+  });
+
   test("keeps ordinary mode off after stop and lets a normal enable through", async () => {
     const harness = createHarness();
     harness.local[STORAGE_KEYS.tabEnabled(1)] = true;

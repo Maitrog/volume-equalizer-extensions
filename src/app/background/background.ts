@@ -11,6 +11,7 @@ import {
   clearUnusedStorage,
 } from "./storageCleanup";
 import { createTabMuteToggle } from "./tabMute";
+import { setTabBadge } from "./tabBadge";
 import { applyToolkitShortcut as runToolkitShortcut } from "./toolkitShortcut";
 import {
   isTabId,
@@ -46,6 +47,11 @@ const refreshLiveCaptureTabs = async (): Promise<void> => {
 };
 
 const isLiveCapture = (tabId: number): boolean => liveCaptureTabs.has(tabId);
+
+// Tabs whose badge is owned by the capture lifecycle; page graph events must not override it.
+const captureBadgeTabs = new Set<number>();
+
+const isCaptureBadgeTab = (tabId: number): boolean => captureBadgeTabs.has(tabId);
 
 const readSpectrumEnabled = async (): Promise<boolean> => {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.ENABLE_SPECTRUM);
@@ -107,6 +113,8 @@ chrome.runtime.onConnect.addListener((port) => {
 
 const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender): void => {
   if (!isOffscreenSender(sender)) return;
+  captureBadgeTabs.delete(tabId);
+  setTabBadge(tabId, false);
   void captureCoordinator
     .handleCaptureEnded(tabId)
     .then(() => resetSpectrumSources(tabId))
@@ -120,15 +128,30 @@ const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender)
 };
 
 const startCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
+  if (isTabId(tabId)) captureBadgeTabs.add(tabId);
   const reply = await captureCoordinator.startCapture(tabId);
-  if (reply.ok) resetSpectrumSources(tabId);
+  if (!reply.ok && isTabId(tabId)) {
+    captureBadgeTabs.delete(tabId);
+  } else if (reply.ok && isTabId(tabId)) {
+    setTabBadge(tabId, true);
+    resetSpectrumSources(tabId);
+  }
   return reply;
 };
 
 const stopCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
   const reply = await captureCoordinator.stopCapture(tabId);
-  if (reply.ok) resetSpectrumSources(tabId);
+  if (reply.ok && isTabId(tabId)) {
+    captureBadgeTabs.delete(tabId);
+    setTabBadge(tabId, false);
+    resetSpectrumSources(tabId);
+  }
   return reply;
+};
+
+const toggleCaptureEnabled = async (tabId: number | undefined): Promise<void> => {
+  const enabled = await captureCoordinator.toggleCaptureEnabled(tabId);
+  if (enabled != null && isTabId(tabId)) setTabBadge(tabId, enabled);
 };
 
 const toggleTabMute = createTabMuteToggle(chrome.storage.local);
@@ -139,6 +162,7 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
   acceptSpectrumFrame: spectrumRelay.acceptFrame,
   acceptCaptureFrame: spectrumRelay.acceptCaptureFrame,
   isLiveCapture,
+  isCaptureBadgeTab,
   isOffscreenSender,
   applyAutostartForTab,
   applyToolkitShortcut: (shortcut) =>
@@ -146,12 +170,12 @@ const runtimeMessageHandler = createRuntimeMessageHandler({
       hasCapture: async (tabId) =>
         (await captureCoordinator.getCaptures()).some((capture) => capture.tabId === tabId),
       toggleMute: toggleTabMute,
-      toggleEqualizer: (tabId) => captureCoordinator.toggleCaptureEnabled(tabId),
+      toggleEqualizer: toggleCaptureEnabled,
     }),
   clearUnusedStorage,
   getCapturedTabs: captureCoordinator.getCapturedTabs,
   restoreSpectrumDemand: spectrumRelay.contentReady,
-  toggleCaptureEnabled: (tabId) => captureCoordinator.toggleCaptureEnabled(tabId),
+  toggleCaptureEnabled,
   startCapture,
   stopCapture,
   handleCaptureEnded,
@@ -186,6 +210,7 @@ chrome.runtime.onMessage.addListener(
 let tabRemovalQueue = Promise.resolve();
 const queueTabCleanup = (tabId: number): Promise<void> => {
   spectrumRelay.removeTab(tabId);
+  captureBadgeTabs.delete(tabId);
   tabRemovalQueue = tabRemovalQueue
     .then(async () => {
       await captureCoordinator.handleTabRemoved(tabId);
@@ -254,6 +279,7 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 
 chrome.tabCapture.onStatusChanged.addListener(({ tabId, status }) => {
   if (status !== "stopped") return;
+  setTabBadge(tabId, false);
   void captureCoordinator
     .handleCaptureEnded(tabId)
     .then(() => resetSpectrumSources(tabId))

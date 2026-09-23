@@ -20,6 +20,8 @@ const mocks = vi.hoisted(() => ({
   messageRouterDeps: null as null | {
     startCapture(tabId?: number): Promise<unknown>;
     stopCapture(tabId?: number): Promise<unknown>;
+    toggleCaptureEnabled(tabId?: number): Promise<void>;
+    handleCaptureEnded(tabId: number, sender: chrome.runtime.MessageSender): void;
   },
   spectrumRelay: {
     acceptFrame: vi.fn(),
@@ -49,6 +51,8 @@ vi.mock("./messageRouter", () => ({
     (deps: {
       startCapture(tabId?: number): Promise<unknown>;
       stopCapture(tabId?: number): Promise<unknown>;
+      toggleCaptureEnabled(tabId?: number): Promise<void>;
+      handleCaptureEnded(tabId: number, sender: chrome.runtime.MessageSender): void;
     }) => {
       mocks.messageRouterDeps = deps;
       return vi.fn();
@@ -77,8 +81,9 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
     Promise.resolve({ [STORAGE_KEYS.ENABLE_SPECTRUM]: true }),
   );
   const tabsSendMessage = vi.fn(() => Promise.resolve(undefined));
+  const setBadgeText = vi.fn(() => Promise.resolve(undefined));
   vi.stubGlobal("chrome", {
-    action: { setBadgeText: vi.fn() },
+    action: { setBadgeText },
     runtime: {
       id: "extension-id",
       getURL: vi.fn((path: string) => `chrome-extension://extension-id/${path}`),
@@ -103,9 +108,15 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
     },
     tabCapture: { onStatusChanged: { addListener: vi.fn() } },
   });
-  return { onActivated, onStorageChanged, runtimeSendMessage, storageGet, tabsSendMessage };
+  return {
+    onActivated,
+    onStorageChanged,
+    runtimeSendMessage,
+    storageGet,
+    tabsSendMessage,
+    setBadgeText,
+  };
 };
-
 describe("background tab activation", () => {
   beforeEach(() => {
     vi.resetModules();
@@ -247,5 +258,44 @@ describe("background tab activation", () => {
       ),
     );
     expect(runtimeSendMessage).not.toHaveBeenCalled();
+  });
+
+  test("turns the tab badge ON when capture starts and OFF when it stops", async () => {
+    const { setBadgeText } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.startCapture.mockResolvedValue({ ok: true, captures: [] });
+    mocks.captureCoordinator.stopCapture.mockResolvedValue({ ok: true, captures: [] });
+    await import("./background");
+
+    await mocks.messageRouterDeps?.startCapture(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 7 });
+
+    await mocks.messageRouterDeps?.stopCapture(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
+  });
+
+  test("updates the tab badge from the bypass toggle result", async () => {
+    const { setBadgeText } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.toggleCaptureEnabled.mockResolvedValue(false);
+    await import("./background");
+
+    await mocks.messageRouterDeps?.toggleCaptureEnabled(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
+
+    mocks.captureCoordinator.toggleCaptureEnabled.mockResolvedValue(true);
+    await mocks.messageRouterDeps?.toggleCaptureEnabled(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 7 });
+  });
+
+  test("clears the tab badge when capture ends", async () => {
+    const { setBadgeText } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.handleCaptureEnded.mockResolvedValue(undefined);
+    await import("./background");
+
+    mocks.messageRouterDeps?.handleCaptureEnded(7, {
+      id: "extension-id",
+      url: "chrome-extension://extension-id/offscreen.html",
+    } as chrome.runtime.MessageSender);
+
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
   });
 });
