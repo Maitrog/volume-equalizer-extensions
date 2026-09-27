@@ -1,5 +1,9 @@
 import { applyAutostartForTab } from "./autostartOnTab";
-import { captureCoordinator, hasCaptureRelevantStorageChange } from "./captureCoordinator";
+import {
+  captureCoordinator,
+  hasCaptureRelevantStorageChange,
+  readCaptureTabSnapshots,
+} from "./captureCoordinator";
 import { createCaptureErrorController } from "./captureErrorController";
 import { prepareInstallUpdateNotice } from "./installUpdateNotice";
 import { createRuntimeMessageHandler } from "./messageRouter";
@@ -48,10 +52,11 @@ const refreshLiveCaptureTabs = async (): Promise<void> => {
 
 const isLiveCapture = (tabId: number): boolean => liveCaptureTabs.has(tabId);
 
-// Tabs whose badge is owned by the capture lifecycle; page graph events must not override it.
-const captureBadgeTabs = new Set<number>();
-
-const isCaptureBadgeTab = (tabId: number): boolean => captureBadgeTabs.has(tabId);
+// A snapshot exists for every pending or active capture, so the check survives worker restarts.
+const isCaptureBadgeTab = async (tabId: number): Promise<boolean> => {
+  const snapshots = await readCaptureTabSnapshots();
+  return snapshots.some((snapshot) => snapshot.tabId === tabId);
+};
 
 const readSpectrumEnabled = async (): Promise<boolean> => {
   const stored = await chrome.storage.local.get(STORAGE_KEYS.ENABLE_SPECTRUM);
@@ -113,7 +118,6 @@ chrome.runtime.onConnect.addListener((port) => {
 
 const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender): void => {
   if (!isOffscreenSender(sender)) return;
-  captureBadgeTabs.delete(tabId);
   setTabBadge(tabId, false);
   void captureCoordinator
     .handleCaptureEnded(tabId)
@@ -128,11 +132,8 @@ const handleCaptureEnded = (tabId: number, sender: chrome.runtime.MessageSender)
 };
 
 const startCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
-  if (isTabId(tabId)) captureBadgeTabs.add(tabId);
   const reply = await captureCoordinator.startCapture(tabId);
-  if (!reply.ok && isTabId(tabId)) {
-    captureBadgeTabs.delete(tabId);
-  } else if (reply.ok && isTabId(tabId)) {
+  if (reply.ok && isTabId(tabId)) {
     const capture = reply.captures.find((entry) => entry.tabId === tabId);
     if (capture) setTabBadge(tabId, capture.settings.enabled);
     resetSpectrumSources(tabId);
@@ -143,7 +144,6 @@ const startCapture = async (tabId: number | undefined): Promise<CaptureReply> =>
 const stopCapture = async (tabId: number | undefined): Promise<CaptureReply> => {
   const reply = await captureCoordinator.stopCapture(tabId);
   if (reply.ok && isTabId(tabId)) {
-    captureBadgeTabs.delete(tabId);
     setTabBadge(tabId, false);
     resetSpectrumSources(tabId);
   }
@@ -211,7 +211,6 @@ chrome.runtime.onMessage.addListener(
 let tabRemovalQueue = Promise.resolve();
 const queueTabCleanup = (tabId: number): Promise<void> => {
   spectrumRelay.removeTab(tabId);
-  captureBadgeTabs.delete(tabId);
   tabRemovalQueue = tabRemovalQueue
     .then(async () => {
       await captureCoordinator.handleTabRemoved(tabId);

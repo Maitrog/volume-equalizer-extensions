@@ -235,7 +235,7 @@ describe("createRuntimeMessageHandler", () => {
     });
   });
 
-  test("updates connected tab badge without an async response", () => {
+  test("updates connected tab badge without an async response", async () => {
     const chromeMock = createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
@@ -254,6 +254,7 @@ describe("createRuntimeMessageHandler", () => {
       { tab: { id: 11 } as chrome.tabs.Tab },
       vi.fn(),
     );
+    await flushPromises();
 
     expect(result).toBeUndefined();
     expect(chromeMock.setBadgeText).toHaveBeenCalledWith({
@@ -305,7 +306,7 @@ describe("createRuntimeMessageHandler", () => {
     expect(captureErrors.reportError).toHaveBeenCalledWith(11, "Audio capture failed");
   });
 
-  test("ignores page badge events for a tab with a live capture", () => {
+  test("ignores page badge events for a tab with a live capture", async () => {
     const chromeMock = createChromeMock();
     const handler = createRuntimeMessageHandler({
       applyAutostartForTab: vi.fn(),
@@ -330,7 +331,93 @@ describe("createRuntimeMessageHandler", () => {
       { tab: { id: 11 } as chrome.tabs.Tab },
       vi.fn(),
     );
+    await flushPromises();
 
+    expect(chromeMock.setBadgeText).not.toHaveBeenCalled();
+  });
+
+  test("awaits capture ownership before applying a page badge", async () => {
+    const chromeMock = createChromeMock();
+    let resolveOwnership!: (owned: boolean) => void;
+    const isCaptureBadgeTab = vi.fn(
+      () =>
+        new Promise<boolean>((resolve) => {
+          resolveOwnership = resolve;
+        }),
+    );
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      isCaptureBadgeTab,
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    await flushPromises();
+    expect(chromeMock.setBadgeText).not.toHaveBeenCalled();
+
+    resolveOwnership(true);
+    await flushPromises();
+    expect(chromeMock.setBadgeText).not.toHaveBeenCalled();
+
+    handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    resolveOwnership(false);
+    await flushPromises();
+    expect(chromeMock.setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 11 });
+
+    handler(
+      { method: RUNTIME_MESSAGES.DISCONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    resolveOwnership(false);
+    await flushPromises();
+    expect(chromeMock.setBadgeText).toHaveBeenLastCalledWith({ text: "OFF", tabId: 11 });
+  });
+
+  test("logs a page badge ownership failure without writing the badge", async () => {
+    const chromeMock = createChromeMock();
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    const failure = new Error("session storage unavailable");
+    const handler = createRuntimeMessageHandler({
+      applyAutostartForTab: vi.fn(),
+      applyToolkitShortcut: vi.fn(() => true),
+      clearUnusedStorage: vi.fn(),
+      getCapturedTabs: vi.fn(),
+      acceptSpectrumFrame: vi.fn(),
+      restoreSpectrumDemand: vi.fn(),
+      isCaptureBadgeTab: () => Promise.reject(failure),
+      startCapture: vi.fn(),
+      stopCapture: vi.fn(),
+      handleCaptureEnded: vi.fn(),
+    });
+
+    handler(
+      { method: RUNTIME_MESSAGES.CONNECTED },
+      { tab: { id: 11 } as chrome.tabs.Tab },
+      vi.fn(),
+    );
+    await flushPromises();
+
+    expect(consoleError).toHaveBeenCalledWith("Failed to update page badge", {
+      operation: "updatePageBadge",
+      tabId: 11,
+      error: failure,
+    });
     expect(chromeMock.setBadgeText).not.toHaveBeenCalled();
   });
 

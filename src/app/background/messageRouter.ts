@@ -31,7 +31,7 @@ export interface RuntimeMessageHandlerDependencies {
   acceptSpectrumFrame: (payload: SpectrumPayload, sender: chrome.runtime.MessageSender) => void;
   acceptCaptureFrame?: (tabId: number, payload: SpectrumPayload) => void;
   isLiveCapture?: (tabId: number) => boolean;
-  isCaptureBadgeTab?: (tabId: number) => boolean;
+  isCaptureBadgeTab?: (tabId: number) => boolean | Promise<boolean>;
   isOffscreenSender?: (sender: chrome.runtime.MessageSender) => boolean;
   applyAutostartForTab: (
     tabId: number | undefined,
@@ -77,6 +77,12 @@ export const createRuntimeMessageHandler = ({
     void Promise.resolve(operation).catch((error: unknown) => {
       console.error("Failed to track capture error state", { error });
     });
+  };
+
+  const updatePageBadge = async (tabId: number, enabled: boolean): Promise<void> => {
+    // A captured tab's badge reflects the offscreen session, not the page graph.
+    if (await isCaptureBadgeTab(tabId)) return;
+    setTabBadge(tabId, enabled);
   };
 
   return (request, sender, response) => {
@@ -216,14 +222,25 @@ export const createRuntimeMessageHandler = ({
       if (typeof frameId === "number" && Number.isInteger(frameId)) {
         trackCaptureErrorState(captureErrors.trackFrameConnected(tabId, frameId));
       }
-      // A captured tab's badge reflects the offscreen session, not the page graph.
-      if (!isCaptureBadgeTab(tabId)) setTabBadge(tabId, true);
+      void updatePageBadge(tabId, true).catch((error: unknown) => {
+        console.error("Failed to update page badge", {
+          operation: "updatePageBadge",
+          tabId,
+          error,
+        });
+      });
     } else if (request.method === RUNTIME_MESSAGES.DISCONNECTED) {
       const frameId = sender.frameId;
       if (typeof frameId === "number" && Number.isInteger(frameId)) {
         trackCaptureErrorState(captureErrors.trackFrameDisconnected(tabId, frameId));
       }
-      if (!isCaptureBadgeTab(tabId)) setTabBadge(tabId, false);
+      void updatePageBadge(tabId, false).catch((error: unknown) => {
+        console.error("Failed to update page badge", {
+          operation: "updatePageBadge",
+          tabId,
+          error,
+        });
+      });
     } else if (request.method === RUNTIME_MESSAGES.CAPTURE_ERROR) {
       const message = (request.payload as { message?: unknown } | undefined)?.message;
       if (typeof message === "string") {

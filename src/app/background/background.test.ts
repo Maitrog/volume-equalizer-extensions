@@ -22,6 +22,7 @@ const mocks = vi.hoisted(() => ({
     stopCapture(tabId?: number): Promise<unknown>;
     toggleCaptureEnabled(tabId?: number): Promise<void>;
     handleCaptureEnded(tabId: number, sender: chrome.runtime.MessageSender): void;
+    isCaptureBadgeTab(tabId: number): boolean | Promise<boolean>;
   },
   spectrumRelay: {
     acceptFrame: vi.fn(),
@@ -53,6 +54,7 @@ vi.mock("./messageRouter", () => ({
       stopCapture(tabId?: number): Promise<unknown>;
       toggleCaptureEnabled(tabId?: number): Promise<void>;
       handleCaptureEnded(tabId: number, sender: chrome.runtime.MessageSender): void;
+      isCaptureBadgeTab(tabId: number): boolean | Promise<boolean>;
     }) => {
       mocks.messageRouterDeps = deps;
       return vi.fn();
@@ -90,6 +92,22 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
   );
   const tabsSendMessage = vi.fn(() => Promise.resolve(undefined));
   const setBadgeText = vi.fn(() => Promise.resolve(undefined));
+  const sessionStore: Record<string, unknown> = {};
+  const sessionGet = vi.fn((keys: string | string[] | null) => {
+    const requested =
+      keys == null ? Object.keys(sessionStore) : Array.isArray(keys) ? keys : [keys];
+    const resolved: Record<string, unknown> = {};
+    for (const key of requested) resolved[key] = sessionStore[key];
+    return Promise.resolve(resolved);
+  });
+  const sessionSet = vi.fn((values: Record<string, unknown>) => {
+    Object.assign(sessionStore, values);
+    return Promise.resolve();
+  });
+  const sessionRemove = vi.fn((keys: string | string[]) => {
+    for (const key of Array.isArray(keys) ? keys : [keys]) delete sessionStore[key];
+    return Promise.resolve();
+  });
   vi.stubGlobal("chrome", {
     action: { setBadgeText },
     runtime: {
@@ -104,7 +122,7 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
     },
     storage: {
       local: { get: storageGet, set: vi.fn() },
-      session: { remove: vi.fn() },
+      session: { get: sessionGet, remove: sessionRemove, set: sessionSet },
       onChanged: { addListener: onStorageChanged },
     },
     tabs: {
@@ -120,6 +138,8 @@ const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
     onActivated,
     onStorageChanged,
     runtimeSendMessage,
+    sessionRemove,
+    sessionSet,
     storageGet,
     tabsSendMessage,
     setBadgeText,
@@ -314,6 +334,25 @@ describe("background tab activation", () => {
     mocks.captureCoordinator.toggleCaptureEnabled.mockResolvedValue(true);
     await mocks.messageRouterDeps?.toggleCaptureEnabled(7);
     expect(setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 7 });
+  });
+
+  test("protects the capture badge from page events after a worker restart", async () => {
+    const { sessionSet, sessionRemove } = createChromeMock(vi.fn());
+    await sessionSet({
+      [STORAGE_KEYS.CAPTURE_TAB_IDS]: [{ tabId: 7, previousTabEnabled: false, status: "starting" }],
+    });
+    await import("./background");
+
+    expect(await mocks.messageRouterDeps!.isCaptureBadgeTab(7)).toBe(true);
+
+    await sessionSet({
+      [STORAGE_KEYS.CAPTURE_TAB_IDS]: [{ tabId: 7, previousTabEnabled: false, status: "active" }],
+    });
+    expect(await mocks.messageRouterDeps!.isCaptureBadgeTab(7)).toBe(true);
+    expect(await mocks.messageRouterDeps!.isCaptureBadgeTab(8)).toBe(false);
+
+    await sessionRemove(STORAGE_KEYS.CAPTURE_TAB_IDS);
+    expect(await mocks.messageRouterDeps!.isCaptureBadgeTab(7)).toBe(false);
   });
 
   test("clears the tab badge when capture ends", async () => {
