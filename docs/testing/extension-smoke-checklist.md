@@ -31,6 +31,10 @@ control for media playback.
 | Update/reload the extension from old WindowMod | Old session data cleared, settings preserved, new mode starts explicitly | Untested |
 | Ordinary mode and whitelist after migration | Existing enable/autostart scenarios still work | Untested |
 | Close the popup while the spectrum is shown | Spectrum frame relay stops; audio keeps playing | Untested |
+| Select capture A from the popup on browser tab B; stop A, then let A also end externally | Settings and spectrum refer to B, not to the stopped/ended capture | Untested — real audio/tab-capture interaction cannot be executed from the automated WSL environment |
+| Capture → toggle bypass off (EQ disabled) → repeated Start | EQ stays disabled in the audio graph, button, and badge; capture keeps playing; a subsequent toggle is consistent | Untested — real audio/tab-capture interaction cannot be executed from the automated WSL environment |
+| Failed Start → successful retry → close/reopen the popup | The old error message is gone after the successful start | Untested — real audio/tab-capture interaction cannot be executed from the automated WSL environment |
+| Capture with bypass → terminate the service worker → trigger a page graph event (e.g. change the number of EQ points) | Badge keeps the capture state across the worker restart; after Stop the normal EQ controls the badge again | Untested — real audio/tab-capture interaction cannot be executed from the automated WSL environment |
 
 ## Protocol and edge checks
 
@@ -50,28 +54,26 @@ These were carried over from earlier reviews and are not yet confirmed by unit t
 
 ## Recording
 
-Automated gate (2026-09-21, agent run, worktree `.worktrees/offscreen-tab-capture-v2`,
-commit after the three review fixes):
+Automated gate (2026-09-27, agent run, worktree `.worktrees/offscreen-tab-capture-v2`,
+commit `baed268` after the four review fixes: popup spectrum fallback switching,
+confirmed bypass state on repeated start, stale error clearing after successful
+start, snapshot-based capture-badge ownership across worker restarts):
 
 - `npm run format:check` — exit 0
 - `npm run lint` — exit 0
 - `npm run typecheck` — exit 0
-- `npm test` — 65 files / 339 tests passed, 0 failed
+- `npm test` — 67 files / 369 tests passed, 0 failed
 - `npm run lint:locales` — exit 0, 19 locales validated
 - `npm run build` — exit 0; `dist/offscreen.html` and `dist/scripts/offscreen.js` present
 - `git diff --check` — exit 0
-- Built `dist/manifest.json`: `minimum_chrome_version: "130"`; permissions include
-  `tabCapture` and `offscreen`
-- Regression coverage added by the review fixes: stale capture state is cleared before
-  the page-mode notification fires; a surviving offscreen document closes after
-  reconciliation with no captures (live captures keep it open); the popup enable
-  button reads stored `tabEnabled` for ordinary tabs and live `capture.enabled`
-  for captured tabs
 
 Manual Chrome run:
 
-- Chrome version: not recorded — no Chrome binary in the automated environment
-- Extension build/commit: `6671f0e` (fix: show ordinary equalizer state in popup)
-- Date and tester: 2026-09-21, automated agent — **browser scenarios pending manual run**
+- Chrome version: present on the Windows host but untested — real audio/tab-capture
+  interaction cannot be executed from the automated WSL environment
+- Extension build/commit: `baed268` (fix: preserve capture badge ownership across
+  worker restarts)
+- Date and tester: 2026-09-27, automated agent — **browser scenarios pending manual run**
 - Failures (scenario, observed, console output): browser matrix untested — every
-  row above is pending manual verification; do not treat "Untested" as PASS
+  row above is pending manual verification, including the four repeated-capture
+  re-review scenarios; do not treat "Untested" as PASS
