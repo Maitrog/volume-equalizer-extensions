@@ -268,6 +268,38 @@ describe("capture controller commands", () => {
     expect(controller.isTabCaptured(12)).toBe(false);
   });
 
+  test("keeps a cleared capture error hidden after successful start and reopen", async () => {
+    const { controller, effects, sendMessage, storage } = setup({ browserTabId: 12 });
+    storage.localValues[STORAGE_KEYS.tabCaptureError(12)] = "denied";
+    await controller.init();
+    expect(effects.renderCaptureError).toHaveBeenLastCalledWith("denied");
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [], activeTabId: null });
+      }
+      if (message.method === RUNTIME_MESSAGES.START_TAB_CAPTURE) {
+        // The coordinator removes the stale error before replying successfully.
+        delete storage.localValues[STORAGE_KEYS.tabCaptureError(12)];
+        return Promise.resolve({
+          ok: true,
+          captures: [{ tabId: 12, settings: captureSettings(true) }],
+        });
+      }
+      return Promise.resolve({ ok: true });
+    });
+
+    await controller.startCapture();
+
+    expect(effects.renderCaptureError).toHaveBeenLastCalledWith(null);
+
+    const reopenedEffects = createEffects();
+    const reopened = createCaptureController(reopenedEffects);
+    await reopened.init();
+
+    expect(reopenedEffects.renderCaptureError).toHaveBeenLastCalledWith(null);
+  });
+
   test("shows a localized start error and keeps controls available on failure", async () => {
     const { controller, effects, sendMessage } = setup({ browserTabId: 12 });
     await controller.init();

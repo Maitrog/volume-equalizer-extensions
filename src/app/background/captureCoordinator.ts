@@ -346,6 +346,8 @@ export const createCaptureCoordinator = (
     return runExclusive(async () => {
       const existing = await readLiveCaptures();
       if (existing.some((capture) => capture.tabId === tabId)) {
+        // A live capture proves the previous failure no longer applies.
+        await chrome.storage.local.remove(STORAGE_KEYS.tabCaptureError(tabId));
         return { ok: true, captures: existing };
       }
 
@@ -375,6 +377,8 @@ export const createCaptureCoordinator = (
         if (!reply.ok) throw new Error(reply.error);
 
         await markSnapshotActive(tabId);
+        // The capture is confirmed active, so a previous attempt's error is stale.
+        await chrome.storage.local.remove(STORAGE_KEYS.tabCaptureError(tabId));
         return reply;
       } catch (error) {
         const message = error instanceof Error ? error.message : String(error);

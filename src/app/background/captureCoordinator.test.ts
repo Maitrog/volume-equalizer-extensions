@@ -277,6 +277,63 @@ describe("captureCoordinator", () => {
     expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
   });
 
+  test("clears only the recovered tab error after a successful retry", async () => {
+    const harness = createHarness();
+    harness.getMediaStreamId.mockRejectedValueOnce(new Error("denied"));
+    const coordinator = createCaptureCoordinator();
+
+    const failed = await coordinator.startCapture(12);
+    expect(failed.ok).toBe(false);
+    harness.local[STORAGE_KEYS.tabCaptureError(21)] = "other tab failure";
+
+    const reply = await coordinator.startCapture(12);
+
+    expect(reply.ok).toBe(true);
+    expect(harness.local[STORAGE_KEYS.tabCaptureError(12)]).toBeUndefined();
+    expect(harness.local[STORAGE_KEYS.tabCaptureError(21)]).toBe("other tab failure");
+  });
+
+  test("clears a stale error for an already live capture", async () => {
+    const harness = createHarness();
+    harness.getMediaStreamId.mockRejectedValueOnce(new Error("denied"));
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(12);
+    expect(harness.local[STORAGE_KEYS.tabCaptureError(12)]).toBe("denied");
+
+    // The capture becomes live outside this start path, so no new stream id is requested.
+    harness.captures.set(12, {
+      tabId: 12,
+      settings: {
+        enabled: true,
+        gainValue: 0,
+        muted: false,
+        volumeCompensationEnabled: false,
+        filterSettings: [],
+      },
+    });
+    harness.open = true;
+
+    const reply = await coordinator.startCapture(12);
+
+    expect(reply.ok).toBe(true);
+    expect(harness.getMediaStreamId).toHaveBeenCalledTimes(1);
+    expect(harness.local[STORAGE_KEYS.tabCaptureError(12)]).toBeUndefined();
+  });
+
+  test("keeps the error when a retry fails again", async () => {
+    const harness = createHarness();
+    harness.getMediaStreamId
+      .mockRejectedValueOnce(new Error("denied"))
+      .mockRejectedValueOnce(new Error("still denied"));
+    const coordinator = createCaptureCoordinator();
+
+    await coordinator.startCapture(12);
+    const reply = await coordinator.startCapture(12);
+
+    expect(reply).toEqual({ ok: false, error: "still denied" });
+    expect(harness.local[STORAGE_KEYS.tabCaptureError(12)]).toBe("still denied");
+  });
+
   test("clears stale state and uses a fresh id when the document is gone", async () => {
     const harness = createHarness();
     const coordinator = createCaptureCoordinator();
