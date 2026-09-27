@@ -3,9 +3,16 @@
   "name": "__MSG_extName__",
   "description": "__MSG_extDescription__",
   "author": "maitrog",
-  "version": "2.3.0",
-  "permissions": ["storage", "scripting", "tabCapture", "offscreen"],
-  "host_permissions": ["*://*/*"],
+  "version": "2.4.0",
+  "permissions": [
+    "storage",
+    "scripting",
+    "tabCapture",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "*://*/*"
+  ],
   "action": {
     "_execute_action": {},
     "default_popup": "popup.html"
