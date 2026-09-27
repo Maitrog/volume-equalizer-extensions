@@ -75,10 +75,7 @@
     "message": "Thème"
   },
   "capture_error_prefix": {
-    "message": "Impossible de capturer le flux audio. Essayez d'utiliser le \"mode fenêtre\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "L'égaliseur est déjà ouvert dans une fenêtre"
+    "message": "Impossible de capturer le flux audio. Essayez d'utiliser la \"capture d'onglet\"."
   },
   "support_me": {
     "message": "Soutenez-moi:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Couper/rétablir le son"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Ouvrir le mode fenêtre"
   },
   "add_to_autostart_tooltip": {
     "message": "Ajouter le site actuel à la liste de démarrage automatique"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Sélectionnez une bande avec Début, Fin, Page précédente ou Page suivante. Utilisez les flèches pour la fréquence et le gain, Maj+Haut/Bas pour Q et Entrée pour réinitialiser."
   },
-  "window_mode_start_error": {
-    "message": "Impossible d’ouvrir le mode fenêtre. Veuillez réessayer."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Compensation automatique du volume"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Capturer l'audio de l'onglet"
+  },
+  "tab_capture_mode_label": {
+    "message": "Capture d'onglet"
+  },
+  "tab_capture_start_error": {
+    "message": "Impossible de démarrer la capture audio de l'onglet."
+  },
+  "tab_capture_help": {
+    "message": "Utilisez ce mode si l'égaliseur ne fonctionne pas sur un site. Le traitement audio continue lorsque la fenêtre contextuelle est fermée."
+  },
+  "tab_capture_stop_error": {
+    "message": "Impossible d'arrêter la capture audio de l'onglet."
   }
 }

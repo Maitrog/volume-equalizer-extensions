@@ -29,3 +29,16 @@ export const clearUnusedStorage = async (): Promise<void> => {
 
   if (unusedKeys.length > 0) await chrome.storage.local.remove(unusedKeys);
 };
+
+// Frozen session keys of the removed WindowMod path. They stay as literals so an
+// extension update can still wipe old installs without resurrecting dead constants.
+const LEGACY_TOOLKIT_WINDOW_KEYS = [
+  "toolkitWindowId",
+  "toolkitWindowTabIds",
+  "toolkitWindowActiveTabId",
+  "toolkitWindowCaptureStreamIds",
+];
+
+export const clearLegacyToolkitWindowState = async (): Promise<void> => {
+  await chrome.storage.session.remove(LEGACY_TOOLKIT_WINDOW_KEYS);
+};

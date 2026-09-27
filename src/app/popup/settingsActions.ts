@@ -20,8 +20,8 @@ export const createSettingsActions = () => ({
       theme: resolveTheme(stored[STORAGE_KEYS.THEME]),
       pointCount: clampPointCount(Number(stored[STORAGE_KEYS.POINT_COUNT])),
       shortcuts: resolveShortcuts(stored[STORAGE_KEYS.SHORTCUTS] as Partial<ShortcutMap>),
-      enableSpectrum: stored[STORAGE_KEYS.ENABLE_SPECTRUM] === true,
-      enableVolumeCompensation: stored[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION] !== false,
+      enableSpectrum: stored[STORAGE_KEYS.ENABLE_SPECTRUM] !== false,
+      enableVolumeCompensation: stored[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION] === true,
       hideDefaultPresets: stored[STORAGE_KEYS.HIDE_DEFAULT_PRESETS] === true,
     };
   },

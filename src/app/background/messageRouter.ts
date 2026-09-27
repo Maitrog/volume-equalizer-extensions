@@ -1,10 +1,22 @@
-import { RUNTIME_MESSAGES } from "../../infrastructure/chrome/runtimeMessages";
-import type { RuntimeMessage, SpectrumPayload } from "../../infrastructure/chrome/runtimeMessages";
+import {
+  isTabId,
+  normalizeSpectrumPayload,
+  RUNTIME_MESSAGES,
+} from "../../infrastructure/chrome/runtimeMessages";
+import type {
+  CaptureReply,
+  RuntimeMessage,
+  SpectrumPayload,
+} from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { ApplyAutostartOptions } from "./autostartOnTab";
-import type { CapturedTabsResult } from "./windowModeCoordinator";
+import type { CaptureErrorController } from "./captureErrorController";
+import { isCaptureTabSnapshot, type CapturedTabsResult } from "./captureCoordinator";
+import { setTabBadge } from "./tabBadge";
+import { resolveToolkitShortcutMessage, type ToolkitShortcutMessage } from "./toolkitShortcut";
 
 interface BackgroundRuntimeMessage extends RuntimeMessage {
+  target?: string;
   message?: unknown;
   tabId?: number;
 }
@@ -17,33 +29,60 @@ type RuntimeMessageHandler = (
 
 export interface RuntimeMessageHandlerDependencies {
   acceptSpectrumFrame: (payload: SpectrumPayload, sender: chrome.runtime.MessageSender) => void;
+  acceptCaptureFrame?: (tabId: number, payload: SpectrumPayload) => void;
+  isLiveCapture?: (tabId: number) => boolean;
+  isCaptureBadgeTab?: (tabId: number) => boolean | Promise<boolean>;
+  isOffscreenSender?: (sender: chrome.runtime.MessageSender) => boolean;
   applyAutostartForTab: (
     tabId: number | undefined,
     url: string | undefined,
     options?: ApplyAutostartOptions,
   ) => Promise<void> | void;
+  applyToolkitShortcut: (shortcut: ToolkitShortcutMessage) => Promise<boolean> | boolean;
   clearUnusedStorage: () => Promise<void> | void;
   getCapturedTabs: () => Promise<CapturedTabsResult>;
   restoreSpectrumDemand: (sender: chrome.runtime.MessageSender) => void;
-  toggleWindowMode: (tabId?: number) => Promise<void> | void;
+  toggleCaptureEnabled?: (tabId: number) => Promise<void> | void;
+  startCapture: (tabId?: number) => Promise<CaptureReply>;
+  stopCapture: (tabId?: number) => Promise<CaptureReply>;
+  handleCaptureEnded: (tabId: number, sender: chrome.runtime.MessageSender) => void;
+  captureErrors?: CaptureErrorController;
 }
+
+const noopCaptureErrors: CaptureErrorController = {
+  trackFrameConnected: async () => undefined,
+  trackFrameDisconnected: async () => undefined,
+  reportError: async () => undefined,
+  clearTabFrames: async () => undefined,
+};
 
 export const createRuntimeMessageHandler = ({
   acceptSpectrumFrame,
+  acceptCaptureFrame = () => undefined,
+  isLiveCapture = () => false,
+  isCaptureBadgeTab = () => false,
+  isOffscreenSender = () => false,
   applyAutostartForTab,
+  applyToolkitShortcut,
   clearUnusedStorage,
   getCapturedTabs,
   restoreSpectrumDemand,
-  toggleWindowMode,
+  toggleCaptureEnabled = () => undefined,
+  startCapture,
+  stopCapture,
+  handleCaptureEnded,
+  captureErrors = noopCaptureErrors,
 }: RuntimeMessageHandlerDependencies): RuntimeMessageHandler => {
-  const updateBadge = (tabId: number, text: string): void => {
-    void chrome.action.setBadgeText({ text, tabId }).catch((error: unknown) => {
-      console.error("Failed to update tab badge", {
-        operation: "setBadgeText",
-        tabId,
-        error,
-      });
+  const trackCaptureErrorState = (operation: Promise<void> | void): void => {
+    void Promise.resolve(operation).catch((error: unknown) => {
+      console.error("Failed to track capture error state", { error });
     });
+  };
+
+  const updatePageBadge = async (tabId: number, enabled: boolean): Promise<void> => {
+    // A captured tab's badge reflects the offscreen session, not the page graph.
+    if (await isCaptureBadgeTab(tabId)) return;
+    setTabBadge(tabId, enabled);
   };
 
   return (request, sender, response) => {
@@ -52,8 +91,34 @@ export const createRuntimeMessageHandler = ({
       return;
     }
 
-    if (request.method === RUNTIME_MESSAGES.ENABLE_WINDOW_MODE) {
-      void Promise.resolve(toggleWindowMode(request.tabId))
+    if (
+      request.method === RUNTIME_MESSAGES.START_TAB_CAPTURE ||
+      request.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE
+    ) {
+      const capture =
+        request.method === RUNTIME_MESSAGES.START_TAB_CAPTURE
+          ? startCapture(request.tabId ?? sender.tab?.id)
+          : stopCapture(request.tabId ?? sender.tab?.id);
+      void Promise.resolve(capture)
+        .then(response)
+        .catch((error: unknown) => {
+          response({
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        });
+      return true;
+    }
+
+    // The popup has no sender.tab, so its explicit tab id is the capture-bypass target.
+    // Content scripts carry sender.tab and must not toggle another tab's bypass.
+    if (
+      request.method === RUNTIME_MESSAGES.TOGGLE_CAPTURE_ENABLED &&
+      isTabId(request.tabId) &&
+      !sender.tab
+    ) {
+      const tabId = request.tabId;
+      void Promise.resolve(toggleCaptureEnabled(tabId))
         .then(() => response({ ok: true }))
         .catch((error: unknown) => {
           response({
@@ -62,6 +127,11 @@ export const createRuntimeMessageHandler = ({
           });
         });
       return true;
+    }
+
+    if (request.method === RUNTIME_MESSAGES.CAPTURE_ENDED) {
+      if (isTabId(request.tabId)) handleCaptureEnded(request.tabId, sender);
+      return;
     }
 
     if (request.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
@@ -77,8 +147,35 @@ export const createRuntimeMessageHandler = ({
       return true;
     }
 
+    // The offscreen document has no sender.tab, so capture frames carry the tab id
+    // explicitly and are accepted only from a verified offscreen sender with a live session.
+    if (
+      request.method === RUNTIME_MESSAGES.SPECTRUM_FRAME &&
+      isOffscreenSender(sender) &&
+      isTabId(request.tabId)
+    ) {
+      const captureTabId = request.tabId;
+      const payload = normalizeSpectrumPayload(request.payload);
+      if (payload && isLiveCapture(captureTabId)) acceptCaptureFrame(captureTabId, payload);
+      return;
+    }
+
     const tabId = sender.tab?.id;
     if (tabId == null) return;
+
+    if (request.method === RUNTIME_MESSAGES.TOOLKIT_SHORTCUT) {
+      const shortcut = resolveToolkitShortcutMessage(request, sender);
+      if (shortcut) {
+        void Promise.resolve(applyToolkitShortcut(shortcut)).catch((error: unknown) => {
+          console.error("Failed to apply toolkit shortcut", {
+            operation: "applyToolkitShortcut",
+            tabId: shortcut.tabId,
+            error,
+          });
+        });
+      }
+      return;
+    }
 
     if (request.method === RUNTIME_MESSAGES.SPECTRUM_READY && Number.isInteger(sender.frameId)) {
       restoreSpectrumDemand(sender);
@@ -91,11 +188,15 @@ export const createRuntimeMessageHandler = ({
     }
 
     if (request.method === RUNTIME_MESSAGES.IS_TOOLKIT_CAPTURED) {
-      chrome.storage.session.get(STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS, (stored) => {
-        const capturedTabIds = Array.isArray(stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
-          ? stored[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]
+      chrome.storage.session.get(STORAGE_KEYS.CAPTURE_TAB_IDS, (stored) => {
+        const snapshots = Array.isArray(stored[STORAGE_KEYS.CAPTURE_TAB_IDS])
+          ? stored[STORAGE_KEYS.CAPTURE_TAB_IDS]
           : [];
-        response(capturedTabIds.includes(tabId));
+        response(
+          snapshots.some(
+            (snapshot: unknown) => isCaptureTabSnapshot(snapshot) && snapshot.tabId === tabId,
+          ),
+        );
       });
       return true;
     }
@@ -103,6 +204,7 @@ export const createRuntimeMessageHandler = ({
     if (request.method === RUNTIME_MESSAGES.GET_TAB_ID) {
       response(tabId);
     } else if (request.method === RUNTIME_MESSAGES.PAGE_STARTED) {
+      trackCaptureErrorState(captureErrors.clearTabFrames(tabId));
       const applied = applyAutostartForTab(tabId, sender.tab?.url, {
         resetWhenNoMatch: true,
       });
@@ -116,9 +218,34 @@ export const createRuntimeMessageHandler = ({
         });
       }
     } else if (request.method === RUNTIME_MESSAGES.CONNECTED) {
-      updateBadge(tabId, "ON");
+      const frameId = sender.frameId;
+      if (typeof frameId === "number" && Number.isInteger(frameId)) {
+        trackCaptureErrorState(captureErrors.trackFrameConnected(tabId, frameId));
+      }
+      void updatePageBadge(tabId, true).catch((error: unknown) => {
+        console.error("Failed to update page badge", {
+          operation: "updatePageBadge",
+          tabId,
+          error,
+        });
+      });
     } else if (request.method === RUNTIME_MESSAGES.DISCONNECTED) {
-      updateBadge(tabId, "OFF");
+      const frameId = sender.frameId;
+      if (typeof frameId === "number" && Number.isInteger(frameId)) {
+        trackCaptureErrorState(captureErrors.trackFrameDisconnected(tabId, frameId));
+      }
+      void updatePageBadge(tabId, false).catch((error: unknown) => {
+        console.error("Failed to update page badge", {
+          operation: "updatePageBadge",
+          tabId,
+          error,
+        });
+      });
+    } else if (request.method === RUNTIME_MESSAGES.CAPTURE_ERROR) {
+      const message = (request.payload as { message?: unknown } | undefined)?.message;
+      if (typeof message === "string") {
+        trackCaptureErrorState(captureErrors.reportError(tabId, message));
+      }
     } else if (request.method === RUNTIME_MESSAGES.CLEAR_STORAGE) {
       const cleared = clearUnusedStorage();
       if (cleared) {

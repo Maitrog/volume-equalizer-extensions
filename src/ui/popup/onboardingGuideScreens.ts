@@ -3,7 +3,7 @@ export type GuideTarget =
   | "changeEq"
   | "settings"
   | "autostart"
-  | "windowMode"
+  | "tabCapture"
   | "equalizer"
   | "volume"
   | "presets";
@@ -65,8 +65,9 @@ export const GUIDE_SCREENS: readonly GuideScreen[] = [
   {
     stage: 5,
     kind: "spotlight",
-    target: "windowMode",
-    titleKey: "window_mode_button_tooltip",
+    target: "tabCapture",
+    titleKey: "tab_capture_mode_label",
+    messageKey: "tab_capture_help",
     substep: [3, 3],
   },
   {

@@ -75,10 +75,7 @@
     "message": "主题"
   },
   "capture_error_prefix": {
-    "message": "无法捕获音频流。请尝试使用“窗口模式”。"
-  },
-  "toolkit_window_already_open": {
-    "message": "均衡器已在窗口中打开"
+    "message": "无法捕获音频流。请尝试使用“标签页捕获”。"
   },
   "support_me": {
     "message": "支持我:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "静音/取消静音"
-  },
-  "window_mode_button_tooltip": {
-    "message": "打开窗口模式"
   },
   "add_to_autostart_tooltip": {
     "message": "将当前网站添加到自动启动列表"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "使用 Home、End、Page Up 或 Page Down 选择频段。使用方向键调整频率和增益，Shift+上/下调整 Q，Enter 重置。"
   },
-  "window_mode_start_error": {
-    "message": "无法打开窗口模式。请重试。"
-  },
   "enable_volume_compensation_setting_option": {
     "message": "自动音量补偿"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "捕获标签页音频"
+  },
+  "tab_capture_mode_label": {
+    "message": "标签页捕获"
+  },
+  "tab_capture_start_error": {
+    "message": "无法启动标签页音频捕获。"
+  },
+  "tab_capture_help": {
+    "message": "如果均衡器在某个网站上无法使用，请使用此模式。关闭弹出窗口后音频处理仍会继续。"
+  },
+  "tab_capture_stop_error": {
+    "message": "无法停止标签页音频捕获。"
   }
 }

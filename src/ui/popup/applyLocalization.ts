@@ -54,7 +54,7 @@ export const applyLocalization = (
   setElementTooltip(root, "settings-btn", "settings_button_tooltip", getMessage);
   setElementTooltip(root, "volume-mute", "volume_mute_button_tooltip", getMessage);
   setElementTooltip(root, "add-to-autostart-whitelist-btn", "add_to_autostart_tooltip", getMessage);
-  setElementTooltip(root, "window-mod", "window_mode_button_tooltip", getMessage);
+  setElementTooltip(root, "tab-capture", "tab_capture_button_tooltip", getMessage);
   setElementTooltip(root, "change-eq", "shortcut_toggle_eq_label", getMessage);
   setElementTooltip(root, "info-btn", "help_label", getMessage);
 };

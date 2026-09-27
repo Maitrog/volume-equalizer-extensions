@@ -34,6 +34,9 @@ const sender = (tabId: number, frameId: number): chrome.runtime.MessageSender =>
   frameId,
 });
 
+const contentSource = (frameId: number) => ({ kind: "content" as const, frameId });
+const captureSource = { kind: "capture" as const };
+
 const meta = {
   type: "meta" as const,
   sampleRate: 48000,
@@ -48,6 +51,8 @@ const frame = {
   buffer: [-42, -38],
   clipping: false,
 };
+
+const nullFrame = { type: "spectrum" as const, buffer: null, clipping: false };
 
 describe("createSpectrumRelay", () => {
   test("enables demand for the first subscriber and disables it after the last", () => {
@@ -98,7 +103,7 @@ describe("createSpectrumRelay", () => {
     expect(setDemand).toHaveBeenCalledWith(12, true, 4);
   });
 
-  test("routes one stable frame source and sends metadata before promoted frames", () => {
+  test("routes one stable content frame and sends metadata before promoted frames", () => {
     const relay = createSpectrumRelay({ setDemand: vi.fn() });
     const client = createPort();
     relay.connect(client.port);
@@ -108,19 +113,15 @@ describe("createSpectrumRelay", () => {
     relay.acceptFrame(frame, sender(12, 1));
     relay.acceptFrame({ ...meta, sampleRate: 44100 }, sender(12, 2));
     relay.acceptFrame({ ...frame, buffer: [-30] }, sender(12, 2));
-    relay.acceptFrame({ type: "spectrum", buffer: null, clipping: false }, sender(12, 1));
+    relay.acceptFrame(nullFrame, sender(12, 1));
     relay.acceptFrame({ ...frame, buffer: [-29] }, sender(12, 2));
 
     expect(client.postMessage.mock.calls.map(([message]) => message)).toEqual([
-      { tabId: 12, frameId: 1, payload: meta },
-      { tabId: 12, frameId: 1, payload: frame },
-      {
-        tabId: 12,
-        frameId: 1,
-        payload: { type: "spectrum", buffer: null, clipping: false },
-      },
-      { tabId: 12, frameId: 2, payload: { ...meta, sampleRate: 44100 } },
-      { tabId: 12, frameId: 2, payload: { ...frame, buffer: [-29] } },
+      { tabId: 12, source: contentSource(1), payload: meta },
+      { tabId: 12, source: contentSource(1), payload: frame },
+      { tabId: 12, source: contentSource(1), payload: nullFrame },
+      { tabId: 12, source: contentSource(2), payload: { ...meta, sampleRate: 44100 } },
+      { tabId: 12, source: contentSource(2), payload: { ...frame, buffer: [-29] } },
     ]);
   });
 
@@ -141,7 +142,7 @@ describe("createSpectrumRelay", () => {
 
     expect(client.postMessage).toHaveBeenCalledWith({
       tabId: 12,
-      frameId: 3,
+      source: contentSource(3),
       payload: meta,
     });
     expect(setDemand.mock.calls).toEqual([
@@ -174,5 +175,108 @@ describe("createSpectrumRelay", () => {
 
     expect(setDemand).not.toHaveBeenCalled();
     expect(client.postMessage).not.toHaveBeenCalled();
+  });
+
+  test("delivers capture frames to the subscriber of the captured tab", () => {
+    const relay = createSpectrumRelay({ setDemand: vi.fn() });
+    const client = createPort();
+    relay.connect(client.port);
+    client.onMessage.fire({ type: "subscribe", tabId: 12 });
+
+    relay.acceptCaptureFrame(12, meta);
+    relay.acceptCaptureFrame(12, frame);
+    relay.acceptCaptureFrame(13, meta);
+
+    expect(client.postMessage.mock.calls.map(([message]) => message)).toEqual([
+      { tabId: 12, source: captureSource, payload: meta },
+      { tabId: 12, source: captureSource, payload: frame },
+    ]);
+  });
+
+  test("capture metadata replaces the active content frame", () => {
+    const relay = createSpectrumRelay({ setDemand: vi.fn() });
+    const client = createPort();
+    relay.connect(client.port);
+    client.onMessage.fire({ type: "subscribe", tabId: 12 });
+
+    relay.acceptFrame(meta, sender(12, 1));
+    relay.acceptFrame(frame, sender(12, 1));
+    relay.acceptCaptureFrame(12, { ...meta, sampleRate: 44100 });
+    relay.acceptFrame({ ...frame, buffer: [-30] }, sender(12, 1));
+    relay.acceptCaptureFrame(12, { ...frame, buffer: [-31] });
+
+    expect(client.postMessage.mock.calls.map(([message]) => message)).toEqual([
+      { tabId: 12, source: contentSource(1), payload: meta },
+      { tabId: 12, source: contentSource(1), payload: frame },
+      { tabId: 12, source: captureSource, payload: { ...meta, sampleRate: 44100 } },
+      { tabId: 12, source: captureSource, payload: { ...frame, buffer: [-31] } },
+    ]);
+  });
+
+  test("delivers the same capture frames to every subscriber of a tab", () => {
+    const relay = createSpectrumRelay({ setDemand: vi.fn() });
+    const first = createPort();
+    const second = createPort();
+    relay.connect(first.port);
+    relay.connect(second.port);
+    first.onMessage.fire({ type: "subscribe", tabId: 12 });
+    second.onMessage.fire({ type: "subscribe", tabId: 12 });
+
+    relay.acceptCaptureFrame(12, meta);
+
+    expect(first.postMessage).toHaveBeenCalledWith({
+      tabId: 12,
+      source: captureSource,
+      payload: meta,
+    });
+    expect(second.postMessage).toHaveBeenCalledWith({
+      tabId: 12,
+      source: captureSource,
+      payload: meta,
+    });
+  });
+
+  test("resets stale sources and re-issues demand without dropping subscribers", () => {
+    const setDemand = vi.fn();
+    const relay = createSpectrumRelay({ setDemand });
+    const client = createPort();
+    relay.connect(client.port);
+    client.onMessage.fire({ type: "subscribe", tabId: 12 });
+    relay.acceptCaptureFrame(12, meta);
+    relay.acceptCaptureFrame(12, frame);
+    setDemand.mockClear();
+
+    relay.resetSources(12);
+
+    expect(setDemand).toHaveBeenCalledWith(12, true);
+    expect(client.postMessage).toHaveBeenLastCalledWith({
+      tabId: 12,
+      source: captureSource,
+      payload: nullFrame,
+    });
+    relay.acceptCaptureFrame(12, frame);
+    expect(client.postMessage).toHaveBeenCalledTimes(3);
+  });
+
+  test("reconnects after a relay restart and re-delivers capture metadata", () => {
+    const firstRelay = createSpectrumRelay({ setDemand: vi.fn() });
+    const stale = createPort();
+    firstRelay.connect(stale.port);
+    stale.onMessage.fire({ type: "subscribe", tabId: 12 });
+    stale.onDisconnect.fire();
+
+    const setDemand = vi.fn();
+    const relay = createSpectrumRelay({ setDemand });
+    const client = createPort();
+    relay.connect(client.port);
+    client.onMessage.fire({ type: "subscribe", tabId: 12 });
+    relay.acceptCaptureFrame(12, meta);
+    relay.acceptCaptureFrame(12, frame);
+
+    expect(setDemand).toHaveBeenCalledWith(12, true);
+    expect(client.postMessage.mock.calls.map(([message]) => message)).toEqual([
+      { tabId: 12, source: captureSource, payload: meta },
+      { tabId: 12, source: captureSource, payload: frame },
+    ]);
   });
 });

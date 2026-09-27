@@ -1,16 +1,28 @@
 import { describe, expect, test } from "vitest";
 
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
+import { isLatestModeCheck, resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
 
 describe("resolveTabEnabled", () => {
   test("keeps the page equalizer disabled while its tab is captured", () => {
     expect(resolveTabEnabled(true, true)).toBe(false);
   });
 
+  test("keeps a frame loaded during capture disabled without extra processing", () => {
+    // A newly loaded iframe requests the ordinary mode but must stay off for tab capture.
+    expect(resolveTabEnabled(true, true)).toBe(false);
+  });
+
   test("preserves the requested state outside toolkit capture", () => {
     expect(resolveTabEnabled(true, false)).toBe(true);
     expect(resolveTabEnabled(false, false)).toBe(false);
+  });
+});
+
+describe("isLatestModeCheck", () => {
+  test("drops a stale async mode reply after a newer check starts", () => {
+    expect(isLatestModeCheck(1, 2)).toBe(false);
+    expect(isLatestModeCheck(2, 2)).toBe(true);
   });
 });
 

@@ -75,10 +75,7 @@
     "message": "Giao diện"
   },
   "capture_error_prefix": {
-    "message": "Không thể thu luồng âm thanh. Hãy thử dùng \"Chế độ cửa sổ\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "Bộ cân bằng đã được mở trong một cửa sổ"
+    "message": "Không thể thu luồng âm thanh. Hãy thử dùng \"Ghi thẻ\"."
   },
   "support_me": {
     "message": "Hỗ trợ tôi:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Tắt/bật âm lượng"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Mở chế độ cửa sổ"
   },
   "add_to_autostart_tooltip": {
     "message": "Thêm trang hiện tại vào danh sách tự động khởi động"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Chọn dải bằng Home, End, Page Up hoặc Page Down. Dùng phím mũi tên cho tần số và độ lợi, Shift+Lên/Xuống cho Q và Enter để đặt lại."
   },
-  "window_mode_start_error": {
-    "message": "Không thể mở chế độ cửa sổ. Vui lòng thử lại."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Tự động bù âm lượng"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Ghi âm thanh thẻ"
+  },
+  "tab_capture_mode_label": {
+    "message": "Ghi thẻ"
+  },
+  "tab_capture_start_error": {
+    "message": "Không thể bắt đầu ghi âm thanh thẻ."
+  },
+  "tab_capture_help": {
+    "message": "Dùng chế độ này nếu bộ cân bằng không hoạt động trên trang web. Quá trình xử lý âm thanh vẫn tiếp tục khi đóng cửa sổ bật lên."
+  },
+  "tab_capture_stop_error": {
+    "message": "Không thể dừng ghi âm thanh của tab."
   }
 }

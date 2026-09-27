@@ -20,7 +20,7 @@ import {
 } from "../../infrastructure/chrome/runtimeMessages";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import { claimContentInstance } from "./contentInstance";
-import { resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
+import { isLatestModeCheck, resolveShortcutToggle, resolveTabEnabled } from "./toolkitCaptureState";
 
 type SendRuntimeMessageWithCallback = (
   message: RuntimeMessage,
@@ -54,40 +54,57 @@ port.dataset.enabled = "false";
 port.dataset.spectrumDemand = "false";
 port.dispatchEvent(new Event("enabled-changed"));
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (!isCurrentInstance()) return;
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse): boolean | undefined => {
+  if (!isCurrentInstance()) return undefined;
 
   if (message?.method === RUNTIME_MESSAGES.CONTENT_SCRIPT_PING) {
     (sendResponse as unknown as (response: boolean) => void)(port.dataset.mainReady === "true");
-    return;
+    return undefined;
   }
 
-  if (message?.method !== RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND) return;
+  if (message?.method === RUNTIME_MESSAGES.CAPTURE_MODE_CHANGED) {
+    void applyTabEnabledState(lastRequestedEnabled).then(
+      () => (sendResponse as unknown as (response: boolean) => void)(true),
+      (error: unknown) => {
+        console.error("Failed to apply capture mode change", {
+          operation: "captureModeChanged",
+          error,
+        });
+        (sendResponse as unknown as (response: boolean) => void)(false);
+      },
+    );
+    return true;
+  }
+
+  if (message?.method !== RUNTIME_MESSAGES.SET_SPECTRUM_DEMAND) return undefined;
   const enabled = (message.payload as { enabled?: unknown } | undefined)?.enabled;
-  if (typeof enabled !== "boolean") return;
+  if (typeof enabled !== "boolean") return undefined;
   port.dataset.spectrumDemand = String(enabled);
   port.dispatchEvent(new Event("spectrum-state-changed"));
+  return undefined;
 });
 
 let currentTabId: number | null = null;
 let shortcuts = resolveShortcuts(null);
 
-const getTabId = (callback: (tabId: number) => void): void => {
-  sendRuntimeMessageWithCallback({ method: RUNTIME_MESSAGES.GET_TAB_ID }, (tabId) => {
-    if (!isCurrentInstance() || typeof tabId !== "number") return;
+const getTabId = (): Promise<number> => {
+  if (currentTabId !== null) return Promise.resolve(currentTabId);
 
-    currentTabId = tabId;
-    callback(tabId);
+  return new Promise((resolve, reject) => {
+    sendRuntimeMessageWithCallback({ method: RUNTIME_MESSAGES.GET_TAB_ID }, (tabId) => {
+      if (!isCurrentInstance() || typeof tabId !== "number") {
+        reject(new Error("Failed to resolve tab id"));
+        return;
+      }
+
+      currentTabId = tabId;
+      resolve(tabId);
+    });
   });
 };
 
 const withTabId = (callback: (tabId: number) => void): void => {
-  if (currentTabId !== null) {
-    callback(currentTabId);
-    return;
-  }
-
-  getTabId(callback);
+  void getTabId().then(callback, () => undefined);
 };
 
 const isToolkitCaptured = (): Promise<boolean> => {
@@ -98,32 +115,28 @@ const isToolkitCaptured = (): Promise<boolean> => {
   });
 };
 
+let lastRequestedEnabled = false;
+let modeCheckGeneration = 0;
+
 const applyTabEnabledState = async (requestedEnabled: boolean): Promise<void> => {
+  lastRequestedEnabled = requestedEnabled;
+  const generation = ++modeCheckGeneration;
   const captured = await isToolkitCaptured();
-  if (!isCurrentInstance()) return;
+  // A newer mode check (for example after capture-mode-changed) must win over a stale reply.
+  if (!isCurrentInstance() || !isLatestModeCheck(generation, modeCheckGeneration)) return;
 
   port.dataset.enabled = String(resolveTabEnabled(requestedEnabled, captured));
   port.dispatchEvent(new Event("enabled-changed"));
 };
 
 const setCaptureError = (message: string): void => {
-  withTabId((tabId) => {
-    reportAsyncFailure(
-      "store capture error",
-      chrome.storage.local.set({
-        [STORAGE_KEYS.tabCaptureError(tabId)]: message,
-      }),
-    );
-  });
-};
-
-const clearCaptureError = (): void => {
-  withTabId((tabId) => {
-    reportAsyncFailure(
-      "clear capture error",
-      chrome.storage.local.remove(STORAGE_KEYS.tabCaptureError(tabId)),
-    );
-  });
+  reportAsyncFailure(
+    "report capture error",
+    chrome.runtime.sendMessage({
+      method: RUNTIME_MESSAGES.CAPTURE_ERROR,
+      payload: { message },
+    }),
+  );
 };
 
 const getCaptureErrorMessage = (event: Event): string => {
@@ -134,7 +147,6 @@ const getCaptureErrorMessage = (event: Event): string => {
 port.addEventListener("connected", () => {
   if (!isCurrentInstance()) return;
 
-  clearCaptureError();
   reportAsyncFailure(
     "report connected state",
     chrome.runtime.sendMessage({ method: RUNTIME_MESSAGES.CONNECTED }),
@@ -156,47 +168,50 @@ port.addEventListener("capture-error", (event) => {
   setCaptureError(getCaptureErrorMessage(event));
 });
 
-getTabId((tabId) => {
-  const defaultFilters = createDefaultFilterSettings();
-  chrome.storage.local.get(
-    {
-      [STORAGE_KEYS.tabVolume(tabId)]: 1,
-      [STORAGE_KEYS.tabPan(tabId)]: 0,
-      [STORAGE_KEYS.tabFilters(tabId)]: defaultFilters,
-      [STORAGE_KEYS.ENABLE_SPECTRUM]: false,
-      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
-      [STORAGE_KEYS.tabEnabled(tabId)]: false,
-      [STORAGE_KEYS.tabMute(tabId)]: false,
-    },
-    (prefs) => {
-      void (async () => {
-        if (!isCurrentInstance()) return;
+void getTabId().then(
+  (tabId) => {
+    const defaultFilters = createDefaultFilterSettings();
+    chrome.storage.local.get(
+      {
+        [STORAGE_KEYS.tabVolume(tabId)]: 1,
+        [STORAGE_KEYS.tabPan(tabId)]: 0,
+        [STORAGE_KEYS.tabFilters(tabId)]: defaultFilters,
+        [STORAGE_KEYS.ENABLE_SPECTRUM]: true,
+        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: false,
+        [STORAGE_KEYS.tabEnabled(tabId)]: false,
+        [STORAGE_KEYS.tabMute(tabId)]: false,
+      },
+      (prefs) => {
+        void (async () => {
+          if (!isCurrentInstance()) return;
 
-        const filters = prefs[STORAGE_KEYS.tabFilters(tabId)] ?? defaultFilters;
-        const freqsMapped = normalizeFilterSettings(filters);
-        port.dataset.freqs = JSON.stringify(freqsMapped);
-        port.dataset.pan = String(prefs[STORAGE_KEYS.tabPan(tabId)]);
-        port.dataset.preamp = String(prefs[STORAGE_KEYS.tabVolume(tabId)]);
-        port.dataset.mute = String(prefs[STORAGE_KEYS.tabMute(tabId)]);
-        port.dataset.enableSpectrum = String(prefs[STORAGE_KEYS.ENABLE_SPECTRUM]);
-        port.dataset.enableVolumeCompensation = String(
-          prefs[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION],
-        );
-        await applyTabEnabledState(prefs[STORAGE_KEYS.tabEnabled(tabId)] === true);
-        if (!isCurrentInstance()) return;
-        console.log("[contentIsolated] State ready", {
-          tabId,
-          enabled: port.dataset.enabled,
-          filters: freqsMapped.length,
-        });
+          const filters = prefs[STORAGE_KEYS.tabFilters(tabId)] ?? defaultFilters;
+          const freqsMapped = normalizeFilterSettings(filters);
+          port.dataset.freqs = JSON.stringify(freqsMapped);
+          port.dataset.pan = String(prefs[STORAGE_KEYS.tabPan(tabId)]);
+          port.dataset.preamp = String(prefs[STORAGE_KEYS.tabVolume(tabId)]);
+          port.dataset.mute = String(prefs[STORAGE_KEYS.tabMute(tabId)]);
+          port.dataset.enableSpectrum = String(prefs[STORAGE_KEYS.ENABLE_SPECTRUM]);
+          port.dataset.enableVolumeCompensation = String(
+            prefs[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION],
+          );
+          await applyTabEnabledState(prefs[STORAGE_KEYS.tabEnabled(tabId)] === true);
+          if (!isCurrentInstance()) return;
+          console.log("[contentIsolated] State ready", {
+            tabId,
+            enabled: port.dataset.enabled,
+            filters: freqsMapped.length,
+          });
 
-        if (prefs[STORAGE_KEYS.tabMute(tabId)]) {
-          port.dispatchEvent(new Event("mute-enabled"));
-        }
-      })();
-    },
-  );
-});
+          if (prefs[STORAGE_KEYS.tabMute(tabId)]) {
+            port.dispatchEvent(new Event("mute-enabled"));
+          }
+        })();
+      },
+    );
+  },
+  () => undefined,
+);
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (!isCurrentInstance()) return;
@@ -216,7 +231,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
   if (changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]) {
     port.dataset.enableVolumeCompensation = String(
-      changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION].newValue !== false,
+      changes[STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION].newValue === true,
     );
     port.dispatchEvent(new Event("volume-compensation-changed"));
   }

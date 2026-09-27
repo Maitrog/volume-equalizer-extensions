@@ -75,10 +75,7 @@
     "message": "थीम"
   },
   "capture_error_prefix": {
-    "message": "ऑडियो स्ट्रीम कैप्चर नहीं हो सकी। \"विंडो मोड\" का उपयोग करके देखें।"
-  },
-  "toolkit_window_already_open": {
-    "message": "इक्वलाइज़र पहले से ही एक विंडो में खुला है"
+    "message": "ऑडियो स्ट्रीम कैप्चर नहीं हो सकी। \"टैब कैप्चर\" का उपयोग करके देखें।"
   },
   "support_me": {
     "message": "मेरा समर्थन करें:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "आवाज़ बंद/चालू करें"
-  },
-  "window_mode_button_tooltip": {
-    "message": "विंडो मोड खोलें"
   },
   "add_to_autostart_tooltip": {
     "message": "मौजूदा साइट को ऑटोस्टार्ट सूची में जोड़ें"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Home, End, Page Up या Page Down से बैंड चुनें। फ़्रीक्वेंसी और गेन के लिए तीर, Q के लिए Shift+Up/Down और रीसेट के लिए Enter दबाएँ।"
   },
-  "window_mode_start_error": {
-    "message": "विंडो मोड नहीं खुल सका। कृपया फिर से कोशिश करें।"
-  },
   "enable_volume_compensation_setting_option": {
     "message": "स्वचालित वॉल्यूम क्षतिपूर्ति"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "टैब ऑडियो कैप्चर करें"
+  },
+  "tab_capture_mode_label": {
+    "message": "टैब कैप्चर"
+  },
+  "tab_capture_start_error": {
+    "message": "टैब ऑडियो कैप्चर शुरू नहीं किया जा सका।"
+  },
+  "tab_capture_help": {
+    "message": "अगर किसी साइट पर इक्वलाइज़र काम नहीं करता है तो इस मोड का उपयोग करें। पॉपअप बंद होने पर भी ऑडियो प्रोसेसिंग जारी रहती है।"
+  },
+  "tab_capture_stop_error": {
+    "message": "टैब ऑडियो कैप्चर रोक नहीं सका।"
   }
 }

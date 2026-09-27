@@ -75,10 +75,7 @@
     "message": "テーマ"
   },
   "capture_error_prefix": {
-    "message": "オーディオストリームをキャプチャできませんでした。「ウィンドウモード」を使用してみてください。"
-  },
-  "toolkit_window_already_open": {
-    "message": "イコライザーはすでにウィンドウで開いています"
+    "message": "オーディオストリームをキャプチャできませんでした。「タブキャプチャ」を使用してみてください。"
   },
   "support_me": {
     "message": "私を支援する:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "音量をミュート/解除"
-  },
-  "window_mode_button_tooltip": {
-    "message": "ウィンドウモードを開く"
   },
   "add_to_autostart_tooltip": {
     "message": "現在のサイトを自動起動リストに追加"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Home、End、Page Up、Page Down でバンドを選択します。矢印キーで周波数とゲイン、Shift+上下で Q、Enter でリセットします。"
   },
-  "window_mode_start_error": {
-    "message": "ウィンドウモードを開けませんでした。もう一度お試しください。"
-  },
   "enable_volume_compensation_setting_option": {
     "message": "音量を自動補正"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "タブの音声をキャプチャ"
+  },
+  "tab_capture_mode_label": {
+    "message": "タブキャプチャ"
+  },
+  "tab_capture_start_error": {
+    "message": "タブの音声キャプチャを開始できませんでした。"
+  },
+  "tab_capture_help": {
+    "message": "サイトでイコライザーが機能しない場合はこのモードを使用してください。ポップアップを閉じても音声処理は継続します。"
+  },
+  "tab_capture_stop_error": {
+    "message": "タブの音声キャプチャを停止できませんでした。"
   }
 }

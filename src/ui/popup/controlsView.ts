@@ -9,14 +9,13 @@ export const createControlsView = (deps: {
   masterVolumeValue: HTMLOutputElement;
   clippingIndicator: HTMLElement;
   volumeMuteButton: HTMLElement;
-  windowModeButton: HTMLElement;
+  tabCaptureButton: HTMLElement;
   getMessage(messageName: string): string;
   onToggleEqualizer(): Promise<void>;
   onReset(): Promise<void>;
   onVolumeInput(value: number): Promise<void>;
   onToggleMute(): Promise<void>;
-  onWindowMode(): Promise<void>;
-  onMuteStateApplied(): void;
+  onTabCapture(): Promise<void>;
 }) => {
   let clippingTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -52,8 +51,8 @@ export const createControlsView = (deps: {
     void deps.onToggleMute();
   });
 
-  deps.windowModeButton.addEventListener("click", () => {
-    void deps.onWindowMode();
+  deps.tabCaptureButton.addEventListener("click", () => {
+    void deps.onTabCapture();
   });
 
   return {
@@ -68,7 +67,6 @@ export const createControlsView = (deps: {
     setMuteButtonClass: (muted: boolean) => {
       deps.volumeMuteButton.className = muted ? "volume-mute-active" : "volume-mute";
       deps.volumeMuteButton.setAttribute("aria-pressed", String(muted));
-      deps.onMuteStateApplied();
     },
   };
 };

@@ -1,6 +1,7 @@
+import type { EqualizerFilter } from "../../domains/equalizer/types";
+
 export const RUNTIME_MESSAGES = {
   LOG: "log",
-  ENABLE_WINDOW_MODE: "enableWindowMode",
   GET_CAPTURED_TABS: "getCapturedTabs",
   SPECTRUM_FRAME: "spectrum-frame",
   GET_TAB_ID: "getTabId",
@@ -9,20 +10,60 @@ export const RUNTIME_MESSAGES = {
   PAGE_STARTED: "pageStarted",
   CONNECTED: "connected",
   DISCONNECTED: "disconnected",
+  CAPTURE_ERROR: "capture-error",
   CLEAR_STORAGE: "clearStorage",
   CONTENT_SCRIPT_PING: "contentScriptPing",
   SPECTRUM_READY: "spectrum-ready",
   SET_SPECTRUM_DEMAND: "set-spectrum-demand",
+  CAPTURE_START: "capture-start",
+  CAPTURE_STOP: "capture-stop",
+  CAPTURE_SETTINGS: "capture-settings",
+  CAPTURE_LIST: "capture-list",
+  CAPTURE_SPECTRUM_DEMAND: "capture-spectrum-demand",
+  CAPTURE_ENDED: "capture-ended",
+  START_TAB_CAPTURE: "start-tab-capture",
+  STOP_TAB_CAPTURE: "stop-tab-capture",
+  TOGGLE_CAPTURE_ENABLED: "toggle-capture-enabled",
+  CAPTURE_MODE_CHANGED: "capture-mode-changed",
 } as const;
 
 export type RuntimeMessageMethod = (typeof RUNTIME_MESSAGES)[keyof typeof RUNTIME_MESSAGES];
+
+export const isTabId = (value: unknown): value is number =>
+  typeof value === "number" && Number.isInteger(value) && value >= 0;
 
 export interface RuntimeMessage {
   method: RuntimeMessageMethod;
   payload?: unknown;
 }
 
-export type EnableWindowModeResponse = { ok: true } | { ok: false; error: string };
+export interface CaptureSettings {
+  enabled: boolean;
+  gainValue: number;
+  muted: boolean;
+  volumeCompensationEnabled: boolean;
+  filterSettings: EqualizerFilter[];
+}
+
+export interface CaptureState {
+  tabId: number;
+  settings: CaptureSettings;
+}
+
+export type OffscreenCommand =
+  | {
+      target: "offscreen";
+      method: "capture-start";
+      tabId: number;
+      streamId: string;
+      settings: CaptureSettings;
+    }
+  | { target: "offscreen"; method: "capture-stop"; tabId: number }
+  | { target: "offscreen"; method: "capture-settings"; tabId: number; settings: CaptureSettings }
+  | { target: "offscreen"; method: "capture-list" }
+  | { target: "offscreen"; method: "capture-spectrum-demand"; tabId: number; enabled: boolean };
+
+export type CaptureReply = { ok: true; captures: CaptureState[] } | { ok: false; error: string };
 
 export const SPECTRUM_PORT_NAME = "eq-spectrum";
 
@@ -48,11 +89,16 @@ export interface SpectrumSubscribeMessage {
   tabId: number;
 }
 
+export type SpectrumSource = { kind: "content"; frameId: number } | { kind: "capture" };
+
 export interface RelayedSpectrumMessage {
   tabId: number;
-  frameId: number;
+  source: SpectrumSource;
   payload: SpectrumPayload;
 }
+
+export const isSameSpectrumSource = (a: SpectrumSource, b: SpectrumSource): boolean =>
+  a.kind === "capture" ? b.kind === "capture" : b.kind === "content" && a.frameId === b.frameId;
 
 export const normalizeSpectrumPayload = (value: unknown): SpectrumPayload | null => {
   if (!value || typeof value !== "object") return null;

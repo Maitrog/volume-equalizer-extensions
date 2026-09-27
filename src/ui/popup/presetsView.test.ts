@@ -61,7 +61,6 @@ const setup = (providedSavePreset?: SavePreset) => {
     setCurrentFilters: vi.fn(),
     saveLoadedFilters: vi.fn(async () => undefined),
     redraw: vi.fn(),
-    refreshToolkitCaptureFilters: vi.fn(),
   });
   return { nameInput, saveButton, saveError, saveForm, saveModal, savePreset };
 };

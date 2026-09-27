@@ -28,7 +28,7 @@ test("settings actions normalize loads and preserve storage contracts", async ()
   expect(loaded.pointCount).toBe(9);
   expect(loaded.hideDefaultPresets).toBe(true);
   expect(loaded.enableSpectrum).toBe(true);
-  expect(loaded.enableVolumeCompensation).toBe(true);
+  expect(loaded.enableVolumeCompensation).toBe(false);
   expect(loaded.shortcuts.mute?.key).toBe("m");
 
   await actions.saveTheme("light");

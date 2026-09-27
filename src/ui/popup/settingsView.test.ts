@@ -119,7 +119,6 @@ const setup = (options: {
     addPresetToDropdown,
     initPoints: vi.fn(),
     redraw: vi.fn(),
-    refreshToolkitCaptureFilters: vi.fn(),
     saveCurrentFilters: vi.fn(async () => undefined),
     refreshDynamicContent,
   });
@@ -232,18 +231,18 @@ describe("preset import settings", () => {
 });
 
 describe("volume compensation setting", () => {
-  test("starts enabled and persists checkbox changes", async () => {
+  test("starts disabled and persists checkbox changes", async () => {
     const { enableVolumeCompensation, settingsView, storage } = setup({ contents: "" });
 
     await settingsView.init();
-    expect(enableVolumeCompensation.checked).toBe(true);
+    expect(enableVolumeCompensation.checked).toBe(false);
 
-    enableVolumeCompensation.checked = false;
+    enableVolumeCompensation.checked = true;
     enableVolumeCompensation.dispatchEvent(new Event("change"));
 
     await vi.waitFor(() =>
       expect(storage.set).toHaveBeenCalledWith({
-        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: false,
+        [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
       }),
     );
   });

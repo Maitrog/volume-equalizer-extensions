@@ -1,6 +1,7 @@
 import { findWhitelistMatch } from "../../domains/autostart/autostartRules";
 import { resolvePresetFilters, type PresetStorage } from "../../domains/presets/defaultPresets";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
+import { readCaptureTabSnapshots } from "./captureCoordinator";
 
 export interface ApplyAutostartOptions {
   resetWhenNoMatch?: boolean;
@@ -32,14 +33,13 @@ export const applyAutostartForTab = async (
     return;
   }
 
-  const session = await chrome.storage.session.get(STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS);
-  const capturedTabIds = Array.isArray(session[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS])
-    ? session[STORAGE_KEYS.TOOLKIT_WINDOW_TAB_IDS]
-    : [];
+  const capturedTabIds = new Set(
+    (await readCaptureTabSnapshots()).map((snapshot) => snapshot.tabId),
+  );
 
   await chrome.storage.local.set({
     [STORAGE_KEYS.tabFilters(tabId)]: preset,
     [STORAGE_KEYS.FILTERS]: preset,
-    [STORAGE_KEYS.tabEnabled(tabId)]: !capturedTabIds.includes(tabId),
+    [STORAGE_KEYS.tabEnabled(tabId)]: !capturedTabIds.has(tabId),
   });
 };

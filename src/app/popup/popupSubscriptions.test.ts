@@ -68,13 +68,11 @@ const setup = () => {
     refreshAutostartPresetSelects: vi.fn(() => Promise.resolve()),
     refreshPresetDropdown: vi.fn(() => Promise.resolve()),
     getCurrentTabId: vi.fn(() => Promise.resolve(12)),
+    isTabCaptured: vi.fn(() => false),
     setEnableButtonClass: vi.fn(),
     setMuteButtonClass: vi.fn(),
     renderCaptureError: vi.fn(),
-    refreshCaptureFilters: vi.fn(),
     getShortcutSettings: vi.fn(() => DEFAULT_SHORTCUTS),
-    hasCapture: vi.fn(() => true),
-    selectTab: vi.fn(() => Promise.resolve()),
     toggleMute: vi.fn(() => Promise.resolve()),
     toggleEqualizer: vi.fn(() => Promise.resolve()),
     onSpectrumMeta: vi.fn(),
@@ -83,7 +81,6 @@ const setup = () => {
     onPagehide: vi.fn(),
   };
   const subscriptions = attachPopupSubscriptions({
-    isToolkitWindow: true,
     ...callbacks,
   });
   return {
@@ -106,14 +103,7 @@ afterEach(() => {
 
 describe("popup subscriptions", () => {
   test("routes events before disposal and ignores them afterward", async () => {
-    const { subscriptions, callbacks, runtimeMessage, storageChange, documentTarget } = setup();
-    runtimeMessage.fire(
-      {
-        method: RUNTIME_MESSAGES.TOOLKIT_SHORTCUT,
-        payload: { action: TOOLKIT_SHORTCUT_ACTIONS.MUTE },
-      },
-      { tab: { id: 12 } } as chrome.runtime.MessageSender,
-    );
+    const { subscriptions, callbacks, storageChange, documentTarget } = setup();
     storageChange.fire({
       [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
     });
@@ -133,13 +123,25 @@ describe("popup subscriptions", () => {
     await Promise.resolve();
     await Promise.resolve();
 
-    expect(callbacks.selectTab).toHaveBeenCalledWith(12);
-    expect(callbacks.toggleMute).toHaveBeenCalledTimes(2);
+    expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
     expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
     expect(keydown.preventDefault).toHaveBeenCalledOnce();
 
     subscriptions.dispose();
     subscriptions.dispose();
+    storageChange.fire({
+      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
+    });
+    documentTarget.fire("keydown", keydown);
+    await Promise.resolve();
+
+    expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
+    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+  });
+
+  test("leaves captured tab shortcuts to the background", async () => {
+    const { subscriptions, callbacks, runtimeMessage } = setup();
+
     runtimeMessage.fire(
       {
         method: RUNTIME_MESSAGES.TOOLKIT_SHORTCUT,
@@ -147,15 +149,11 @@ describe("popup subscriptions", () => {
       },
       { tab: { id: 12 } } as chrome.runtime.MessageSender,
     );
-    storageChange.fire({
-      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
-    });
-    documentTarget.fire("keydown", keydown);
     await Promise.resolve();
 
-    expect(callbacks.selectTab).toHaveBeenCalledOnce();
-    expect(callbacks.toggleMute).toHaveBeenCalledTimes(2);
-    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+    expect(callbacks.toggleMute).not.toHaveBeenCalled();
+    expect(callbacks.toggleEqualizer).not.toHaveBeenCalled();
+    subscriptions.dispose();
   });
 
   test("blocks late async work and clears a pending port reconnect", async () => {
@@ -179,6 +177,34 @@ describe("popup subscriptions", () => {
     expect(connect).toHaveBeenCalledOnce();
   });
 
+  test("does not let a late tabEnabled write override an active capture button", async () => {
+    const { subscriptions, callbacks, storageChange } = setup();
+    callbacks.isTabCaptured.mockReturnValue(true);
+    storageChange.fire({
+      [STORAGE_KEYS.tabEnabled(12)]: { newValue: false, oldValue: true },
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(callbacks.setEnableButtonClass).not.toHaveBeenCalled();
+    subscriptions.dispose();
+  });
+
+  test("hides the capture error when a removal reports no new value", async () => {
+    const { subscriptions, callbacks, storageChange } = setup();
+    storageChange.fire({
+      [STORAGE_KEYS.tabCaptureError(12)]: {
+        oldValue: "Audio capture failed",
+        newValue: undefined,
+      },
+    });
+    await Promise.resolve();
+    await Promise.resolve();
+
+    expect(callbacks.renderCaptureError).toHaveBeenCalledWith(null);
+    subscriptions.dispose();
+  });
+
   test("pairs spectrum frames with current metadata", () => {
     const { subscriptions, callbacks, port } = setup();
     subscriptions.connectSpectrum(12);
@@ -193,26 +219,30 @@ describe("popup subscriptions", () => {
 
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-42], clipping: false },
     });
-    port.onMessage.fire({ tabId: 13, frameId: 3, payload: meta });
+    port.onMessage.fire({
+      tabId: 13,
+      source: { kind: "content", frameId: 3 },
+      payload: meta,
+    });
     expect(callbacks.onSpectrumFrame).not.toHaveBeenCalled();
 
-    port.onMessage.fire({ tabId: 12, frameId: 3, payload: meta });
+    port.onMessage.fire({ tabId: 12, source: { kind: "content", frameId: 3 }, payload: meta });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-42], clipping: true },
     });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: null, clipping: false },
     });
     port.onMessage.fire({
       tabId: 12,
-      frameId: 3,
+      source: { kind: "content", frameId: 3 },
       payload: { type: "spectrum", buffer: [-30], clipping: false },
     });
 
@@ -220,6 +250,49 @@ describe("popup subscriptions", () => {
     expect(callbacks.onSpectrumFrame.mock.calls).toEqual([
       [[-42], true],
       [null, false],
+    ]);
+    subscriptions.dispose();
+  });
+
+  test("switches between content and capture sources and follows the new metadata", () => {
+    const { subscriptions, callbacks, port } = setup();
+    subscriptions.connectSpectrum(12);
+    const meta = {
+      type: "meta" as const,
+      sampleRate: 48000,
+      fftSize: 2048,
+      minDb: -100,
+      maxDb: -30,
+      frequencyBinCount: 1024,
+    };
+    const captureSource = { kind: "capture" as const };
+
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: meta,
+    });
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: { type: "spectrum", buffer: [-40], clipping: false },
+    });
+    port.onMessage.fire({ tabId: 12, source: captureSource, payload: meta });
+    port.onMessage.fire({
+      tabId: 12,
+      source: { kind: "content", frameId: 1 },
+      payload: { type: "spectrum", buffer: [-10], clipping: false },
+    });
+    port.onMessage.fire({
+      tabId: 12,
+      source: captureSource,
+      payload: { type: "spectrum", buffer: [-20], clipping: false },
+    });
+
+    expect(callbacks.onSpectrumMeta).toHaveBeenCalledTimes(2);
+    expect(callbacks.onSpectrumFrame.mock.calls).toEqual([
+      [[-40], false],
+      [[-20], false],
     ]);
     subscriptions.dispose();
   });

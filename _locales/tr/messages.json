@@ -75,10 +75,7 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Ses akışı yakalanamadı. \"Pencere modunu\" kullanmayı deneyin."
-  },
-  "toolkit_window_already_open": {
-    "message": "Ekolayzer zaten bir pencerede açık"
+    "message": "Ses akışı yakalanamadı. \"Sekme yakalama\" kullanmayı deneyin."
   },
   "support_me": {
     "message": "Beni destekle:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Sesi kapat/aç"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Pencere modunu aç"
   },
   "add_to_autostart_tooltip": {
     "message": "Geçerli siteyi otomatik başlatma listesine ekle"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Home, End, Page Up veya Page Down ile bir bant seçin. Frekans ve kazanç için okları, Q için Shift+Yukarı/Aşağı, sıfırlamak için Enter'ı kullanın."
   },
-  "window_mode_start_error": {
-    "message": "Pencere modu açılamadı. Lütfen tekrar deneyin."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Otomatik ses düzeyi dengeleme"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Sekme sesini yakala"
+  },
+  "tab_capture_mode_label": {
+    "message": "Sekme yakalama"
+  },
+  "tab_capture_start_error": {
+    "message": "Sekme ses yakalama başlatılamadı."
+  },
+  "tab_capture_help": {
+    "message": "Ekolayzer bir sitede çalışmıyorsa bu modu kullanın. Açılır pencere kapandığında ses işleme devam eder."
+  },
+  "tab_capture_stop_error": {
+    "message": "Sekme ses yakalaması durdurulamadı."
   }
 }

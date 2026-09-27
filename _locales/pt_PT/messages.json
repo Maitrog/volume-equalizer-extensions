@@ -75,10 +75,7 @@
     "message": "Tema"
   },
   "capture_error_prefix": {
-    "message": "Não foi possível capturar o fluxo de áudio. Tente usar o \"Modo de janela\"."
-  },
-  "toolkit_window_already_open": {
-    "message": "O equalizador já está aberto numa janela"
+    "message": "Não foi possível capturar o fluxo de áudio. Tente usar a \"Captura de separador\"."
   },
   "support_me": {
     "message": "Apoie-me:"
@@ -88,9 +85,6 @@
   },
   "volume_mute_button_tooltip": {
     "message": "Silenciar/reativar volume"
-  },
-  "window_mode_button_tooltip": {
-    "message": "Abrir modo janela"
   },
   "add_to_autostart_tooltip": {
     "message": "Adicionar o site atual à lista branca de arranque automático"
@@ -263,10 +257,22 @@
   "equalizer_keyboard_help": {
     "message": "Selecione uma banda com Home, End, Page Up ou Page Down. Use as setas para frequência e ganho, Shift+Cima/Baixo para Q e Enter para repor."
   },
-  "window_mode_start_error": {
-    "message": "Não foi possível abrir o modo de Janela. Por favor tente novamente."
-  },
   "enable_volume_compensation_setting_option": {
     "message": "Compensação automática do volume"
+  },
+  "tab_capture_button_tooltip": {
+    "message": "Capturar áudio do separador"
+  },
+  "tab_capture_mode_label": {
+    "message": "Captura de separador"
+  },
+  "tab_capture_start_error": {
+    "message": "Não foi possível iniciar a captura de áudio do separador."
+  },
+  "tab_capture_help": {
+    "message": "Use este modo se o equalizador não funcionar num site. O processamento de áudio continua quando o pop-up é fechado."
+  },
+  "tab_capture_stop_error": {
+    "message": "Não foi possível parar a captura de áudio do separador."
   }
 }

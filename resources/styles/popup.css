@@ -85,27 +85,6 @@ body {
   color: var(--text);
 }
 
-.window-open-notice-body {
-  width: 320px;
-  min-height: 96px;
-  justify-content: center;
-  box-sizing: border-box;
-}
-
-.window-open-notice {
-  width: 100%;
-  padding: 16px;
-  box-sizing: border-box;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--settings-bg);
-  color: var(--text);
-  font-size: 15px;
-  font-weight: 700;
-  text-align: center;
-  box-shadow: 0 2px 8px var(--shadow-soft);
-}
-
 .header {
   justify-content: space-between;
   display: flex;
@@ -150,20 +129,18 @@ body {
 }
 
 .captured-tabs {
-  display: none;
+  display: flex;
+  flex-wrap: wrap;
   width: 100%;
   max-width: 800px;
+  max-height: 96px;
   margin: 0 0 8px;
   padding: 2px 0 6px;
   box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   gap: 6px;
-  scrollbar-width: none;
-}
-
-.toolkit-window-body .captured-tabs {
-  display: flex;
+  scrollbar-width: thin;
 }
 
 .captured-tab {
@@ -597,7 +574,7 @@ button:focus-visible {
 
 .volume-mute,
 .settings-btn,
-.window-mod,
+.tab-capture,
 .change-eq,
 .add-to-autostart-whitelist-btn {
   filter: var(--svg-btn-filter);
@@ -613,7 +590,7 @@ button:focus-visible {
   cursor: pointer;
 }
 
-.window-mod {
+.tab-capture {
   width: 25px;
   cursor: pointer;
 }
@@ -637,11 +614,6 @@ button:focus-visible {
   filter: var(--svg-btn-filter);
   z-index: 2;
   display: var(--info-btn-display);
-}
-
-.toolkit-window-body .window-mod,
-.toolkit-window-body .add-to-autostart-whitelist-btn {
-  display: none;
 }
 
 .volume-mute-active {

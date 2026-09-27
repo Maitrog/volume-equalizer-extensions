@@ -9,7 +9,6 @@ export interface CreateEqualizerCanvasOptions extends EqualizerCanvasRenderOptio
   infoTooltip?: HTMLElement | null;
   saveCurrentFilters: () => Promise<void> | void;
   flushCurrentFilters: () => Promise<void> | void;
-  refreshToolkitCaptureFilters: () => void;
   keyboardStatus: HTMLElement;
 }
 
@@ -38,7 +37,6 @@ export const createEqualizerCanvas = (options: CreateEqualizerCanvasOptions) => 
     draw: resize,
     saveCurrentFilters: options.saveCurrentFilters,
     flushCurrentFilters: options.flushCurrentFilters,
-    refreshToolkitCaptureFilters: options.refreshToolkitCaptureFilters,
     tooltips,
     getDimensions,
     onKeyboardSelection: (target, index) => {

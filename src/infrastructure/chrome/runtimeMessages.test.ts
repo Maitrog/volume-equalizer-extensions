@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { normalizeSpectrumPayload } from "./runtimeMessages";
+import { isSameSpectrumSource, normalizeSpectrumPayload } from "./runtimeMessages";
 
 describe("normalizeSpectrumPayload", () => {
   test("accepts finite metadata with valid analyser dimensions", () => {
@@ -65,5 +65,19 @@ describe("normalizeSpectrumPayload", () => {
     { type: "unknown" },
   ])("rejects invalid external payload %#", (input) => {
     expect(normalizeSpectrumPayload(input)).toBeNull();
+  });
+});
+
+describe("isSameSpectrumSource", () => {
+  test("matches capture sources together and content sources by frame", () => {
+    expect(isSameSpectrumSource({ kind: "capture" }, { kind: "capture" })).toBe(true);
+    expect(
+      isSameSpectrumSource({ kind: "content", frameId: 1 }, { kind: "content", frameId: 1 }),
+    ).toBe(true);
+    expect(
+      isSameSpectrumSource({ kind: "content", frameId: 1 }, { kind: "content", frameId: 2 }),
+    ).toBe(false);
+    expect(isSameSpectrumSource({ kind: "capture" }, { kind: "content", frameId: 1 })).toBe(false);
+    expect(isSameSpectrumSource({ kind: "content", frameId: 1 }, { kind: "capture" })).toBe(false);
   });
 });

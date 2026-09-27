@@ -1,3 +1,4 @@
+import { readStoredGain } from "../../domains/equalizer/persistedGain";
 import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
@@ -12,12 +13,6 @@ interface CaptureSettingsUpdate {
   gainValue: number;
   muted: boolean;
 }
-
-export const readStoredGain = (value: unknown): number => {
-  if (typeof value !== "string" && typeof value !== "number") return 0;
-  const gain = Number(value);
-  return Number.isFinite(gain) ? gain : 0;
-};
 
 export const createTabSettingsController = (deps: {
   localStorage: chrome.storage.StorageArea;
@@ -47,12 +42,14 @@ export const createTabSettingsController = (deps: {
     activeTabId = tabId;
     if (tabId == null) return true;
 
+    const tabEnabledKey = STORAGE_KEYS.tabEnabled(tabId);
     const result = await deps.localStorage.get([
       STORAGE_KEYS.FILTERS,
       STORAGE_KEYS.tabFilters(tabId),
       STORAGE_KEYS.tabGain(tabId),
       STORAGE_KEYS.tabMute(tabId),
       STORAGE_KEYS.tabCaptureError(tabId),
+      tabEnabledKey,
     ]);
     const tabFilters = readPersistedFilters(result[STORAGE_KEYS.tabFilters(tabId)]);
     const defaultFilters = readPersistedFilters(result[STORAGE_KEYS.FILTERS]);
@@ -79,7 +76,9 @@ export const createTabSettingsController = (deps: {
     if (filters) deps.setFilters(filters);
     else deps.initPoints(pointCount as number);
     deps.resize();
-    deps.setEnableButtonClass(capture?.enabled === true);
+    // A captured tab reports the live bypass state; an ordinary tab reports
+    // its stored page-equalizer state.
+    deps.setEnableButtonClass(capture ? capture.enabled : result[tabEnabledKey] === true);
     deps.setMuteButtonClass(muted);
     deps.renderCaptureError(
       typeof result[STORAGE_KEYS.tabCaptureError(tabId)] === "string"
@@ -94,7 +93,7 @@ export const createTabSettingsController = (deps: {
     const readGeneration = ++selectionReadGeneration;
     if (selectionWrites > 0) return;
     const generation = settingsGeneration;
-    const stored = await deps.sessionStorage.get(STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID);
+    const stored = await deps.sessionStorage.get(STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID);
     if (
       selectionWrites > 0 ||
       generation !== settingsGeneration ||
@@ -102,7 +101,7 @@ export const createTabSettingsController = (deps: {
     ) {
       return;
     }
-    const tabId = (stored[STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID] as number | undefined) ?? null;
+    const tabId = (stored[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] as number | undefined) ?? null;
     if (tabId === activeTabId) return;
     if (!(await load(tabId))) return;
     const appliedGeneration = settingsGeneration;
@@ -116,7 +115,7 @@ export const createTabSettingsController = (deps: {
     selectionWrites++;
     const writing = selectionWriteChain.then(() =>
       deps.sessionStorage.set({
-        [STORAGE_KEYS.TOOLKIT_WINDOW_ACTIVE_TAB_ID]: tabId,
+        [STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]: tabId,
       }),
     );
     selectionWriteChain = writing.then(
@@ -141,6 +140,7 @@ export const createTabSettingsController = (deps: {
 
   return {
     getActiveTabId: (): number | null => activeTabId,
+    getSelectionGeneration: (): number => settingsGeneration,
     setActiveTabId: (tabId: number | null): void => {
       if (tabId === activeTabId) return;
       activeTabId = tabId;

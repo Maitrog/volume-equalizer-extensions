@@ -16,12 +16,11 @@ describe("getPendingInstallUpdateNotice", () => {
     },
   };
 
-  it("returns the current install/update notice outside toolkit window mode", () => {
+  it("returns the current install/update notice", () => {
     expect(
       getPendingInstallUpdateNotice({
         stored,
         currentVersion: "1.7.0",
-        isToolkitWindow: false,
       }),
     ).toEqual({
       reason: "update",
@@ -29,22 +28,11 @@ describe("getPendingInstallUpdateNotice", () => {
     });
   });
 
-  it("does not return notices in toolkit window mode", () => {
-    expect(
-      getPendingInstallUpdateNotice({
-        stored,
-        currentVersion: "1.7.0",
-        isToolkitWindow: true,
-      }),
-    ).toBeNull();
-  });
-
   it("does not return stale notices for older versions", () => {
     expect(
       getPendingInstallUpdateNotice({
         stored,
         currentVersion: "1.8.0",
-        isToolkitWindow: false,
       }),
     ).toBeNull();
   });

@@ -1,17 +1,11 @@
 import { dbToGain } from "../../domains/equalizer/equalizerMath";
 import type { EqualizerFilter } from "../../domains/equalizer/types";
-import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import type { EqualizerState } from "../../ui/equalizerCanvas/equalizerEditorState";
 import { clampPointCount } from "../../domains/equalizer/equalizerMath";
 import { type LocalizationService } from "./localizationController";
 import type { ThemeColors } from "../../ui/theme/themeColors";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import {
-  RUNTIME_MESSAGES,
-  type EnableWindowModeResponse,
-} from "../../infrastructure/chrome/runtimeMessages";
 import type { PopupElements } from "../../ui/popup/popupElements";
-import { createToolkitWindowController } from "../window-mode/createToolkitWindowController";
 import { createEqualizerCanvas } from "../../ui/equalizerCanvas/createEqualizerCanvas";
 import { createFilterPersistence } from "./filterPersistence";
 import { createPresetActions } from "./presetActions";
@@ -28,31 +22,10 @@ import { createDonationReminderView } from "../../ui/popup/donationReminderView"
 import { createOnboardingGuideView } from "../../ui/popup/onboardingGuideView";
 import { createPresetsView } from "../../ui/popup/presetsView";
 import { createSettingsView } from "../../ui/popup/settingsView";
+import { createCapturedTabsView } from "../../ui/popup/capturedTabsView";
 import { ensureContentScripts } from "./ensureContentScripts";
+import { createCaptureController } from "./captureController";
 import { attachPopupSubscriptions } from "./popupSubscriptions";
-
-export const requestWindowMode = async (tabId: number, showError: () => void): Promise<void> => {
-  let response: EnableWindowModeResponse;
-  try {
-    response = (await chrome.runtime.sendMessage({
-      method: RUNTIME_MESSAGES.ENABLE_WINDOW_MODE,
-      tabId,
-    })) as EnableWindowModeResponse;
-  } catch (error) {
-    console.error("Failed to enable window mode", { tabId, error });
-    showError();
-    return;
-  }
-
-  if (response?.ok === true) {
-    window.close();
-    return;
-  }
-
-  const error = response?.ok === false ? response.error : "Invalid window mode response";
-  console.error("Failed to enable window mode", { tabId, error });
-  showError();
-};
 
 export interface PopupAppDependencies {
   elements: PopupElements;
@@ -84,6 +57,8 @@ export const createPopupApp = ({
   let controlsView: ReturnType<typeof createControlsView> | undefined = undefined;
   let presetsView: ReturnType<typeof createPresetsView> | undefined = undefined;
   let settingsView: ReturnType<typeof createSettingsView> | undefined = undefined;
+  let capturedTabsView: ReturnType<typeof createCapturedTabsView> | undefined = undefined;
+  let subscriptions: ReturnType<typeof attachPopupSubscriptions> | undefined = undefined;
   let disposed = false;
   const settingsActions = createSettingsActions();
 
@@ -93,13 +68,14 @@ export const createPopupApp = ({
       [STORAGE_KEYS.tabFilters(tabId)]: filters,
       [STORAGE_KEYS.FILTERS]: filters,
     };
-    if (!toolkitController.isToolkitWindow) {
+    if (!captureController.isTabCaptured(tabId)) {
       values[STORAGE_KEYS.tabEnabled(tabId)] = true;
     }
     await chrome.storage.local.set(values);
   });
 
   const getPointCount = settingsActions.loadPointCount;
+  const getSelectedTabId = (): number | null => captureController.getSelectedTabId();
 
   const equalizerCanvas = createEqualizerCanvas({
     canvas: elements.eqCanvas,
@@ -110,11 +86,10 @@ export const createPopupApp = ({
     infoTooltip: elements.infoTooltip,
     keyboardStatus: elements.equalizerKeyboardStatus,
     saveCurrentFilters: () => {
-      const tabId = toolkitController.getResolvedTabId();
+      const tabId = getSelectedTabId();
       if (tabId != null) filterPersistence.schedule(tabId, getCurrentFilters());
     },
     flushCurrentFilters: () => filterPersistence.flush(),
-    refreshToolkitCaptureFilters: () => toolkitController.refreshCaptureFilters(),
   });
 
   const spectrumRenderer = createSpectrumRenderer({
@@ -158,34 +133,37 @@ export const createPopupApp = ({
     elements.captureError.style.display = "block";
   };
 
-  const toolkitController = createToolkitWindowController({
-    body: document.body,
-    capturedTabs: elements.capturedTabs,
-    audioContext,
+  const renderTabCaptureError = (): void => {
+    elements.captureError.textContent = localization.getMessage("tab_capture_start_error");
+    elements.captureError.style.display = "block";
+  };
+
+  const renderTabCaptureStopError = (): void => {
+    elements.captureError.textContent = localization.getMessage("tab_capture_stop_error");
+    elements.captureError.style.display = "block";
+  };
+
+  const captureController = createCaptureController({
     getPointCount,
-    getFilters: getCurrentFilters,
     setFilters: setCurrentFilters,
     initPoints,
     resize,
+    setGainValue,
     setEnableButtonClass: (enabled) => controlsView?.setEnableButtonClass(enabled),
     setMuteButtonClass: (muted) => controlsView?.setMuteButtonClass(muted),
     renderCaptureError,
-    getGainValue: () => Number(elements.masterVolume.value),
-    setGainValue,
-    isMuted: () => elements.volumeMuteButton.className === "volume-mute-active",
-    getMessage: localization.getMessage,
-    onSpectrumMeta: (meta) => spectrumRenderer.setMeta(meta),
-    onSpectrumFrame: (buffer, clipping) => {
-      spectrumRenderer.scheduleDraw(buffer);
-      if (buffer === null) controlsView?.resetClipping();
-      else controlsView?.setClipping(clipping === true);
+    renderTabCaptureError,
+    renderTabCaptureStopError,
+    onSpectrumTabChange: (tabId) => {
+      if (tabId != null) subscriptions?.connectSpectrum(tabId);
     },
+    renderCapturedTabs: () => capturedTabsView?.render() ?? Promise.resolve(),
   });
 
-  const getCurrentTabId = (): Promise<number | null> => {
-    return toolkitController.getCurrentTabId();
-  };
-  const presetActions = createPresetActions({ getCurrentTabId, getCurrentFilters });
+  const presetActions = createPresetActions({
+    getCurrentTabId: async () => getSelectedTabId(),
+    getCurrentFilters,
+  });
   const autostartActions = createAutostartActions({
     getActiveTab: async () => {
       const [tab] = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
@@ -198,7 +176,7 @@ export const createPopupApp = ({
   ): Promise<void> => {
     await filterPersistence.flush();
     const enableCurrentTab = options.enableCurrentTab ?? true;
-    const tabId = await getCurrentTabId();
+    const tabId = getSelectedTabId();
     if (tabId == null) return;
 
     const newFilters = getCurrentFilters();
@@ -206,7 +184,7 @@ export const createPopupApp = ({
       [STORAGE_KEYS.tabFilters(tabId)]: newFilters,
       [STORAGE_KEYS.FILTERS]: newFilters,
     };
-    if (!toolkitController.isToolkitWindow && enableCurrentTab) {
+    if (!captureController.isTabCaptured(tabId) && enableCurrentTab) {
       values[STORAGE_KEYS.tabEnabled(tabId)] = true;
     }
     await chrome.storage.local.set(values);
@@ -214,14 +192,14 @@ export const createPopupApp = ({
 
   const saveLoadedFilters = async (filters: EqualizerFilter[]): Promise<void> => {
     await filterPersistence.flush();
-    const tabId = await getCurrentTabId();
+    const tabId = getSelectedTabId();
     if (tabId == null) return;
 
     const values: Record<string, unknown> = {
       [STORAGE_KEYS.tabFilters(tabId)]: filters,
       [STORAGE_KEYS.FILTERS]: filters,
     };
-    if (!toolkitController.isToolkitWindow) {
+    if (!captureController.isTabCaptured(tabId)) {
       values[STORAGE_KEYS.tabEnabled(tabId)] = true;
     }
     await chrome.storage.local.set(values);
@@ -241,13 +219,13 @@ export const createPopupApp = ({
   };
 
   const onToggleEqualizer = async (targetTabId?: number): Promise<void> => {
-    if (toolkitController.isToolkitWindow) {
-      toolkitController.toggleEqualizer(targetTabId);
+    const tabId = targetTabId ?? getSelectedTabId();
+    if (tabId == null) return;
+
+    if (captureController.isTabCaptured(tabId)) {
+      await captureController.toggleCaptureEnabled(tabId);
       return;
     }
-
-    const tabId = await getCurrentTabId();
-    if (tabId == null) return;
 
     const enabledKey = STORAGE_KEYS.tabEnabled(tabId);
     const result = await chrome.storage.local.get([enabledKey]);
@@ -262,9 +240,8 @@ export const createPopupApp = ({
     setGainValue(0);
     initPoints(await getPointCount());
     resize();
-    toolkitController.refreshCaptureFilters();
 
-    const tabId = await getCurrentTabId();
+    const tabId = getSelectedTabId();
     if (tabId == null) return;
 
     await chrome.storage.local.set({
@@ -275,46 +252,36 @@ export const createPopupApp = ({
   };
 
   const onVolumeInput = async (value: number): Promise<void> => {
-    toolkitController.applyCaptureSettings();
-    const tabId = await getCurrentTabId();
+    const tabId = getSelectedTabId();
     if (tabId == null) return;
 
     const values: Record<string, unknown> = {
       [STORAGE_KEYS.tabVolume(tabId)]: dbToGain(value),
       [STORAGE_KEYS.tabGain(tabId)]: elements.masterVolume.value,
     };
-    if (!toolkitController.isToolkitWindow) {
+    if (!captureController.isTabCaptured(tabId)) {
       values[STORAGE_KEYS.tabEnabled(tabId)] = true;
     }
     await chrome.storage.local.set(values);
   };
 
   const onToggleMute = async (targetTabId?: number): Promise<void> => {
-    const tabId = targetTabId ?? (await getCurrentTabId());
+    const tabId = targetTabId ?? getSelectedTabId();
     if (tabId == null) return;
 
-    if (!toolkitController.isToolkitWindow) {
+    if (!captureController.isTabCaptured(tabId)) {
       await chrome.storage.local.set({ [STORAGE_KEYS.tabEnabled(tabId)]: true });
     }
 
     const result = await chrome.storage.local.get([STORAGE_KEYS.tabMute(tabId)]);
     const muted = !result[STORAGE_KEYS.tabMute(tabId)];
-    if (toolkitController.isToolkitWindow) {
-      toolkitController.setCaptureMuted(tabId, muted);
-    }
     await chrome.storage.local.set({
       [STORAGE_KEYS.tabMute(tabId)]: muted,
     });
   };
 
-  const onWindowMode = async (): Promise<void> => {
-    const tabId = await getCurrentTabId();
-    if (tabId == null) return;
-
-    await requestWindowMode(tabId, () => {
-      elements.captureError.textContent = localization.getMessage("window_mode_start_error");
-      elements.captureError.style.display = "block";
-    });
+  const onTabCapture = async (): Promise<void> => {
+    await captureController.startCapture();
   };
 
   controlsView = createControlsView({
@@ -324,14 +291,13 @@ export const createPopupApp = ({
     masterVolumeValue: elements.masterVolumeValue,
     clippingIndicator: elements.clippingIndicator,
     volumeMuteButton: elements.volumeMuteButton,
-    windowModeButton: elements.windowModeButton,
+    tabCaptureButton: elements.tabCaptureButton,
     getMessage: localization.getMessage,
     onToggleEqualizer,
     onReset,
     onVolumeInput,
     onToggleMute,
-    onWindowMode,
-    onMuteStateApplied: () => toolkitController.applyCaptureSettings(),
+    onTabCapture,
   });
 
   presetsView = createPresetsView({
@@ -353,7 +319,6 @@ export const createPopupApp = ({
     setCurrentFilters,
     saveLoadedFilters,
     redraw: resize,
-    refreshToolkitCaptureFilters: () => toolkitController.refreshCaptureFilters(),
   });
 
   const autostartView = createAutostartView({
@@ -372,7 +337,6 @@ export const createPopupApp = ({
     settingsAddPreset: elements.autostartSettingsAddPreset,
     settingsAddButton: elements.autostartSettingsAddButton,
     settingsError: elements.autostartSettingsError,
-    isToolkitWindow: toolkitController.isToolkitWindow,
     getMessage: localization.getMessage,
     getActiveTab: autostartActions.getActiveTab,
     loadRules: autostartActions.load,
@@ -417,7 +381,6 @@ export const createPopupApp = ({
     addPresetToDropdown: presetsView.addPresetToDropdown,
     initPoints,
     redraw: resize,
-    refreshToolkitCaptureFilters: () => toolkitController.refreshCaptureFilters(),
     saveCurrentFilters,
     refreshDynamicContent,
   });
@@ -446,7 +409,7 @@ export const createPopupApp = ({
       changeEq: elements.changeEqButton,
       settings: elements.settingsButton,
       autostart: elements.addToAutostartWhitelistButton,
-      windowMode: elements.windowModeButton,
+      tabCapture: elements.tabCaptureButton,
       equalizer: elements.equalizerCurveContainer,
       volume: elements.volumeControlCard,
       presets: elements.presetControlsCard,
@@ -466,30 +429,35 @@ export const createPopupApp = ({
     onComplete: () => chrome.storage.local.remove(STORAGE_KEYS.INSTALL_UPDATE_NOTICE),
   });
 
+  capturedTabsView = createCapturedTabsView({
+    root: elements.capturedTabs,
+    getSelectedTabId,
+    getMessage: localization.getMessage,
+    onSelectTab: (tabId) => captureController.selectTab(tabId),
+    onStopCapture: (tabId) => captureController.stopCapture(tabId),
+  });
+
   const dispose = (): void => {
     if (disposed) return;
     disposed = true;
-    subscriptions.dispose();
+    subscriptions?.dispose();
     equalizerCanvas.cleanup();
     void filterPersistence.dispose().catch((error: unknown) => {
       console.error("Failed to dispose filter persistence", { error });
     });
-    toolkitController.stopTabCapture();
   };
-  const subscriptions = attachPopupSubscriptions({
-    isToolkitWindow: toolkitController.isToolkitWindow,
-    handleToolkitStorageChange: toolkitController.handleStorageChange,
+
+  subscriptions = attachPopupSubscriptions({
+    handleToolkitStorageChange: captureController.handleStorageChange,
     renderAutostartWhitelist: autostartView.renderWhitelist,
     refreshAutostartPresetSelects: autostartView.refreshPresetSelects,
     refreshPresetDropdown,
-    getCurrentTabId,
+    getCurrentTabId: async () => getSelectedTabId(),
+    isTabCaptured: captureController.isTabCaptured,
     setEnableButtonClass: controlsView.setEnableButtonClass,
     setMuteButtonClass: controlsView.setMuteButtonClass,
     renderCaptureError,
-    refreshCaptureFilters: () => toolkitController.refreshCaptureFilters(),
     getShortcutSettings: settingsView.getShortcutSettings,
-    hasCapture: toolkitController.hasCapture,
-    selectTab: toolkitController.selectTab,
     toggleMute: onToggleMute,
     toggleEqualizer: onToggleEqualizer,
     onSpectrumMeta: (meta) => spectrumRenderer.setMeta(meta),
@@ -517,94 +485,41 @@ export const createPopupApp = ({
     ]);
     if (disposed) return;
 
-    const tabId = await getCurrentTabId();
+    await captureController.init();
     if (disposed) return;
-    const showWindowNotice = await toolkitController.shouldShowToolkitWindowNotice(tabId);
-    if (disposed) return;
-    if (showWindowNotice) {
-      toolkitController.showToolkitWindowNotice();
-      return;
-    }
 
-    if (!toolkitController.isToolkitWindow && tabId != null) {
+    const tabId = getSelectedTabId();
+    if (tabId == null) {
+      initPoints(loadedSettings.pointCount);
+      resize();
+    } else {
       await ensureContentScripts(tabId);
       if (disposed) return;
-      subscriptions.connectSpectrum(tabId);
+      subscriptions?.connectSpectrum(tabId);
+      if (!equalizerState.hasCrossoverFilters(getCurrentFilters())) {
+        await saveCurrentFilters({ enableCurrentTab: false });
+        if (disposed) return;
+      }
     }
 
     resize();
-    const savedPointCount = loadedSettings.pointCount;
-
-    if (tabId == null) {
-      initPoints(savedPointCount);
-      resize();
-      return;
-    }
-
-    const result = await chrome.storage.local.get([
-      STORAGE_KEYS.FILTERS,
-      STORAGE_KEYS.tabFilters(tabId),
-      STORAGE_KEYS.tabGain(tabId),
-      STORAGE_KEYS.tabEnabled(tabId),
-      STORAGE_KEYS.tabMute(tabId),
-      STORAGE_KEYS.tabCaptureError(tabId),
-    ]);
-    if (disposed) return;
-
-    const tabFilters = readPersistedFilters(result[STORAGE_KEYS.tabFilters(tabId)]);
-    const defaultFilters = readPersistedFilters(result[STORAGE_KEYS.FILTERS]);
-    const loadedFilters = tabFilters?.length
-      ? tabFilters
-      : defaultFilters?.length
-        ? defaultFilters
-        : null;
-
-    if (loadedFilters) {
-      setCurrentFilters(loadedFilters);
-    } else {
-      initPoints(savedPointCount);
-    }
-
-    if (!loadedFilters || !equalizerState.hasCrossoverFilters(loadedFilters)) {
-      await saveCurrentFilters({ enableCurrentTab: false });
-      if (disposed) return;
-    }
-
-    const gain = result[STORAGE_KEYS.tabGain(tabId)];
-    if (typeof gain === "string" || typeof gain === "number") {
-      setGainValue(Number(gain));
-    }
-
-    resize();
-    controlsView.setEnableButtonClass(result[STORAGE_KEYS.tabEnabled(tabId)] === true);
-    controlsView.setMuteButtonClass(result[STORAGE_KEYS.tabMute(tabId)] === true);
-
     await refreshPresetDropdown();
     if (disposed) return;
-
-    renderCaptureError(
-      typeof result[STORAGE_KEYS.tabCaptureError(tabId)] === "string"
-        ? (result[STORAGE_KEYS.tabCaptureError(tabId)] as string)
-        : null,
-    );
+    await captureController.syncSnapshot();
+    if (disposed) return;
 
     const pendingNotice = getPendingInstallUpdateNotice({
       stored,
       currentVersion: chrome.runtime.getManifest().version,
-      isToolkitWindow: toolkitController.isToolkitWindow,
     });
     if (pendingNotice?.reason === "install") {
       await onboardingGuideView.start();
       if (disposed) return;
     } else if (pendingNotice?.reason === "update") {
       installUpdateNoticeView.showInstallUpdateNotice(pendingNotice);
-    } else if (!toolkitController.isToolkitWindow) {
+    } else {
       donationReminderView.showDonationReminder(stored[STORAGE_KEYS.DONATION_REMINDER_AT]);
     }
-    if (disposed) return;
-    await toolkitController.startTabCapture();
-    if (disposed) return;
-    await toolkitController.renderCapturedTabs();
   };
 
   return {

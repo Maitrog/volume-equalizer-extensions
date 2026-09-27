@@ -88,16 +88,8 @@ export const createCaptureSession = (deps: {
 
   return {
     captures,
-    sync: async (streamIds: Record<string, string>): Promise<void> => {
-      if (stopped) return;
-      const desiredTabs = new Set(Object.keys(streamIds));
-      [...captures.keys(), ...pending.keys()].forEach((tabId) => {
-        if (!desiredTabs.has(tabId)) stopTab(tabId);
-      });
-      await Promise.all(
-        Object.entries(streamIds).map(([tabId, streamId]) => ensureCapture(tabId, streamId)),
-      );
-    },
+    start: (tabId: number, streamId: string): Promise<void> =>
+      ensureCapture(String(tabId), streamId),
     get: (tabId: number | string): CaptureSessionEntry | undefined => captures.get(String(tabId)),
     has: (tabId: number | string): boolean => captures.has(String(tabId)),
     stopTab,

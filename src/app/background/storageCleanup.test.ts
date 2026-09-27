@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { clearTabStorage, clearUnusedStorage, parseTabStorageKey } from "./storageCleanup";
+import {
+  clearLegacyToolkitWindowState,
+  clearTabStorage,
+  clearUnusedStorage,
+  parseTabStorageKey,
+} from "./storageCleanup";
 
 describe("clearUnusedStorage", () => {
   beforeEach(() => {
@@ -105,6 +110,26 @@ describe("clearTabStorage", () => {
       "pan.7",
       "captureError.7",
       "spectrum.7",
+    ]);
+  });
+});
+
+describe("clearLegacyToolkitWindowState", () => {
+  test("removes the four legacy session keys without touching other storage", async () => {
+    const remove = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal("chrome", {
+      storage: {
+        session: { remove },
+      },
+    });
+
+    await clearLegacyToolkitWindowState();
+
+    expect(remove).toHaveBeenCalledWith([
+      "toolkitWindowId",
+      "toolkitWindowTabIds",
+      "toolkitWindowActiveTabId",
+      "toolkitWindowCaptureStreamIds",
     ]);
   });
 });
