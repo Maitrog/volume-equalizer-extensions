@@ -426,16 +426,27 @@
             <li>
               Reworked tab capture
               <ul>
-                <li>Removed the window mode, tab capture is now managed directly from the popup but you still need to click on the button</li>
-                <li>Audio is now processed in the offscreen, so capture keeps working after closing the popup</li>
+                <li>
+                  Removed the window mode, tab capture is now managed directly from the popup but
+                  you still need to click on the button
+                </li>
+                <li>
+                  Audio is now processed in the offscreen, so capture keeps working after closing
+                  the popup
+                </li>
               </ul>
             </li>
           </ul>
-          You may think that the new capture mode more convenient than the default one, but the new capture mode can't handle auto start rules. That's why the new mode can't be used as default.
+          You may think that the new capture mode more convenient than the default one, but the new
+          capture mode can't handle auto start rules. That's why the new mode can't be used as
+          default.
           <ul>
             <li>Spectrum visualization is now enabled by default</li>
             <li>Automatic volume compensation is now disabled by default</li>
-            <li>Improved recovery of the page equalizer after capture interruptions (e.g. service worker or offscreen restarts)</li>
+            <li>
+              Improved recovery of the page equalizer after capture interruptions (e.g. service
+              worker or offscreen restarts)
+            </li>
             <li>Fixed the capture error message remaining after a successful start</li>
             <li>Fixed spectrum not switching when changing the selected captured tab</li>
             <li>Fixed incorrect equalizer state shown in the popup during capture</li>
