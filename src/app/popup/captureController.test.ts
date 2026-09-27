@@ -254,6 +254,7 @@ describe("capture controller commands", () => {
     });
     await controller.init();
     await controller.selectTab(20);
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
 
     sendMessage.mockImplementation((message) => {
       if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
@@ -267,6 +268,7 @@ describe("capture controller commands", () => {
     expect(controller.isTabCaptured(20)).toBe(false);
     expect(controller.isTabCaptured(21)).toBe(true);
     expect(controller.getSelectedTabId()).toBe(12);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(12);
     expect(effects.renderCapturedTabs).toHaveBeenCalled();
 
     storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID] = 21;
@@ -275,6 +277,68 @@ describe("capture controller commands", () => {
     });
 
     expect(controller.getSelectedTabId()).toBe(12);
+  });
+
+  test("moves spectrum to the browser tab when a selected capture ends externally", async () => {
+    const { controller, effects, sendMessage } = setup({
+      browserTabId: 12,
+      capturedTabs: [{ id: 20, enabled: true }],
+    });
+    await controller.init();
+    await controller.selectTab(20);
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [], activeTabId: null });
+      }
+      return Promise.resolve({ ok: true, captures: [] });
+    });
+
+    await controller.handleStorageChange({
+      [STORAGE_KEYS.CAPTURE_TAB_IDS]: { oldValue: [{ tabId: 20 }], newValue: [] },
+    });
+
+    expect(controller.getSelectedTabId()).toBe(12);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(12);
+    expect(
+      sendMessage.mock.calls.filter(([m]) => m.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE),
+    ).toHaveLength(0);
+  });
+
+  test("does not move spectrum for a superseded fallback load", async () => {
+    const { controller, effects, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [
+        { id: 20, enabled: true },
+        { id: 21, enabled: true },
+      ],
+    });
+    await controller.init();
+    await controller.selectTab(20);
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
+
+    const staleRead = deferred<Record<string, unknown>>();
+    storage.local.get.mockImplementation((keys) => {
+      const requested = Array.isArray(keys) ? keys : [keys];
+      if (requested.includes(STORAGE_KEYS.tabFilters(12))) return staleRead.promise;
+      return Promise.resolve(
+        Object.fromEntries(requested.map((key) => [key, storage.localValues[key]])),
+      );
+    });
+
+    const fallback = controller.stopCapture(20);
+    await vi.waitFor(() => {
+      expect(storage.local.get).toHaveBeenCalledWith(
+        expect.arrayContaining([STORAGE_KEYS.tabFilters(12)]),
+      );
+    });
+    await controller.selectTab(21);
+    staleRead.resolve({});
+    await fallback;
+
+    expect(controller.getSelectedTabId()).toBe(21);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(21);
   });
 
   test("keeps the browser tab selected after a late active-capture removal", async () => {

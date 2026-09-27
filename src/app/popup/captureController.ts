@@ -139,7 +139,7 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
 
   const selectCurrentBrowserTab = async (): Promise<void> => {
     const browserTabId = await queryActiveBrowserTabId();
-    await settings.load(browserTabId);
+    if (await settings.load(browserTabId)) deps.onSpectrumTabChange(browserTabId);
   };
 
   const init = async (): Promise<CapturedTabsSnapshot> => {
