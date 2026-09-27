@@ -138,7 +138,10 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
   const getSelectedTabId = (): number | null => settings.getActiveTabId();
 
   const selectCurrentBrowserTab = async (): Promise<void> => {
+    const generation = settings.getSelectionGeneration();
     const browserTabId = await queryActiveBrowserTabId();
+    // A newer selection made while the query was pending wins; drop the stale fallback.
+    if (generation !== settings.getSelectionGeneration()) return;
     if (await settings.load(browserTabId)) deps.onSpectrumTabChange(browserTabId);
   };
 

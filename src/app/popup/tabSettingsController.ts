@@ -140,6 +140,7 @@ export const createTabSettingsController = (deps: {
 
   return {
     getActiveTabId: (): number | null => activeTabId,
+    getSelectionGeneration: (): number => settingsGeneration,
     setActiveTabId: (tabId: number | null): void => {
       if (tabId === activeTabId) return;
       activeTabId = tabId;

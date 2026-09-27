@@ -496,6 +496,137 @@ describe("capture controller commands", () => {
     expect(effects.setEnableButtonClass).toHaveBeenLastCalledWith(false);
   });
 
+  test("keeps a newer selection while the fallback tab query is pending", async () => {
+    const { controller, effects, sendMessage, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [
+        { id: 20, enabled: true },
+        { id: 21, enabled: true },
+      ],
+    });
+    await controller.init();
+    await controller.selectTab(20);
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [{ id: 21, enabled: true }], activeTabId: 21 });
+      }
+      return Promise.resolve({ ok: true, captures: [] });
+    });
+
+    const tabQuery = deferred<chrome.tabs.Tab[]>();
+    const queryStarted = deferred<void>();
+    vi.mocked(chrome.tabs.query).mockImplementationOnce(() => {
+      queryStarted.resolve();
+      return tabQuery.promise;
+    });
+
+    const stopping = controller.stopCapture(20);
+    await queryStarted.promise;
+    await controller.selectTab(21);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(21);
+    vi.mocked(storage.local.get).mockClear();
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
+
+    tabQuery.resolve([{ id: 12 } as chrome.tabs.Tab]);
+    await stopping;
+
+    expect(controller.getSelectedTabId()).toBe(21);
+    expect(controller.isTabCaptured(21)).toBe(true);
+    expect(storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(21);
+    expect(storage.local.get).not.toHaveBeenCalled();
+    expect(effects.onSpectrumTabChange).not.toHaveBeenCalled();
+  });
+
+  test("ignores an empty stale fallback query", async () => {
+    const { controller, effects, sendMessage, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [
+        { id: 20, enabled: true },
+        { id: 21, enabled: true },
+      ],
+    });
+    await controller.init();
+    await controller.selectTab(20);
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [{ id: 21, enabled: true }], activeTabId: 21 });
+      }
+      return Promise.resolve({ ok: true, captures: [] });
+    });
+
+    const tabQuery = deferred<chrome.tabs.Tab[]>();
+    const queryStarted = deferred<void>();
+    vi.mocked(chrome.tabs.query).mockImplementationOnce(() => {
+      queryStarted.resolve();
+      return tabQuery.promise;
+    });
+
+    const stopping = controller.stopCapture(20);
+    await queryStarted.promise;
+    await controller.selectTab(21);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(21);
+    vi.mocked(storage.local.get).mockClear();
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
+
+    tabQuery.resolve([]);
+    await stopping;
+
+    expect(controller.getSelectedTabId()).toBe(21);
+    expect(controller.isTabCaptured(21)).toBe(true);
+    expect(storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(21);
+    expect(storage.local.get).not.toHaveBeenCalled();
+    expect(effects.onSpectrumTabChange).not.toHaveBeenCalled();
+  });
+
+  test("keeps a newer selection during external capture end fallback", async () => {
+    const { controller, effects, sendMessage, storage } = setup({
+      browserTabId: 12,
+      capturedTabs: [
+        { id: 20, enabled: true },
+        { id: 21, enabled: true },
+      ],
+    });
+    await controller.init();
+    await controller.selectTab(20);
+
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.GET_CAPTURED_TABS) {
+        return Promise.resolve({ tabs: [{ id: 21, enabled: true }], activeTabId: 21 });
+      }
+      return Promise.resolve({ ok: true, captures: [] });
+    });
+
+    const tabQuery = deferred<chrome.tabs.Tab[]>();
+    const queryStarted = deferred<void>();
+    vi.mocked(chrome.tabs.query).mockImplementationOnce(() => {
+      queryStarted.resolve();
+      return tabQuery.promise;
+    });
+
+    const externalEnd = controller.handleStorageChange({
+      [STORAGE_KEYS.CAPTURE_TAB_IDS]: { oldValue: [{ tabId: 20 }], newValue: [] },
+    });
+    await queryStarted.promise;
+    await controller.selectTab(21);
+    expect(effects.onSpectrumTabChange).toHaveBeenLastCalledWith(21);
+    vi.mocked(storage.local.get).mockClear();
+    vi.mocked(effects.onSpectrumTabChange).mockClear();
+
+    tabQuery.resolve([{ id: 12 } as chrome.tabs.Tab]);
+    await externalEnd;
+
+    expect(controller.getSelectedTabId()).toBe(21);
+    expect(controller.isTabCaptured(21)).toBe(true);
+    expect(storage.sessionValues[STORAGE_KEYS.CAPTURE_ACTIVE_TAB_ID]).toBe(21);
+    expect(storage.local.get).not.toHaveBeenCalled();
+    expect(effects.onSpectrumTabChange).not.toHaveBeenCalled();
+    expect(
+      sendMessage.mock.calls.filter(([m]) => m.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE),
+    ).toHaveLength(0);
+  });
+
   test("re-renders captured tabs when capture storage changes", async () => {
     const { controller, effects } = setup({ browserTabId: 12 });
     await controller.init();
