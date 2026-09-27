@@ -170,8 +170,14 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
         return reply;
       }
 
+      const capture = reply.captures.find((entry) => entry.tabId === tabId);
+      if (!capture) {
+        deps.renderTabCaptureError();
+        return { ok: false, error: "capture-start-missing-target" };
+      }
+
       deps.renderCaptureError(null);
-      captureEnabled.set(tabId, true);
+      captureEnabled.set(tabId, capture.settings.enabled);
       await settings.select(tabId);
       await deps.renderCapturedTabs();
       return { ok: true, captures: reply.captures };

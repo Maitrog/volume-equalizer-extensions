@@ -62,6 +62,14 @@ const createEffects = (): CaptureControllerDependencies => ({
   renderCapturedTabs: vi.fn(() => Promise.resolve()),
 });
 
+const captureSettings = (enabled: boolean) => ({
+  enabled,
+  gainValue: 0,
+  muted: false,
+  volumeCompensationEnabled: false,
+  filterSettings: [],
+});
+
 const setup = (
   options: {
     browserTabId?: number;
@@ -81,7 +89,10 @@ const setup = (
         });
       }
       if (message.method === RUNTIME_MESSAGES.START_TAB_CAPTURE) {
-        return Promise.resolve({ ok: true, captures: [] });
+        return Promise.resolve({
+          ok: true,
+          captures: [{ tabId: browserTabId, settings: captureSettings(true) }],
+        });
       }
       if (message.method === RUNTIME_MESSAGES.STOP_TAB_CAPTURE) {
         return Promise.resolve({ ok: true, captures: [] });
@@ -110,14 +121,13 @@ afterEach(() => {
 
 describe("requestTabCapture", () => {
   test("sends a capture request without closing the popup", async () => {
-    const sendMessage = vi.fn().mockResolvedValue({ ok: true, captures: [] });
+    const reply = { ok: true, captures: [{ tabId: 12, settings: captureSettings(true) }] };
+    const sendMessage = vi.fn().mockResolvedValue(reply);
     const close = vi.fn();
     vi.stubGlobal("chrome", { runtime: { sendMessage } });
     vi.stubGlobal("window", { close });
 
-    const reply = await requestTabCapture(12);
-
-    expect(reply).toEqual({ ok: true, captures: [] });
+    await expect(requestTabCapture(12)).resolves.toEqual(reply);
     expect(sendMessage).toHaveBeenCalledWith({
       method: RUNTIME_MESSAGES.START_TAB_CAPTURE,
       tabId: 12,
@@ -203,11 +213,59 @@ describe("capture controller commands", () => {
       ).toHaveLength(1);
     });
 
-    start.resolve({ ok: true, captures: [] });
-    await expect(first).resolves.toEqual({ ok: true, captures: [] });
+    start.resolve({
+      ok: true,
+      captures: [{ tabId: 12, settings: captureSettings(true) }],
+    });
+    await expect(first).resolves.toEqual({
+      ok: true,
+      captures: [{ tabId: 12, settings: captureSettings(true) }],
+    });
     expect(controller.getSelectedTabId()).toBe(12);
     expect(controller.isTabCaptured(12)).toBe(true);
     expect(effects.renderTabCaptureError).not.toHaveBeenCalled();
+  });
+
+  test("preserves bypass when starting an already captured tab", async () => {
+    const { controller, effects, sendMessage } = setup({
+      browserTabId: 12,
+      capturedTabs: [{ id: 12, enabled: false }],
+    });
+    await controller.init();
+    sendMessage.mockImplementation((message) => {
+      if (message.method === RUNTIME_MESSAGES.START_TAB_CAPTURE) {
+        return Promise.resolve({
+          ok: true,
+          captures: [
+            { tabId: 21, settings: captureSettings(true) },
+            { tabId: 12, settings: captureSettings(false) },
+          ],
+        });
+      }
+      return Promise.resolve({ ok: true });
+    });
+
+    await controller.startCapture();
+
+    expect(effects.setEnableButtonClass).toHaveBeenLastCalledWith(false);
+    await controller.toggleCaptureEnabled(12);
+    expect(effects.setEnableButtonClass).toHaveBeenLastCalledWith(true);
+  });
+
+  test("rejects a successful start reply without the requested capture", async () => {
+    const { controller, effects, sendMessage } = setup({ browserTabId: 12 });
+    await controller.init();
+    sendMessage.mockImplementation((message) =>
+      message.method === RUNTIME_MESSAGES.START_TAB_CAPTURE
+        ? Promise.resolve({ ok: true, captures: [] })
+        : Promise.resolve({ ok: true }),
+    );
+
+    const reply = await controller.startCapture();
+
+    expect(reply.ok).toBe(false);
+    expect(effects.renderTabCaptureError).toHaveBeenCalled();
+    expect(controller.isTabCaptured(12)).toBe(false);
   });
 
   test("shows a localized start error and keeps controls available on failure", async () => {

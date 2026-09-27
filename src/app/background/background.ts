@@ -133,7 +133,8 @@ const startCapture = async (tabId: number | undefined): Promise<CaptureReply> =>
   if (!reply.ok && isTabId(tabId)) {
     captureBadgeTabs.delete(tabId);
   } else if (reply.ok && isTabId(tabId)) {
-    setTabBadge(tabId, true);
+    const capture = reply.captures.find((entry) => entry.tabId === tabId);
+    if (capture) setTabBadge(tabId, capture.settings.enabled);
     resetSpectrumSources(tabId);
   }
   return reply;

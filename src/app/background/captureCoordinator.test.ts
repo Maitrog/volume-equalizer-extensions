@@ -171,6 +171,21 @@ describe("captureCoordinator", () => {
     );
   });
 
+  test("reports the live bypass state when starting an already captured tab", async () => {
+    const harness = createHarness();
+    const coordinator = createCaptureCoordinator();
+
+    await coordinator.startCapture(12);
+    await coordinator.toggleCaptureEnabled(12);
+    const reply = await coordinator.startCapture(12);
+
+    expect(reply.ok).toBe(true);
+    if (reply.ok) {
+      expect(reply.captures.find((capture) => capture.tabId === 12)?.settings.enabled).toBe(false);
+    }
+    expect(harness.getMediaStreamId).toHaveBeenCalledTimes(1);
+  });
+
   test("orders document, stream id and handoff before reporting success", async () => {
     const harness = createHarness();
     const coordinator = createCaptureCoordinator();

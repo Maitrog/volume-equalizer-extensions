@@ -73,6 +73,14 @@ vi.mock("./storageCleanup", () => ({
   clearTabStorage: mocks.clearTabStorage,
   clearUnusedStorage: mocks.clearUnusedStorage,
 }));
+const captureSettings = (enabled: boolean) => ({
+  enabled,
+  gainValue: 0,
+  muted: false,
+  volumeCompensationEnabled: false,
+  filterSettings: [],
+});
+
 const createChromeMock = (getTab: ReturnType<typeof vi.fn>) => {
   const onActivated = vi.fn();
   const onStorageChanged = vi.fn();
@@ -229,7 +237,10 @@ describe("background tab activation", () => {
 
   test("resets spectrum sources when capture starts and stops", async () => {
     createChromeMock(vi.fn());
-    mocks.captureCoordinator.startCapture.mockResolvedValue({ ok: true, captures: [] });
+    mocks.captureCoordinator.startCapture.mockResolvedValue({
+      ok: true,
+      captures: [{ tabId: 7, settings: captureSettings(true) }],
+    });
     mocks.captureCoordinator.stopCapture.mockResolvedValue({ ok: true, captures: [] });
     await import("./background");
 
@@ -262,7 +273,10 @@ describe("background tab activation", () => {
 
   test("turns the tab badge ON when capture starts and OFF when it stops", async () => {
     const { setBadgeText } = createChromeMock(vi.fn());
-    mocks.captureCoordinator.startCapture.mockResolvedValue({ ok: true, captures: [] });
+    mocks.captureCoordinator.startCapture.mockResolvedValue({
+      ok: true,
+      captures: [{ tabId: 7, settings: captureSettings(true) }],
+    });
     mocks.captureCoordinator.stopCapture.mockResolvedValue({ ok: true, captures: [] });
     await import("./background");
 
@@ -271,6 +285,22 @@ describe("background tab activation", () => {
 
     await mocks.messageRouterDeps?.stopCapture(7);
     expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
+  });
+
+  test("uses the requested capture enabled state for the start badge", async () => {
+    const { setBadgeText } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.startCapture.mockResolvedValue({
+      ok: true,
+      captures: [
+        { tabId: 21, settings: captureSettings(true) },
+        { tabId: 12, settings: captureSettings(false) },
+      ],
+    });
+    await import("./background");
+
+    await mocks.messageRouterDeps?.startCapture(12);
+
+    expect(setBadgeText).toHaveBeenLastCalledWith({ tabId: 12, text: "OFF" });
   });
 
   test("updates the tab badge from the bypass toggle result", async () => {
