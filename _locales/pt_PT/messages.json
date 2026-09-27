@@ -264,7 +264,7 @@
     "message": "Selecione uma banda com Home, End, Page Up ou Page Down. Use as setas para frequência e ganho, Shift+Cima/Baixo para Q e Enter para repor."
   },
   "window_mode_start_error": {
-    "message": "Não foi possível abrir o modo de janela. Tente novamente."
+    "message": "Não foi possível abrir o modo de Janela. Por favor tente novamente."
   },
   "enable_volume_compensation_setting_option": {
     "message": "Compensação automática do volume"

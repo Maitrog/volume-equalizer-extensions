@@ -255,13 +255,13 @@
     "message": "Вкладка"
   },
   "stop_capture_label": {
-    "message": "Остановить захват"
+    "message": "Остановить обработку"
   },
   "equalizer_canvas_label": {
     "message": "Управление эквалайзером"
   },
   "equalizer_keyboard_help": {
-    "message": "Выберите полосу клавишами Home, End, Page Up или Page Down. Стрелки меняют частоту и усиление, Shift+Вверх/Вниз — Q, Enter сбрасывает полосу."
+    "message": "Выберите точку клавишами Home, End, Page Up или Page Down. Стрелки меняют частоту и усиление, Shift+Вверх/Вниз — Q, Enter сбрасывает полосу."
   },
   "window_mode_start_error": {
     "message": "Не удалось открыть оконный режим. Попробуйте ещё раз."
