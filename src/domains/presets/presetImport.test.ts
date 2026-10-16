@@ -1,8 +1,30 @@
 import { describe, expect, test } from "vitest";
 
-import { parsePresetImport } from "./presetImport";
+import { parsePresetImport, parsePresetImportData } from "./presetImport";
 
 describe("parsePresetImport", () => {
+  test("reads parsed legacy data without importing unlisted keys", () => {
+    expect(
+      parsePresetImportData({
+        presetNames: [" Empty "],
+        presets: { " Empty ": [], Ignored: "bad" },
+      }),
+    ).toEqual({ ok: true, presetNames: ["Empty"], presets: { Empty: [] } });
+  });
+
+  test("requires own preset keys and own structural fields", () => {
+    expect(
+      parsePresetImportData({
+        presetNames: ["Inherited"],
+        presets: Object.create({ Inherited: [] }),
+      }),
+    ).toEqual({ ok: false, error: "structure" });
+    expect(parsePresetImportData(Object.create({ presetNames: [], presets: {} }))).toEqual({
+      ok: false,
+      error: "structure",
+    });
+  });
+
   test.each([
     "{",
     "null",
