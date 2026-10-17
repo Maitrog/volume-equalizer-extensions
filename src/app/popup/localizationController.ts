@@ -2,6 +2,8 @@ import {
   DEFAULT_LANGUAGE,
   LANGUAGE_KEY,
   resolveLanguageCode,
+  resolveInitialLanguage,
+  type AvailableLanguageCode,
 } from "../../domains/localization/languages";
 import {
   loadLocaleMessages,
@@ -14,6 +16,8 @@ import {
 
 export interface LocalizationService {
   ready: Promise<void>;
+  waitForPendingChanges(): Promise<void>;
+  applySavedLanguage(language: AvailableLanguageCode): Promise<boolean>;
   getMessage(messageName: string): string;
   applyLocalization(root?: Document): void;
   populateLanguageSelect(root?: Document): void;
@@ -32,6 +36,7 @@ export const createLocalizationService = (): LocalizationService => {
   let defaultMessages: LocaleMessages = {};
   let languageGeneration = 0;
   let languageSaveQueue = Promise.resolve();
+  const pendingChanges = new Set<Promise<void>>();
 
   const getMessage = (messageName: string): string =>
     currentMessages[messageName]?.message ||
@@ -54,15 +59,11 @@ export const createLocalizationService = (): LocalizationService => {
     populateLanguageSelect(document);
   };
 
-  const setLanguage = async (
-    language: string,
-    options: {
-      save?: boolean;
-      refreshDynamicContent?: () => Promise<void>;
-    } = {},
-  ): Promise<void> => {
-    const generation = ++languageGeneration;
-    const resolvedLanguage = resolveLanguageCode(language);
+  const changeLanguage = async (
+    resolvedLanguage: AvailableLanguageCode,
+    generation: number,
+    save: boolean,
+  ): Promise<boolean> => {
     let messages: LocaleMessages;
     try {
       messages = await loadLocaleMessages(resolvedLanguage);
@@ -71,32 +72,57 @@ export const createLocalizationService = (): LocalizationService => {
         console.error("Failed to load locale", { language: resolvedLanguage, error });
         applyCurrentLanguage();
       }
-      return;
+      return false;
     }
-    if (generation !== languageGeneration) return;
+    if (generation !== languageGeneration) return false;
     if (Object.keys(messages).length === 0) {
       console.error("Failed to load locale", {
         language: resolvedLanguage,
         error: "Empty locale",
       });
       applyCurrentLanguage();
-      return;
+      return false;
     }
 
     currentLanguage = resolvedLanguage;
     currentMessages = messages;
     applyCurrentLanguage();
-    if (options.save) {
+    if (save) {
       let savedLatest = false;
-      const save = languageSaveQueue.then(async () => {
+      const saving = languageSaveQueue.then(async () => {
         if (generation !== languageGeneration) return;
         await chrome.storage.local.set({ [LANGUAGE_KEY]: resolvedLanguage });
         savedLatest = generation === languageGeneration;
       });
-      languageSaveQueue = save.catch(() => undefined);
-      await save;
-      if (!savedLatest) return;
-      await options.refreshDynamicContent?.();
+      languageSaveQueue = saving.catch(() => undefined);
+      await saving;
+      if (!savedLatest) return false;
+    }
+    return true;
+  };
+
+  const setLanguage: LocalizationService["setLanguage"] = async (language, options = {}) => {
+    const generation = ++languageGeneration;
+    const change = changeLanguage(resolveLanguageCode(language), generation, options.save === true);
+    const pending = change.then((applied) => {
+      if (!applied && generation === languageGeneration)
+        throw new Error("Failed to apply language");
+    });
+    pendingChanges.add(pending);
+    void pending.then(
+      () => pendingChanges.delete(pending),
+      () => pendingChanges.delete(pending),
+    );
+    const applied = await change;
+    if (applied && options.save) await options.refreshDynamicContent?.();
+  };
+
+  const applySavedLanguage = async (language: AvailableLanguageCode): Promise<boolean> => {
+    try {
+      return await changeLanguage(language, ++languageGeneration, false);
+    } catch (error) {
+      console.error("Failed to apply saved locale", { language, error });
+      return false;
     }
   };
 
@@ -111,10 +137,7 @@ export const createLocalizationService = (): LocalizationService => {
     }
     const stored = await chrome.storage.local.get([LANGUAGE_KEY]);
     const browserLocale = chrome.i18n.getMessage("@@ui_locale") || navigator.language;
-    const language =
-      typeof stored[LANGUAGE_KEY] === "string"
-        ? stored[LANGUAGE_KEY]
-        : resolveLanguageCode(browserLocale);
+    const language = resolveInitialLanguage(stored[LANGUAGE_KEY], browserLocale);
     await setLanguage(language);
   };
 
@@ -124,5 +147,9 @@ export const createLocalizationService = (): LocalizationService => {
     applyLocalization,
     populateLanguageSelect,
     setLanguage,
+    applySavedLanguage,
+    waitForPendingChanges: async () => {
+      await Promise.all(pendingChanges);
+    },
   };
 };

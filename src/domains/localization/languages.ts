@@ -36,3 +36,9 @@ export const resolveLanguageCode = (locale: string): AvailableLanguageCode => {
 
   return DEFAULT_LANGUAGE;
 };
+
+export const resolveInitialLanguage = (
+  storedLanguage: unknown,
+  browserLocale: string,
+): AvailableLanguageCode =>
+  resolveLanguageCode(typeof storedLanguage === "string" ? storedLanguage : browserLocale);

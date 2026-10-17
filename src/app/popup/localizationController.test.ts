@@ -137,6 +137,100 @@ describe("createLocalizationService", () => {
     expect(service.getMessage("key")).toBe("RU");
   });
 
+  test("waits for language fetch before its later storage write", async () => {
+    vi.mocked(fetch).mockResolvedValue(createResponse({ ready: { message: "Ready" } }));
+    const service = createLocalizationService();
+    await service.ready;
+    let finishFetch!: (response: Response) => void;
+    let finishSave!: () => void;
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishFetch = resolve;
+        }),
+    );
+    vi.mocked(chrome.storage.local.set).mockImplementationOnce(
+      () =>
+        new Promise<void>((resolve) => {
+          finishSave = resolve;
+        }),
+    );
+    const change = service.setLanguage("ru", { save: true });
+    const finished = vi.fn();
+    const wait = service.waitForPendingChanges().then(finished);
+    await Promise.resolve();
+    expect(finished).not.toHaveBeenCalled();
+    finishFetch(createResponse({ ready: { message: "RU" } }));
+    await vi.waitFor(() => expect(chrome.storage.local.set).toHaveBeenCalledOnce());
+    expect(finished).not.toHaveBeenCalled();
+    finishSave();
+    await Promise.all([change, wait]);
+    expect(finished).toHaveBeenCalledOnce();
+    await service.applySavedLanguage("de");
+    expect(chrome.storage.local.set).toHaveBeenCalledTimes(1);
+    expect(service.getMessage("ready")).toBe("Ready");
+  });
+
+  test("saved language invalidates an older deferred locale", async () => {
+    vi.mocked(fetch).mockResolvedValue(createResponse({ ready: { message: "Ready" } }));
+    const service = createLocalizationService();
+    await service.ready;
+    let finishFetch!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishFetch = resolve;
+        }),
+    );
+    const change = service.setLanguage("ru", { save: true });
+    expect(await service.applySavedLanguage("de")).toBe(true);
+    finishFetch(createResponse({ ready: { message: "RU" } }));
+    await change;
+    expect(service.getMessage("ready")).toBe("Ready");
+    expect(chrome.storage.local.set).not.toHaveBeenCalled();
+  });
+
+  test("reports saved language apply failure", async () => {
+    vi.mocked(fetch).mockResolvedValue(createResponse({ ready: { message: "Ready" } }));
+    const service = createLocalizationService();
+    await service.ready;
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    vi.mocked(fetch).mockRejectedValueOnce(new Error("locale unavailable"));
+    expect(await service.applySavedLanguage("ru")).toBe(false);
+    expect(chrome.storage.local.set).not.toHaveBeenCalled();
+    expect(service.getMessage("ready")).toBe("Ready");
+  });
+
+  test("pending locale failures reject waiting without poisoning later waits", async () => {
+    vi.mocked(fetch).mockResolvedValue(createResponse({ ready: { message: "Ready" } }));
+    const service = createLocalizationService();
+    await service.ready;
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    let failFetch!: (error: Error) => void;
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          failFetch = reject;
+        }),
+    );
+    const change = service.setLanguage("ru", { save: true });
+    const waiting = expect(service.waitForPendingChanges()).rejects.toThrow();
+    failFetch(new Error("locale unavailable"));
+    await Promise.all([change, waiting]);
+    await expect(service.waitForPendingChanges()).resolves.toBeUndefined();
+  });
+
+  test("dynamic language refresh can wait for pending changes", async () => {
+    vi.mocked(fetch).mockResolvedValue(createResponse({ ready: { message: "Ready" } }));
+    const service = createLocalizationService();
+    await service.ready;
+    await service.setLanguage("ru", {
+      save: true,
+      refreshDynamicContent: () => service.waitForPendingChanges(),
+    });
+    expect(chrome.storage.local.set).toHaveBeenCalledWith({ uiLanguage: "ru" });
+  });
+
   test("localizes theme option labels used by settings and onboarding", async () => {
     vi.mocked(fetch)
       .mockResolvedValueOnce(
