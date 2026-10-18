@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { findWhitelistMatch } from "../autostart/autostartRules";
 
 import {
   parseSettingsImport,
@@ -276,6 +277,32 @@ describe("settings transfer", () => {
         { group: "autostartRules", code: "duplicateRule", path: "settings.autostartRules[1]" },
       ]),
     });
+  });
+
+  test("collapses repeated rules at their last position to preserve matching precedence", () => {
+    const result = parseSettingsImport(
+      JSON.stringify({
+        format: "eq-toolkit-settings",
+        version: 1,
+        settings: {
+          autostartRules: [
+            { type: "domain", value: "example.com", presetName: "Parent" },
+            { type: "domain", value: "sub.example.com", presetName: "Child" },
+            { type: "domain", value: "www.EXAMPLE.com", presetName: "Parent" },
+          ],
+        },
+      }),
+    );
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.value.groups.autostartRules?.map((entry) => entry.value)).toEqual([
+      "sub.example.com",
+      "example.com",
+    ]);
+    expect(
+      findWhitelistMatch(result.value.groups.autostartRules, "https://sub.example.com/a")
+        ?.presetName,
+    ).toBe("Parent");
   });
 
   test.each([

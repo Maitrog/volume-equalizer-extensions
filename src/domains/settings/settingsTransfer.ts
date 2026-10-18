@@ -66,50 +66,14 @@ const readShortcut = (value: unknown): Shortcut | null => {
   };
 };
 
-export const parseSettingsImport = (text: string): SettingsParseResult => {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(text);
-  } catch {
-    return { ok: false, issues: [{ group: null, code: "syntax", path: "$" }] };
-  }
-  if (!isRecord(parsed))
-    return { ok: false, issues: [{ group: null, code: "structure", path: "$" }] };
-
+export const parseSettingsPreferencesData = (
+  settings: Record<string, unknown>,
+): ParsedSettingsImport => {
   const groups: TransferGroups = {};
   const issues: TransferIssue[] = [];
-  const issue = (group: SettingsGroup, code: TransferIssue["code"], path: string): void => {
+  const issue = (group: SettingsGroup, code: string, path: string): void => {
     issues.push({ group, code, path });
   };
-  if (!Object.hasOwn(parsed, "format") && !Object.hasOwn(parsed, "version")) {
-    const legacy = parsePresetImportData(parsed);
-    if (!legacy.ok)
-      return {
-        ok: false,
-        issues: [
-          {
-            group: "presets",
-            code: legacy.error,
-            path: legacy.error === "name" ? "presetNames" : "presets",
-          },
-        ],
-      };
-    return {
-      ok: true,
-      value: {
-        groups: { presets: { presets: legacy.presets, presetNames: legacy.presetNames } },
-        issues,
-      },
-    };
-  }
-  if (parsed.format !== "eq-toolkit-settings")
-    return { ok: false, issues: [{ group: null, code: "structure", path: "format" }] };
-  if (parsed.version !== 1)
-    return { ok: false, issues: [{ group: null, code: "version", path: "version" }] };
-  if (!isRecord(parsed.settings))
-    return { ok: false, issues: [{ group: null, code: "structure", path: "settings" }] };
-  const settings = parsed.settings;
-
   if (Object.hasOwn(settings, "general")) {
     const general = settings.general;
     if (!isRecord(general)) {
@@ -170,6 +134,57 @@ export const parseSettingsImport = (text: string): SettingsParseResult => {
     }
   }
 
+  return { groups, issues };
+};
+
+export const parseSettingsImport = (text: string): SettingsParseResult => {
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return { ok: false, issues: [{ group: null, code: "syntax", path: "$" }] };
+  }
+  if (!isRecord(parsed))
+    return { ok: false, issues: [{ group: null, code: "structure", path: "$" }] };
+
+  const groups: TransferGroups = {};
+  const issues: TransferIssue[] = [];
+  const issue = (group: SettingsGroup, code: TransferIssue["code"], path: string): void => {
+    issues.push({ group, code, path });
+  };
+  if (!Object.hasOwn(parsed, "format") && !Object.hasOwn(parsed, "version")) {
+    const legacy = parsePresetImportData(parsed);
+    if (!legacy.ok)
+      return {
+        ok: false,
+        issues: [
+          {
+            group: "presets",
+            code: legacy.error,
+            path: legacy.error === "name" ? "presetNames" : "presets",
+          },
+        ],
+      };
+    return {
+      ok: true,
+      value: {
+        groups: { presets: { presets: legacy.presets, presetNames: legacy.presetNames } },
+        issues,
+      },
+    };
+  }
+  if (parsed.format !== "eq-toolkit-settings")
+    return { ok: false, issues: [{ group: null, code: "structure", path: "format" }] };
+  if (parsed.version !== 1)
+    return { ok: false, issues: [{ group: null, code: "version", path: "version" }] };
+  if (!isRecord(parsed.settings))
+    return { ok: false, issues: [{ group: null, code: "structure", path: "settings" }] };
+  const settings = parsed.settings;
+
+  const preferences = parseSettingsPreferencesData(settings);
+  Object.assign(groups, preferences.groups);
+  issues.push(...preferences.issues);
+
   if (Object.hasOwn(settings, "autostartRules")) {
     if (!Array.isArray(settings.autostartRules)) {
       issue("autostartRules", "structure", "settings.autostartRules");
@@ -186,7 +201,10 @@ export const parseSettingsImport = (text: string): SettingsParseResult => {
         const previous = rules.get(rule.id);
         if (previous && previous.presetName !== rule.presetName)
           issue("autostartRules", "duplicateRule", path);
-        else if (!previous) rules.set(rule.id, rule);
+        else {
+          rules.delete(rule.id);
+          rules.set(rule.id, rule);
+        }
       });
       if (issues.length === issuesBefore) groups.autostartRules = [...rules.values()];
     }

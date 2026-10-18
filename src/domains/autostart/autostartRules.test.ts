@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import {
   createWhitelistEntry,
   findWhitelistMatch,
+  findAmbiguousAutostartRuleKeys,
   getWhitelistDomain,
   normalizeAutostartSettingsUrlValue,
   normalizeWhitelistUrl,
@@ -10,6 +11,22 @@ import {
 } from "./autostartRules";
 
 describe("autostartRules", () => {
+  test("finds distinct assignments in normalized rules without treating identical rows as ambiguous", () => {
+    const entry = {
+      id: "domain:example.com",
+      type: "domain" as const,
+      value: "example.com",
+      presetName: "Voice",
+    };
+    expect(findAmbiguousAutostartRuleKeys([entry, { ...entry }])).toEqual([]);
+    expect(
+      findAmbiguousAutostartRuleKeys([
+        entry,
+        { ...entry, presetName: "Other" },
+        { ...entry, presetName: "Third" },
+      ]),
+    ).toEqual(["domain:example.com"]);
+  });
   test.each(["EXAMPLE.com", "www.example.com", "https://example.com/path"])(
     "canonicalizes domain %s and ignores an input id",
     (value) => {

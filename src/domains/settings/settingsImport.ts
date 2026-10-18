@@ -1,4 +1,8 @@
-import { readAutostartRule, type AutostartWhitelistEntry } from "../autostart/autostartRules";
+import {
+  findAmbiguousAutostartRuleKeys,
+  readAutostartRule,
+  type AutostartWhitelistEntry,
+} from "../autostart/autostartRules";
 import { isEqualizerFilterEnabled } from "../equalizer/defaultFilters";
 import type { EqualizerFilter } from "../equalizer/types";
 import { isDefaultPresetName, resolvePresetFilters } from "../presets/defaultPresets";
@@ -150,7 +154,9 @@ export const buildSettingsImportPlan = (
   const finalRules = [...localRules];
   if (selected.includes("autostartRules") && incoming.autostartRules) {
     const byKey = new Map<string, { entry: AutostartWhitelistEntry; positions: number[] }>();
-    const ambiguousKeys = new Set<string>();
+    const ambiguousKeys = findAmbiguousAutostartRuleKeys(
+      localRules.filter((entry) => entry !== null),
+    );
     localRules.forEach((entry, index) => {
       if (!entry) return;
       const existing = byKey.get(entry.id);
@@ -158,12 +164,11 @@ export const buildSettingsImportPlan = (
         byKey.set(entry.id, { entry, positions: [index] });
       } else {
         existing.positions.push(index);
-        if (existing.entry.presetName !== entry.presetName) ambiguousKeys.add(entry.id);
       }
     });
     for (const key of ambiguousKeys)
       blockers.push({ group: "autostartRules", code: "ambiguous-local-rule", path: key });
-    if (ambiguousKeys.size === 0) {
+    if (ambiguousKeys.length === 0) {
       const rules = [...current.autostartRules];
       for (const entry of incoming.autostartRules) {
         const key = entry.id;

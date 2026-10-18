@@ -77,6 +77,19 @@ export const readAutostartRule = (value: unknown): AutostartWhitelistEntry | nul
   return createWhitelistEntry(entry.type, entry.value, entry.presetName);
 };
 
+export const findAmbiguousAutostartRuleKeys = (
+  entries: readonly AutostartWhitelistEntry[],
+): string[] => {
+  const assignments = new Map<string, string>();
+  const ambiguous = new Set<string>();
+  for (const entry of entries) {
+    if (assignments.has(entry.id) && assignments.get(entry.id) !== entry.presetName)
+      ambiguous.add(entry.id);
+    assignments.set(entry.id, entry.presetName);
+  }
+  return [...ambiguous];
+};
+
 export const findWhitelistMatch = (
   entries: AutostartWhitelistEntry[] | null | undefined,
   url: string,
