@@ -393,6 +393,46 @@
       </form>
     </div>
 
+    <div id="settings-import-modal" class="modal" aria-labelledby="settings-import-title">
+      <section class="modal-content settings-import-dialog">
+        <button type="button" id="settings-import-close" data-i18n="settings_transfer_close">
+          Close
+        </button>
+        <h3 id="settings-import-title" tabindex="-1" data-i18n="settings_transfer_select_groups">
+          Select settings to import
+        </h3>
+        <div id="settings-import-groups"></div>
+        <div id="settings-import-conflicts" hidden></div>
+        <div id="settings-import-summary" hidden></div>
+        <label data-reset-visible="false">
+          <input type="checkbox" id="settings-import-reset-confirm" hidden />
+          <span data-reset-label data-i18n="settings_transfer_reset_acknowledgement"
+            >I understand that the current curve will be reset</span
+          >
+        </label>
+        <p id="settings-import-status" role="status" aria-live="polite"></p>
+        <div class="settings-import-actions">
+          <button type="button" id="settings-import-back" data-i18n="settings_transfer_back" hidden>
+            Back
+          </button>
+          <button type="button" id="settings-import-next" data-i18n="settings_transfer_next">
+            Next
+          </button>
+          <button
+            type="button"
+            id="settings-import-apply"
+            data-i18n="settings_transfer_apply"
+            hidden
+          >
+            Apply
+          </button>
+          <button type="button" id="settings-import-cancel" data-i18n="settings_transfer_cancel">
+            Cancel
+          </button>
+        </div>
+      </section>
+    </div>
+
     <div id="points-reset-modal" class="modal" aria-labelledby="points-reset-title">
       <div class="modal-content confirm-modal">
         <h3 id="points-reset-title" data-i18n="points_reset_title">Change points count?</h3>

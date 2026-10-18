@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Tab-Audioaufnahme konnte nicht beendet werden."
+  },
+  "settings_transfer_title": {
+    "message": "Einstellungen übertragen"
+  },
+  "settings_transfer_general": {
+    "message": "Allgemein"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Autostart-Regeln"
+  },
+  "settings_transfer_absent": {
+    "message": "Nicht in dieser Datei"
+  },
+  "settings_transfer_invalid": {
+    "message": "Ungültige Einstellungen"
+  },
+  "settings_transfer_current": {
+    "message": "Aktuell"
+  },
+  "settings_transfer_incoming": {
+    "message": "Aus Datei"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Aktuelle behalten"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Aus Datei verwenden"
+  },
+  "settings_transfer_added": {
+    "message": "Hinzugefügt"
+  },
+  "settings_transfer_replaced": {
+    "message": "Ersetzt"
+  },
+  "settings_transfer_kept": {
+    "message": "Beibehalten"
+  },
+  "settings_transfer_identical": {
+    "message": "Identisch"
+  },
+  "settings_transfer_skipped": {
+    "message": "Übersprungen"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Regel übersprungen: Voreinstellung fehlt oder ist leer"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Integrierte Voreinstellung übersprungen"
+  },
+  "settings_transfer_dependency": {
+    "message": "Eine beibehaltene Regel benötigt diese Voreinstellung; andere Version wählen"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Aktuelle Regeln haben widersprüchliche Zuordnungen"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Bestehende Regeln mit dieser Voreinstellung"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frequenz"
+  },
+  "settings_transfer_gain": {
+    "message": "Verstärkung"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Typ"
+  },
+  "settings_transfer_enabled": {
+    "message": "Aktiviert"
+  },
+  "settings_transfer_yes": {
+    "message": "Ja"
+  },
+  "settings_transfer_no": {
+    "message": "Nein"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Leere Voreinstellung"
+  },
+  "settings_transfer_disabled": {
+    "message": "Deaktiviert"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Einstellungen zum Import wählen"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Für jeden Konflikt eine Version wählen"
+  },
+  "settings_transfer_review": {
+    "message": "Import prüfen"
+  },
+  "settings_transfer_reading": {
+    "message": "Einstellungen werden gelesen…"
+  },
+  "settings_transfer_saving": {
+    "message": "Einstellungen werden gespeichert…"
+  },
+  "settings_transfer_result": {
+    "message": "Importergebnis"
+  },
+  "settings_transfer_privacy": {
+    "message": "Dateien können Website-Adressen und persönliche Namen enthalten. Vorsichtig teilen. Aktuelle Kurven und Tab-Zustände werden nicht übertragen."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "Die aktuelle Kurve dieses Tabs wird zurückgesetzt"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Ich verstehe, dass die aktuelle Kurve zurückgesetzt wird"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Kein Tab gewählt: Nur die Punktzahl ändert sich; Kurven bleiben erhalten"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "Die gemeinsame Ersatzkurve wird ebenfalls zurückgesetzt"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "Der Equalizer wird für diesen Tab aktiviert"
+  },
+  "settings_transfer_stale": {
+    "message": "Einstellungen oder Tab geändert. Import erneut prüfen und auswählen."
+  },
+  "settings_transfer_blocked": {
+    "message": "Alle Konflikte lösen und das Zurücksetzen bestätigen."
+  },
+  "settings_transfer_saved": {
+    "message": "Einstellungen erfolgreich importiert."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Keine Änderungen anzuwenden."
+  },
+  "settings_transfer_read_error": {
+    "message": "Einstellungen konnten nicht gelesen werden. Datei erneut wählen."
+  },
+  "settings_transfer_version_error": {
+    "message": "Diese Dateiversion wird nicht unterstützt."
+  },
+  "settings_transfer_file_error": {
+    "message": "Keine gültige Einstellungsdatei oder alte Voreinstellungsdatei."
+  },
+  "settings_transfer_write_error": {
+    "message": "Speichern fehlgeschlagen. Auswahl bleibt erhalten; erneut versuchen."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Einstellungen gespeichert, aber Ansicht nicht aktualisiert. Fenster erneut öffnen."
+  },
+  "settings_transfer_export_error": {
+    "message": "Export fehlgeschlagen. Erneut versuchen."
+  },
+  "settings_transfer_apply": {
+    "message": "Anwenden"
+  },
+  "settings_transfer_back": {
+    "message": "Zurück"
+  },
+  "settings_transfer_next": {
+    "message": "Weiter"
+  },
+  "settings_transfer_cancel": {
+    "message": "Abbrechen"
+  },
+  "settings_transfer_close": {
+    "message": "Schließen"
+  },
+  "settings_transfer_presets": {
+    "message": "Voreinstellungen"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Tastenkürzel"
+  },
+  "settings_transfer_theme": {
+    "message": "Design"
+  },
+  "settings_transfer_language": {
+    "message": "Sprache"
+  },
+  "settings_transfer_point_count": {
+    "message": "Anzahl der EQ-Punkte"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Spektrumvisualisierung aktivieren"
+  },
+  "settings_transfer_compensation": {
+    "message": "Automatische Lautstärkekompensation"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Nicht mehr anzeigen"
+  },
+  "settings_transfer_mute": {
+    "message": "Stummschalten/Stummschaltung aufheben"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Aktivieren/deaktivieren"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Standard-Presets ausblenden"
+  },
+  "settings_transfer_dark": {
+    "message": "Dunkel"
+  },
+  "settings_transfer_light": {
+    "message": "Hell"
+  },
+  "settings_transfer_import": {
+    "message": "Voreinstellungen importieren"
+  },
+  "settings_transfer_export": {
+    "message": "Voreinstellungen exportieren"
   }
 }

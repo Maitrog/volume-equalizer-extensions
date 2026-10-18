@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "タブの音声キャプチャを停止できませんでした。"
+  },
+  "settings_transfer_title": {
+    "message": "設定の移行"
+  },
+  "settings_transfer_general": {
+    "message": "一般"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "自動開始ルール"
+  },
+  "settings_transfer_absent": {
+    "message": "ファイルにありません"
+  },
+  "settings_transfer_invalid": {
+    "message": "無効な設定"
+  },
+  "settings_transfer_current": {
+    "message": "現在"
+  },
+  "settings_transfer_incoming": {
+    "message": "ファイルから"
+  },
+  "settings_transfer_keep_current": {
+    "message": "現在の設定を保持"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "ファイルの設定を使用"
+  },
+  "settings_transfer_added": {
+    "message": "追加"
+  },
+  "settings_transfer_replaced": {
+    "message": "置換"
+  },
+  "settings_transfer_kept": {
+    "message": "保持"
+  },
+  "settings_transfer_identical": {
+    "message": "同一"
+  },
+  "settings_transfer_skipped": {
+    "message": "スキップ"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "ルールをスキップ：プリセットがないか空です"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "組み込みプリセットをスキップ"
+  },
+  "settings_transfer_dependency": {
+    "message": "保持するルールに必要なプリセットです。別の版を選んでください"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "現在のルールで同じアドレスに異なるプリセットが指定されています"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "このプリセットを使う既存のルール"
+  },
+  "settings_transfer_frequency": {
+    "message": "周波数"
+  },
+  "settings_transfer_gain": {
+    "message": "ゲイン"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "種類"
+  },
+  "settings_transfer_enabled": {
+    "message": "有効"
+  },
+  "settings_transfer_yes": {
+    "message": "はい"
+  },
+  "settings_transfer_no": {
+    "message": "いいえ"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "空のプリセット"
+  },
+  "settings_transfer_disabled": {
+    "message": "無効"
+  },
+  "settings_transfer_select_groups": {
+    "message": "読み込む設定を選択"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "競合ごとに使用する版を選択"
+  },
+  "settings_transfer_review": {
+    "message": "読み込み内容を確認"
+  },
+  "settings_transfer_reading": {
+    "message": "設定を読み込み中…"
+  },
+  "settings_transfer_saving": {
+    "message": "設定を保存中…"
+  },
+  "settings_transfer_result": {
+    "message": "読み込み結果"
+  },
+  "settings_transfer_privacy": {
+    "message": "ファイルにはサイトのアドレスや個人的な名前が含まれる場合があります。共有に注意してください。現在のカーブとタブの状態は移行されません。"
+  },
+  "settings_transfer_reset_warning": {
+    "message": "このタブの現在のカーブがリセットされます"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "現在のカーブがリセットされることを理解しています"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "タブ未選択：ポイント数のみ変更され、カーブは保持されます"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "共有の代替カーブもリセットされます"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "このタブのイコライザーが有効になります"
+  },
+  "settings_transfer_stale": {
+    "message": "設定または選択したタブが変わりました。内容を確認して選び直してください。"
+  },
+  "settings_transfer_blocked": {
+    "message": "競合を解決し、リセットを確認してください。"
+  },
+  "settings_transfer_saved": {
+    "message": "設定を読み込みました。"
+  },
+  "settings_transfer_unchanged": {
+    "message": "適用する変更はありません。"
+  },
+  "settings_transfer_read_error": {
+    "message": "設定を読み込めませんでした。ファイルを選び直してください。"
+  },
+  "settings_transfer_version_error": {
+    "message": "この設定ファイルのバージョンには対応していません。"
+  },
+  "settings_transfer_file_error": {
+    "message": "有効な設定ファイルまたは旧形式のプリセットファイルではありません。"
+  },
+  "settings_transfer_write_error": {
+    "message": "保存できませんでした。選択は保持されています。再試行してください。"
+  },
+  "settings_transfer_refresh_error": {
+    "message": "設定は保存されましたが画面を更新できませんでした。開き直してください。"
+  },
+  "settings_transfer_export_error": {
+    "message": "設定を書き出せませんでした。再試行してください。"
+  },
+  "settings_transfer_apply": {
+    "message": "適用"
+  },
+  "settings_transfer_back": {
+    "message": "戻る"
+  },
+  "settings_transfer_next": {
+    "message": "次へ"
+  },
+  "settings_transfer_cancel": {
+    "message": "キャンセル"
+  },
+  "settings_transfer_close": {
+    "message": "閉じる"
+  },
+  "settings_transfer_presets": {
+    "message": "プリセット"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "ホットキー"
+  },
+  "settings_transfer_theme": {
+    "message": "テーマ"
+  },
+  "settings_transfer_language": {
+    "message": "言語"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQポイント数"
+  },
+  "settings_transfer_spectrum": {
+    "message": "スペクトラム可視化を有効にする"
+  },
+  "settings_transfer_compensation": {
+    "message": "音量を自動補正"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "次回から表示しない"
+  },
+  "settings_transfer_mute": {
+    "message": "ミュート/ミュート解除"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "有効/無効"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "デフォルトプリセットを非表示"
+  },
+  "settings_transfer_dark": {
+    "message": "ダーク"
+  },
+  "settings_transfer_light": {
+    "message": "ライト"
+  },
+  "settings_transfer_import": {
+    "message": "プリセットをインポート"
+  },
+  "settings_transfer_export": {
+    "message": "プリセットをエクスポート"
   }
 }

@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Não foi possível parar a captura de áudio do separador."
+  },
+  "settings_transfer_title": {
+    "message": "Transferir definições"
+  },
+  "settings_transfer_general": {
+    "message": "Geral"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Regras de início automático"
+  },
+  "settings_transfer_absent": {
+    "message": "Ausente neste ficheiro"
+  },
+  "settings_transfer_invalid": {
+    "message": "Definições inválidas"
+  },
+  "settings_transfer_current": {
+    "message": "Atual"
+  },
+  "settings_transfer_incoming": {
+    "message": "Do ficheiro"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Manter atual"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Usar do ficheiro"
+  },
+  "settings_transfer_added": {
+    "message": "Adicionados"
+  },
+  "settings_transfer_replaced": {
+    "message": "Substituídos"
+  },
+  "settings_transfer_kept": {
+    "message": "Mantidos"
+  },
+  "settings_transfer_identical": {
+    "message": "Idênticos"
+  },
+  "settings_transfer_skipped": {
+    "message": "Ignorados"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Regra ignorada: predefinição ausente ou vazia"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Predefinição integrada ignorada"
+  },
+  "settings_transfer_dependency": {
+    "message": "Uma regra mantida precisa desta predefinição; escolha outra versão"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "As regras atuais atribuem predefinições diferentes ao mesmo endereço"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Regras existentes com esta predefinição"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frequência"
+  },
+  "settings_transfer_gain": {
+    "message": "Ganho"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Tipo"
+  },
+  "settings_transfer_enabled": {
+    "message": "Ativo"
+  },
+  "settings_transfer_yes": {
+    "message": "Sim"
+  },
+  "settings_transfer_no": {
+    "message": "Não"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Predefinição vazia"
+  },
+  "settings_transfer_disabled": {
+    "message": "Desativado"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Escolha as definições a importar"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Escolha uma versão para cada conflito"
+  },
+  "settings_transfer_review": {
+    "message": "Rever importação"
+  },
+  "settings_transfer_reading": {
+    "message": "A ler definições…"
+  },
+  "settings_transfer_saving": {
+    "message": "A guardar definições…"
+  },
+  "settings_transfer_result": {
+    "message": "Resultado da importação"
+  },
+  "settings_transfer_privacy": {
+    "message": "Os ficheiros podem conter endereços de sites e nomes pessoais. Partilhe com cuidado. As curvas atuais e o estado dos separadores não são transferidos."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "A curva atual deste separador será reposta"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Compreendo que a curva atual será reposta"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Nenhum separador selecionado: apenas muda o número de pontos; as curvas mantêm-se"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "A curva de recurso partilhada também será reposta"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "O equalizador será ativado neste separador"
+  },
+  "settings_transfer_stale": {
+    "message": "As definições ou o separador mudaram. Reveja a importação e escolha novamente."
+  },
+  "settings_transfer_blocked": {
+    "message": "Resolva os conflitos e confirme a reposição."
+  },
+  "settings_transfer_saved": {
+    "message": "Definições importadas com êxito."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Sem alterações a aplicar."
+  },
+  "settings_transfer_read_error": {
+    "message": "Não foi possível ler. Selecione o ficheiro novamente."
+  },
+  "settings_transfer_version_error": {
+    "message": "Esta versão do ficheiro não é suportada."
+  },
+  "settings_transfer_file_error": {
+    "message": "O ficheiro de definições ou de predefinições antigas é inválido."
+  },
+  "settings_transfer_write_error": {
+    "message": "Não foi possível guardar. As escolhas mantêm-se; tente novamente."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Definições guardadas, mas a janela não atualizou. Abra-a novamente."
+  },
+  "settings_transfer_export_error": {
+    "message": "Não foi possível exportar. Tente novamente."
+  },
+  "settings_transfer_apply": {
+    "message": "Aplicar"
+  },
+  "settings_transfer_back": {
+    "message": "Voltar"
+  },
+  "settings_transfer_next": {
+    "message": "Seguinte"
+  },
+  "settings_transfer_cancel": {
+    "message": "Cancelar"
+  },
+  "settings_transfer_close": {
+    "message": "Fechar"
+  },
+  "settings_transfer_presets": {
+    "message": "Predefinições"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Atalhos de teclado"
+  },
+  "settings_transfer_theme": {
+    "message": "Tema"
+  },
+  "settings_transfer_language": {
+    "message": "Idioma"
+  },
+  "settings_transfer_point_count": {
+    "message": "Número de pontos de EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Ativar a visualização do espectro"
+  },
+  "settings_transfer_compensation": {
+    "message": "Compensação automática do volume"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Não mostrar novamente"
+  },
+  "settings_transfer_mute": {
+    "message": "Silenciar/ativar som"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Ativar/desativar"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Ocultar predefinições padrão"
+  },
+  "settings_transfer_dark": {
+    "message": "Escuro"
+  },
+  "settings_transfer_light": {
+    "message": "Claro"
+  },
+  "settings_transfer_import": {
+    "message": "Importar"
+  },
+  "settings_transfer_export": {
+    "message": "Exportar"
   }
 }

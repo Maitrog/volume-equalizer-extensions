@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Không thể dừng ghi âm thanh của tab."
+  },
+  "settings_transfer_title": {
+    "message": "Chuyển cài đặt"
+  },
+  "settings_transfer_general": {
+    "message": "Chung"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Quy tắc tự khởi động"
+  },
+  "settings_transfer_absent": {
+    "message": "Không có trong tệp"
+  },
+  "settings_transfer_invalid": {
+    "message": "Cài đặt không hợp lệ"
+  },
+  "settings_transfer_current": {
+    "message": "Hiện tại"
+  },
+  "settings_transfer_incoming": {
+    "message": "Từ tệp"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Giữ bản hiện tại"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Dùng bản từ tệp"
+  },
+  "settings_transfer_added": {
+    "message": "Đã thêm"
+  },
+  "settings_transfer_replaced": {
+    "message": "Đã thay thế"
+  },
+  "settings_transfer_kept": {
+    "message": "Đã giữ"
+  },
+  "settings_transfer_identical": {
+    "message": "Giống nhau"
+  },
+  "settings_transfer_skipped": {
+    "message": "Đã bỏ qua"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Bỏ qua quy tắc: thiếu hoặc trống cấu hình sẵn"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Bỏ qua cấu hình sẵn tích hợp"
+  },
+  "settings_transfer_dependency": {
+    "message": "Quy tắc được giữ cần cấu hình sẵn này; hãy chọn bản khác"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Các quy tắc hiện tại gán cấu hình khác nhau cho cùng địa chỉ"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Quy tắc hiện có dùng cấu hình này"
+  },
+  "settings_transfer_frequency": {
+    "message": "Tần số"
+  },
+  "settings_transfer_gain": {
+    "message": "Độ khuếch đại"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Loại"
+  },
+  "settings_transfer_enabled": {
+    "message": "Bật"
+  },
+  "settings_transfer_yes": {
+    "message": "Có"
+  },
+  "settings_transfer_no": {
+    "message": "Không"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Cấu hình sẵn trống"
+  },
+  "settings_transfer_disabled": {
+    "message": "Tắt"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Chọn cài đặt để nhập"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Chọn một bản cho mỗi xung đột"
+  },
+  "settings_transfer_review": {
+    "message": "Xem lại lần nhập"
+  },
+  "settings_transfer_reading": {
+    "message": "Đang đọc cài đặt…"
+  },
+  "settings_transfer_saving": {
+    "message": "Đang lưu cài đặt…"
+  },
+  "settings_transfer_result": {
+    "message": "Kết quả nhập"
+  },
+  "settings_transfer_privacy": {
+    "message": "Tệp có thể chứa địa chỉ trang web và tên cá nhân. Hãy chia sẻ cẩn thận. Đường cong hiện tại và trạng thái thẻ không được chuyển."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "Đường cong hiện tại của thẻ này sẽ được đặt lại"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Tôi hiểu rằng đường cong hiện tại sẽ được đặt lại"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Chưa chọn thẻ: chỉ đổi số điểm; các đường cong được giữ nguyên"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "Đường cong dự phòng dùng chung cũng sẽ được đặt lại"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "Bộ cân bằng sẽ được bật trên thẻ này"
+  },
+  "settings_transfer_stale": {
+    "message": "Cài đặt hoặc thẻ đã thay đổi. Hãy xem lại và chọn lại."
+  },
+  "settings_transfer_blocked": {
+    "message": "Giải quyết xung đột và xác nhận đặt lại."
+  },
+  "settings_transfer_saved": {
+    "message": "Đã nhập cài đặt thành công."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Không có thay đổi để áp dụng."
+  },
+  "settings_transfer_read_error": {
+    "message": "Không đọc được cài đặt. Hãy chọn lại tệp."
+  },
+  "settings_transfer_version_error": {
+    "message": "Không hỗ trợ phiên bản tệp này."
+  },
+  "settings_transfer_file_error": {
+    "message": "Tệp cài đặt hoặc cấu hình sẵn cũ không hợp lệ."
+  },
+  "settings_transfer_write_error": {
+    "message": "Không lưu được. Các lựa chọn được giữ; hãy thử lại."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Đã lưu nhưng không cập nhật được cửa sổ. Hãy mở lại."
+  },
+  "settings_transfer_export_error": {
+    "message": "Không xuất được cài đặt. Hãy thử lại."
+  },
+  "settings_transfer_apply": {
+    "message": "Áp dụng"
+  },
+  "settings_transfer_back": {
+    "message": "Quay lại"
+  },
+  "settings_transfer_next": {
+    "message": "Tiếp theo"
+  },
+  "settings_transfer_cancel": {
+    "message": "Hủy"
+  },
+  "settings_transfer_close": {
+    "message": "Đóng"
+  },
+  "settings_transfer_presets": {
+    "message": "Cấu hình sẵn"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Phím tắt"
+  },
+  "settings_transfer_theme": {
+    "message": "Giao diện"
+  },
+  "settings_transfer_language": {
+    "message": "Ngôn ngữ"
+  },
+  "settings_transfer_point_count": {
+    "message": "Số điểm EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Bật hiển thị phổ"
+  },
+  "settings_transfer_compensation": {
+    "message": "Tự động bù âm lượng"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Không hiển thị lại"
+  },
+  "settings_transfer_mute": {
+    "message": "Tắt/bật tiếng"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Bật/tắt"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Ẩn cấu hình sẵn mặc định"
+  },
+  "settings_transfer_dark": {
+    "message": "Tối"
+  },
+  "settings_transfer_light": {
+    "message": "Sáng"
+  },
+  "settings_transfer_import": {
+    "message": "Nhập preset"
+  },
+  "settings_transfer_export": {
+    "message": "Xuất preset"
   }
 }

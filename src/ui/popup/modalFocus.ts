@@ -1,6 +1,10 @@
 const openDialogs: HTMLElement[] = [];
 
-export const attachModalFocus = (dialog: HTMLElement, trigger: HTMLElement) => {
+export const attachModalFocus = (
+  dialog: HTMLElement,
+  trigger: HTMLElement,
+  options?: { canClose?: () => boolean },
+) => {
   const inertStates = new Map<HTMLElement, boolean>();
   let returnFocus: HTMLElement = trigger;
   const focusableElements = (): HTMLElement[] =>
@@ -14,18 +18,23 @@ export const attachModalFocus = (dialog: HTMLElement, trigger: HTMLElement) => {
         element.getClientRects().length > 0,
     );
 
-  const close = (): void => {
+  const release = (): void => {
     const index = openDialogs.indexOf(dialog);
     if (index < 0) return;
     openDialogs.splice(index, 1);
     dialog.style.display = "none";
-    document.removeEventListener("keydown", onKeyDown, true);
+    document.removeEventListener("keydown", onKeyDown, { capture: true });
     inertStates.forEach((inert, element) => {
       element.inert = inert;
     });
     inertStates.clear();
     returnFocus.focus();
     dialog.dispatchEvent(new Event("modal-closed"));
+  };
+
+  const close = (): void => {
+    if (options?.canClose && !options.canClose()) return;
+    release();
   };
 
   const onKeyDown = (event: KeyboardEvent): void => {
@@ -83,8 +92,8 @@ export const attachModalFocus = (dialog: HTMLElement, trigger: HTMLElement) => {
     },
     close,
     dispose: (): void => {
-      close();
-      document.removeEventListener("keydown", onKeyDown, true);
+      release();
+      document.removeEventListener("keydown", onKeyDown, { capture: true });
     },
   };
 };

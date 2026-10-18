@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "ট্যাব অডিও ক্যাপচার বন্ধ করা যায়নি।"
+  },
+  "settings_transfer_title": {
+    "message": "সেটিংস স্থানান্তর"
+  },
+  "settings_transfer_general": {
+    "message": "সাধারণ"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "স্বয়ংক্রিয় শুরুর নিয়ম"
+  },
+  "settings_transfer_absent": {
+    "message": "এই ফাইলে নেই"
+  },
+  "settings_transfer_invalid": {
+    "message": "অবৈধ সেটিংস"
+  },
+  "settings_transfer_current": {
+    "message": "বর্তমান"
+  },
+  "settings_transfer_incoming": {
+    "message": "ফাইল থেকে"
+  },
+  "settings_transfer_keep_current": {
+    "message": "বর্তমানটি রাখুন"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "ফাইলেরটি ব্যবহার করুন"
+  },
+  "settings_transfer_added": {
+    "message": "যোগ হয়েছে"
+  },
+  "settings_transfer_replaced": {
+    "message": "প্রতিস্থাপিত"
+  },
+  "settings_transfer_kept": {
+    "message": "রাখা হয়েছে"
+  },
+  "settings_transfer_identical": {
+    "message": "একই"
+  },
+  "settings_transfer_skipped": {
+    "message": "বাদ দেওয়া হয়েছে"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "নিয়ম বাদ গেছে: প্রিসেট অনুপস্থিত বা খালি"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "অন্তর্নির্মিত প্রিসেট বাদ গেছে"
+  },
+  "settings_transfer_dependency": {
+    "message": "রাখা নিয়মের জন্য এই প্রিসেট প্রয়োজন; অন্য সংস্করণ বেছে নিন"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "বর্তমান নিয়মে একই ঠিকানায় ভিন্ন প্রিসেট রয়েছে"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "এই প্রিসেট ব্যবহারকারী বিদ্যমান নিয়ম"
+  },
+  "settings_transfer_frequency": {
+    "message": "কম্পাঙ্ক"
+  },
+  "settings_transfer_gain": {
+    "message": "গেইন"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "ধরন"
+  },
+  "settings_transfer_enabled": {
+    "message": "চালু"
+  },
+  "settings_transfer_yes": {
+    "message": "হ্যাঁ"
+  },
+  "settings_transfer_no": {
+    "message": "না"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "খালি প্রিসেট"
+  },
+  "settings_transfer_disabled": {
+    "message": "বন্ধ"
+  },
+  "settings_transfer_select_groups": {
+    "message": "আমদানি করার সেটিংস বেছে নিন"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "প্রতিটি দ্বন্দ্বের জন্য একটি সংস্করণ বেছে নিন"
+  },
+  "settings_transfer_review": {
+    "message": "আমদানি পর্যালোচনা"
+  },
+  "settings_transfer_reading": {
+    "message": "সেটিংস পড়া হচ্ছে…"
+  },
+  "settings_transfer_saving": {
+    "message": "সেটিংস সংরক্ষণ হচ্ছে…"
+  },
+  "settings_transfer_result": {
+    "message": "আমদানির ফলাফল"
+  },
+  "settings_transfer_privacy": {
+    "message": "ফাইলে ওয়েবসাইটের ঠিকানা ও ব্যক্তিগত নাম থাকতে পারে। সতর্কভাবে শেয়ার করুন। বর্তমান কার্ভ ও ট্যাবের অবস্থা স্থানান্তর হয় না।"
+  },
+  "settings_transfer_reset_warning": {
+    "message": "এই ট্যাবের বর্তমান কার্ভ রিসেট হবে"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "আমি বুঝেছি যে বর্তমান কার্ভ রিসেট হবে"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "কোনো ট্যাব বাছা হয়নি: শুধু পয়েন্টের সংখ্যা বদলাবে; কার্ভ অপরিবর্তিত থাকবে"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "ভাগ করা বিকল্প কার্ভও রিসেট হবে"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "এই ট্যাবে ইকুয়ালাইজার চালু হবে"
+  },
+  "settings_transfer_stale": {
+    "message": "সেটিংস বা নির্বাচিত ট্যাব বদলেছে। আমদানি পর্যালোচনা করে আবার বেছে নিন।"
+  },
+  "settings_transfer_blocked": {
+    "message": "সব দ্বন্দ্ব মেটান এবং রিসেট নিশ্চিত করুন।"
+  },
+  "settings_transfer_saved": {
+    "message": "সেটিংস সফলভাবে আমদানি হয়েছে।"
+  },
+  "settings_transfer_unchanged": {
+    "message": "প্রয়োগ করার কোনো পরিবর্তন নেই।"
+  },
+  "settings_transfer_read_error": {
+    "message": "সেটিংস পড়া যায়নি। ফাইল আবার বেছে নিন।"
+  },
+  "settings_transfer_version_error": {
+    "message": "সেটিংস ফাইলের এই সংস্করণ সমর্থিত নয়।"
+  },
+  "settings_transfer_file_error": {
+    "message": "এটি বৈধ সেটিংস বা পুরোনো প্রিসেট ফাইল নয়।"
+  },
+  "settings_transfer_write_error": {
+    "message": "সেটিংস সংরক্ষণ হয়নি। নির্বাচন রাখা হয়েছে; আবার চেষ্টা করুন।"
+  },
+  "settings_transfer_refresh_error": {
+    "message": "সেটিংস সংরক্ষিত, কিন্তু উইন্ডো রিফ্রেশ হয়নি। আবার খুলুন।"
+  },
+  "settings_transfer_export_error": {
+    "message": "সেটিংস রপ্তানি হয়নি। আবার চেষ্টা করুন।"
+  },
+  "settings_transfer_apply": {
+    "message": "প্রয়োগ করুন"
+  },
+  "settings_transfer_back": {
+    "message": "পিছনে"
+  },
+  "settings_transfer_next": {
+    "message": "পরবর্তী"
+  },
+  "settings_transfer_cancel": {
+    "message": "বাতিল"
+  },
+  "settings_transfer_close": {
+    "message": "বন্ধ করুন"
+  },
+  "settings_transfer_presets": {
+    "message": "প্রিসেট"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "কীবোর্ড শর্টকাট"
+  },
+  "settings_transfer_theme": {
+    "message": "থিম"
+  },
+  "settings_transfer_language": {
+    "message": "ভাষা"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQ পয়েন্টের সংখ্যা"
+  },
+  "settings_transfer_spectrum": {
+    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন"
+  },
+  "settings_transfer_compensation": {
+    "message": "স্বয়ংক্রিয় ভলিউম ক্ষতিপূরণ"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "আবার দেখাবেন না"
+  },
+  "settings_transfer_mute": {
+    "message": "মিউট/আনমিউট"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "চালু/বন্ধ"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "ডিফল্ট প্রিসেট লুকান"
+  },
+  "settings_transfer_dark": {
+    "message": "গাঢ়"
+  },
+  "settings_transfer_light": {
+    "message": "হালকা"
+  },
+  "settings_transfer_import": {
+    "message": "প্রিসেট আমদানি করুন"
+  },
+  "settings_transfer_export": {
+    "message": "প্রিসেট রপ্তানি করুন"
   }
 }

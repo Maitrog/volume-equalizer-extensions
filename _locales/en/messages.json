@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Could not stop tab audio capture."
+  },
+  "settings_transfer_title": {
+    "message": "Settings transfer"
+  },
+  "settings_transfer_general": {
+    "message": "General"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Auto start rules"
+  },
+  "settings_transfer_absent": {
+    "message": "Not in this file"
+  },
+  "settings_transfer_invalid": {
+    "message": "Invalid settings"
+  },
+  "settings_transfer_current": {
+    "message": "Current"
+  },
+  "settings_transfer_incoming": {
+    "message": "From file"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Keep current"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Use from file"
+  },
+  "settings_transfer_added": {
+    "message": "Added"
+  },
+  "settings_transfer_replaced": {
+    "message": "Replaced"
+  },
+  "settings_transfer_kept": {
+    "message": "Kept"
+  },
+  "settings_transfer_identical": {
+    "message": "Identical"
+  },
+  "settings_transfer_skipped": {
+    "message": "Skipped"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Rule skipped: preset is missing or empty"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Built-in preset skipped"
+  },
+  "settings_transfer_dependency": {
+    "message": "A retained rule requires this preset; choose another version"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Current rules have conflicting preset assignments"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Existing rules using this preset"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frequency"
+  },
+  "settings_transfer_gain": {
+    "message": "Gain"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Type"
+  },
+  "settings_transfer_enabled": {
+    "message": "Enabled"
+  },
+  "settings_transfer_yes": {
+    "message": "Yes"
+  },
+  "settings_transfer_no": {
+    "message": "No"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Empty preset"
+  },
+  "settings_transfer_disabled": {
+    "message": "Disabled"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Select settings to import"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Choose a version for each conflict"
+  },
+  "settings_transfer_review": {
+    "message": "Review import"
+  },
+  "settings_transfer_reading": {
+    "message": "Reading settings…"
+  },
+  "settings_transfer_saving": {
+    "message": "Saving settings…"
+  },
+  "settings_transfer_result": {
+    "message": "Import result"
+  },
+  "settings_transfer_privacy": {
+    "message": "Files can contain site addresses and personal preset names. Share them carefully. Current curves and tab state are not transferred."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "The current curve on this tab will be reset"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "I understand that the current curve will be reset"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "No tab selected: only the point count changes; curves stay unchanged"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "The shared fallback curve will also be reset"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "The equalizer will be enabled on this tab"
+  },
+  "settings_transfer_stale": {
+    "message": "Settings or the selected tab changed. Review the updated import and choose again."
+  },
+  "settings_transfer_blocked": {
+    "message": "Resolve all conflicts and acknowledge the reset before applying."
+  },
+  "settings_transfer_saved": {
+    "message": "Settings imported successfully."
+  },
+  "settings_transfer_unchanged": {
+    "message": "No changes to apply."
+  },
+  "settings_transfer_read_error": {
+    "message": "Could not read settings. Select the file again to retry."
+  },
+  "settings_transfer_version_error": {
+    "message": "This settings file version is not supported."
+  },
+  "settings_transfer_file_error": {
+    "message": "This is not a valid settings or legacy presets file."
+  },
+  "settings_transfer_write_error": {
+    "message": "Could not save settings. Your choices are preserved; try again."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Settings were saved, but the popup could not refresh. Reopen it to see the changes."
+  },
+  "settings_transfer_export_error": {
+    "message": "Could not export settings. Try again."
+  },
+  "settings_transfer_apply": {
+    "message": "Apply"
+  },
+  "settings_transfer_back": {
+    "message": "Back"
+  },
+  "settings_transfer_next": {
+    "message": "Next"
+  },
+  "settings_transfer_cancel": {
+    "message": "Cancel"
+  },
+  "settings_transfer_close": {
+    "message": "Close"
+  },
+  "settings_transfer_presets": {
+    "message": "Presets"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Shortcuts"
+  },
+  "settings_transfer_theme": {
+    "message": "Theme"
+  },
+  "settings_transfer_language": {
+    "message": "Language"
+  },
+  "settings_transfer_point_count": {
+    "message": "Number of EQ points"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Enable spectrum visualisation"
+  },
+  "settings_transfer_compensation": {
+    "message": "Automatic volume compensation"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Don't show again"
+  },
+  "settings_transfer_mute": {
+    "message": "Mute/unmute"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Enable/disable"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Hide default presets"
+  },
+  "settings_transfer_dark": {
+    "message": "Dark"
+  },
+  "settings_transfer_light": {
+    "message": "Light"
+  },
+  "settings_transfer_import": {
+    "message": "Import"
+  },
+  "settings_transfer_export": {
+    "message": "Export"
   }
 }

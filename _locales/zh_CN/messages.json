@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "无法停止标签页音频捕获。"
+  },
+  "settings_transfer_title": {
+    "message": "设置迁移"
+  },
+  "settings_transfer_general": {
+    "message": "常规"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "自动启动规则"
+  },
+  "settings_transfer_absent": {
+    "message": "文件中不存在"
+  },
+  "settings_transfer_invalid": {
+    "message": "设置无效"
+  },
+  "settings_transfer_current": {
+    "message": "当前"
+  },
+  "settings_transfer_incoming": {
+    "message": "来自文件"
+  },
+  "settings_transfer_keep_current": {
+    "message": "保留当前设置"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "使用文件中的设置"
+  },
+  "settings_transfer_added": {
+    "message": "已添加"
+  },
+  "settings_transfer_replaced": {
+    "message": "已替换"
+  },
+  "settings_transfer_kept": {
+    "message": "已保留"
+  },
+  "settings_transfer_identical": {
+    "message": "相同"
+  },
+  "settings_transfer_skipped": {
+    "message": "已跳过"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "已跳过规则：预设不存在或为空"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "已跳过内置预设"
+  },
+  "settings_transfer_dependency": {
+    "message": "保留的规则需要此预设，请选择其他版本"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "当前规则为同一地址指定了不同的预设"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "使用此预设的现有规则"
+  },
+  "settings_transfer_frequency": {
+    "message": "频率"
+  },
+  "settings_transfer_gain": {
+    "message": "增益"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "类型"
+  },
+  "settings_transfer_enabled": {
+    "message": "启用"
+  },
+  "settings_transfer_yes": {
+    "message": "是"
+  },
+  "settings_transfer_no": {
+    "message": "否"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "空预设"
+  },
+  "settings_transfer_disabled": {
+    "message": "已禁用"
+  },
+  "settings_transfer_select_groups": {
+    "message": "选择要导入的设置"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "为每个冲突选择版本"
+  },
+  "settings_transfer_review": {
+    "message": "检查导入内容"
+  },
+  "settings_transfer_reading": {
+    "message": "正在读取设置…"
+  },
+  "settings_transfer_saving": {
+    "message": "正在保存设置…"
+  },
+  "settings_transfer_result": {
+    "message": "导入结果"
+  },
+  "settings_transfer_privacy": {
+    "message": "文件可能包含网站地址和个人预设名称，请谨慎分享。当前曲线和标签页状态不会迁移。"
+  },
+  "settings_transfer_reset_warning": {
+    "message": "此标签页的当前曲线将被重置"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "我理解当前曲线将被重置"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "未选择标签页：仅更改点数，曲线保持不变"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "共享的备用曲线也将被重置"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "将启用此标签页的均衡器"
+  },
+  "settings_transfer_stale": {
+    "message": "设置或所选标签页已更改，请检查更新后的导入内容并重新选择。"
+  },
+  "settings_transfer_blocked": {
+    "message": "请解决所有冲突并确认重置。"
+  },
+  "settings_transfer_saved": {
+    "message": "设置已成功导入。"
+  },
+  "settings_transfer_unchanged": {
+    "message": "没有需要应用的更改。"
+  },
+  "settings_transfer_read_error": {
+    "message": "无法读取设置，请重新选择文件。"
+  },
+  "settings_transfer_version_error": {
+    "message": "不支持此设置文件版本。"
+  },
+  "settings_transfer_file_error": {
+    "message": "这不是有效的设置文件或旧版预设文件。"
+  },
+  "settings_transfer_write_error": {
+    "message": "无法保存设置。已保留您的选择，请重试。"
+  },
+  "settings_transfer_refresh_error": {
+    "message": "设置已保存，但弹出窗口无法刷新。请重新打开。"
+  },
+  "settings_transfer_export_error": {
+    "message": "无法导出设置，请重试。"
+  },
+  "settings_transfer_apply": {
+    "message": "应用"
+  },
+  "settings_transfer_back": {
+    "message": "返回"
+  },
+  "settings_transfer_next": {
+    "message": "下一步"
+  },
+  "settings_transfer_cancel": {
+    "message": "取消"
+  },
+  "settings_transfer_close": {
+    "message": "关闭"
+  },
+  "settings_transfer_presets": {
+    "message": "预设"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "快捷键"
+  },
+  "settings_transfer_theme": {
+    "message": "主题"
+  },
+  "settings_transfer_language": {
+    "message": "语言"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQ点数"
+  },
+  "settings_transfer_spectrum": {
+    "message": "启用频谱可视化"
+  },
+  "settings_transfer_compensation": {
+    "message": "自动音量补偿"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "不再显示"
+  },
+  "settings_transfer_mute": {
+    "message": "静音/取消静音"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "启用/禁用"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "隐藏默认预设"
+  },
+  "settings_transfer_dark": {
+    "message": "深色"
+  },
+  "settings_transfer_light": {
+    "message": "浅色"
+  },
+  "settings_transfer_import": {
+    "message": "导入预设"
+  },
+  "settings_transfer_export": {
+    "message": "导出预设"
   }
 }

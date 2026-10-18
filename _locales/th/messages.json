@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "ไม่สามารถหยุดการบันทึกเสียงของแท็บได้"
+  },
+  "settings_transfer_title": {
+    "message": "โอนย้ายการตั้งค่า"
+  },
+  "settings_transfer_general": {
+    "message": "ทั่วไป"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "กฎเริ่มอัตโนมัติ"
+  },
+  "settings_transfer_absent": {
+    "message": "ไม่มีในไฟล์นี้"
+  },
+  "settings_transfer_invalid": {
+    "message": "การตั้งค่าไม่ถูกต้อง"
+  },
+  "settings_transfer_current": {
+    "message": "ปัจจุบัน"
+  },
+  "settings_transfer_incoming": {
+    "message": "จากไฟล์"
+  },
+  "settings_transfer_keep_current": {
+    "message": "เก็บค่าปัจจุบัน"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "ใช้ค่าจากไฟล์"
+  },
+  "settings_transfer_added": {
+    "message": "เพิ่มแล้ว"
+  },
+  "settings_transfer_replaced": {
+    "message": "แทนที่แล้ว"
+  },
+  "settings_transfer_kept": {
+    "message": "เก็บไว้"
+  },
+  "settings_transfer_identical": {
+    "message": "เหมือนกัน"
+  },
+  "settings_transfer_skipped": {
+    "message": "ข้ามแล้ว"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "ข้ามกฎ: ไม่มีพรีเซ็ตหรือพรีเซ็ตว่าง"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "ข้ามพรีเซ็ตในตัว"
+  },
+  "settings_transfer_dependency": {
+    "message": "กฎที่เก็บไว้ต้องใช้พรีเซ็ตนี้ โปรดเลือกเวอร์ชันอื่น"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "กฎปัจจุบันกำหนดพรีเซ็ตต่างกันสำหรับที่อยู่เดียวกัน"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "กฎที่ใช้พรีเซ็ตนี้"
+  },
+  "settings_transfer_frequency": {
+    "message": "ความถี่"
+  },
+  "settings_transfer_gain": {
+    "message": "เกน"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "ประเภท"
+  },
+  "settings_transfer_enabled": {
+    "message": "เปิดใช้งาน"
+  },
+  "settings_transfer_yes": {
+    "message": "ใช่"
+  },
+  "settings_transfer_no": {
+    "message": "ไม่ใช่"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "พรีเซ็ตว่าง"
+  },
+  "settings_transfer_disabled": {
+    "message": "ปิดใช้งาน"
+  },
+  "settings_transfer_select_groups": {
+    "message": "เลือกการตั้งค่าที่จะนำเข้า"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "เลือกเวอร์ชันสำหรับแต่ละข้อขัดแย้ง"
+  },
+  "settings_transfer_review": {
+    "message": "ตรวจสอบการนำเข้า"
+  },
+  "settings_transfer_reading": {
+    "message": "กำลังอ่านการตั้งค่า…"
+  },
+  "settings_transfer_saving": {
+    "message": "กำลังบันทึกการตั้งค่า…"
+  },
+  "settings_transfer_result": {
+    "message": "ผลการนำเข้า"
+  },
+  "settings_transfer_privacy": {
+    "message": "ไฟล์อาจมีที่อยู่เว็บไซต์และชื่อส่วนตัว โปรดแชร์อย่างระมัดระวัง เส้นโค้งปัจจุบันและสถานะแท็บจะไม่ถูกโอนย้าย"
+  },
+  "settings_transfer_reset_warning": {
+    "message": "เส้นโค้งปัจจุบันของแท็บนี้จะถูกรีเซ็ต"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "ฉันเข้าใจว่าเส้นโค้งปัจจุบันจะถูกรีเซ็ต"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "ไม่ได้เลือกแท็บ: เปลี่ยนเฉพาะจำนวนจุด เส้นโค้งคงเดิม"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "เส้นโค้งสำรองที่ใช้ร่วมกันจะถูกรีเซ็ตด้วย"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "อีควอไลเซอร์จะเปิดใช้งานในแท็บนี้"
+  },
+  "settings_transfer_stale": {
+    "message": "การตั้งค่าหรือแท็บเปลี่ยนไป โปรดตรวจสอบและเลือกใหม่"
+  },
+  "settings_transfer_blocked": {
+    "message": "แก้ไขข้อขัดแย้งทั้งหมดและยืนยันการรีเซ็ต"
+  },
+  "settings_transfer_saved": {
+    "message": "นำเข้าการตั้งค่าสำเร็จ"
+  },
+  "settings_transfer_unchanged": {
+    "message": "ไม่มีการเปลี่ยนแปลงที่จะใช้"
+  },
+  "settings_transfer_read_error": {
+    "message": "อ่านการตั้งค่าไม่ได้ โปรดเลือกไฟล์อีกครั้ง"
+  },
+  "settings_transfer_version_error": {
+    "message": "ไม่รองรับเวอร์ชันไฟล์การตั้งค่านี้"
+  },
+  "settings_transfer_file_error": {
+    "message": "ไม่ใช่ไฟล์การตั้งค่าหรือพรีเซ็ตรุ่นเก่าที่ถูกต้อง"
+  },
+  "settings_transfer_write_error": {
+    "message": "บันทึกไม่ได้ ตัวเลือกยังคงอยู่ โปรดลองอีกครั้ง"
+  },
+  "settings_transfer_refresh_error": {
+    "message": "บันทึกแล้วแต่รีเฟรชหน้าต่างไม่ได้ โปรดเปิดใหม่"
+  },
+  "settings_transfer_export_error": {
+    "message": "ส่งออกการตั้งค่าไม่ได้ โปรดลองอีกครั้ง"
+  },
+  "settings_transfer_apply": {
+    "message": "ใช้"
+  },
+  "settings_transfer_back": {
+    "message": "ย้อนกลับ"
+  },
+  "settings_transfer_next": {
+    "message": "ถัดไป"
+  },
+  "settings_transfer_cancel": {
+    "message": "ยกเลิก"
+  },
+  "settings_transfer_close": {
+    "message": "ปิด"
+  },
+  "settings_transfer_presets": {
+    "message": "พรีเซ็ต"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "ปุ่มลัด"
+  },
+  "settings_transfer_theme": {
+    "message": "ธีม"
+  },
+  "settings_transfer_language": {
+    "message": "ภาษา"
+  },
+  "settings_transfer_point_count": {
+    "message": "จำนวนจุด EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "เปิดใช้งานการแสดงผลสเปกตรัม"
+  },
+  "settings_transfer_compensation": {
+    "message": "การชดเชยระดับเสียงอัตโนมัติ"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "ไม่ต้องแสดงอีก"
+  },
+  "settings_transfer_mute": {
+    "message": "ปิดเสียง/เปิดเสียง"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "เปิดใช้งาน/ปิดใช้งาน"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "ซ่อนพรีเซ็ตเริ่มต้น"
+  },
+  "settings_transfer_dark": {
+    "message": "มืด"
+  },
+  "settings_transfer_light": {
+    "message": "สว่าง"
+  },
+  "settings_transfer_import": {
+    "message": "นำเข้าพรีเซ็ต"
+  },
+  "settings_transfer_export": {
+    "message": "ส่งออกพรีเซ็ต"
   }
 }

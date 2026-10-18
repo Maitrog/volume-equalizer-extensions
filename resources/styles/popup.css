@@ -674,6 +674,81 @@ button:focus-visible {
   font-size: 18px;
 }
 
+#settings-import-modal [hidden],
+#settings-import-modal [data-reset-visible="false"] {
+  display: none !important;
+}
+
+#settings-import-modal {
+  z-index: 1100;
+}
+
+.settings-import-dialog {
+  box-sizing: border-box;
+  max-height: calc(100% - 32px);
+  margin: 16px auto;
+  overflow-wrap: anywhere;
+  scrollbar-width: thin;
+}
+
+.settings-import-dialog h4,
+.settings-import-dialog p {
+  margin: 8px 0;
+}
+
+.settings-import-dialog label {
+  margin: 10px 0;
+  align-items: flex-start;
+}
+
+.settings-import-dialog fieldset {
+  min-width: 0;
+  margin: 10px 0;
+  padding: 8px;
+  border: 1px solid var(--border);
+}
+
+.settings-import-dialog legend {
+  max-width: 100%;
+}
+
+.settings-import-dialog table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.settings-import-dialog td,
+.settings-import-dialog th {
+  padding: 4px 2px;
+  text-align: start;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-import-dialog input[type="radio"] {
+  flex-shrink: 0;
+  accent-color: var(--accent-mid);
+}
+
+.settings-import-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.settings-import-actions button,
+#settings-import-close {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+#settings-import-close {
+  display: block;
+  margin-inline-start: auto;
+  margin-bottom: 8px;
+}
+
 .modal-content h3 {
   margin: 0 0 10px;
   font-size: 16px;

@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "தாவல் ஆடியோ பிடிப்பை நிறுத்த முடியவில்லை."
+  },
+  "settings_transfer_title": {
+    "message": "அமைப்புகள் பரிமாற்றம்"
+  },
+  "settings_transfer_general": {
+    "message": "பொது"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "தானியக்கத் தொடக்க விதிகள்"
+  },
+  "settings_transfer_absent": {
+    "message": "இந்தக் கோப்பில் இல்லை"
+  },
+  "settings_transfer_invalid": {
+    "message": "தவறான அமைப்புகள்"
+  },
+  "settings_transfer_current": {
+    "message": "தற்போதையது"
+  },
+  "settings_transfer_incoming": {
+    "message": "கோப்பிலிருந்து"
+  },
+  "settings_transfer_keep_current": {
+    "message": "தற்போதையதை வைத்திரு"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "கோப்பிலுள்ளதைப் பயன்படுத்து"
+  },
+  "settings_transfer_added": {
+    "message": "சேர்க்கப்பட்டவை"
+  },
+  "settings_transfer_replaced": {
+    "message": "மாற்றப்பட்டவை"
+  },
+  "settings_transfer_kept": {
+    "message": "வைத்திருப்பவை"
+  },
+  "settings_transfer_identical": {
+    "message": "ஒரே மாதிரியானவை"
+  },
+  "settings_transfer_skipped": {
+    "message": "தவிர்க்கப்பட்டவை"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "விதி தவிர்க்கப்பட்டது: முன்னமைவு இல்லை அல்லது காலியாக உள்ளது"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "உள்ளமைந்த முன்னமைவு தவிர்க்கப்பட்டது"
+  },
+  "settings_transfer_dependency": {
+    "message": "வைத்திருக்கும் விதிக்கு இந்த முன்னமைவு தேவை; வேறு பதிப்பைத் தேர்ந்தெடுக்கவும்"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "தற்போதைய விதிகள் ஒரே முகவரிக்கு வெவ்வேறு முன்னமைவுகளைக் குறிப்பிடுகின்றன"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "இந்த முன்னமைவைப் பயன்படுத்தும் விதிகள்"
+  },
+  "settings_transfer_frequency": {
+    "message": "அதிர்வெண்"
+  },
+  "settings_transfer_gain": {
+    "message": "ஆதாயம்"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "வகை"
+  },
+  "settings_transfer_enabled": {
+    "message": "இயக்கப்பட்டது"
+  },
+  "settings_transfer_yes": {
+    "message": "ஆம்"
+  },
+  "settings_transfer_no": {
+    "message": "இல்லை"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "காலியான முன்னமைவு"
+  },
+  "settings_transfer_disabled": {
+    "message": "முடக்கப்பட்டது"
+  },
+  "settings_transfer_select_groups": {
+    "message": "இறக்குமதி செய்யும் அமைப்புகளைத் தேர்ந்தெடுக்கவும்"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "ஒவ்வொரு முரண்பாட்டிற்கும் பதிப்பைத் தேர்ந்தெடுக்கவும்"
+  },
+  "settings_transfer_review": {
+    "message": "இறக்குமதியைச் சரிபார்க்கவும்"
+  },
+  "settings_transfer_reading": {
+    "message": "அமைப்புகளைப் படிக்கிறது…"
+  },
+  "settings_transfer_saving": {
+    "message": "அமைப்புகளைச் சேமிக்கிறது…"
+  },
+  "settings_transfer_result": {
+    "message": "இறக்குமதி முடிவு"
+  },
+  "settings_transfer_privacy": {
+    "message": "கோப்புகளில் தள முகவரிகளும் தனிப்பட்ட பெயர்களும் இருக்கலாம். கவனமாகப் பகிரவும். தற்போதைய வளைவுகளும் தாவல் நிலையும் மாற்றப்படாது."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "இந்தத் தாவலின் தற்போதைய வளைவு மீட்டமைக்கப்படும்"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "தற்போதைய வளைவு மீட்டமைக்கப்படும் என்பதைப் புரிந்துகொள்கிறேன்"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "தாவல் தேர்ந்தெடுக்கப்படவில்லை: புள்ளி எண்ணிக்கை மட்டும் மாறும்; வளைவுகள் மாறாது"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "பகிரப்பட்ட மாற்று வளைவும் மீட்டமைக்கப்படும்"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "இந்தத் தாவலில் சமநிலைப்படுத்தி இயக்கப்படும்"
+  },
+  "settings_transfer_stale": {
+    "message": "அமைப்புகள் அல்லது தாவல் மாறியுள்ளது. இறக்குமதியைச் சரிபார்த்து மீண்டும் தேர்ந்தெடுக்கவும்."
+  },
+  "settings_transfer_blocked": {
+    "message": "முரண்பாடுகளைத் தீர்த்து மீட்டமைப்பை உறுதிசெய்யவும்."
+  },
+  "settings_transfer_saved": {
+    "message": "அமைப்புகள் இறக்குமதி செய்யப்பட்டன."
+  },
+  "settings_transfer_unchanged": {
+    "message": "பயன்படுத்த மாற்றங்கள் இல்லை."
+  },
+  "settings_transfer_read_error": {
+    "message": "அமைப்புகளைப் படிக்க முடியவில்லை. கோப்பை மீண்டும் தேர்ந்தெடுக்கவும்."
+  },
+  "settings_transfer_version_error": {
+    "message": "இந்தக் கோப்புப் பதிப்பு ஆதரிக்கப்படவில்லை."
+  },
+  "settings_transfer_file_error": {
+    "message": "இது சரியான அமைப்புக் கோப்போ பழைய முன்னமைவுக் கோப்போ அல்ல."
+  },
+  "settings_transfer_write_error": {
+    "message": "சேமிக்க முடியவில்லை. தேர்வுகள் பாதுகாக்கப்பட்டுள்ளன; மீண்டும் முயலவும்."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "அமைப்புகள் சேமிக்கப்பட்டன; சாளரம் புதுப்பிக்கப்படவில்லை. மீண்டும் திறக்கவும்."
+  },
+  "settings_transfer_export_error": {
+    "message": "ஏற்றுமதி செய்ய முடியவில்லை. மீண்டும் முயலவும்."
+  },
+  "settings_transfer_apply": {
+    "message": "பயன்படுத்து"
+  },
+  "settings_transfer_back": {
+    "message": "பின்செல்"
+  },
+  "settings_transfer_next": {
+    "message": "அடுத்து"
+  },
+  "settings_transfer_cancel": {
+    "message": "கைவிடு"
+  },
+  "settings_transfer_close": {
+    "message": "மூடு"
+  },
+  "settings_transfer_presets": {
+    "message": "முன்னமைவுகள்"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "குறுக்குவழிகள்"
+  },
+  "settings_transfer_theme": {
+    "message": "கருப்பொருள்"
+  },
+  "settings_transfer_language": {
+    "message": "மொழி"
+  },
+  "settings_transfer_point_count": {
+    "message": "சமனாக்கி புள்ளிகளின் எண்ணிக்கை"
+  },
+  "settings_transfer_spectrum": {
+    "message": "வானவில் காட்சிப்படுத்தலை இயக்கு"
+  },
+  "settings_transfer_compensation": {
+    "message": "தானியங்கி ஒலியளவு ஈடுசெய்தல்"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "மீண்டும் காட்டாதே"
+  },
+  "settings_transfer_mute": {
+    "message": "ஒலிமுடக்கு/இயக்கு"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "இயக்கு/முடக்கு"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "இயல்புநிலை முன்னமைவுகளை மறை"
+  },
+  "settings_transfer_dark": {
+    "message": "இருண்ட"
+  },
+  "settings_transfer_light": {
+    "message": "வெளிர்"
+  },
+  "settings_transfer_import": {
+    "message": "இறக்குமதி"
+  },
+  "settings_transfer_export": {
+    "message": "ஏற்றுமதி"
   }
 }

@@ -274,5 +274,215 @@
   },
   "tab_capture_stop_error": {
     "message": "No se pudo detener la captura de audio de la pestaña."
+  },
+  "settings_transfer_title": {
+    "message": "Transferir ajustes"
+  },
+  "settings_transfer_general": {
+    "message": "General"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Reglas de inicio automático"
+  },
+  "settings_transfer_absent": {
+    "message": "No está en este archivo"
+  },
+  "settings_transfer_invalid": {
+    "message": "Ajustes no válidos"
+  },
+  "settings_transfer_current": {
+    "message": "Actual"
+  },
+  "settings_transfer_incoming": {
+    "message": "Del archivo"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Conservar actual"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Usar del archivo"
+  },
+  "settings_transfer_added": {
+    "message": "Añadidos"
+  },
+  "settings_transfer_replaced": {
+    "message": "Reemplazados"
+  },
+  "settings_transfer_kept": {
+    "message": "Conservados"
+  },
+  "settings_transfer_identical": {
+    "message": "Idénticos"
+  },
+  "settings_transfer_skipped": {
+    "message": "Omitidos"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Regla omitida: el preajuste falta o está vacío"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Preajuste integrado omitido"
+  },
+  "settings_transfer_dependency": {
+    "message": "Una regla conservada requiere este preajuste; elige otra versión"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Las reglas actuales asignan preajustes distintos a la misma dirección"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Reglas existentes con este preajuste"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frecuencia"
+  },
+  "settings_transfer_gain": {
+    "message": "Ganancia"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Tipo"
+  },
+  "settings_transfer_enabled": {
+    "message": "Activado"
+  },
+  "settings_transfer_yes": {
+    "message": "Sí"
+  },
+  "settings_transfer_no": {
+    "message": "No"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Preajuste vacío"
+  },
+  "settings_transfer_disabled": {
+    "message": "Desactivado"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Elige los ajustes que importar"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Elige una versión para cada conflicto"
+  },
+  "settings_transfer_review": {
+    "message": "Revisar importación"
+  },
+  "settings_transfer_reading": {
+    "message": "Leyendo ajustes…"
+  },
+  "settings_transfer_saving": {
+    "message": "Guardando ajustes…"
+  },
+  "settings_transfer_result": {
+    "message": "Resultado de importación"
+  },
+  "settings_transfer_privacy": {
+    "message": "Los archivos pueden contener direcciones web y nombres personales. Compártelos con cuidado. No se transfieren las curvas actuales ni el estado de las pestañas."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "Se restablecerá la curva actual de esta pestaña"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Entiendo que se restablecerá la curva actual"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Sin pestaña seleccionada: solo cambia el número de puntos; las curvas se mantienen"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "También se restablecerá la curva compartida de respaldo"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "Se activará el ecualizador en esta pestaña"
+  },
+  "settings_transfer_stale": {
+    "message": "Los ajustes o la pestaña cambiaron. Revisa la importación y vuelve a elegir."
+  },
+  "settings_transfer_blocked": {
+    "message": "Resuelve todos los conflictos y confirma el restablecimiento."
+  },
+  "settings_transfer_saved": {
+    "message": "Ajustes importados correctamente."
+  },
+  "settings_transfer_unchanged": {
+    "message": "No hay cambios que aplicar."
+  },
+  "settings_transfer_read_error": {
+    "message": "No se pudieron leer los ajustes. Selecciona el archivo de nuevo."
+  },
+  "settings_transfer_version_error": {
+    "message": "Esta versión del archivo no es compatible."
+  },
+  "settings_transfer_file_error": {
+    "message": "No es un archivo válido de ajustes ni de preajustes antiguos."
+  },
+  "settings_transfer_write_error": {
+    "message": "No se pudieron guardar los ajustes. Tus elecciones se conservan; inténtalo de nuevo."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Los ajustes se guardaron, pero la ventana no se actualizó. Ábrela de nuevo."
+  },
+  "settings_transfer_export_error": {
+    "message": "No se pudieron exportar los ajustes. Inténtalo de nuevo."
+  },
+  "settings_transfer_apply": {
+    "message": "Aplicar"
+  },
+  "settings_transfer_back": {
+    "message": "Atrás"
+  },
+  "settings_transfer_next": {
+    "message": "Siguiente"
+  },
+  "settings_transfer_cancel": {
+    "message": "Cancelar"
+  },
+  "settings_transfer_close": {
+    "message": "Cerrar"
+  },
+  "settings_transfer_presets": {
+    "message": "Preajustes"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Atajos de teclado"
+  },
+  "settings_transfer_theme": {
+    "message": "Tema"
+  },
+  "settings_transfer_language": {
+    "message": "Idioma"
+  },
+  "settings_transfer_point_count": {
+    "message": "Número de puntos de EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Activar la visualización del espectro"
+  },
+  "settings_transfer_compensation": {
+    "message": "Compensación automática de volumen"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "No volver a mostrar"
+  },
+  "settings_transfer_mute": {
+    "message": "Silenciar/activar sonido"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Activar/desactivar"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Ocultar preajustes predeterminados"
+  },
+  "settings_transfer_dark": {
+    "message": "Oscuro"
+  },
+  "settings_transfer_light": {
+    "message": "Claro"
+  },
+  "settings_transfer_import": {
+    "message": "Importar preajustes"
+  },
+  "settings_transfer_export": {
+    "message": "Exportar preajustes"
   }
 }
