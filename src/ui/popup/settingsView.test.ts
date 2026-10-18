@@ -226,7 +226,7 @@ test("applies settings without writes or curve reset", async () => {
   expect(enableSpectrum.checked).toBe(false);
   expect(enableVolumeCompensation.checked).toBe(true);
   expect(hideDefaultPresets.checked).toBe(true);
-  expect(localization.applySavedLanguage).toHaveBeenCalledWith("ru");
+  expect(localization.applySavedLanguage).toHaveBeenCalledWith("ru", expect.any(Function));
   expect(settingsView.getShortcutSettings()).toEqual({ mute: null, toggleEq: null });
 });
 

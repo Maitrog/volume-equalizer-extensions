@@ -4,8 +4,10 @@ import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 import type { PopupElements } from "../../ui/popup/popupElements";
 import { createEqualizerState } from "../../ui/equalizerCanvas/equalizerEditorState";
 import { createPopupApp } from "./createPopupApp";
+import { createLocalizationService } from "./localizationController";
 
 const mechanics = vi.hoisted(() => ({
+  realAutostart: false,
   selected: 42 as number | null,
   generation: 1,
   stopCapture: vi.fn(),
@@ -53,13 +55,19 @@ vi.mock("../../ui/popup/controlsView", () => ({
 vi.mock("../../ui/popup/presetsView", () => ({
   createPresetsView: () => ({ renderPresetNames: mechanics.renderNames }),
 }));
-vi.mock("../../ui/popup/autostartView", () => ({
-  createAutostartView: () => ({
-    init: vi.fn(async () => {}),
-    renderWhitelist: vi.fn(async () => {}),
-    refreshPresetSelects: mechanics.refreshPresets,
-  }),
-}));
+vi.mock("../../ui/popup/autostartView", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("../../ui/popup/autostartView")>();
+  return {
+    createAutostartView: (deps: Parameters<typeof actual.createAutostartView>[0]) =>
+      mechanics.realAutostart
+        ? actual.createAutostartView(deps)
+        : {
+            init: vi.fn(async () => {}),
+            renderWhitelist: vi.fn(async () => {}),
+            refreshPresetSelects: mechanics.refreshPresets,
+          },
+  };
+});
 vi.mock("../../ui/popup/capturedTabsView", () => ({
   createCapturedTabsView: () => ({ render: vi.fn(async () => {}) }),
 }));
@@ -74,6 +82,7 @@ vi.mock("../../ui/popup/onboardingGuideView", () => ({
   createOnboardingGuideView: () => ({ start: vi.fn(async () => {}) }),
 }));
 class FakeElement extends EventTarget {
+  lang = "";
   style = { display: "none" };
   classList = { add: vi.fn(), remove: vi.fn(), toggle: vi.fn() };
   getContext = () => ({});
@@ -108,6 +117,10 @@ class FakeElement extends EventTarget {
       child.parentElement = this;
       this.children.push(child);
     });
+  }
+  appendChild(child: FakeElement): FakeElement {
+    this.append(child);
+    return child;
   }
   replaceChildren(...children: FakeElement[]): void {
     this.text = "";
@@ -151,6 +164,8 @@ const doc = Object.assign(new EventTarget(), {
   activeElement: null as FakeElement | null,
   body: new FakeElement(),
   documentElement: new FakeElement(),
+  getElementById: () => null,
+  querySelectorAll: () => [],
   createElement: (tag: string) => new FakeElement(tag.toUpperCase()),
 });
 class Reader {
@@ -173,6 +188,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.clearAllMocks();
   Reader.pending = [];
+  mechanics.realAutostart = false;
   mechanics.selected = 42;
   mechanics.generation = 1;
 });
@@ -190,7 +206,10 @@ const general = {
 const filters = [{ type: "peaking", freq: 1000, gain: 2, q: 0.5 }];
 const file = (settings: object) =>
   JSON.stringify({ format: "eq-toolkit-settings", version: 1, settings });
-const setup = () => {
+const setup = (options: { realLocalization?: boolean; realAutostart?: boolean } = {}) => {
+  mechanics.realAutostart = options.realAutostart === true;
+  doc.documentElement.lang = "";
+  vi.stubGlobal("HTMLSelectElement", FakeElement);
   vi.stubGlobal("HTMLElement", FakeElement);
   vi.stubGlobal("document", doc);
   vi.stubGlobal("window", new EventTarget());
@@ -222,7 +241,9 @@ const setup = () => {
     listeners.forEach((listener) => listener(changes, area));
   const stored: Record<string, unknown> = { presets: { Mine: filters }, presetNames: ["Mine"] };
   const storage = {
-    get: vi.fn(async () => structuredClone(stored)),
+    get: vi.fn<(keys?: string | string[]) => Promise<Record<string, unknown>>>(async () =>
+      structuredClone(stored),
+    ),
     set: vi.fn(async (patch: Record<string, unknown>) => {
       const changes = Object.fromEntries(
         Object.entries(patch).map(([key, value]) => [
@@ -235,12 +256,15 @@ const setup = () => {
     }),
   };
   vi.stubGlobal("chrome", {
-    i18n: { getUILanguage: () => "en" },
+    i18n: {
+      getUILanguage: () => "en",
+      getMessage: (key: string) => (key === "@@ui_locale" ? "en" : ""),
+    },
     tabs: {
       get: vi.fn(async (id: number) => ({ id, title: `Tab ${id}` })),
       query: vi.fn(async () => []),
     },
-    runtime: {},
+    runtime: { getURL: (path: string) => path },
     storage: {
       local: storage,
       onChanged: {
@@ -258,6 +282,14 @@ const setup = () => {
     applySavedLanguage: vi.fn(async () => true),
     setLanguage: vi.fn(async () => {}),
   };
+  if (options.realLocalization)
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () => ({ ok: true, json: async () => ({ ready: { message: "Ready" } }) }) as Response,
+      ),
+    );
+  const realLocalization = options.realLocalization ? createLocalizationService() : null;
   const state = createEqualizerState();
   state.initPoints(3, { canvasWidth: 400, canvasHeight: 200 });
   const setPoints = vi.spyOn(state, "setPoints");
@@ -266,7 +298,7 @@ const setup = () => {
     elements: elements as unknown as PopupElements,
     audioContext: {} as AudioContext,
     equalizerState: state,
-    localization,
+    localization: realLocalization ?? localization,
     readThemeColors: () => ({}) as never,
   });
   disposers.push(app.dispose);
@@ -285,6 +317,7 @@ const setup = () => {
   };
   return {
     app,
+    realLocalization,
     elements,
     storage,
     stored,
@@ -331,7 +364,7 @@ test("file groups conflicts summary commit updates settings with one write and n
   expect(t.stored.theme).toBe("light");
   expect(t.elements.themeSelect.value).toBe("light");
   expect(t.elements.shortcutMute.value).toBe("");
-  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru");
+  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru", expect.any(Function));
   expect(t.initPoints).not.toHaveBeenCalled();
   expect(t.state.getFilters({ canvasWidth: 400, canvasHeight: 200 })).toEqual(
     t.stored[STORAGE_KEYS.tabFilters(42)],
@@ -352,7 +385,7 @@ test("updates another open popup without writes or a second reset", async () => 
   expect(t.elements.enableVolumeCompensation.checked).toBe(true);
   expect(t.elements.hideDefaultPresets.checked).toBe(true);
   expect(t.elements.shortcutMute.value).toBe("");
-  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru");
+  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru", expect.any(Function));
   expect(t.initPoints).not.toHaveBeenCalled();
   expect(t.setPoints).not.toHaveBeenCalled();
   expect(t.storage.set).not.toHaveBeenCalled();
@@ -515,7 +548,7 @@ test("a newer settings refresh supersedes an older delayed storage snapshot", as
   await tick();
   expect(t.elements.themeSelect.value).toBe("light");
   expect(t.localization.applySavedLanguage).toHaveBeenCalledOnce();
-  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru");
+  expect(t.localization.applySavedLanguage).toHaveBeenCalledWith("ru", expect.any(Function));
   expect(t.storage.set).not.toHaveBeenCalled();
 });
 
@@ -605,4 +638,116 @@ test("unexpected tab API errors prevent import instead of becoming an empty targ
   await t.read(file({ general }));
   expect(t.elements.settingsImportStatus.textContent).toBe("settings_transfer_read_error");
   expect(t.storage.set).not.toHaveBeenCalled();
+});
+
+test("disposal during a real saved locale fetch prevents its later DOM application", async () => {
+  const t = setup({ realLocalization: true });
+  await t.realLocalization!.ready;
+  let finishLocale!: (response: Response) => void;
+  vi.mocked(fetch).mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finishLocale = resolve;
+      }),
+  );
+  t.stored.uiLanguage = "ru";
+  t.emit({ uiLanguage: { newValue: "ru" } });
+  await tick();
+  const language = doc.documentElement.lang;
+  t.app.dispose();
+  finishLocale({ ok: true, json: async () => ({ ready: { message: "RU" } }) } as Response);
+  await tick();
+  expect(doc.documentElement.lang).toBe(language);
+  expect(t.realLocalization!.getMessage("ready")).toBe("Ready");
+  expect(t.storage.set).not.toHaveBeenCalled();
+});
+
+test("an older real rule read cannot overwrite a newer storage refresh", async () => {
+  const t = setup({ realAutostart: true });
+  let finishOld!: (value: Record<string, unknown>) => void;
+  t.storage.get.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finishOld = resolve;
+      }),
+  );
+  t.emit({ whitelist: { newValue: [] } });
+  await tick();
+  const latest = { id: "new", type: "domain", value: "new.example.com", presetName: "Mine" };
+  t.stored.whitelist = [latest];
+  t.emit({ whitelist: { newValue: [latest] } });
+  await tick();
+  expect(t.elements.autostartSettingsList.textContent).toContain("new.example.com");
+  finishOld({ whitelist: [{ ...latest, id: "old", value: "old.example.com" }] });
+  await tick();
+  expect(t.elements.autostartSettingsList.textContent).toContain("new.example.com");
+  expect(t.elements.autostartSettingsList.textContent).not.toContain("old.example.com");
+});
+
+test("an older real preset read cannot overwrite newer dependency selects", async () => {
+  const t = setup({ realAutostart: true });
+  const read = t.storage.get.getMockImplementation()!;
+  let finishOld!: (value: Record<string, unknown>) => void;
+  let intercepted = false;
+  t.storage.get.mockImplementation((keys) => {
+    if (!intercepted && Array.isArray(keys) && keys.includes(STORAGE_KEYS.PRESETS)) {
+      intercepted = true;
+      return new Promise((resolve) => {
+        finishOld = resolve;
+      });
+    }
+    return read(keys);
+  });
+  t.emit({ presets: { newValue: {} } });
+  await tick();
+  t.stored.presets = { Latest: filters };
+  t.stored.presetNames = ["Latest"];
+  t.emit({ presets: { newValue: t.stored.presets } });
+  await tick();
+  expect(t.elements.autostartSettingsAddPreset.textContent).toContain("Latest");
+  finishOld({ presets: { Old: filters }, presetNames: ["Old"] });
+  await tick();
+  expect(t.elements.autostartSettingsAddPreset.textContent).toContain("Latest");
+  expect(t.elements.autostartSettingsAddPreset.textContent).not.toContain("Old");
+});
+
+test("a committed import supersedes an older real rule read", async () => {
+  const t = setup({ realAutostart: true });
+  let finishOld!: (value: Record<string, unknown>) => void;
+  t.storage.get.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finishOld = resolve;
+      }),
+  );
+  t.emit({ whitelist: { newValue: [] } });
+  await tick();
+  const latest = { id: "new", type: "domain", value: "imported.example.com", presetName: "Mine" };
+  await t.read(file({ autostartRules: [latest] }));
+  await t.confirm();
+  expect(t.elements.settingsImportStatus.textContent).toBe("settings_transfer_saved");
+  expect(t.elements.autostartSettingsList.textContent).toContain("imported.example.com");
+  finishOld({ whitelist: [{ ...latest, id: "old", value: "old.example.com" }] });
+  await tick();
+  expect(t.elements.autostartSettingsList.textContent).toContain("imported.example.com");
+  expect(t.elements.autostartSettingsList.textContent).not.toContain("old.example.com");
+  expect(t.storage.set).toHaveBeenCalledOnce();
+});
+
+test("disposal invalidates a real pending autostart list read", async () => {
+  const t = setup({ realAutostart: true });
+  let finishRead!: (value: Record<string, unknown>) => void;
+  t.storage.get.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finishRead = resolve;
+      }),
+  );
+  t.emit({ whitelist: { newValue: [] } });
+  await tick();
+  const before = t.elements.autostartSettingsList.textContent;
+  t.app.dispose();
+  finishRead({ whitelist: [] });
+  await tick();
+  expect(t.elements.autostartSettingsList.textContent).toBe(before);
 });

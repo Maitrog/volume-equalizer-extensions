@@ -66,9 +66,7 @@ const setup = () => {
   vi.stubGlobal("window", windowTarget);
   const callbacks = {
     handleToolkitStorageChange: vi.fn(() => Promise.resolve()),
-    renderAutostartWhitelist: vi.fn(() => Promise.resolve()),
-    refreshAutostartPresetSelects: vi.fn(() => Promise.resolve()),
-    refreshPresetDropdown: vi.fn(() => Promise.resolve()),
+    refreshDynamicContent: vi.fn(() => Promise.resolve()),
     refreshSavedSettings: vi.fn(() => Promise.resolve()),
     refreshSelectedFilters: vi.fn(() => Promise.resolve()),
     getCurrentTabId: vi.fn(() => Promise.resolve(12)),
@@ -131,7 +129,7 @@ describe("popup subscriptions", () => {
     await Promise.resolve();
 
     expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
-    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+    expect(callbacks.refreshDynamicContent).toHaveBeenCalledOnce();
     expect(keydown.preventDefault).toHaveBeenCalledOnce();
 
     subscriptions.dispose();
@@ -146,7 +144,7 @@ describe("popup subscriptions", () => {
     await Promise.resolve();
 
     expect(callbacks.toggleMute).toHaveBeenCalledTimes(1);
-    expect(callbacks.renderAutostartWhitelist).toHaveBeenCalledOnce();
+    expect(callbacks.refreshDynamicContent).toHaveBeenCalledOnce();
   });
 
   test("leaves captured tab shortcuts to the background", async () => {
@@ -185,8 +183,7 @@ describe("popup subscriptions", () => {
     await Promise.resolve();
     vi.advanceTimersByTime(100);
 
-    expect(callbacks.refreshAutostartPresetSelects).not.toHaveBeenCalled();
-    expect(callbacks.refreshPresetDropdown).not.toHaveBeenCalled();
+    expect(callbacks.refreshDynamicContent).not.toHaveBeenCalled();
     expect(connect).toHaveBeenCalledOnce();
   });
 
@@ -392,13 +389,12 @@ const deferred = <T>() => {
   return { promise, resolve };
 };
 
-test("refreshes preferences and preset data without requiring name changes", async () => {
+test("refreshes preferences and delegates their dynamic content to the saved refresh", async () => {
   const { subscriptions, callbacks, storageChange } = setup();
   storageChange.fire({ theme: { newValue: "light" }, presets: { newValue: {} } }, "local");
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(callbacks.refreshSavedSettings).toHaveBeenCalledOnce();
-  expect(callbacks.refreshAutostartPresetSelects).toHaveBeenCalledOnce();
-  expect(callbacks.refreshPresetDropdown).toHaveBeenCalledOnce();
+  expect(callbacks.refreshDynamicContent).not.toHaveBeenCalled();
   subscriptions.dispose();
 });
 
@@ -423,5 +419,14 @@ test("refreshes only the selected individual curve", async () => {
   storageChange.fire({ [STORAGE_KEYS.tabFilters(12)]: { newValue: [] } }, "local");
   await new Promise((resolve) => setTimeout(resolve, 0));
   expect(callbacks.refreshSelectedFilters).toHaveBeenCalledOnce();
+  subscriptions.dispose();
+});
+
+test("refreshes preset data without requiring name changes through the shared coordinator", async () => {
+  const { subscriptions, callbacks, storageChange } = setup();
+  storageChange.fire({ presets: { newValue: {} } }, "local");
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(callbacks.refreshDynamicContent).toHaveBeenCalledOnce();
+  expect(callbacks.refreshSavedSettings).not.toHaveBeenCalled();
   subscriptions.dispose();
 });

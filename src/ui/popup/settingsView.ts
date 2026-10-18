@@ -29,7 +29,10 @@ export const createSettingsView = (deps: {
   localization: {
     getMessage(messageName: string): string;
     waitForPendingChanges(): Promise<void>;
-    applySavedLanguage(language: AvailableLanguageCode): Promise<boolean>;
+    applySavedLanguage(
+      language: AvailableLanguageCode,
+      isCurrent?: () => boolean,
+    ): Promise<boolean>;
     setLanguage(
       language: string,
       options?: {
@@ -230,7 +233,11 @@ export const createSettingsView = (deps: {
         deps.localization.waitForPendingChanges(),
       ]);
     },
-    applySavedSettings: async (settings: ResolvedSettings): Promise<void> => {
+    applySavedSettings: async (
+      settings: ResolvedSettings,
+      isCurrent: () => boolean = () => true,
+    ): Promise<void> => {
+      if (!isCurrent()) return;
       const { general } = settings;
       applyTheme(general.theme);
       updatePointCountSelect(general.pointCount);
@@ -239,7 +246,9 @@ export const createSettingsView = (deps: {
       deps.enableVolumeCompensation.checked = general.enableVolumeCompensation;
       deps.hideDefaultPresets.checked = settings.presets.hideDefaultPresets;
       shortcuts.setShortcuts(settings.shortcuts);
-      if (!(await deps.localization.applySavedLanguage(general.uiLanguage))) {
+      const applied = await deps.localization.applySavedLanguage(general.uiLanguage, isCurrent);
+      if (!isCurrent()) return;
+      if (!applied) {
         throw new Error("Failed to apply saved language");
       }
     },

@@ -16,9 +16,7 @@ import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
 export const attachPopupSubscriptions = (deps: {
   handleToolkitStorageChange(changes: Record<string, chrome.storage.StorageChange>): Promise<void>;
-  renderAutostartWhitelist(): Promise<void>;
-  refreshAutostartPresetSelects(): Promise<void>;
-  refreshPresetDropdown(): Promise<void>;
+  refreshDynamicContent(): Promise<void>;
   refreshSavedSettings(): Promise<void>;
   refreshSelectedFilters(): Promise<void>;
   getCurrentTabId(): Promise<number | null>;
@@ -88,19 +86,12 @@ export const attachPopupSubscriptions = (deps: {
       ) {
         await deps.refreshSavedSettings();
         if (disposed) return;
-      }
-      if (changes[STORAGE_KEYS.AUTOSTART_RULES]) {
-        await deps.renderAutostartWhitelist();
-        if (disposed) return;
-      }
-      if (
+      } else if (
+        changes[STORAGE_KEYS.AUTOSTART_RULES] ||
         changes[STORAGE_KEYS.PRESETS] ||
-        changes[STORAGE_KEYS.PRESET_NAMES] ||
-        changes[STORAGE_KEYS.HIDE_DEFAULT_PRESETS]
+        changes[STORAGE_KEYS.PRESET_NAMES]
       ) {
-        await deps.refreshAutostartPresetSelects();
-        if (disposed) return;
-        await deps.refreshPresetDropdown();
+        await deps.refreshDynamicContent();
         if (disposed) return;
       }
 

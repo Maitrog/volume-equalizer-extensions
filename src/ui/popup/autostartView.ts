@@ -57,8 +57,11 @@ export const createAutostartView = (deps: {
     select.value = selectedName;
   };
 
-  const refreshPresetSelects = async (): Promise<void> => {
+  let presetRefreshGeneration = 0;
+  const refreshPresetSelects = async (isCurrent: () => boolean = () => true): Promise<void> => {
+    const generation = ++presetRefreshGeneration;
     const presetNames = await deps.loadPresetNames();
+    if (generation !== presetRefreshGeneration || !isCurrent()) return;
     fillPresetSelect(deps.modalPreset, presetNames);
     fillPresetSelect(deps.settingsAddPreset, presetNames);
   };
@@ -71,8 +74,14 @@ export const createAutostartView = (deps: {
     return `${typeLabel}: ${entry.value}`;
   };
 
-  const renderWhitelist = async (resolvedEntries?: AutostartWhitelistEntry[]): Promise<void> => {
+  let rulesRefreshGeneration = 0;
+  const renderWhitelist = async (
+    resolvedEntries?: AutostartWhitelistEntry[],
+    isCurrent: () => boolean = () => true,
+  ): Promise<void> => {
+    const generation = ++rulesRefreshGeneration;
     const entries = resolvedEntries ?? (await deps.loadRules());
+    if (generation !== rulesRefreshGeneration || !isCurrent()) return;
     deps.settingsList.textContent = "";
     if (entries.length === 0) {
       const empty = document.createElement("div");

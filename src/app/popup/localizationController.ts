@@ -17,7 +17,7 @@ import {
 export interface LocalizationService {
   ready: Promise<void>;
   waitForPendingChanges(): Promise<void>;
-  applySavedLanguage(language: AvailableLanguageCode): Promise<boolean>;
+  applySavedLanguage(language: AvailableLanguageCode, isCurrent?: () => boolean): Promise<boolean>;
   getMessage(messageName: string): string;
   applyLocalization(root?: Document): void;
   populateLanguageSelect(root?: Document): void;
@@ -63,18 +63,19 @@ export const createLocalizationService = (): LocalizationService => {
     resolvedLanguage: AvailableLanguageCode,
     generation: number,
     save: boolean,
+    isCurrent: () => boolean = () => true,
   ): Promise<boolean> => {
     let messages: LocaleMessages;
     try {
       messages = await loadLocaleMessages(resolvedLanguage);
     } catch (error) {
-      if (generation === languageGeneration) {
+      if (generation === languageGeneration && isCurrent()) {
         console.error("Failed to load locale", { language: resolvedLanguage, error });
         applyCurrentLanguage();
       }
       return false;
     }
-    if (generation !== languageGeneration) return false;
+    if (generation !== languageGeneration || !isCurrent()) return false;
     if (Object.keys(messages).length === 0) {
       console.error("Failed to load locale", {
         language: resolvedLanguage,
@@ -117,9 +118,12 @@ export const createLocalizationService = (): LocalizationService => {
     if (applied && options.save) await options.refreshDynamicContent?.();
   };
 
-  const applySavedLanguage = async (language: AvailableLanguageCode): Promise<boolean> => {
+  const applySavedLanguage = async (
+    language: AvailableLanguageCode,
+    isCurrent?: () => boolean,
+  ): Promise<boolean> => {
     try {
-      return await changeLanguage(language, ++languageGeneration, false);
+      return await changeLanguage(language, ++languageGeneration, false, isCurrent);
     } catch (error) {
       console.error("Failed to apply saved locale", { language, error });
       return false;

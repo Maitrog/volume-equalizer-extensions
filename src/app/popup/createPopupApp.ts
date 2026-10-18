@@ -213,22 +213,26 @@ export const createPopupApp = ({
   };
 
   let presetRefreshGeneration = 0;
-  const refreshPresetDropdown = async (): Promise<void> => {
+  const refreshPresetDropdown = async (isCurrent: () => boolean = () => true): Promise<void> => {
     const generation = ++presetRefreshGeneration;
     const current = await presetActions.load();
-    if (disposed || generation !== presetRefreshGeneration) return;
+    if (disposed || generation !== presetRefreshGeneration || !isCurrent()) return;
     presetsView?.renderPresetNames(current.presetNames, {
       includeDefaultPresets: current.includeDefaultPresets,
     });
   };
 
-  const refreshDynamicContent = async (): Promise<void> => {
-    if (disposed) return;
-    await autostartView.renderWhitelist();
-    if (disposed) return;
-    await autostartView.refreshPresetSelects();
-    if (disposed) return;
-    await refreshPresetDropdown();
+  let dynamicContentGeneration = 0;
+  const refreshDynamicContent = async (isCurrent: () => boolean = () => true): Promise<void> => {
+    const generation = ++dynamicContentGeneration;
+    const canApply = (): boolean =>
+      !disposed && generation === dynamicContentGeneration && isCurrent();
+    if (!canApply()) return;
+    await autostartView.renderWhitelist(undefined, canApply);
+    if (!canApply()) return;
+    await autostartView.refreshPresetSelects(canApply);
+    if (!canApply()) return;
+    await refreshPresetDropdown(canApply);
   };
 
   const onToggleEqualizer = async (targetTabId?: number): Promise<void> => {
@@ -439,6 +443,7 @@ export const createPopupApp = ({
   let savedSettingsRefresh = Promise.resolve();
   const refreshSavedSettings = (): Promise<void> => {
     const generation = ++savedSettingsGeneration;
+    ++dynamicContentGeneration;
     // Serialize locale/DOM application as well as guarding delayed snapshot reads.
     savedSettingsRefresh = savedSettingsRefresh
       .catch(() => undefined)
@@ -446,9 +451,12 @@ export const createPopupApp = ({
         if (disposed || generation !== savedSettingsGeneration) return;
         const snapshot = await transferActions.loadSettingsSnapshot();
         if (disposed || generation !== savedSettingsGeneration) return;
-        await settingsView.applySavedSettings(snapshot);
+        await settingsView.applySavedSettings(
+          snapshot,
+          () => !disposed && generation === savedSettingsGeneration,
+        );
         if (disposed || generation !== savedSettingsGeneration) return;
-        await refreshDynamicContent();
+        await refreshDynamicContent(() => !disposed && generation === savedSettingsGeneration);
       });
     return savedSettingsRefresh;
   };
@@ -575,9 +583,7 @@ export const createPopupApp = ({
 
   subscriptions = attachPopupSubscriptions({
     handleToolkitStorageChange: captureController.handleStorageChange,
-    renderAutostartWhitelist: autostartView.renderWhitelist,
-    refreshAutostartPresetSelects: autostartView.refreshPresetSelects,
-    refreshPresetDropdown,
+    refreshDynamicContent,
     refreshSavedSettings,
     refreshSelectedFilters,
     getCurrentTabId: async () => getSelectedTabId(),

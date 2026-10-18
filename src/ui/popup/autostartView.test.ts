@@ -56,6 +56,7 @@ const setup = (options: { rejectAdd?: boolean } = {}) => {
   const modalPreset = new FakeElement();
   const settingsAddPreset = new FakeElement();
   const loadPresetNames = vi.fn(async () => ["Mine"]);
+  const loadRules = vi.fn(async (): Promise<AutostartWhitelistEntry[]> => []);
   const addRule = options.rejectAdd
     ? vi.fn(async () => {
         throw new Error("write failed");
@@ -92,13 +93,14 @@ const setup = (options: { rejectAdd?: boolean } = {}) => {
           url: "https://example.com/page",
         }) as chrome.tabs.Tab,
     ),
-    loadRules: vi.fn(async () => []),
+    loadRules,
     loadPresetNames,
     addRule,
     removeRule,
   });
   return {
     addRule,
+    loadRules,
     loadPresetNames,
     modalPreset,
     removeRule,
@@ -149,3 +151,39 @@ test("a rejected add keeps the input and rendered list unchanged", async () => {
 vi.mock("./modalFocus", () => ({
   attachModalFocus: () => ({ open: vi.fn(), close: vi.fn() }),
 }));
+
+test("a newer resolved rule render supersedes an earlier pending load", async () => {
+  const t = setup();
+  let finish!: (entries: AutostartWhitelistEntry[]) => void;
+  t.loadRules.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const old = t.view.renderWhitelist();
+  await t.view.renderWhitelist([{ ...entry, value: "latest.example.com" }]);
+  finish([entry]);
+  await old;
+  expect(t.settingsList.children[0].children[0].children[0].textContent).toContain(
+    "latest.example.com",
+  );
+});
+
+test("a newer preset select refresh supersedes an earlier pending load", async () => {
+  const t = setup();
+  let finish!: (names: string[]) => void;
+  t.loadPresetNames.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finish = resolve;
+      }),
+  );
+  const old = t.view.refreshPresetSelects();
+  t.loadPresetNames.mockResolvedValueOnce(["Latest"]);
+  await t.view.refreshPresetSelects();
+  finish(["Old"]);
+  await old;
+  expect(t.modalPreset.children.map((option) => option.value)).toEqual(["", "Latest"]);
+  expect(t.settingsAddPreset.children.map((option) => option.value)).toEqual(["", "Latest"]);
+});
