@@ -480,9 +480,9 @@
     "message": "밝게"
   },
   "settings_transfer_import": {
-    "message": "프리셋 가져오기"
+    "message": "가져오기"
   },
   "settings_transfer_export": {
-    "message": "프리셋 내보내기"
+    "message": "내보내기"
   }
 }

@@ -480,9 +480,9 @@
     "message": "Clair"
   },
   "settings_transfer_import": {
-    "message": "Importer des préréglages"
+    "message": "Importer"
   },
   "settings_transfer_export": {
-    "message": "Exporter des préréglages"
+    "message": "Exporter"
   }
 }

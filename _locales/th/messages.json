@@ -480,9 +480,9 @@
     "message": "สว่าง"
   },
   "settings_transfer_import": {
-    "message": "นำเข้าพรีเซ็ต"
+    "message": "นำเข้า"
   },
   "settings_transfer_export": {
-    "message": "ส่งออกพรีเซ็ต"
+    "message": "ส่งออก"
   }
 }

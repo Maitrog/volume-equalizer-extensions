@@ -480,9 +480,9 @@
     "message": "Claro"
   },
   "settings_transfer_import": {
-    "message": "Importar preajustes"
+    "message": "Importar"
   },
   "settings_transfer_export": {
-    "message": "Exportar preajustes"
+    "message": "Exportar"
   }
 }

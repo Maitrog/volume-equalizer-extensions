@@ -480,9 +480,9 @@
     "message": "浅色"
   },
   "settings_transfer_import": {
-    "message": "导入预设"
+    "message": "导入"
   },
   "settings_transfer_export": {
-    "message": "导出预设"
+    "message": "导出"
   }
 }

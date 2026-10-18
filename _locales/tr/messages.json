@@ -480,9 +480,9 @@
     "message": "Açık"
   },
   "settings_transfer_import": {
-    "message": "Ön ayarları içe aktar"
+    "message": "İçe aktar"
   },
   "settings_transfer_export": {
-    "message": "Ön ayarları dışa aktar"
+    "message": "Dışa aktar"
   }
 }

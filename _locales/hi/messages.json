@@ -480,9 +480,9 @@
     "message": "हल्का"
   },
   "settings_transfer_import": {
-    "message": "प्रीसेट आयात करें"
+    "message": "आयात करें"
   },
   "settings_transfer_export": {
-    "message": "प्रीसेट निर्यात करें"
+    "message": "निर्यात करें"
   }
 }

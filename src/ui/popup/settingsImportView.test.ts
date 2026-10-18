@@ -370,6 +370,69 @@ test("prevents double commit and close while saving", async () => {
   expect(e.status.textContent).toContain("settings_transfer_saved");
 });
 
+test.each(["saved", "refresh-error", "disposed"])(
+  "keeps saving guards active until UI application finishes: %s",
+  async (outcome) => {
+    const { elements: e, actions, load, storage, view, applyCommitted } = setup();
+    let resolveApply!: () => void;
+    let rejectApply!: (error: Error) => void;
+    applyCommitted.mockImplementation(
+      () =>
+        new Promise<void>((resolve, reject) => {
+          resolveApply = resolve;
+          rejectApply = reject;
+        }),
+    );
+    const prepare = vi.spyOn(actions, "prepareImport");
+    const filePicker = vi.spyOn(e.fileInput, "click");
+    await load(JSON.stringify({ presets: { Voice: filters }, presetNames: ["Voice"] }));
+    e.next.click();
+    e.apply.click();
+    await tick();
+    expect(storage.set).toHaveBeenCalledTimes(1);
+    expect(applyCommitted).toHaveBeenCalledTimes(1);
+    expect(e.status.textContent).toBe("settings_transfer_saving");
+    expect(e.modal.attributes["aria-busy"]).toBe("true");
+    expect(e.close.disabled).toBe(true);
+    expect(e.cancel.disabled).toBe(true);
+    e.cancel.click();
+    e.close.click();
+    doc.dispatchEvent(Object.assign(new Event("keydown", { cancelable: true }), { key: "Escape" }));
+    e.modal.click();
+    expect(e.modal.style.display).toBe("block");
+    view.open();
+    e.importButton.click();
+    expect(filePicker).not.toHaveBeenCalled();
+    await load(JSON.stringify({ presets: { Second: filters }, presetNames: ["Second"] }));
+    expect(prepare).toHaveBeenCalledTimes(1);
+    expect(e.status.textContent).toBe("settings_transfer_saving");
+    if (outcome === "disposed") {
+      view.dispose();
+      expect(e.importButton.inert).toBe(false);
+      expect(e.modal.style.display).toBe("none");
+      rejectApply(new Error("refresh rejected after disposal"));
+      await tick();
+      expect(e.status.textContent).toBe("settings_transfer_saving");
+      return;
+    }
+    if (outcome === "refresh-error") rejectApply(new Error("refresh failed"));
+    else resolveApply();
+    await tick();
+    expect(e.status.textContent).toBe(
+      outcome === "saved" ? "settings_transfer_saved" : "settings_transfer_refresh_error",
+    );
+    expect(e.modal.attributes["aria-busy"]).toBe("false");
+    expect(e.close.disabled).toBe(false);
+    expect(e.cancel.disabled).toBe(false);
+    e.apply.click();
+    expect(storage.set).toHaveBeenCalledTimes(1);
+    e.cancel.click();
+    expect(e.modal.style.display).toBe("none");
+    view.open();
+    expect(filePicker).toHaveBeenCalledTimes(1);
+  },
+);
+
 test("keeps decisions on write rejection but clears stale approvals", async () => {
   const {
     elements: e,

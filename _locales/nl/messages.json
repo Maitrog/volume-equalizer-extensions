@@ -480,9 +480,9 @@
     "message": "Licht"
   },
   "settings_transfer_import": {
-    "message": "Voorinstellingen importeren"
+    "message": "Importeren"
   },
   "settings_transfer_export": {
-    "message": "Voorinstellingen exporteren"
+    "message": "Exporteren"
   }
 }

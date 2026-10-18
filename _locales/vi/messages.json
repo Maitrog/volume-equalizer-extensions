@@ -480,9 +480,9 @@
     "message": "Sáng"
   },
   "settings_transfer_import": {
-    "message": "Nhập preset"
+    "message": "Nhập"
   },
   "settings_transfer_export": {
-    "message": "Xuất preset"
+    "message": "Xuất"
   }
 }

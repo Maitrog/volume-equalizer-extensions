@@ -426,14 +426,15 @@ export const createSettingsImportView = (deps: Dependencies) => {
         status("blocked", true);
         return;
       }
-      step = "result";
       try {
         if (result.status === "saved") await deps.applyCommitted(result.prepared);
         if (disposed || token !== generation) return;
+        step = "result";
         render();
         status(result.status === "saved" ? "saved" : "unchanged");
       } catch {
         if (disposed || token !== generation) return;
+        step = "result";
         render();
         status("refresh_error", true);
       }
