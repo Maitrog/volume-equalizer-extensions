@@ -9,18 +9,6 @@ type ThemeName = "dark" | "light";
 
 const resolveTheme = (theme: unknown): ThemeName => (theme === "light" ? "light" : "dark");
 
-const saveTextAsFile = (text: string, filename: string): void => {
-  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = filename;
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
-};
-
 export const createSettingsView = (deps: {
   settingsModal: HTMLElement;
   settingsButton: HTMLElement;
@@ -31,9 +19,6 @@ export const createSettingsView = (deps: {
   pointsResetConfirm: HTMLButtonElement;
   pointsResetCancel: HTMLButtonElement;
   skipResetConfirm: HTMLInputElement;
-  exportPresetsButton: HTMLButtonElement;
-  importPresetsButton: HTMLButtonElement;
-  importInput: HTMLInputElement;
   enableSpectrum: HTMLInputElement;
   enableVolumeCompensation: HTMLInputElement;
   hideDefaultPresets: HTMLInputElement;
@@ -70,14 +55,6 @@ export const createSettingsView = (deps: {
   saveSpectrumEnabled(enabled: boolean): Promise<void>;
   saveVolumeCompensationEnabled(enabled: boolean): Promise<void>;
   saveHideDefaultPresets(hidden: boolean): Promise<void>;
-  importPresets(
-    text: string,
-  ): Promise<
-    | { ok: true; namesAdded: string[]; presetNames: string[] }
-    | { ok: false; error: "syntax" | "structure" | "name" | "filter" }
-  >;
-  exportPresets(): Promise<string>;
-  addPresetToDropdown(name: string): void;
   initPoints(count: number): void;
   redraw(): void;
   saveCurrentFilters(): Promise<void>;
@@ -196,53 +173,6 @@ export const createSettingsView = (deps: {
   deps.pointsResetCancel.addEventListener("click", cancelPointCountChange);
   deps.pointsResetModal.addEventListener("click", (event) => {
     if (event.target === deps.pointsResetModal) cancelPointCountChange();
-  });
-
-  deps.exportPresetsButton.addEventListener("click", () => {
-    void deps
-      .exportPresets()
-      .then((text) => {
-        saveTextAsFile(text, "eq_toolkit_presets.json");
-      })
-      .catch((error: unknown) => {
-        console.error("Failed to export presets", { error });
-      });
-  });
-  deps.importPresetsButton.addEventListener("click", () => deps.importInput.click());
-  deps.importInput.addEventListener("change", () => {
-    const file = deps.importInput.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    const showImportError = (messageName: string): void => {
-      alert(deps.localization.getMessage(messageName));
-    };
-    reader.onerror = () => {
-      showImportError("preset_import_read_error");
-      deps.importInput.value = "";
-    };
-    reader.onload = () => {
-      void (async () => {
-        try {
-          if (typeof reader.result !== "string") {
-            showImportError("preset_import_read_error");
-            return;
-          }
-          const result = await deps.importPresets(reader.result);
-          if (!result.ok) {
-            showImportError(`preset_import_${result.error}_error`);
-            return;
-          }
-          result.namesAdded.forEach((name) => deps.addPresetToDropdown(name));
-          await deps.refreshDynamicContent();
-        } catch (error) {
-          showImportError("preset_import_save_error");
-          console.error("Failed to import presets", { error });
-        } finally {
-          deps.importInput.value = "";
-        }
-      })();
-    };
-    reader.readAsText(file, "utf-8");
   });
 
   deps.enableSpectrum.addEventListener("change", () => {

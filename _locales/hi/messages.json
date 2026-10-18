@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "सोर्स कोड:"
   },
-  "import_presets_button_label": {
-    "message": "प्रीसेट आयात करें"
-  },
-  "export_presets_button_label": {
-    "message": "प्रीसेट निर्यात करें"
-  },
   "enable_spectrum_setting_option": {
     "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें"
   },
@@ -220,24 +214,6 @@
   },
   "guide_spectrum_visualization_hint": {
     "message": "आप सेटिंग्स में स्पेक्ट्रम विज़ुअलाइज़ेशन भी सक्षम कर सकते हैं।"
-  },
-  "preset_import_syntax_error": {
-    "message": "फ़ाइल में अमान्य JSON है।"
-  },
-  "preset_import_structure_error": {
-    "message": "प्रीसेट फ़ाइल की संरचना अमान्य है।"
-  },
-  "preset_import_name_error": {
-    "message": "प्रीसेट फ़ाइल में एक अमान्य नाम है।"
-  },
-  "preset_import_filter_error": {
-    "message": "प्रीसेट फ़ाइल में एक अमान्य फ़िल्टर है।"
-  },
-  "preset_import_read_error": {
-    "message": "प्रीसेट फ़ाइल पढ़ी नहीं जा सकी।"
-  },
-  "preset_import_save_error": {
-    "message": "आयात किए गए प्रीसेट सहेजे नहीं जा सके।"
   },
   "close": {
     "message": "बंद करें"

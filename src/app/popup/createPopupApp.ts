@@ -1,3 +1,10 @@
+import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
+import { createSettingsImportView } from "../../ui/popup/settingsImportView";
+import {
+  createSettingsTransferActions,
+  type ImportTarget,
+  type PreparedSettingsImport,
+} from "./settingsTransferActions";
 import { dbToGain } from "../../domains/equalizer/equalizerMath";
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 import type { EqualizerState } from "../../ui/equalizerCanvas/equalizerEditorState";
@@ -205,16 +212,22 @@ export const createPopupApp = ({
     await chrome.storage.local.set(values);
   };
 
+  let presetRefreshGeneration = 0;
   const refreshPresetDropdown = async (): Promise<void> => {
+    const generation = ++presetRefreshGeneration;
     const current = await presetActions.load();
+    if (disposed || generation !== presetRefreshGeneration) return;
     presetsView?.renderPresetNames(current.presetNames, {
       includeDefaultPresets: current.includeDefaultPresets,
     });
   };
 
   const refreshDynamicContent = async (): Promise<void> => {
+    if (disposed) return;
     await autostartView.renderWhitelist();
+    if (disposed) return;
     await autostartView.refreshPresetSelects();
+    if (disposed) return;
     await refreshPresetDropdown();
   };
 
@@ -355,9 +368,6 @@ export const createPopupApp = ({
     pointsResetConfirm: elements.pointsResetConfirm,
     pointsResetCancel: elements.pointsResetCancel,
     skipResetConfirm: elements.skipResetConfirm,
-    exportPresetsButton: elements.exportPresetsButton,
-    importPresetsButton: elements.importPresetsButton,
-    importInput: elements.importInput,
     enableSpectrum: elements.enableSpectrum,
     enableVolumeCompensation: elements.enableVolumeCompensation,
     hideDefaultPresets: elements.hideDefaultPresets,
@@ -376,13 +386,128 @@ export const createPopupApp = ({
     saveSpectrumEnabled: settingsActions.saveSpectrumEnabled,
     saveVolumeCompensationEnabled: settingsActions.saveVolumeCompensationEnabled,
     saveHideDefaultPresets: settingsActions.saveHideDefaultPresets,
-    importPresets: presetActions.importPresets,
-    exportPresets: presetActions.exportPresets,
-    addPresetToDropdown: presetsView.addPresetToDropdown,
     initPoints,
     redraw: resize,
     saveCurrentFilters,
     refreshDynamicContent,
+  });
+
+  const waitForPendingChanges = async (): Promise<void> => {
+    await Promise.all([
+      settingsView.waitForPendingChanges(),
+      localization.waitForPendingChanges(),
+      filterPersistence.flush(),
+    ]);
+  };
+  let importTarget: ImportTarget | null = null;
+  const readTarget = async (): Promise<ImportTarget> => {
+    while (true) {
+      const selectedTabId = getSelectedTabId();
+      const selectionGeneration = captureController.getSelectionGeneration();
+      const filters = getCurrentFilters();
+      const captured = selectedTabId !== null && captureController.isTabCaptured(selectedTabId);
+      const [tab, stored]: [chrome.tabs.Tab | null, Record<string, unknown>] =
+        selectedTabId === null
+          ? [null, {}]
+          : await Promise.all([
+              chrome.tabs.get(selectedTabId).catch((error: unknown) => {
+                if (error instanceof Error && /^No tab with id:/.test(error.message)) return null;
+                throw error;
+              }),
+              chrome.storage.local.get([STORAGE_KEYS.tabEnabled(selectedTabId)]),
+            ]);
+      if (selectionGeneration !== captureController.getSelectionGeneration()) continue;
+      importTarget = {
+        tabId: tab ? selectedTabId : null,
+        selectionGeneration,
+        title: tab?.title ?? "",
+        captured,
+        enabled: selectedTabId !== null && stored[STORAGE_KEYS.tabEnabled(selectedTabId)] === true,
+        filters,
+      };
+      return importTarget;
+    }
+  };
+  const transferActions = createSettingsTransferActions({
+    localStorage: chrome.storage.local,
+    browserLocale: chrome.i18n.getUILanguage(),
+    waitForPendingChanges,
+    readTarget,
+    getDimensions: equalizerCanvas.getDimensions,
+  });
+  let savedSettingsGeneration = 0;
+  let savedSettingsRefresh = Promise.resolve();
+  const refreshSavedSettings = (): Promise<void> => {
+    const generation = ++savedSettingsGeneration;
+    // Serialize locale/DOM application as well as guarding delayed snapshot reads.
+    savedSettingsRefresh = savedSettingsRefresh
+      .catch(() => undefined)
+      .then(async () => {
+        if (disposed || generation !== savedSettingsGeneration) return;
+        const snapshot = await transferActions.loadSettingsSnapshot();
+        if (disposed || generation !== savedSettingsGeneration) return;
+        await settingsView.applySavedSettings(snapshot);
+        if (disposed || generation !== savedSettingsGeneration) return;
+        await refreshDynamicContent();
+      });
+    return savedSettingsRefresh;
+  };
+  let filtersRefreshGeneration = 0;
+  const refreshSelectedFilters = async (): Promise<void> => {
+    const generation = ++filtersRefreshGeneration;
+    const tabId = getSelectedTabId();
+    const selectionGeneration = captureController.getSelectionGeneration();
+    if (tabId === null) return;
+    const stored = await chrome.storage.local.get([STORAGE_KEYS.tabFilters(tabId)]);
+    if (
+      disposed ||
+      generation !== filtersRefreshGeneration ||
+      selectionGeneration !== captureController.getSelectionGeneration() ||
+      tabId !== getSelectedTabId()
+    )
+      return;
+    const filters = readPersistedFilters(stored[STORAGE_KEYS.tabFilters(tabId)]);
+    if (filters) {
+      setCurrentFilters(filters);
+      resize();
+    }
+  };
+  const applyCommitted = async (prepared: PreparedSettingsImport): Promise<void> => {
+    if (disposed) return;
+    const target = importTarget;
+    ++filtersRefreshGeneration;
+    if (
+      prepared.reset &&
+      target &&
+      prepared.reset.tabId === getSelectedTabId() &&
+      target.selectionGeneration === captureController.getSelectionGeneration()
+    ) {
+      setCurrentFilters(prepared.reset.filters);
+      resize();
+    }
+    await refreshSavedSettings();
+  };
+  const settingsImportView = createSettingsImportView({
+    elements: {
+      modal: elements.settingsImportModal,
+      title: elements.settingsImportTitle,
+      groups: elements.settingsImportGroups,
+      conflicts: elements.settingsImportConflicts,
+      summary: elements.settingsImportSummary,
+      status: elements.settingsImportStatus,
+      resetConfirm: elements.settingsImportResetConfirm,
+      fileInput: elements.settingsImportInput,
+      back: elements.settingsImportBack,
+      next: elements.settingsImportNext,
+      apply: elements.settingsImportApply,
+      cancel: elements.settingsImportCancel,
+      close: elements.settingsImportClose,
+      importButton: elements.importSettingsButton,
+      exportButton: elements.exportSettingsButton,
+    },
+    actions: transferActions,
+    getMessage: localization.getMessage,
+    applyCommitted,
   });
 
   const installUpdateNoticeView = createInstallUpdateNoticeView({
@@ -441,6 +566,7 @@ export const createPopupApp = ({
     if (disposed) return;
     disposed = true;
     subscriptions?.dispose();
+    settingsImportView.dispose();
     equalizerCanvas.cleanup();
     void filterPersistence.dispose().catch((error: unknown) => {
       console.error("Failed to dispose filter persistence", { error });
@@ -452,6 +578,8 @@ export const createPopupApp = ({
     renderAutostartWhitelist: autostartView.renderWhitelist,
     refreshAutostartPresetSelects: autostartView.refreshPresetSelects,
     refreshPresetDropdown,
+    refreshSavedSettings,
+    refreshSelectedFilters,
     getCurrentTabId: async () => getSelectedTabId(),
     isTabCaptured: captureController.isTabCaptured,
     setEnableButtonClass: controlsView.setEnableButtonClass,

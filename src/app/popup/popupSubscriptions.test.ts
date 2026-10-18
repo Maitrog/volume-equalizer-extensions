@@ -51,7 +51,9 @@ const setup = () => {
   const runtimeMessage =
     createEvent<(message: unknown, sender: chrome.runtime.MessageSender) => void>();
   const storageChange =
-    createEvent<(changes: Record<string, chrome.storage.StorageChange>) => void>();
+    createEvent<
+      (changes: Record<string, chrome.storage.StorageChange>, areaName: string) => void
+    >();
   const documentTarget = createDomTarget<KeyboardEvent>();
   const windowTarget = createDomTarget<PageTransitionEvent>();
   const port = createPort();
@@ -67,6 +69,8 @@ const setup = () => {
     renderAutostartWhitelist: vi.fn(() => Promise.resolve()),
     refreshAutostartPresetSelects: vi.fn(() => Promise.resolve()),
     refreshPresetDropdown: vi.fn(() => Promise.resolve()),
+    refreshSavedSettings: vi.fn(() => Promise.resolve()),
+    refreshSelectedFilters: vi.fn(() => Promise.resolve()),
     getCurrentTabId: vi.fn(() => Promise.resolve(12)),
     isTabCaptured: vi.fn(() => false),
     setEnableButtonClass: vi.fn(),
@@ -104,9 +108,12 @@ afterEach(() => {
 describe("popup subscriptions", () => {
   test("routes events before disposal and ignores them afterward", async () => {
     const { subscriptions, callbacks, storageChange, documentTarget } = setup();
-    storageChange.fire({
-      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
-    });
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
+      },
+      "local",
+    );
     const keydown = {
       repeat: false,
       target: null,
@@ -129,9 +136,12 @@ describe("popup subscriptions", () => {
 
     subscriptions.dispose();
     subscriptions.dispose();
-    storageChange.fire({
-      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
-    });
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
+      },
+      "local",
+    );
     documentTarget.fire("keydown", keydown);
     await Promise.resolve();
 
@@ -161,9 +171,12 @@ describe("popup subscriptions", () => {
     const { subscriptions, callbacks, storageChange, port, connect } = setup();
     const storageHandled = deferred<void>();
     callbacks.handleToolkitStorageChange.mockReturnValueOnce(storageHandled.promise);
-    storageChange.fire({
-      [STORAGE_KEYS.PRESET_NAMES]: { newValue: ["custom"] },
-    });
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.PRESET_NAMES]: { newValue: ["custom"] },
+      },
+      "local",
+    );
     subscriptions.connectSpectrum(12);
     port.onDisconnect.fire();
 
@@ -180,9 +193,12 @@ describe("popup subscriptions", () => {
   test("does not let a late tabEnabled write override an active capture button", async () => {
     const { subscriptions, callbacks, storageChange } = setup();
     callbacks.isTabCaptured.mockReturnValue(true);
-    storageChange.fire({
-      [STORAGE_KEYS.tabEnabled(12)]: { newValue: false, oldValue: true },
-    });
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.tabEnabled(12)]: { newValue: false, oldValue: true },
+      },
+      "local",
+    );
     await Promise.resolve();
     await Promise.resolve();
 
@@ -192,12 +208,15 @@ describe("popup subscriptions", () => {
 
   test("hides the capture error when a removal reports no new value", async () => {
     const { subscriptions, callbacks, storageChange } = setup();
-    storageChange.fire({
-      [STORAGE_KEYS.tabCaptureError(12)]: {
-        oldValue: "Audio capture failed",
-        newValue: undefined,
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.tabCaptureError(12)]: {
+          oldValue: "Audio capture failed",
+          newValue: undefined,
+        },
       },
-    });
+      "local",
+    );
     await Promise.resolve();
     await Promise.resolve();
 
@@ -344,9 +363,12 @@ describe("popup subscriptions", () => {
     } as unknown as KeyboardEvent;
 
     documentTarget.fire("keydown", keydown);
-    storageChange.fire({
-      [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
-    });
+    storageChange.fire(
+      {
+        [STORAGE_KEYS.AUTOSTART_RULES]: { newValue: [] },
+      },
+      "local",
+    );
     await Promise.resolve();
     await Promise.resolve();
 
@@ -369,3 +391,37 @@ const deferred = <T>() => {
   });
   return { promise, resolve };
 };
+
+test("refreshes preferences and preset data without requiring name changes", async () => {
+  const { subscriptions, callbacks, storageChange } = setup();
+  storageChange.fire({ theme: { newValue: "light" }, presets: { newValue: {} } }, "local");
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(callbacks.refreshSavedSettings).toHaveBeenCalledOnce();
+  expect(callbacks.refreshAutostartPresetSelects).toHaveBeenCalledOnce();
+  expect(callbacks.refreshPresetDropdown).toHaveBeenCalledOnce();
+  subscriptions.dispose();
+});
+
+test("preserves capture session events and ignores session preferences", async () => {
+  const { subscriptions, callbacks, storageChange } = setup();
+  const changes = { theme: { newValue: "light" } };
+  storageChange.fire(changes, "session");
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(callbacks.handleToolkitStorageChange).toHaveBeenCalledWith(changes);
+  expect(callbacks.refreshSavedSettings).not.toHaveBeenCalled();
+  subscriptions.dispose();
+});
+
+test("refreshes only the selected individual curve", async () => {
+  const { subscriptions, callbacks, storageChange } = setup();
+  storageChange.fire(
+    { [STORAGE_KEYS.tabFilters(13)]: { newValue: [] }, filters: { newValue: [] } },
+    "local",
+  );
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(callbacks.refreshSelectedFilters).not.toHaveBeenCalled();
+  storageChange.fire({ [STORAGE_KEYS.tabFilters(12)]: { newValue: [] } }, "local");
+  await new Promise((resolve) => setTimeout(resolve, 0));
+  expect(callbacks.refreshSelectedFilters).toHaveBeenCalledOnce();
+  subscriptions.dispose();
+});

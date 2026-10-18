@@ -19,6 +19,8 @@ export const attachPopupSubscriptions = (deps: {
   renderAutostartWhitelist(): Promise<void>;
   refreshAutostartPresetSelects(): Promise<void>;
   refreshPresetDropdown(): Promise<void>;
+  refreshSavedSettings(): Promise<void>;
+  refreshSelectedFilters(): Promise<void>;
   getCurrentTabId(): Promise<number | null>;
   isTabCaptured(tabId: number): boolean;
   setEnableButtonClass(enabled: boolean): void;
@@ -64,16 +66,38 @@ export const attachPopupSubscriptions = (deps: {
     }
   };
 
-  const onStorageChange = (changes: Record<string, chrome.storage.StorageChange>): void => {
+  const onStorageChange = (
+    changes: Record<string, chrome.storage.StorageChange>,
+    areaName: string,
+  ): void => {
     if (disposed) return;
     void (async () => {
       await deps.handleToolkitStorageChange(changes);
-      if (disposed) return;
+      if (disposed || areaName !== "local") return;
+      if (
+        [
+          STORAGE_KEYS.THEME,
+          STORAGE_KEYS.UI_LANGUAGE,
+          STORAGE_KEYS.POINT_COUNT,
+          STORAGE_KEYS.ENABLE_SPECTRUM,
+          STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION,
+          STORAGE_KEYS.SKIP_POINTS_CONFIRM,
+          STORAGE_KEYS.SHORTCUTS,
+          STORAGE_KEYS.HIDE_DEFAULT_PRESETS,
+        ].some((key) => changes[key])
+      ) {
+        await deps.refreshSavedSettings();
+        if (disposed) return;
+      }
       if (changes[STORAGE_KEYS.AUTOSTART_RULES]) {
         await deps.renderAutostartWhitelist();
         if (disposed) return;
       }
-      if (changes[STORAGE_KEYS.PRESET_NAMES] || changes[STORAGE_KEYS.HIDE_DEFAULT_PRESETS]) {
+      if (
+        changes[STORAGE_KEYS.PRESETS] ||
+        changes[STORAGE_KEYS.PRESET_NAMES] ||
+        changes[STORAGE_KEYS.HIDE_DEFAULT_PRESETS]
+      ) {
         await deps.refreshAutostartPresetSelects();
         if (disposed) return;
         await deps.refreshPresetDropdown();
@@ -82,6 +106,10 @@ export const attachPopupSubscriptions = (deps: {
 
       const tabId = await deps.getCurrentTabId();
       if (disposed || tabId == null) return;
+      if (changes[STORAGE_KEYS.tabFilters(tabId)]) {
+        await deps.refreshSelectedFilters();
+        if (disposed) return;
+      }
       if (changes[STORAGE_KEYS.tabEnabled(tabId)] && !deps.isTabCaptured(tabId)) {
         deps.setEnableButtonClass(changes[STORAGE_KEYS.tabEnabled(tabId)].newValue === true);
       }

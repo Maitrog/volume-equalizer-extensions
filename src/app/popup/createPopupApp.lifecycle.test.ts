@@ -51,6 +51,9 @@ vi.mock("./popupSubscriptions", () => ({
     dispose: mocks.disposeSubscriptions,
   }),
 }));
+vi.mock("../../ui/popup/settingsImportView", () => ({
+  createSettingsImportView: () => ({ dispose: vi.fn() }),
+}));
 vi.mock("./settingsActions", () => ({
   createSettingsActions: () => ({
     loadPointCount: vi.fn(() => Promise.resolve(3)),
@@ -75,8 +78,6 @@ vi.mock("./presetActions", () => ({
     savePreset: vi.fn(),
     deletePreset: vi.fn(),
     selectPreset: vi.fn(),
-    importPresets: vi.fn(),
-    exportPresets: vi.fn(),
     loadAvailablePresetNames: vi.fn(),
   }),
 }));
@@ -187,6 +188,7 @@ const createTestApp = (ready: Promise<void>, audioContext: AudioContext = {} as 
         remove: vi.fn(() => Promise.resolve()),
       },
     },
+    i18n: { getUILanguage: () => "en" },
     runtime: { getManifest: () => ({ version: "1.0.0" }) },
   });
   return createPopupApp({

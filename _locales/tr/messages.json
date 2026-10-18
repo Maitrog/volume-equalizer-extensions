@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "Kaynak kodu:"
   },
-  "import_presets_button_label": {
-    "message": "Ön ayarları içe aktar"
-  },
-  "export_presets_button_label": {
-    "message": "Ön ayarları dışa aktar"
-  },
   "enable_spectrum_setting_option": {
     "message": "Spektrum görselleştirmesini etkinleştir"
   },
@@ -220,24 +214,6 @@
   },
   "guide_spectrum_visualization_hint": {
     "message": "Ayrıca Ayarlar'da spektrum görselleştirmesini etkinleştirebilirsiniz."
-  },
-  "preset_import_syntax_error": {
-    "message": "Dosya geçersiz JSON içeriyor."
-  },
-  "preset_import_structure_error": {
-    "message": "Ön ayar dosyasının yapısı geçersiz."
-  },
-  "preset_import_name_error": {
-    "message": "Ön ayar dosyası geçersiz bir ad içeriyor."
-  },
-  "preset_import_filter_error": {
-    "message": "Ön ayar dosyası geçersiz bir filtre içeriyor."
-  },
-  "preset_import_read_error": {
-    "message": "Ön ayar dosyası okunamadı."
-  },
-  "preset_import_save_error": {
-    "message": "İçe aktarılan ön ayarlar kaydedilemedi."
   },
   "close": {
     "message": "Kapat"

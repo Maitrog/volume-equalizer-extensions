@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "ソースコード:"
   },
-  "import_presets_button_label": {
-    "message": "プリセットをインポート"
-  },
-  "export_presets_button_label": {
-    "message": "プリセットをエクスポート"
-  },
   "enable_spectrum_setting_option": {
     "message": "スペクトラム可視化を有効にする"
   },
@@ -220,24 +214,6 @@
   },
   "guide_spectrum_visualization_hint": {
     "message": "設定でスペクトラム表示を有効にすることもできます。"
-  },
-  "preset_import_syntax_error": {
-    "message": "ファイルに無効なJSONが含まれています。"
-  },
-  "preset_import_structure_error": {
-    "message": "プリセットファイルの構造が無効です。"
-  },
-  "preset_import_name_error": {
-    "message": "プリセットファイルに無効な名前が含まれています。"
-  },
-  "preset_import_filter_error": {
-    "message": "プリセットファイルに無効なフィルターが含まれています。"
-  },
-  "preset_import_read_error": {
-    "message": "プリセットファイルを読み込めませんでした。"
-  },
-  "preset_import_save_error": {
-    "message": "インポートしたプリセットを保存できませんでした。"
   },
   "close": {
     "message": "閉じる"

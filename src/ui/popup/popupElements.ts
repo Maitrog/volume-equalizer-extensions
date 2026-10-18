@@ -64,9 +64,9 @@ export interface PopupElements {
   presetsSettingsTitle: HTMLHeadingElement;
   hideDefaultPresetsLabel: HTMLElement;
   hideDefaultPresets: HTMLInputElement;
-  importInput: HTMLInputElement;
-  importPresetsButton: HTMLButtonElement;
-  exportPresetsButton: HTMLButtonElement;
+  settingsImportInput: HTMLInputElement;
+  importSettingsButton: HTMLButtonElement;
+  exportSettingsButton: HTMLButtonElement;
   settingsImportModal: HTMLElement;
   settingsImportTitle: HTMLElement;
   settingsImportGroups: HTMLElement;
@@ -218,9 +218,9 @@ export const getPopupElements = (document: Document): PopupElements => ({
   presetsSettingsTitle: getRequiredElement(document, "presets-settings-title", HTMLHeadingElement),
   hideDefaultPresetsLabel: getRequiredElement(document, "hide-default-presets-label", HTMLElement),
   hideDefaultPresets: getRequiredElement(document, "hide-default-presets", HTMLInputElement),
-  importInput: getRequiredElement(document, "import-input", HTMLInputElement),
-  importPresetsButton: getRequiredElement(document, "import-presets", HTMLButtonElement),
-  exportPresetsButton: getRequiredElement(document, "export-presets", HTMLButtonElement),
+  settingsImportInput: getRequiredElement(document, "settings-import-input", HTMLInputElement),
+  importSettingsButton: getRequiredElement(document, "import-settings", HTMLButtonElement),
+  exportSettingsButton: getRequiredElement(document, "export-settings", HTMLButtonElement),
   settingsImportModal: getRequiredElement(document, "settings-import-modal", HTMLElement),
   settingsImportTitle: getRequiredElement(document, "settings-import-title", HTMLElement),
   settingsImportGroups: getRequiredElement(document, "settings-import-groups", HTMLElement),

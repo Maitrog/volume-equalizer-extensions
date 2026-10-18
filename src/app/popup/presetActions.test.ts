@@ -75,39 +75,4 @@ describe("presetActions", () => {
     await expect(actions.deletePreset("Mine")).resolves.toEqual({ ok: false, reason: "used" });
     expect(storage.set).not.toHaveBeenCalled();
   });
-
-  test("imports only new non-default presets and preserves the caller list on rejection", async () => {
-    const names = ["Existing"];
-    const { actions, storage } = setup(
-      {
-        [STORAGE_KEYS.PRESET_NAMES]: names,
-        [STORAGE_KEYS.PRESETS]: { Existing: [{ freq: 500, gain: 1 }] },
-      },
-      true,
-    );
-    const text = JSON.stringify({
-      presetNames: ["Bass Boost", "Existing", "New"],
-      presets: {
-        "Bass Boost": [{ freq: 1000, gain: -12 }],
-        Existing: [{ freq: 500, gain: 1 }],
-        New: [{ freq: 1000, gain: 2 }],
-      },
-    });
-    await expect(actions.importPresets(text)).rejects.toThrow("write failed");
-    expect(names).toEqual(["Existing"]);
-    expect(storage.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        [STORAGE_KEYS.PRESET_NAMES]: ["Existing", "New"],
-      }),
-    );
-  });
-
-  test("exports current preset data", async () => {
-    const stored = {
-      [STORAGE_KEYS.PRESET_NAMES]: ["Mine"],
-      [STORAGE_KEYS.PRESETS]: { Mine: [{ freq: 1000, gain: 2 }] },
-    };
-    const { actions } = setup(stored);
-    expect(JSON.parse(await actions.exportPresets())).toEqual(stored);
-  });
 });
