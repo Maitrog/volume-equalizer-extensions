@@ -515,6 +515,55 @@ describe("captureCoordinator", () => {
     expect(harness.captures.get(2)?.settings.gainValue).toBe(0);
   });
 
+  test("updates captured audio settings without restarting capture", async () => {
+    const harness = createHarness();
+    harness.local[STORAGE_KEYS.tabGain(1)] = -6;
+    harness.local[STORAGE_KEYS.tabMute(1)] = true;
+    const coordinator = createCaptureCoordinator();
+    await coordinator.startCapture(1);
+    await coordinator.startCapture(2);
+    await coordinator.toggleCaptureEnabled(1);
+    const filters = [{ freq: 800, gain: 0, q: 0.5, type: "peaking" }];
+    const otherFilters = [{ freq: 400, gain: 3, q: 1, type: "peaking" }];
+    harness.local[STORAGE_KEYS.tabFilters(2)] = otherFilters;
+    Object.assign(harness.local, {
+      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: true,
+      [STORAGE_KEYS.FILTERS]: filters,
+      [STORAGE_KEYS.tabFilters(1)]: filters,
+    });
+    harness.commands.length = 0;
+
+    await coordinator.handleStorageChange({
+      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: { oldValue: false, newValue: true },
+      [STORAGE_KEYS.ENABLE_SPECTRUM]: { oldValue: true, newValue: false },
+      [STORAGE_KEYS.FILTERS]: { newValue: filters },
+      [STORAGE_KEYS.tabFilters(1)]: { newValue: filters },
+      [STORAGE_KEYS.SHORTCUTS]: { newValue: {} },
+    });
+
+    expect(harness.commands.map((command) => command.method)).toEqual([
+      "capture-list",
+      "capture-settings",
+      "capture-settings",
+    ]);
+    expect(harness.captures.get(1)?.settings).toEqual({
+      enabled: false,
+      gainValue: -6,
+      muted: true,
+      volumeCompensationEnabled: true,
+      filterSettings: filters,
+    });
+    expect(harness.captures.get(2)?.settings).toEqual({
+      enabled: true,
+      gainValue: 0,
+      muted: false,
+      volumeCompensationEnabled: true,
+      filterSettings: otherFilters,
+    });
+    expect(harness.getMediaStreamId).toHaveBeenCalledTimes(2);
+    expect(harness.closeDocument).not.toHaveBeenCalled();
+  });
+
   test("applies global storage changes to every live session", async () => {
     const harness = createHarness();
     const coordinator = createCaptureCoordinator();
