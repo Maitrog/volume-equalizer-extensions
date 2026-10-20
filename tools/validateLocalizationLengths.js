@@ -109,6 +109,9 @@ const validateWizard = async (page, locale, theme) => {
       document.documentElement.lang = locale;
       document.documentElement.dataset.theme = theme;
       const { createSettingsImportView } = await import("/src/ui/popup/settingsImportView.ts");
+      const { applyLocalization } = await import("/src/ui/popup/applyLocalization.ts");
+      applyLocalization(document, (key) => messages[key]?.message ?? key);
+      document.getElementById("settings-modal").style.display = "block";
       const { createSettingsTransferActions } =
         await import("/src/app/popup/settingsTransferActions.ts");
       const get = (id) => document.getElementById(id);
@@ -196,6 +199,16 @@ const validateWizard = async (page, locale, theme) => {
     },
     { locale, theme, messages },
   );
+  const disclosure = page.locator(
+    '#export-settings >> xpath=ancestor::div[contains(@class,"settings-section")]//p[@data-i18n="settings_transfer_privacy"]',
+  );
+  if (
+    !(await disclosure.isVisible()) ||
+    (await disclosure.textContent()) !== messages.settings_transfer_privacy.message
+  )
+    errors.push(`${locale}/${theme}: export address disclosure missing or untranslated`);
+  else if (await disclosure.evaluate((element) => element.scrollWidth > element.clientWidth + 1))
+    errors.push(`${locale}/${theme}: export disclosure overflows`);
   await page.locator("#settings-import-input").setInputFiles({
     name: "settings.json",
     mimeType: "application/json",
@@ -271,6 +284,16 @@ const validateWizard = async (page, locale, theme) => {
     }
   };
   await checkState("groups");
+  for (const [group, count] of [
+    ["presets", 32],
+    ["autostartRules", 2],
+  ]) {
+    const label = await page
+      .locator(`#settings-import-groups input[value="${group}"]`)
+      .evaluate((input) => input.labels[0].textContent);
+    if (label !== `${messages[`settings_transfer_${group}`].message}: ${count}`)
+      errors.push(`${locale}/${theme}: ${group} selection count missing`);
+  }
   await page.locator("#settings-import-next").focus();
   await page.keyboard.press("Enter");
   await page.locator("#settings-import-conflicts table").first().waitFor({ state: "visible" });
@@ -297,6 +320,46 @@ const validateWizard = async (page, locale, theme) => {
   if (await page.locator("#settings-import-apply").isDisabled())
     errors.push(`${locale}: keyboard acknowledgement did not enable Apply`);
   await checkState("summary acknowledged");
+  await page.locator("#settings-import-apply").click();
+  await page.waitForFunction(
+    (text) => document.getElementById("settings-import-status").textContent === text,
+    messages.settings_transfer_saved.message,
+  );
+  const checkResult = async (state) => {
+    await checkState(state);
+    const text = await page.locator("#settings-import-summary").textContent();
+    for (const expected of [
+      `${messages.settings_transfer_skipped.message}: 2`,
+      messages.settings_transfer_missing_preset.message,
+      "empty.example.com",
+      "https://example.com/",
+    ])
+      if (!text.includes(expected)) errors.push(`${locale}/${theme}/${state}: missing ${expected}`);
+    for (const id of ["groups", "conflicts", "back", "apply", "reset-confirm"])
+      if (await page.locator(`#settings-import-${id}`).isVisible())
+        errors.push(`${locale}/${theme}/${state}: editable ${id} still visible`);
+    if (!(await page.locator("#settings-import-summary").isVisible()))
+      errors.push(`${locale}/${theme}/${state}: result details hidden`);
+  };
+  await checkResult("saved result");
+  await page.keyboard.press("Escape");
+  const skippedFile = await page.evaluate(() => {
+    const file = JSON.parse(window.layoutFile);
+    file.settings = { autostartRules: file.settings.autostartRules };
+    return JSON.stringify(file);
+  });
+  await page.locator("#settings-import-input").setInputFiles({
+    name: "skipped.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(skippedFile),
+  });
+  await page.locator("#settings-import-next").click();
+  await page.locator("#settings-import-apply").click();
+  await page.waitForFunction(
+    (text) => document.getElementById("settings-import-status").textContent === text,
+    messages.settings_transfer_unchanged.message,
+  );
+  await checkResult("unchanged result with skips");
   await page.keyboard.press("Escape");
   if (await page.locator("#settings-import-modal").isVisible())
     errors.push(`${locale}: Escape did not close wizard`);
@@ -337,7 +400,7 @@ const main = async () => {
       process.exitCode = 1;
     } else
       console.log(
-        `Localization layout validation passed for ${locales.length} locales: existing controls and real groups/conflicts/summary, dark/light, labels and keyboard focus.`,
+        `Localization layout validation passed for ${locales.length} locales: export disclosure and real groups/conflicts/summary/results, dark/light, counts, labels and keyboard focus.`,
       );
   } finally {
     await browser?.close();

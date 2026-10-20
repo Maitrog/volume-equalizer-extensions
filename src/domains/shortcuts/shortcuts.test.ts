@@ -9,6 +9,19 @@ import {
 } from "./shortcuts";
 
 describe("shortcuts", () => {
+  test("validates explicit disabled bindings but rejects missing or invalid active bindings", () => {
+    expect(validateShortcutConfig({ mute: null, toggleEq: null })).toBeNull();
+    expect(validateShortcutConfig({ ...DEFAULT_SHORTCUTS, mute: null })).toBeNull();
+    expect(validateShortcutConfig({ ...DEFAULT_SHORTCUTS, toggleEq: null })).toBeNull();
+    expect(validateShortcutConfig({ mute: null })).toBe("invalid");
+    expect(validateShortcutConfig(null)).toBe("invalid");
+    expect(
+      validateShortcutConfig({
+        mute: { alt: false, ctrl: false, shift: false, meta: false, key: "M" },
+        toggleEq: null,
+      }),
+    ).toBe("invalid");
+  });
   test("resolves null shortcuts to defaults", () => {
     expect(resolveShortcuts(null)).toEqual(DEFAULT_SHORTCUTS);
   });

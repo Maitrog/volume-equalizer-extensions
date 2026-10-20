@@ -67,6 +67,7 @@ export const createPopupApp = ({
   let capturedTabsView: ReturnType<typeof createCapturedTabsView> | undefined = undefined;
   let subscriptions: ReturnType<typeof attachPopupSubscriptions> | undefined = undefined;
   let disposed = false;
+  let filtersRefreshGeneration = 0;
   const settingsActions = createSettingsActions();
 
   const getColors = (): ThemeColors => readThemeColors(document.documentElement);
@@ -93,6 +94,7 @@ export const createPopupApp = ({
     infoTooltip: elements.infoTooltip,
     keyboardStatus: elements.equalizerKeyboardStatus,
     saveCurrentFilters: () => {
+      ++filtersRefreshGeneration;
       const tabId = getSelectedTabId();
       if (tabId != null) filterPersistence.schedule(tabId, getCurrentFilters());
     },
@@ -114,12 +116,14 @@ export const createPopupApp = ({
   };
 
   const setCurrentFilters = (filters: EqualizerFilter[]): void => {
+    ++filtersRefreshGeneration;
     equalizerState.setPoints(filters, equalizerCanvas.getDimensions(), {
       onPointCountChange: (pointCount) => settingsView?.updatePointCountSelect(pointCount),
     });
   };
 
   const initPoints = (count: number): void => {
+    ++filtersRefreshGeneration;
     equalizerState.initPoints(clampPointCount(count), equalizerCanvas.getDimensions());
   };
 
@@ -449,7 +453,12 @@ export const createPopupApp = ({
       .catch(() => undefined)
       .then(async () => {
         if (disposed || generation !== savedSettingsGeneration) return;
+        // Read after local saves so an unrelated event cannot cancel a pending locale choice.
+        await settingsView.waitForPendingChanges();
+        if (disposed || generation !== savedSettingsGeneration) return;
         const snapshot = await transferActions.loadSettingsSnapshot();
+        // A local edit may also start while the storage read is in flight.
+        await settingsView.waitForPendingChanges();
         if (disposed || generation !== savedSettingsGeneration) return;
         await settingsView.applySavedSettings(
           snapshot,
@@ -460,16 +469,16 @@ export const createPopupApp = ({
       });
     return savedSettingsRefresh;
   };
-  let filtersRefreshGeneration = 0;
   const refreshSelectedFilters = async (): Promise<void> => {
     const generation = ++filtersRefreshGeneration;
     const tabId = getSelectedTabId();
     const selectionGeneration = captureController.getSelectionGeneration();
-    if (tabId === null) return;
+    if (tabId === null || filterPersistence.hasPendingChanges(tabId)) return;
     const stored = await chrome.storage.local.get([STORAGE_KEYS.tabFilters(tabId)]);
     if (
       disposed ||
       generation !== filtersRefreshGeneration ||
+      filterPersistence.hasPendingChanges(tabId) ||
       selectionGeneration !== captureController.getSelectionGeneration() ||
       tabId !== getSelectedTabId()
     )

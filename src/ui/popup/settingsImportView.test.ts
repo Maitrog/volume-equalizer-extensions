@@ -1,4 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
+import { readFileSync } from "node:fs";
 import { createSettingsTransferActions } from "../../app/popup/settingsTransferActions";
 import { DEFAULT_SHORTCUTS } from "../../domains/shortcuts/shortcuts";
 import { createSettingsImportView, type SettingsImportElements } from "./settingsImportView";
@@ -202,6 +203,78 @@ const setup = (stored: Record<string, unknown> = {}) => {
   };
   return { elements, actions, storage, view, load, inputs, change, applyCommitted, stored };
 };
+
+test("export controls disclose included site addresses with the existing localized text", () => {
+  const markup = readFileSync("popup.html", "utf8");
+  const section = markup.slice(
+    markup.lastIndexOf('<div class="settings-section">', markup.indexOf('id="export-settings"')),
+    markup.indexOf("<!--COMMUNITY SECTION-->"),
+  );
+  expect(section).toContain('data-i18n="settings_transfer_privacy"');
+});
+
+test.each([0, 2])("group selection shows validated preset and rule counts: %s", async (count) => {
+  const t = setup();
+  const names = Array.from({ length: count }, (_, index) => `Preset ${index}`);
+  await t.load(
+    file({
+      presets: {
+        presets: Object.fromEntries(names.map((name) => [name, filters])),
+        presetNames: names,
+        hideDefaultPresets: false,
+      },
+      autostartRules: names.map((presetName, index) => ({
+        id: `${index}`,
+        type: "domain",
+        value: `site${index}.com`,
+        presetName,
+      })),
+    }),
+  );
+  const labels = t.elements.groups.children.filter((child) => child.tagName === "LABEL");
+  expect(labels.find((label) => label.children[0].value === "presets")?.textContent).toBe(
+    `settings_transfer_presets: ${count}`,
+  );
+  expect(labels.find((label) => label.children[0].value === "autostartRules")?.textContent).toBe(
+    `settings_transfer_autostartRules: ${count}`,
+  );
+});
+
+test.each([false, true])(
+  "result retains committed counts and missing dependency warnings (unchanged: %s)",
+  async (unchanged) => {
+    const t = setup();
+    await t.load(
+      file({
+        presets: {
+          presets: unchanged ? {} : { New: filters },
+          presetNames: unchanged ? [] : ["New"],
+          hideDefaultPresets: false,
+        },
+        autostartRules: [
+          { id: "skip", type: "domain", value: "missing.example.com", presetName: "Missing" },
+        ],
+      }),
+    );
+    t.elements.next.click();
+    t.elements.apply.click();
+    await tick();
+    expect(t.elements.status.textContent).toBe(
+      `settings_transfer_${unchanged ? "unchanged" : "saved"}`,
+    );
+    expect(t.elements.summary.hidden).toBe(false);
+    expect(t.elements.summary.textContent).toContain(
+      `settings_transfer_added: ${unchanged ? 0 : 1}`,
+    );
+    expect(t.elements.summary.textContent).toContain("settings_transfer_skipped: 1");
+    expect(t.elements.summary.textContent).toContain("missing.example.com");
+    expect(t.elements.resetConfirm.hidden).toBe(true);
+    expect(t.elements.back.hidden).toBe(true);
+    expect(t.elements.groups.hidden).toBe(true);
+    expect(t.elements.conflicts.hidden).toBe(true);
+    expect(t.inputs(t.elements.summary)).toEqual([]);
+  },
+);
 
 test("selects available groups and disables absent or invalid groups", async () => {
   const { elements: e, load, inputs, change } = setup();

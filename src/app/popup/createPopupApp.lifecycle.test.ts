@@ -23,6 +23,7 @@ vi.mock("../../ui/equalizerCanvas/createEqualizerCanvas", () => ({
 vi.mock("./filterPersistence", () => ({
   createFilterPersistence: () => ({
     schedule: vi.fn(),
+    hasPendingChanges: () => false,
     flush: vi.fn(() => Promise.resolve()),
     dispose: mocks.filterDispose,
   }),

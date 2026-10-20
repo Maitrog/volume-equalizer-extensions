@@ -8,6 +8,9 @@ import { createLocalizationService } from "./localizationController";
 
 const mechanics = vi.hoisted(() => ({
   realAutostart: false,
+  realPersistence: false,
+  editFilters: () => {},
+  flushFilters: async () => {},
   selected: 42 as number | null,
   generation: 1,
   stopCapture: vi.fn(),
@@ -16,22 +19,36 @@ const mechanics = vi.hoisted(() => ({
   refreshPresets: vi.fn(async () => {}),
 }));
 vi.mock("../../ui/equalizerCanvas/createEqualizerCanvas", () => ({
-  createEqualizerCanvas: () => ({
-    resize: vi.fn(),
-    cleanup: vi.fn(),
-    getDimensions: () => ({ canvasWidth: 400, canvasHeight: 200 }),
-  }),
+  createEqualizerCanvas: (deps: {
+    saveCurrentFilters(): void;
+    flushCurrentFilters(): Promise<void>;
+  }) => {
+    mechanics.editFilters = deps.saveCurrentFilters;
+    mechanics.flushFilters = deps.flushCurrentFilters;
+    return {
+      resize: vi.fn(),
+      cleanup: vi.fn(),
+      getDimensions: () => ({ canvasWidth: 400, canvasHeight: 200 }),
+    };
+  },
 }));
 vi.mock("../../ui/equalizerCanvas/draw/drawSpectrum", () => ({
   createSpectrumRenderer: () => ({ setMeta: vi.fn(), scheduleDraw: vi.fn() }),
 }));
-vi.mock("./filterPersistence", () => ({
-  createFilterPersistence: () => ({
-    schedule: vi.fn(),
-    flush: mechanics.flush,
-    dispose: vi.fn(async () => {}),
-  }),
-}));
+vi.mock("./filterPersistence", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("./filterPersistence")>();
+  return {
+    createFilterPersistence: (...args: Parameters<typeof actual.createFilterPersistence>) =>
+      mechanics.realPersistence
+        ? actual.createFilterPersistence(...args)
+        : {
+            schedule: vi.fn(),
+            hasPendingChanges: () => false,
+            flush: mechanics.flush,
+            dispose: vi.fn(async () => {}),
+          },
+  };
+});
 vi.mock("./captureController", () => ({
   createCaptureController: () => ({
     init: vi.fn(async () => {}),
@@ -189,6 +206,7 @@ afterEach(() => {
   vi.clearAllMocks();
   Reader.pending = [];
   mechanics.realAutostart = false;
+  mechanics.realPersistence = false;
   mechanics.selected = 42;
   mechanics.generation = 1;
 });
@@ -203,11 +221,14 @@ const general = {
   enableVolumeCompensation: true,
   skipPointsResetConfirm: true,
 };
-const filters = [{ type: "peaking", freq: 1000, gain: 2, q: 0.5 }];
+const filters = [{ type: "peaking" as const, freq: 1000, gain: 2, q: 0.5 }];
 const file = (settings: object) =>
   JSON.stringify({ format: "eq-toolkit-settings", version: 1, settings });
-const setup = (options: { realLocalization?: boolean; realAutostart?: boolean } = {}) => {
+const setup = (
+  options: { realLocalization?: boolean; realAutostart?: boolean; realPersistence?: boolean } = {},
+) => {
   mechanics.realAutostart = options.realAutostart === true;
+  mechanics.realPersistence = options.realPersistence === true;
   doc.documentElement.lang = "";
   vi.stubGlobal("HTMLSelectElement", FakeElement);
   vi.stubGlobal("HTMLElement", FakeElement);
@@ -751,3 +772,173 @@ test("disposal invalidates a real pending autostart list read", async () => {
   await tick();
   expect(t.elements.autostartSettingsList.textContent).toBe(before);
 });
+
+test.each(["enableSpectrum", "themeSelect"])(
+  "saving %s preserves a pending user language selection",
+  async (control) => {
+    const t = setup({ realLocalization: true });
+    await t.realLocalization!.ready;
+    let finishLocale!: (response: Response) => void;
+    vi.mocked(fetch)
+      .mockResolvedValue({ ok: true, json: async () => ({ ready: { message: "RU" } }) } as Response)
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            finishLocale = resolve;
+          }),
+      );
+    t.elements.languageSelect.value = "ru";
+    t.elements.languageSelect.dispatchEvent(new Event("change"));
+    t.elements[control].checked = false;
+    t.elements[control].value = "light";
+    t.elements[control].dispatchEvent(new Event("change"));
+    await tick();
+    finishLocale({ ok: true, json: async () => ({ ready: { message: "RU" } }) } as Response);
+    await tick();
+    expect(t.stored.uiLanguage).toBe("ru");
+    expect(doc.documentElement.lang).toBe("ru");
+    expect(t.realLocalization!.getMessage("ready")).toBe("RU");
+  },
+);
+
+test("a deferred selected-filter read cannot revert a newer canvas edit", async () => {
+  const t = setup({ realPersistence: true });
+  let finishRead!: (value: Record<string, unknown>) => void;
+  t.storage.get.mockReturnValueOnce(
+    new Promise((resolve) => {
+      finishRead = resolve;
+    }),
+  );
+  t.emit({ [STORAGE_KEYS.tabFilters(42)]: { newValue: filters } });
+  await tick();
+  const edited = [{ ...filters[0], gain: 7 }];
+  t.state.setPoints(edited, { canvasWidth: 400, canvasHeight: 200 });
+  mechanics.editFilters();
+  finishRead({ [STORAGE_KEYS.tabFilters(42)]: filters });
+  await tick();
+  expect(
+    t.state
+      .getFilters({ canvasWidth: 400, canvasHeight: 200 })
+      .find((filter) => filter.type === "peaking")?.gain,
+  ).toBeCloseTo(7);
+  await mechanics.flushFilters();
+  expect(t.stored[STORAGE_KEYS.tabFilters(42)]).toEqual(
+    t.state.getFilters({ canvasWidth: 400, canvasHeight: 200 }),
+  );
+});
+
+test("an own write echo cannot replay the saved curve over the next pending canvas edit", async () => {
+  const t = setup({ realPersistence: true });
+  const edited = [{ ...filters[0], gain: 7 }];
+  t.state.setPoints(filters, { canvasWidth: 400, canvasHeight: 200 });
+  mechanics.editFilters();
+  const write = t.storage.set.getMockImplementation()!;
+  let finishWrite!: () => void;
+  t.storage.set.mockImplementationOnce(async (patch) => {
+    // Model Chrome delivering the previous write's event after another local edit.
+    t.state.setPoints(edited, { canvasWidth: 400, canvasHeight: 200 });
+    mechanics.editFilters();
+    await write(patch);
+    await new Promise<void>((resolve) => {
+      finishWrite = resolve;
+    });
+  });
+  const flushing = mechanics.flushFilters();
+  await tick();
+  expect(
+    t.state
+      .getFilters({ canvasWidth: 400, canvasHeight: 200 })
+      .find((filter) => filter.type === "peaking")?.gain,
+  ).toBeCloseTo(7);
+  finishWrite();
+  await flushing;
+  await tick();
+  expect(t.stored[STORAGE_KEYS.tabFilters(42)]).toEqual(
+    t.state.getFilters({ canvasWidth: 400, canvasHeight: 200 }),
+  );
+  const external = [{ ...filters[0], gain: 9 }];
+  t.stored[STORAGE_KEYS.tabFilters(42)] = external;
+  t.emit({ [STORAGE_KEYS.tabFilters(42)]: { newValue: external } });
+  await tick();
+  expect(
+    t.state
+      .getFilters({ canvasWidth: 400, canvasHeight: 200 })
+      .find((filter) => filter.type === "peaking")?.gain,
+  ).toBeCloseTo(9);
+});
+
+test("pending edits on another tab do not suppress the selected tab refresh", async () => {
+  const t = setup({ realPersistence: true });
+  mechanics.selected = 43;
+  mechanics.editFilters();
+  mechanics.selected = 42;
+  mechanics.generation++;
+  t.stored[STORAGE_KEYS.tabFilters(42)] = filters;
+  t.emit({ [STORAGE_KEYS.tabFilters(42)]: { newValue: filters } });
+  await tick();
+  expect(
+    t.state
+      .getFilters({ canvasWidth: 400, canvasHeight: 200 })
+      .find((filter) => filter.type === "peaking")?.gain,
+  ).toBeCloseTo(2);
+  await mechanics.flushFilters();
+});
+
+test("a user language selection started during a saved-settings read survives its stale snapshot", async () => {
+  const t = setup({ realLocalization: true });
+  await t.realLocalization!.ready;
+  let finishRead!: (value: Record<string, unknown>) => void;
+  t.storage.get.mockReturnValueOnce(
+    new Promise((resolve) => {
+      finishRead = resolve;
+    }),
+  );
+  t.emit({ enableSpectrum: { newValue: false } });
+  await tick();
+  let finishLocale!: (response: Response) => void;
+  vi.mocked(fetch)
+    .mockResolvedValue({ ok: true, json: async () => ({ ready: { message: "RU" } }) } as Response)
+    .mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishLocale = resolve;
+        }),
+    );
+  t.elements.languageSelect.value = "ru";
+  t.elements.languageSelect.dispatchEvent(new Event("change"));
+  finishRead({ uiLanguage: "en", enableSpectrum: false });
+  await tick();
+  finishLocale({ ok: true, json: async () => ({ ready: { message: "RU" } }) } as Response);
+  await tick();
+  expect(t.stored.uiLanguage).toBe("ru");
+  expect(doc.documentElement.lang).toBe("ru");
+});
+
+test.each(["mute", "toggleEq"] as const)(
+  "an imported null %s can be enabled in the connected settings UI",
+  async (action) => {
+    const t = setup();
+    await t.read(file({ shortcuts: { mute: null, toggleEq: null } }));
+    await t.confirm();
+    t.elements.settingsImportClose.click();
+    const input = action === "mute" ? t.elements.shortcutMute : t.elements.shortcutToggleEq;
+    input.dispatchEvent(
+      Object.assign(new Event("keydown"), {
+        key: "u",
+        code: "KeyU",
+        altKey: true,
+        ctrlKey: false,
+        shiftKey: false,
+        metaKey: false,
+      }),
+    );
+    await tick();
+    expect(t.stored.shortcuts).toEqual({
+      mute: null,
+      toggleEq: null,
+      [action]: { key: "U", alt: true, ctrl: false, shift: false, meta: false },
+    });
+    expect(input.value).toBe("Alt+U");
+    expect(t.elements.shortcutsSettingsError.textContent).toBe("");
+  },
+);

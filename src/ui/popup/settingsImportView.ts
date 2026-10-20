@@ -39,6 +39,7 @@ type Step = "reading" | "groups" | "conflicts" | "summary" | "saving" | "result"
 export const createSettingsImportView = (deps: Dependencies) => {
   const { elements: e, actions } = deps;
   let session: ImportSession | null = null;
+  let committed: PreparedSettingsImport | null = null;
   let selected: SettingsGroup[] = [];
   let decisions: ImportDecisions = {};
   let resetConfirmed = false;
@@ -208,7 +209,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
       document.activeElement instanceof HTMLElement
         ? document.activeElement.dataset.focusKey
         : undefined;
-    const prepared = preview();
+    const prepared = step === "result" ? committed : preview();
     e.title.textContent = message(
       step === "saving"
         ? "saving"
@@ -224,7 +225,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
     );
     e.groups.hidden = step !== "groups";
     e.conflicts.hidden = step !== "conflicts";
-    e.summary.hidden = step !== "summary";
+    e.summary.hidden = step !== "summary" && !(step === "result" && committed);
     e.back.hidden = step !== "conflicts" && step !== "summary";
     e.next.hidden = step !== "groups" && step !== "conflicts";
     e.apply.hidden = step !== "summary";
@@ -252,11 +253,17 @@ export const createSettingsImportView = (deps: Dependencies) => {
         const invalid = session.source.issues.some((issue) => issue.group === group);
         input.disabled = !session.source.groups[group] || invalid;
         input.checked = selected.includes(group);
+        const count =
+          group === "presets"
+            ? session.source.groups.presets?.presetNames.length
+            : group === "autostartRules"
+              ? session.source.groups.autostartRules?.length
+              : undefined;
         label.append(
           input,
           node(
             "span",
-            `${message(group)}${input.disabled ? ` — ${message(invalid ? "invalid" : "absent")}` : ""}`,
+            `${message(group)}${input.disabled ? ` — ${message(invalid ? "invalid" : "absent")}` : count === undefined ? "" : `: ${count}`}`,
           ),
         );
         listenChange(input, () => {
@@ -316,6 +323,16 @@ export const createSettingsImportView = (deps: Dependencies) => {
         if (reset.enableEq) e.summary.append(node("p", message("enable_eq")));
       }
     }
+    if (step === "result" && prepared) {
+      e.summary.replaceChildren();
+      for (const group of selected) {
+        if (group !== "presets" && group !== "autostartRules") continue;
+        e.summary.append(node("h4", message(group)));
+        for (const [key, count] of Object.entries(prepared.plan.counts[group]))
+          e.summary.append(node("p", `${message(key)}: ${count}`));
+      }
+      showIssues(e.summary, prepared.plan.warnings);
+    }
     if (activeKey)
       Array.from(e.modal.querySelectorAll<HTMLElement>("input"))
         .find((element) => element.dataset.focusKey === activeKey)
@@ -342,6 +359,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
     if (!file) return;
     const token = ++generation;
     session = null;
+    committed = null;
     selected = [];
     clearApprovals();
     step = "reading";
@@ -426,6 +444,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
         status("blocked", true);
         return;
       }
+      committed = result.prepared;
       try {
         if (result.status === "saved") await deps.applyCommitted(result.prepared);
         if (disposed || token !== generation) return;
@@ -466,6 +485,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
       }
     } catch {
       if (disposed || generation !== token) return;
+      committed = null;
       step = "result";
       render();
       status("export_error", true);
