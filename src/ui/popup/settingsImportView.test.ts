@@ -182,6 +182,7 @@ const setup = (stored: Record<string, unknown> = {}) => {
     getDimensions: () => ({ width: 400, height: 200, canvasWidth: 400, canvasHeight: 200 }),
   });
   const applyCommitted = vi.fn(async () => {});
+  elements.close.textContent = "×";
   const view = createSettingsImportView({
     elements: elements as unknown as SettingsImportElements,
     actions,
@@ -211,6 +212,28 @@ test("export controls disclose included site addresses with the existing localiz
     markup.indexOf("<!--COMMUNITY SECTION-->"),
   );
   expect(section).toContain('data-i18n="settings_transfer_privacy"');
+});
+
+test("preserves the close icon and uses OK only for the result stage", async () => {
+  const { elements: e, load } = setup();
+  expect(e.close.textContent).toBe("×");
+  expect(e.close.attributes["aria-label"]).toBe("close");
+  await load(JSON.stringify({ presets: { Voice: filters }, presetNames: ["Voice"] }));
+  expect(e.cancel.textContent).toBe("settings_transfer_cancel");
+  expect(e.cancel.dataset.i18n).toBe("settings_transfer_cancel");
+  e.next.click();
+  e.apply.click();
+  await tick();
+  expect(e.cancel.textContent).toBe("ok");
+  expect(e.cancel.dataset.i18n).toBe("ok");
+  e.cancel.click();
+  await load("invalid JSON");
+  expect(e.cancel.textContent).toBe("ok");
+  expect(e.cancel.dataset.i18n).toBe("ok");
+  e.cancel.click();
+  await load(JSON.stringify({ presets: { Second: filters }, presetNames: ["Second"] }));
+  expect(e.cancel.textContent).toBe("settings_transfer_cancel");
+  expect(e.cancel.dataset.i18n).toBe("settings_transfer_cancel");
 });
 
 test.each([0, 2])("group selection shows validated preset and rule counts: %s", async (count) => {

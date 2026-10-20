@@ -401,8 +401,8 @@
 
     <div id="settings-import-modal" class="modal" aria-labelledby="settings-import-title">
       <section class="modal-content settings-import-dialog">
-        <button type="button" id="settings-import-close" data-i18n="settings_transfer_close">
-          Close
+        <button type="button" id="settings-import-close" class="close" data-i18n-label="close">
+          &times;
         </button>
         <h3 id="settings-import-title" tabindex="-1" data-i18n="settings_transfer_select_groups">
           Select settings to import
@@ -418,6 +418,9 @@
         </label>
         <p id="settings-import-status" role="status" aria-live="polite"></p>
         <div class="settings-import-actions">
+          <button type="button" id="settings-import-cancel" data-i18n="settings_transfer_cancel">
+            Cancel
+          </button>
           <button type="button" id="settings-import-back" data-i18n="settings_transfer_back" hidden>
             Back
           </button>
@@ -431,9 +434,6 @@
             hidden
           >
             Apply
-          </button>
-          <button type="button" id="settings-import-cancel" data-i18n="settings_transfer_cancel">
-            Cancel
           </button>
         </div>
       </section>

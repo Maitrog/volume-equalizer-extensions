@@ -230,6 +230,8 @@ export const createSettingsImportView = (deps: Dependencies) => {
     e.next.hidden = step !== "groups" && step !== "conflicts";
     e.apply.hidden = step !== "summary";
     e.cancel.disabled = e.close.disabled = step === "saving";
+    e.cancel.dataset.i18n = step === "result" ? "ok" : "settings_transfer_cancel";
+    e.cancel.textContent = deps.getMessage(e.cancel.dataset.i18n);
     e.modal.setAttribute("aria-busy", String(step === "reading" || step === "saving"));
     e.resetConfirm.checked = resetConfirmed;
     const needsConfirmation = prepared?.reset?.requiresConfirmation === true;
@@ -327,11 +329,17 @@ export const createSettingsImportView = (deps: Dependencies) => {
       e.summary.replaceChildren();
       for (const group of selected) {
         if (group !== "presets" && group !== "autostartRules") continue;
-        e.summary.append(node("h4", message(group)));
+        const section = node("section");
+        section.append(node("h4", message(group)));
         for (const [key, count] of Object.entries(prepared.plan.counts[group]))
-          e.summary.append(node("p", `${message(key)}: ${count}`));
+          section.append(node("p", `${message(key)}: ${count}`));
+        e.summary.append(section);
       }
-      showIssues(e.summary, prepared.plan.warnings);
+      if (prepared.plan.warnings.length) {
+        const warnings = node("section");
+        showIssues(warnings, prepared.plan.warnings);
+        e.summary.append(warnings);
+      }
     }
     if (activeKey)
       Array.from(e.modal.querySelectorAll<HTMLElement>("input"))
@@ -343,9 +351,9 @@ export const createSettingsImportView = (deps: Dependencies) => {
     [e.next, "next"],
     [e.apply, "apply"],
     [e.cancel, "cancel"],
-    [e.close, "close"],
   ] as const)
     element.textContent = message(key);
+  e.close.setAttribute("aria-label", deps.getMessage("close"));
   e.resetConfirm.setAttribute("aria-label", message("reset_acknowledgement"));
   const resetLabel = e.resetConfirm.parentElement?.querySelector<HTMLElement>("[data-reset-label]");
   if (resetLabel) resetLabel.textContent = message("reset_acknowledgement");

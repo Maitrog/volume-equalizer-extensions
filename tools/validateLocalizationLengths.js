@@ -216,43 +216,83 @@ const validateWizard = async (page, locale, theme) => {
   });
   await page.locator("#settings-import-groups input").first().waitFor({ state: "visible" });
   const checkState = async (state) => {
-    const issues = await page.evaluate(() => {
-      const modal = document.getElementById("settings-import-modal");
-      const failures = [];
-      if (
-        modal.getAttribute("role") !== "dialog" ||
-        modal.getAttribute("aria-modal") !== "true" ||
-        !document.getElementById(modal.getAttribute("aria-labelledby"))?.textContent.trim()
-      )
-        failures.push("dialog role/name missing");
-      for (const element of modal.querySelectorAll(
-        "section, div, p, fieldset, legend, table, th, td, label, button",
-      )) {
-        if (!element.getClientRects().length) continue;
-        if (element.scrollWidth > element.clientWidth + 1)
-          failures.push(
-            `horizontal overflow: ${element.tagName}#${element.id} (${element.scrollWidth}/${element.clientWidth})`,
-          );
-      }
-      for (const element of modal.querySelectorAll("button, input")) {
-        if (!element.getClientRects().length || element.disabled) continue;
-        const label =
-          element.getAttribute("aria-label") ||
-          element.textContent ||
-          Array.from(element.labels ?? [])
-            .map((label) => label.textContent)
-            .join("");
-        if (!label.trim() || label.includes("settings_transfer_"))
-          failures.push(`unlabeled control: ${element.id || element.name}`);
-      }
-      const dialog = modal.querySelector("section");
-      if (
-        dialog.scrollHeight > dialog.clientHeight &&
-        getComputedStyle(dialog).overflowY === "visible"
-      )
-        failures.push("long list is not scrollable");
-      return failures;
-    });
+    const issues = await page.evaluate(
+      ({ state, messages }) => {
+        const modal = document.getElementById("settings-import-modal");
+        const failures = [];
+        if (
+          modal.getAttribute("role") !== "dialog" ||
+          modal.getAttribute("aria-modal") !== "true" ||
+          !document.getElementById(modal.getAttribute("aria-labelledby"))?.textContent.trim()
+        )
+          failures.push("dialog role/name missing");
+        for (const element of modal.querySelectorAll(
+          "section, div, p, fieldset, legend, table, th, td, label, button",
+        )) {
+          if (!element.getClientRects().length) continue;
+          if (element.scrollWidth > element.clientWidth + 1)
+            failures.push(
+              `horizontal overflow: ${element.tagName}#${element.id} (${element.scrollWidth}/${element.clientWidth})`,
+            );
+        }
+        for (const element of modal.querySelectorAll("button, input")) {
+          if (!element.getClientRects().length || element.disabled) continue;
+          const label =
+            element.getAttribute("aria-label") ||
+            element.textContent ||
+            Array.from(element.labels ?? [])
+              .map((label) => label.textContent)
+              .join("");
+          if (!label.trim() || label.includes("settings_transfer_"))
+            failures.push(`unlabeled control: ${element.id || element.name}`);
+        }
+        const dialog = modal.querySelector("section");
+        const close = document.getElementById("settings-import-close");
+        if (
+          close.textContent.trim() !== "×" ||
+          close.getAttribute("aria-label") !== messages.close.message
+        )
+          failures.push("close icon or localized accessible label missing");
+        const actions = modal.querySelector(".settings-import-actions");
+        const buttons = Array.from(actions.children).filter(
+          (button) => button.getClientRects().length,
+        );
+        const expected = state.startsWith("summary")
+          ? ["cancel", "back", "apply"]
+          : state === "groups"
+            ? ["cancel", "next"]
+            : state === "conflicts"
+              ? ["cancel", "back", "next"]
+              : ["cancel"];
+        if (
+          buttons.map((button) => button.id.replace("settings-import-", "")).join() !==
+          expected.join()
+        )
+          failures.push("actions are not in the expected DOM/keyboard order");
+        if (
+          getComputedStyle(actions).justifyContent !== "flex-end" ||
+          Math.abs(
+            buttons.at(-1).getBoundingClientRect().right - actions.getBoundingClientRect().right,
+          ) > 1
+        )
+          failures.push("actions are not aligned to the right");
+        if (
+          getComputedStyle(dialog).scrollbarColor !==
+            getComputedStyle(document.querySelector("#settings-modal .modal-content"))
+              .scrollbarColor ||
+          getComputedStyle(dialog, "::-webkit-scrollbar-track").backgroundColor !==
+            "rgba(0, 0, 0, 0)"
+        )
+          failures.push("scrollbar does not match the transparent settings scrollbar");
+        if (
+          dialog.scrollHeight > dialog.clientHeight &&
+          getComputedStyle(dialog).overflowY === "visible"
+        )
+          failures.push("long list is not scrollable");
+        return failures;
+      },
+      { state, messages },
+    );
     errors.push(...issues.map((issue) => `${locale}/${theme}/${state}: ${issue}`));
     // Visit every available control in both directions and verify the modal traps focus.
     const count = await page.locator("#settings-import-modal").evaluate(
@@ -326,7 +366,24 @@ const validateWizard = async (page, locale, theme) => {
     messages.settings_transfer_saved.message,
   );
   const checkResult = async (state) => {
+    await page.evaluate(async (messages) => {
+      const { applyLocalization } = await import("/src/ui/popup/applyLocalization.ts");
+      applyLocalization(document, (key) => messages[key]?.message ?? key);
+    }, messages);
     await checkState(state);
+    if ((await page.locator("#settings-import-cancel").textContent()) !== messages.ok.message)
+      errors.push(`${locale}/${theme}/${state}: result acknowledgement is not localized OK`);
+    const hasSpacing = await page.evaluate(() => {
+      const blocks = document.querySelectorAll(
+        "#settings-import-summary > section + section, #settings-import-status",
+      );
+      return Array.from(blocks).every((block) => {
+        const style = getComputedStyle(block);
+        return parseFloat(style.marginTop) >= parseFloat(style.fontSize);
+      });
+    });
+    if (!hasSpacing)
+      errors.push(`${locale}/${theme}/${state}: result blocks lack blank-line spacing`);
     const text = await page.locator("#settings-import-summary").textContent();
     for (const expected of [
       `${messages.settings_transfer_skipped.message}: 2`,
@@ -353,6 +410,11 @@ const validateWizard = async (page, locale, theme) => {
     mimeType: "application/json",
     buffer: Buffer.from(skippedFile),
   });
+  if (
+    (await page.locator("#settings-import-cancel").textContent()) !==
+    messages.settings_transfer_cancel.message
+  )
+    errors.push(`${locale}/${theme}: reopening did not restore Cancel`);
   await page.locator("#settings-import-next").click();
   await page.locator("#settings-import-apply").click();
   await page.waitForFunction(
