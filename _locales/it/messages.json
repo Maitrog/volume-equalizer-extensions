@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "Codice sorgente:"
   },
-  "import_presets_button_label": {
-    "message": "Importa preset"
-  },
-  "export_presets_button_label": {
-    "message": "Esporta preset"
-  },
   "enable_spectrum_setting_option": {
     "message": "Abilita la visualizzazione dello spettro"
   },
@@ -221,24 +215,6 @@
   "guide_spectrum_visualization_hint": {
     "message": "Puoi anche attivare la visualizzazione dello spettro nelle Impostazioni."
   },
-  "preset_import_syntax_error": {
-    "message": "Il file contiene JSON non valido."
-  },
-  "preset_import_structure_error": {
-    "message": "Il file dei preset ha una struttura non valida."
-  },
-  "preset_import_name_error": {
-    "message": "Il file dei preset contiene un nome non valido."
-  },
-  "preset_import_filter_error": {
-    "message": "Il file dei preset contiene un filtro non valido."
-  },
-  "preset_import_read_error": {
-    "message": "Impossibile leggere il file dei preset."
-  },
-  "preset_import_save_error": {
-    "message": "Impossibile salvare i preset importati."
-  },
   "close": {
     "message": "Chiudi"
   },
@@ -274,5 +250,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Impossibile interrompere la cattura audio della scheda."
+  },
+  "settings_transfer_title": {
+    "message": "Trasferimento impostazioni"
+  },
+  "settings_transfer_general": {
+    "message": "Generali"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Regole di avvio automatico"
+  },
+  "settings_transfer_absent": {
+    "message": "Assente nel file"
+  },
+  "settings_transfer_invalid": {
+    "message": "Impostazioni non valide"
+  },
+  "settings_transfer_current": {
+    "message": "Attuale"
+  },
+  "settings_transfer_incoming": {
+    "message": "Dal file"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Mantieni attuale"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Usa dal file"
+  },
+  "settings_transfer_added": {
+    "message": "Aggiunti"
+  },
+  "settings_transfer_replaced": {
+    "message": "Sostituiti"
+  },
+  "settings_transfer_kept": {
+    "message": "Mantenuti"
+  },
+  "settings_transfer_identical": {
+    "message": "Identici"
+  },
+  "settings_transfer_skipped": {
+    "message": "Ignorati"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Regola ignorata: preset assente o vuoto"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Preset integrato ignorato"
+  },
+  "settings_transfer_dependency": {
+    "message": "Una regola mantenuta richiede questo preset; scegli un’altra versione"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Le regole attuali assegnano preset diversi allo stesso indirizzo"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Regole esistenti con questo preset"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frequenza"
+  },
+  "settings_transfer_gain": {
+    "message": "Guadagno"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Tipo"
+  },
+  "settings_transfer_enabled": {
+    "message": "Attivo"
+  },
+  "settings_transfer_yes": {
+    "message": "Sì"
+  },
+  "settings_transfer_no": {
+    "message": "No"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Preset vuoto"
+  },
+  "settings_transfer_disabled": {
+    "message": "Disattivato"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Scegli le impostazioni da importare"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Scegli una versione per ogni conflitto"
+  },
+  "settings_transfer_review": {
+    "message": "Verifica importazione"
+  },
+  "settings_transfer_reading": {
+    "message": "Lettura impostazioni…"
+  },
+  "settings_transfer_saving": {
+    "message": "Salvataggio impostazioni…"
+  },
+  "settings_transfer_result": {
+    "message": "Risultato importazione"
+  },
+  "settings_transfer_privacy": {
+    "message": "I file possono contenere indirizzi web e nomi personali. Condividili con cautela. Le curve attuali e lo stato delle schede non vengono trasferiti."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "La curva attuale di questa scheda sarà reimpostata"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Comprendo che la curva attuale sarà reimpostata"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Nessuna scheda selezionata: cambia solo il numero di punti; le curve restano invariate"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "Anche la curva di riserva condivisa sarà reimpostata"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "L’equalizzatore sarà attivato su questa scheda"
+  },
+  "settings_transfer_stale": {
+    "message": "Le impostazioni o la scheda sono cambiate. Verifica l’importazione e scegli di nuovo."
+  },
+  "settings_transfer_blocked": {
+    "message": "Risolvi i conflitti e conferma il ripristino."
+  },
+  "settings_transfer_saved": {
+    "message": "Impostazioni importate correttamente."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Nessuna modifica da applicare."
+  },
+  "settings_transfer_read_error": {
+    "message": "Lettura non riuscita. Seleziona di nuovo il file."
+  },
+  "settings_transfer_version_error": {
+    "message": "Questa versione del file non è supportata."
+  },
+  "settings_transfer_file_error": {
+    "message": "Il file di impostazioni o di vecchi preset non è valido."
+  },
+  "settings_transfer_write_error": {
+    "message": "Salvataggio non riuscito. Le scelte sono conservate; riprova."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Impostazioni salvate, ma finestra non aggiornata. Riaprila."
+  },
+  "settings_transfer_export_error": {
+    "message": "Esportazione non riuscita. Riprova."
+  },
+  "settings_transfer_apply": {
+    "message": "Applica"
+  },
+  "settings_transfer_back": {
+    "message": "Indietro"
+  },
+  "settings_transfer_next": {
+    "message": "Avanti"
+  },
+  "settings_transfer_cancel": {
+    "message": "Annulla"
+  },
+  "settings_transfer_close": {
+    "message": "Chiudi"
+  },
+  "settings_transfer_presets": {
+    "message": "Presets"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Scorciatoie da tastiera"
+  },
+  "settings_transfer_theme": {
+    "message": "Tema"
+  },
+  "settings_transfer_language": {
+    "message": "Lingua"
+  },
+  "settings_transfer_point_count": {
+    "message": "Numero di punti EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Abilita la visualizzazione dello spettro"
+  },
+  "settings_transfer_compensation": {
+    "message": "Compensazione automatica del volume"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Non mostrare più"
+  },
+  "settings_transfer_mute": {
+    "message": "Disattiva/riattiva audio"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Attiva/disattiva"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Nascondi preset predefiniti"
+  },
+  "settings_transfer_dark": {
+    "message": "Scuro"
+  },
+  "settings_transfer_light": {
+    "message": "Chiaro"
+  },
+  "settings_transfer_import": {
+    "message": "Importa"
+  },
+  "settings_transfer_export": {
+    "message": "Esporta"
   }
 }

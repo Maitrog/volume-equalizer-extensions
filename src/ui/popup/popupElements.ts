@@ -64,9 +64,21 @@ export interface PopupElements {
   presetsSettingsTitle: HTMLHeadingElement;
   hideDefaultPresetsLabel: HTMLElement;
   hideDefaultPresets: HTMLInputElement;
-  importInput: HTMLInputElement;
-  importPresetsButton: HTMLButtonElement;
-  exportPresetsButton: HTMLButtonElement;
+  settingsImportInput: HTMLInputElement;
+  importSettingsButton: HTMLButtonElement;
+  exportSettingsButton: HTMLButtonElement;
+  settingsImportModal: HTMLElement;
+  settingsImportTitle: HTMLElement;
+  settingsImportGroups: HTMLElement;
+  settingsImportConflicts: HTMLElement;
+  settingsImportSummary: HTMLElement;
+  settingsImportStatus: HTMLElement;
+  settingsImportResetConfirm: HTMLInputElement;
+  settingsImportBack: HTMLButtonElement;
+  settingsImportNext: HTMLButtonElement;
+  settingsImportApply: HTMLButtonElement;
+  settingsImportCancel: HTMLButtonElement;
+  settingsImportClose: HTMLButtonElement;
   communitySettingsTitle: HTMLHeadingElement;
   helpWithTranslationLabel: HTMLDivElement;
   sourceCodeLabel: HTMLDivElement;
@@ -206,9 +218,25 @@ export const getPopupElements = (document: Document): PopupElements => ({
   presetsSettingsTitle: getRequiredElement(document, "presets-settings-title", HTMLHeadingElement),
   hideDefaultPresetsLabel: getRequiredElement(document, "hide-default-presets-label", HTMLElement),
   hideDefaultPresets: getRequiredElement(document, "hide-default-presets", HTMLInputElement),
-  importInput: getRequiredElement(document, "import-input", HTMLInputElement),
-  importPresetsButton: getRequiredElement(document, "import-presets", HTMLButtonElement),
-  exportPresetsButton: getRequiredElement(document, "export-presets", HTMLButtonElement),
+  settingsImportInput: getRequiredElement(document, "settings-import-input", HTMLInputElement),
+  importSettingsButton: getRequiredElement(document, "import-settings", HTMLButtonElement),
+  exportSettingsButton: getRequiredElement(document, "export-settings", HTMLButtonElement),
+  settingsImportModal: getRequiredElement(document, "settings-import-modal", HTMLElement),
+  settingsImportTitle: getRequiredElement(document, "settings-import-title", HTMLElement),
+  settingsImportGroups: getRequiredElement(document, "settings-import-groups", HTMLElement),
+  settingsImportConflicts: getRequiredElement(document, "settings-import-conflicts", HTMLElement),
+  settingsImportSummary: getRequiredElement(document, "settings-import-summary", HTMLElement),
+  settingsImportStatus: getRequiredElement(document, "settings-import-status", HTMLElement),
+  settingsImportResetConfirm: getRequiredElement(
+    document,
+    "settings-import-reset-confirm",
+    HTMLInputElement,
+  ),
+  settingsImportBack: getRequiredElement(document, "settings-import-back", HTMLButtonElement),
+  settingsImportNext: getRequiredElement(document, "settings-import-next", HTMLButtonElement),
+  settingsImportApply: getRequiredElement(document, "settings-import-apply", HTMLButtonElement),
+  settingsImportCancel: getRequiredElement(document, "settings-import-cancel", HTMLButtonElement),
+  settingsImportClose: getRequiredElement(document, "settings-import-close", HTMLButtonElement),
   communitySettingsTitle: getRequiredElement(
     document,
     "community-settings-title",

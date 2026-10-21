@@ -20,6 +20,8 @@ export const createShortcutSettingsView = (deps: {
   let savedShortcuts = resolveShortcuts(null);
   let requestedShortcuts = savedShortcuts;
   let interactionGeneration = 0;
+  let appliedGeneration = 0;
+  const pendingChanges = new Set<Promise<void>>();
   let saveQueue = Promise.resolve();
   const inputs: Record<ShortcutActionName, HTMLInputElement> = {
     [SHORTCUT_ACTION_MUTE_NAME]: deps.muteInput,
@@ -74,28 +76,38 @@ export const createShortcutSettingsView = (deps: {
         () => deps.saveShortcuts(next),
         () => deps.saveShortcuts(next),
       );
-      void saveQueue
-        .then(() => {
-          savedShortcuts = next;
-          if (generation !== interactionGeneration) return;
-          requestedShortcuts = next;
-          setError(null);
-          render();
-        })
-        .catch((error: unknown) => {
-          console.error("Failed to save shortcut settings", { action, error });
-          if (generation !== interactionGeneration) return;
-          requestedShortcuts = savedShortcuts;
-          setError("shortcut_validation_error");
-          render(action);
-        });
+      const update = saveQueue.then(() => {
+        if (generation < appliedGeneration) return;
+        savedShortcuts = next;
+        if (generation !== interactionGeneration) return;
+        requestedShortcuts = next;
+        setError(null);
+        render();
+      });
+      pendingChanges.add(update);
+      void update.then(
+        () => pendingChanges.delete(update),
+        () => pendingChanges.delete(update),
+      );
+      void update.catch((error: unknown) => {
+        console.error("Failed to save shortcut settings", { action, error });
+        if (generation !== interactionGeneration) return;
+        requestedShortcuts = savedShortcuts;
+        setError("shortcut_validation_error");
+        render(action);
+      });
     });
   });
 
   return {
+    waitForPendingChanges: async (): Promise<void> => {
+      await Promise.all(pendingChanges);
+    },
     setShortcuts: (value: Partial<ShortcutMap> | null | undefined): void => {
+      appliedGeneration = ++interactionGeneration;
       savedShortcuts = resolveShortcuts(value);
       requestedShortcuts = savedShortcuts;
+      setError(null);
       render();
     },
     getShortcuts: (): ShortcutMap => savedShortcuts,

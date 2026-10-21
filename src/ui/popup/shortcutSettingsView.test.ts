@@ -167,3 +167,85 @@ test("a pending valid save cannot clear a newer validation error", async () => {
   expect(error.textContent).toBe("shortcut_validation_error");
   expect(view.getShortcuts().toggleEq?.key).toBe("E");
 });
+
+test("applying saved shortcuts invalidates old render callbacks and cached values", async () => {
+  vi.stubGlobal("KeyboardEvent", FakeKeyboardEvent);
+  const mute = new FakeInput();
+  const toggle = new FakeInput();
+  let finishSave!: () => void;
+  const view = createShortcutSettingsView({
+    muteInput: mute as unknown as HTMLInputElement,
+    toggleEqInput: toggle as unknown as HTMLInputElement,
+    error: { textContent: "", style: { display: "" } } as HTMLElement,
+    getMessage: (key) => key,
+    saveShortcuts: () =>
+      new Promise<void>((resolve) => {
+        finishSave = resolve;
+      }),
+  });
+  toggle.dispatchEvent(new KeyboardEvent("keydown", { key: "e", altKey: true }));
+  await vi.waitFor(() => expect(finishSave).toBeTypeOf("function"));
+  const finished = vi.fn();
+  const wait = view.waitForPendingChanges().then(finished);
+  await Promise.resolve();
+  expect(finished).not.toHaveBeenCalled();
+  view.setShortcuts({ mute: null, toggleEq: null });
+  const importedText = toggle.value;
+  finishSave();
+  await wait;
+  expect(toggle.value).toBe(importedText);
+  expect(view.getShortcuts()).toEqual({ mute: null, toggleEq: null });
+});
+
+test("shortcut wait rejects pending failures without poisoning later waits", async () => {
+  vi.stubGlobal("KeyboardEvent", FakeKeyboardEvent);
+  vi.spyOn(console, "error").mockImplementation(() => {});
+  const mute = new FakeInput();
+  let failSave!: (error: Error) => void;
+  const view = createShortcutSettingsView({
+    muteInput: mute as unknown as HTMLInputElement,
+    toggleEqInput: new FakeInput() as unknown as HTMLInputElement,
+    error: { textContent: "", style: { display: "" } } as HTMLElement,
+    getMessage: (key) => key,
+    saveShortcuts: () =>
+      new Promise<void>((_resolve, reject) => {
+        failSave = reject;
+      }),
+  });
+  mute.dispatchEvent(new KeyboardEvent("keydown", { key: "u", altKey: true }));
+  await vi.waitFor(() => expect(failSave).toBeTypeOf("function"));
+  const waiting = expect(view.waitForPendingChanges()).rejects.toThrow("write failed");
+  failSave(new Error("write failed"));
+  await waiting;
+  await expect(view.waitForPendingChanges()).resolves.toBeUndefined();
+});
+
+test.each(["mute", "toggleEq"] as const)(
+  "re-enables imported null %s and edits it with a disabled counterpart",
+  async (action) => {
+    vi.stubGlobal("KeyboardEvent", FakeKeyboardEvent);
+    const mute = new FakeInput();
+    const toggle = new FakeInput();
+    const error = { textContent: "", style: { display: "" } } as HTMLElement;
+    let stored = { mute: null, toggleEq: null } as ReturnType<typeof resolveShortcuts>;
+    const view = createShortcutSettingsView({
+      muteInput: mute as unknown as HTMLInputElement,
+      toggleEqInput: toggle as unknown as HTMLInputElement,
+      error,
+      getMessage: (key) => key,
+      saveShortcuts: async (value) => {
+        stored = value;
+      },
+    });
+    view.setShortcuts(stored);
+    const input = action === "mute" ? mute : toggle;
+    for (const key of ["m", "u"]) {
+      input.dispatchEvent(new KeyboardEvent("keydown", { key, altKey: true }));
+      await view.waitForPendingChanges();
+      expect(stored[action]?.key).toBe(key.toUpperCase());
+      expect(stored[action === "mute" ? "toggleEq" : "mute"]).toBeNull();
+      expect(view.getShortcuts()).toEqual(stored);
+      expect(error.textContent).toBe("");
+    }
+  },
+);

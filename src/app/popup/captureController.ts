@@ -248,6 +248,7 @@ export const createCaptureController = (deps: CaptureControllerDependencies) => 
     handleStorageChange,
     isTabCaptured,
     getSelectedTabId,
+    getSelectionGeneration: settings.getSelectionGeneration,
     syncSnapshot,
   };
 };

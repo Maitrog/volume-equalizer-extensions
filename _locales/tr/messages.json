@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "Kaynak kodu:"
   },
-  "import_presets_button_label": {
-    "message": "Ön ayarları içe aktar"
-  },
-  "export_presets_button_label": {
-    "message": "Ön ayarları dışa aktar"
-  },
   "enable_spectrum_setting_option": {
     "message": "Spektrum görselleştirmesini etkinleştir"
   },
@@ -221,24 +215,6 @@
   "guide_spectrum_visualization_hint": {
     "message": "Ayrıca Ayarlar'da spektrum görselleştirmesini etkinleştirebilirsiniz."
   },
-  "preset_import_syntax_error": {
-    "message": "Dosya geçersiz JSON içeriyor."
-  },
-  "preset_import_structure_error": {
-    "message": "Ön ayar dosyasının yapısı geçersiz."
-  },
-  "preset_import_name_error": {
-    "message": "Ön ayar dosyası geçersiz bir ad içeriyor."
-  },
-  "preset_import_filter_error": {
-    "message": "Ön ayar dosyası geçersiz bir filtre içeriyor."
-  },
-  "preset_import_read_error": {
-    "message": "Ön ayar dosyası okunamadı."
-  },
-  "preset_import_save_error": {
-    "message": "İçe aktarılan ön ayarlar kaydedilemedi."
-  },
   "close": {
     "message": "Kapat"
   },
@@ -274,5 +250,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Sekme ses yakalaması durdurulamadı."
+  },
+  "settings_transfer_title": {
+    "message": "Ayarları aktar"
+  },
+  "settings_transfer_general": {
+    "message": "Genel"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Otomatik başlatma kuralları"
+  },
+  "settings_transfer_absent": {
+    "message": "Bu dosyada yok"
+  },
+  "settings_transfer_invalid": {
+    "message": "Geçersiz ayarlar"
+  },
+  "settings_transfer_current": {
+    "message": "Geçerli"
+  },
+  "settings_transfer_incoming": {
+    "message": "Dosyadan"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Geçerliyi koru"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Dosyadakini kullan"
+  },
+  "settings_transfer_added": {
+    "message": "Eklenen"
+  },
+  "settings_transfer_replaced": {
+    "message": "Değiştirilen"
+  },
+  "settings_transfer_kept": {
+    "message": "Korunan"
+  },
+  "settings_transfer_identical": {
+    "message": "Aynı"
+  },
+  "settings_transfer_skipped": {
+    "message": "Atlanan"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Kural atlandı: ön ayar yok veya boş"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Yerleşik ön ayar atlandı"
+  },
+  "settings_transfer_dependency": {
+    "message": "Korunan bir kural bu ön ayarı gerektiriyor; başka sürüm seçin"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Geçerli kurallar aynı adrese farklı ön ayarlar atıyor"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Bu ön ayarı kullanan mevcut kurallar"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frekans"
+  },
+  "settings_transfer_gain": {
+    "message": "Kazanç"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Tür"
+  },
+  "settings_transfer_enabled": {
+    "message": "Etkin"
+  },
+  "settings_transfer_yes": {
+    "message": "Evet"
+  },
+  "settings_transfer_no": {
+    "message": "Hayır"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Boş ön ayar"
+  },
+  "settings_transfer_disabled": {
+    "message": "Devre dışı"
+  },
+  "settings_transfer_select_groups": {
+    "message": "İçe aktarılacak ayarları seçin"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Her çakışma için bir sürüm seçin"
+  },
+  "settings_transfer_review": {
+    "message": "İçe aktarmayı inceleyin"
+  },
+  "settings_transfer_reading": {
+    "message": "Ayarlar okunuyor…"
+  },
+  "settings_transfer_saving": {
+    "message": "Ayarlar kaydediliyor…"
+  },
+  "settings_transfer_result": {
+    "message": "İçe aktarma sonucu"
+  },
+  "settings_transfer_privacy": {
+    "message": "Dosyalarda site adresleri ve kişisel adlar olabilir. Dikkatli paylaşın. Geçerli eğriler ve sekme durumu aktarılmaz."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "Bu sekmenin geçerli eğrisi sıfırlanacak"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Geçerli eğrinin sıfırlanacağını anlıyorum"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Sekme seçilmedi: yalnızca nokta sayısı değişir; eğriler korunur"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "Paylaşılan yedek eğri de sıfırlanacak"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "Bu sekmede ekolayzer etkinleştirilecek"
+  },
+  "settings_transfer_stale": {
+    "message": "Ayarlar veya sekme değişti. İçe aktarmayı inceleyip yeniden seçin."
+  },
+  "settings_transfer_blocked": {
+    "message": "Çakışmaları çözün ve sıfırlamayı onaylayın."
+  },
+  "settings_transfer_saved": {
+    "message": "Ayarlar başarıyla içe aktarıldı."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Uygulanacak değişiklik yok."
+  },
+  "settings_transfer_read_error": {
+    "message": "Ayarlar okunamadı. Dosyayı yeniden seçin."
+  },
+  "settings_transfer_version_error": {
+    "message": "Bu dosya sürümü desteklenmiyor."
+  },
+  "settings_transfer_file_error": {
+    "message": "Geçerli bir ayar veya eski ön ayar dosyası değil."
+  },
+  "settings_transfer_write_error": {
+    "message": "Ayarlar kaydedilemedi. Seçimler korundu; yeniden deneyin."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Ayarlar kaydedildi ancak pencere yenilenemedi. Yeniden açın."
+  },
+  "settings_transfer_export_error": {
+    "message": "Ayarlar dışa aktarılamadı. Yeniden deneyin."
+  },
+  "settings_transfer_apply": {
+    "message": "Uygula"
+  },
+  "settings_transfer_back": {
+    "message": "Geri"
+  },
+  "settings_transfer_next": {
+    "message": "İleri"
+  },
+  "settings_transfer_cancel": {
+    "message": "İptal"
+  },
+  "settings_transfer_close": {
+    "message": "Kapat"
+  },
+  "settings_transfer_presets": {
+    "message": "Ön ayarlar"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Kısayol tuşları"
+  },
+  "settings_transfer_theme": {
+    "message": "Tema"
+  },
+  "settings_transfer_language": {
+    "message": "Dil"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQ nokta sayısı"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Spektrum görselleştirmesini etkinleştir"
+  },
+  "settings_transfer_compensation": {
+    "message": "Otomatik ses düzeyi dengeleme"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Bir daha gösterme"
+  },
+  "settings_transfer_mute": {
+    "message": "Sesi kapat/aç"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Etkinleştir/devre dışı bırak"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Varsayılan ön ayarları gizle"
+  },
+  "settings_transfer_dark": {
+    "message": "Koyu"
+  },
+  "settings_transfer_light": {
+    "message": "Açık"
+  },
+  "settings_transfer_import": {
+    "message": "İçe aktar"
+  },
+  "settings_transfer_export": {
+    "message": "Dışa aktar"
   }
 }

@@ -25,14 +25,38 @@ const testDocument = Object.assign(new EventTarget(), {
   body: new TestElement(),
 });
 const disposers: Array<() => void> = [];
-const attach = (dialog: TestElement, trigger: TestElement) => {
+const attach = (
+  dialog: TestElement,
+  trigger: TestElement,
+  options?: { canClose?: () => boolean },
+) => {
   const view = attachModalFocus(
     dialog as unknown as HTMLElement,
     trigger as unknown as HTMLElement,
+    options,
   );
   disposers.unshift(view.dispose);
   return view;
 };
+
+test("busy dialogs guard close and Escape but dispose restores focus and inert", () => {
+  vi.stubGlobal("HTMLElement", TestElement);
+  vi.stubGlobal("document", testDocument);
+  const dialog = new TestElement();
+  const trigger = new TestElement();
+  testDocument.body.children = [trigger, dialog];
+  trigger.parentElement = dialog.parentElement = testDocument.body;
+  const view = attach(dialog, trigger, { canClose: () => false });
+  view.open();
+  view.close();
+  key("Escape");
+  expect(dialog.style.display).toBe("block");
+  expect(trigger.inert).toBe(true);
+  view.dispose();
+  expect(dialog.style.display).toBe("none");
+  expect(trigger.inert).toBe(false);
+  expect(testDocument.activeElement).toBe(trigger);
+});
 const key = (value: string, shiftKey = false) => {
   const event = Object.assign(new Event("keydown", { cancelable: true }), { key: value, shiftKey });
   testDocument.dispatchEvent(event);

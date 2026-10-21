@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "Kode sumber:"
   },
-  "import_presets_button_label": {
-    "message": "Impor"
-  },
-  "export_presets_button_label": {
-    "message": "Ekspor"
-  },
   "enable_spectrum_setting_option": {
     "message": "Aktifkan visualisasi spektrum"
   },
@@ -221,24 +215,6 @@
   "guide_spectrum_visualization_hint": {
     "message": "Anda juga dapat mengaktifkan visualisasi spektrum di Pengaturan."
   },
-  "preset_import_syntax_error": {
-    "message": "File berisi JSON yang tidak valid."
-  },
-  "preset_import_structure_error": {
-    "message": "File preset memiliki struktur yang tidak valid."
-  },
-  "preset_import_name_error": {
-    "message": "File preset berisi nama yang tidak valid."
-  },
-  "preset_import_filter_error": {
-    "message": "File preset berisi filter yang tidak valid."
-  },
-  "preset_import_read_error": {
-    "message": "File preset tidak dapat dibaca."
-  },
-  "preset_import_save_error": {
-    "message": "Preset yang diimpor tidak dapat disimpan."
-  },
   "close": {
     "message": "Tutup"
   },
@@ -274,5 +250,215 @@
   },
   "tab_capture_stop_error": {
     "message": "Tidak dapat menghentikan penangkapan audio tab."
+  },
+  "settings_transfer_title": {
+    "message": "Transfer pengaturan"
+  },
+  "settings_transfer_general": {
+    "message": "Umum"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "Aturan mulai otomatis"
+  },
+  "settings_transfer_absent": {
+    "message": "Tidak ada dalam file"
+  },
+  "settings_transfer_invalid": {
+    "message": "Pengaturan tidak valid"
+  },
+  "settings_transfer_current": {
+    "message": "Saat ini"
+  },
+  "settings_transfer_incoming": {
+    "message": "Dari file"
+  },
+  "settings_transfer_keep_current": {
+    "message": "Pertahankan saat ini"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "Gunakan dari file"
+  },
+  "settings_transfer_added": {
+    "message": "Ditambahkan"
+  },
+  "settings_transfer_replaced": {
+    "message": "Diganti"
+  },
+  "settings_transfer_kept": {
+    "message": "Dipertahankan"
+  },
+  "settings_transfer_identical": {
+    "message": "Sama"
+  },
+  "settings_transfer_skipped": {
+    "message": "Dilewati"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "Aturan dilewati: preset hilang atau kosong"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "Preset bawaan dilewati"
+  },
+  "settings_transfer_dependency": {
+    "message": "Aturan yang dipertahankan memerlukan preset ini; pilih versi lain"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "Aturan saat ini menetapkan preset berbeda untuk alamat yang sama"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "Aturan yang menggunakan preset ini"
+  },
+  "settings_transfer_frequency": {
+    "message": "Frekuensi"
+  },
+  "settings_transfer_gain": {
+    "message": "Penguatan"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "Jenis"
+  },
+  "settings_transfer_enabled": {
+    "message": "Aktif"
+  },
+  "settings_transfer_yes": {
+    "message": "Ya"
+  },
+  "settings_transfer_no": {
+    "message": "Tidak"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "Preset kosong"
+  },
+  "settings_transfer_disabled": {
+    "message": "Nonaktif"
+  },
+  "settings_transfer_select_groups": {
+    "message": "Pilih pengaturan untuk diimpor"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "Pilih versi untuk setiap konflik"
+  },
+  "settings_transfer_review": {
+    "message": "Tinjau impor"
+  },
+  "settings_transfer_reading": {
+    "message": "Membaca pengaturan…"
+  },
+  "settings_transfer_saving": {
+    "message": "Menyimpan pengaturan…"
+  },
+  "settings_transfer_result": {
+    "message": "Hasil impor"
+  },
+  "settings_transfer_privacy": {
+    "message": "File dapat berisi alamat situs dan nama pribadi. Bagikan dengan hati-hati. Kurva saat ini dan status tab tidak ditransfer."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "Kurva saat ini pada tab ini akan direset"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "Saya memahami bahwa kurva saat ini akan direset"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "Tidak ada tab dipilih: hanya jumlah titik berubah; kurva tetap"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "Kurva cadangan bersama juga akan direset"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "Equalizer akan diaktifkan pada tab ini"
+  },
+  "settings_transfer_stale": {
+    "message": "Pengaturan atau tab berubah. Tinjau impor dan pilih lagi."
+  },
+  "settings_transfer_blocked": {
+    "message": "Selesaikan konflik dan konfirmasikan reset."
+  },
+  "settings_transfer_saved": {
+    "message": "Pengaturan berhasil diimpor."
+  },
+  "settings_transfer_unchanged": {
+    "message": "Tidak ada perubahan untuk diterapkan."
+  },
+  "settings_transfer_read_error": {
+    "message": "Pengaturan tidak dapat dibaca. Pilih file lagi."
+  },
+  "settings_transfer_version_error": {
+    "message": "Versi file ini tidak didukung."
+  },
+  "settings_transfer_file_error": {
+    "message": "File pengaturan atau preset lama tidak valid."
+  },
+  "settings_transfer_write_error": {
+    "message": "Gagal menyimpan. Pilihan dipertahankan; coba lagi."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "Pengaturan disimpan, tetapi jendela gagal diperbarui. Buka kembali."
+  },
+  "settings_transfer_export_error": {
+    "message": "Gagal mengekspor pengaturan. Coba lagi."
+  },
+  "settings_transfer_apply": {
+    "message": "Terapkan"
+  },
+  "settings_transfer_back": {
+    "message": "Kembali"
+  },
+  "settings_transfer_next": {
+    "message": "Berikutnya"
+  },
+  "settings_transfer_cancel": {
+    "message": "Batal"
+  },
+  "settings_transfer_close": {
+    "message": "Tutup"
+  },
+  "settings_transfer_presets": {
+    "message": "Preset"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "Pintasan"
+  },
+  "settings_transfer_theme": {
+    "message": "Tema"
+  },
+  "settings_transfer_language": {
+    "message": "Bahasa"
+  },
+  "settings_transfer_point_count": {
+    "message": "Jumlah titik EQ"
+  },
+  "settings_transfer_spectrum": {
+    "message": "Aktifkan visualisasi spektrum"
+  },
+  "settings_transfer_compensation": {
+    "message": "Kompensasi volume otomatis"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "Jangan tampilkan lagi"
+  },
+  "settings_transfer_mute": {
+    "message": "Bisukan/suarakan"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "Aktifkan/nonaktifkan"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "Sembunyikan preset bawaan"
+  },
+  "settings_transfer_dark": {
+    "message": "Gelap"
+  },
+  "settings_transfer_light": {
+    "message": "Terang"
+  },
+  "settings_transfer_import": {
+    "message": "Impor"
+  },
+  "settings_transfer_export": {
+    "message": "Ekspor"
   }
 }

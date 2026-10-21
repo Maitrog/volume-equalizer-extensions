@@ -16,14 +16,18 @@ const isPlainObject = (value: unknown): value is Record<string, unknown> => {
 };
 
 export const parsePresetImport = (text: string): PresetImportResult => {
-  let parsed: unknown;
   try {
-    parsed = JSON.parse(text);
+    return parsePresetImportData(JSON.parse(text));
   } catch {
     return { ok: false, error: "syntax" };
   }
+};
+
+export const parsePresetImportData = (parsed: unknown): PresetImportResult => {
   if (
     !isPlainObject(parsed) ||
+    !Object.hasOwn(parsed, "presetNames") ||
+    !Object.hasOwn(parsed, "presets") ||
     !Array.isArray(parsed.presetNames) ||
     !isPlainObject(parsed.presets)
   ) {
@@ -38,6 +42,7 @@ export const parsePresetImport = (text: string): PresetImportResult => {
     if (!name || presetNames.includes(name) || unsafeNames.has(name)) {
       return { ok: false, error: "name" };
     }
+    if (!Object.hasOwn(parsed.presets, rawName)) return { ok: false, error: "structure" };
     const filters = parsed.presets[rawName];
     if (!Array.isArray(filters)) return { ok: false, error: "structure" };
     const normalized = filters.map(readPersistedFilter);

@@ -237,6 +237,30 @@ describe("background tab activation", () => {
     await vi.waitFor(() => expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7));
   });
 
+  test("relays spectrum and captured settings from one combined local change", async () => {
+    const { onStorageChanged } = createChromeMock(vi.fn());
+    mocks.captureCoordinator.getCaptures.mockResolvedValue([{ tabId: 7, settings: {} }] as never);
+    await import("./background");
+    const listener = onStorageChanged.mock.calls[0][0];
+    const changes = {
+      [STORAGE_KEYS.ENABLE_SPECTRUM]: { oldValue: true, newValue: false },
+      [STORAGE_KEYS.ENABLE_VOLUME_COMPENSATION]: { oldValue: false, newValue: true },
+      [STORAGE_KEYS.tabFilters(7)]: { newValue: [] },
+      [STORAGE_KEYS.SHORTCUTS]: { newValue: {} },
+    };
+    listener(changes, "sync");
+    await Promise.resolve();
+    expect(mocks.captureCoordinator.handleStorageChange).not.toHaveBeenCalled();
+    expect(mocks.spectrumRelay.resetSources).not.toHaveBeenCalled();
+
+    listener(changes, "local");
+    await vi.waitFor(() => expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7));
+    expect(mocks.captureCoordinator.handleStorageChange).toHaveBeenCalledOnce();
+    expect(mocks.captureCoordinator.handleStorageChange).toHaveBeenCalledWith(changes);
+    expect(mocks.captureCoordinator.startCapture).not.toHaveBeenCalled();
+    expect(mocks.captureCoordinator.stopCapture).not.toHaveBeenCalled();
+  });
+
   test("forwards only capture-relevant storage changes to the coordinator", async () => {
     const { onStorageChanged } = createChromeMock(vi.fn());
     await import("./background");

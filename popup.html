@@ -265,15 +265,21 @@
             >
             <input type="checkbox" id="hide-default-presets" />
           </label>
+        </div>
+        <div class="settings-section">
           <div class="settings-actions">
-            <input type="file" id="import-input" hidden />
-            <button type="button" id="import-presets" data-i18n="import_presets_button_label">
-              Import presets
+            <input type="file" id="settings-import-input" accept=".json,application/json" hidden />
+            <button type="button" id="import-settings" data-i18n="settings_transfer_import">
+              Import
             </button>
-            <button type="button" id="export-presets" data-i18n="export_presets_button_label">
-              Export presets
+            <button type="button" id="export-settings" data-i18n="settings_transfer_export">
+              Export
             </button>
           </div>
+          <p data-i18n="settings_transfer_privacy">
+            Files can contain site addresses and personal preset names. Share them carefully.
+            Current curves and tab state are not transferred.
+          </p>
         </div>
 
         <!--COMMUNITY SECTION-->
@@ -391,6 +397,46 @@
           <button type="submit" id="preset-save-confirm" data-i18n="save">Save</button>
         </div>
       </form>
+    </div>
+
+    <div id="settings-import-modal" class="modal" aria-labelledby="settings-import-title">
+      <section class="modal-content settings-import-dialog">
+        <button type="button" id="settings-import-close" class="close" data-i18n-label="close">
+          &times;
+        </button>
+        <h3 id="settings-import-title" tabindex="-1" data-i18n="settings_transfer_select_groups">
+          Select settings to import
+        </h3>
+        <div id="settings-import-groups"></div>
+        <div id="settings-import-conflicts" hidden></div>
+        <div id="settings-import-summary" hidden></div>
+        <label data-reset-visible="false">
+          <input type="checkbox" id="settings-import-reset-confirm" hidden />
+          <span data-reset-label data-i18n="settings_transfer_reset_acknowledgement"
+            >I understand that the current curve will be reset</span
+          >
+        </label>
+        <p id="settings-import-status" role="status" aria-live="polite"></p>
+        <div class="settings-import-actions">
+          <button type="button" id="settings-import-cancel" data-i18n="settings_transfer_cancel">
+            Cancel
+          </button>
+          <button type="button" id="settings-import-back" data-i18n="settings_transfer_back" hidden>
+            Back
+          </button>
+          <button type="button" id="settings-import-next" data-i18n="settings_transfer_next">
+            Next
+          </button>
+          <button
+            type="button"
+            id="settings-import-apply"
+            data-i18n="settings_transfer_apply"
+            hidden
+          >
+            Apply
+          </button>
+        </div>
+      </section>
     </div>
 
     <div id="points-reset-modal" class="modal" aria-labelledby="points-reset-title">

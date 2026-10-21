@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "सोर्स कोड:"
   },
-  "import_presets_button_label": {
-    "message": "प्रीसेट आयात करें"
-  },
-  "export_presets_button_label": {
-    "message": "प्रीसेट निर्यात करें"
-  },
   "enable_spectrum_setting_option": {
     "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें"
   },
@@ -221,24 +215,6 @@
   "guide_spectrum_visualization_hint": {
     "message": "आप सेटिंग्स में स्पेक्ट्रम विज़ुअलाइज़ेशन भी सक्षम कर सकते हैं।"
   },
-  "preset_import_syntax_error": {
-    "message": "फ़ाइल में अमान्य JSON है।"
-  },
-  "preset_import_structure_error": {
-    "message": "प्रीसेट फ़ाइल की संरचना अमान्य है।"
-  },
-  "preset_import_name_error": {
-    "message": "प्रीसेट फ़ाइल में एक अमान्य नाम है।"
-  },
-  "preset_import_filter_error": {
-    "message": "प्रीसेट फ़ाइल में एक अमान्य फ़िल्टर है।"
-  },
-  "preset_import_read_error": {
-    "message": "प्रीसेट फ़ाइल पढ़ी नहीं जा सकी।"
-  },
-  "preset_import_save_error": {
-    "message": "आयात किए गए प्रीसेट सहेजे नहीं जा सके।"
-  },
   "close": {
     "message": "बंद करें"
   },
@@ -274,5 +250,215 @@
   },
   "tab_capture_stop_error": {
     "message": "टैब ऑडियो कैप्चर रोक नहीं सका।"
+  },
+  "settings_transfer_title": {
+    "message": "सेटिंग स्थानांतरण"
+  },
+  "settings_transfer_general": {
+    "message": "सामान्य"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "अपने आप शुरू करने के नियम"
+  },
+  "settings_transfer_absent": {
+    "message": "इस फ़ाइल में नहीं है"
+  },
+  "settings_transfer_invalid": {
+    "message": "अमान्य सेटिंग"
+  },
+  "settings_transfer_current": {
+    "message": "वर्तमान"
+  },
+  "settings_transfer_incoming": {
+    "message": "फ़ाइल से"
+  },
+  "settings_transfer_keep_current": {
+    "message": "वर्तमान रखें"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "फ़ाइल वाला उपयोग करें"
+  },
+  "settings_transfer_added": {
+    "message": "जोड़े गए"
+  },
+  "settings_transfer_replaced": {
+    "message": "बदले गए"
+  },
+  "settings_transfer_kept": {
+    "message": "रखे गए"
+  },
+  "settings_transfer_identical": {
+    "message": "समान"
+  },
+  "settings_transfer_skipped": {
+    "message": "छोड़े गए"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "नियम छोड़ा गया: प्रीसेट नहीं है या खाली है"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "अंतर्निहित प्रीसेट छोड़ा गया"
+  },
+  "settings_transfer_dependency": {
+    "message": "रखे गए नियम को यह प्रीसेट चाहिए; दूसरा संस्करण चुनें"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "वर्तमान नियम एक ही पते के लिए अलग प्रीसेट चुनते हैं"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "इस प्रीसेट का उपयोग करने वाले मौजूदा नियम"
+  },
+  "settings_transfer_frequency": {
+    "message": "आवृत्ति"
+  },
+  "settings_transfer_gain": {
+    "message": "गेन"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "प्रकार"
+  },
+  "settings_transfer_enabled": {
+    "message": "सक्षम"
+  },
+  "settings_transfer_yes": {
+    "message": "हाँ"
+  },
+  "settings_transfer_no": {
+    "message": "नहीं"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "खाली प्रीसेट"
+  },
+  "settings_transfer_disabled": {
+    "message": "अक्षम"
+  },
+  "settings_transfer_select_groups": {
+    "message": "आयात करने के लिए सेटिंग चुनें"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "हर विरोध के लिए एक संस्करण चुनें"
+  },
+  "settings_transfer_review": {
+    "message": "आयात की समीक्षा करें"
+  },
+  "settings_transfer_reading": {
+    "message": "सेटिंग पढ़ी जा रही हैं…"
+  },
+  "settings_transfer_saving": {
+    "message": "सेटिंग सहेजी जा रही हैं…"
+  },
+  "settings_transfer_result": {
+    "message": "आयात परिणाम"
+  },
+  "settings_transfer_privacy": {
+    "message": "फ़ाइलों में वेबसाइट पते और निजी नाम हो सकते हैं। सावधानी से साझा करें। वर्तमान कर्व और टैब की स्थिति स्थानांतरित नहीं होती।"
+  },
+  "settings_transfer_reset_warning": {
+    "message": "इस टैब का वर्तमान कर्व रीसेट होगा"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "मैं समझता हूँ कि वर्तमान कर्व रीसेट होगा"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "कोई टैब नहीं चुना: केवल बिंदुओं की संख्या बदलेगी; कर्व नहीं बदलेंगे"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "साझा बैकअप कर्व भी रीसेट होगा"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "इस टैब में इक्वलाइज़र सक्षम होगा"
+  },
+  "settings_transfer_stale": {
+    "message": "सेटिंग या चुना गया टैब बदल गया। आयात की समीक्षा करके फिर चुनें।"
+  },
+  "settings_transfer_blocked": {
+    "message": "सभी विरोध हल करें और रीसेट की पुष्टि करें।"
+  },
+  "settings_transfer_saved": {
+    "message": "सेटिंग सफलतापूर्वक आयात की गईं।"
+  },
+  "settings_transfer_unchanged": {
+    "message": "लागू करने के लिए कोई बदलाव नहीं।"
+  },
+  "settings_transfer_read_error": {
+    "message": "सेटिंग नहीं पढ़ी जा सकीं। फ़ाइल फिर चुनें।"
+  },
+  "settings_transfer_version_error": {
+    "message": "सेटिंग फ़ाइल का यह संस्करण समर्थित नहीं है।"
+  },
+  "settings_transfer_file_error": {
+    "message": "यह मान्य सेटिंग या पुराने प्रीसेट की फ़ाइल नहीं है।"
+  },
+  "settings_transfer_write_error": {
+    "message": "सेटिंग सहेजी नहीं जा सकीं। चयन सुरक्षित हैं; फिर कोशिश करें।"
+  },
+  "settings_transfer_refresh_error": {
+    "message": "सेटिंग सहेजी गईं लेकिन विंडो रीफ़्रेश नहीं हुई। इसे फिर खोलें।"
+  },
+  "settings_transfer_export_error": {
+    "message": "सेटिंग निर्यात नहीं हुईं। फिर कोशिश करें।"
+  },
+  "settings_transfer_apply": {
+    "message": "लागू करें"
+  },
+  "settings_transfer_back": {
+    "message": "पीछे"
+  },
+  "settings_transfer_next": {
+    "message": "अगला"
+  },
+  "settings_transfer_cancel": {
+    "message": "रद्द करें"
+  },
+  "settings_transfer_close": {
+    "message": "बंद करें"
+  },
+  "settings_transfer_presets": {
+    "message": "प्रीसेट"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "कीबोर्ड शॉर्टकट"
+  },
+  "settings_transfer_theme": {
+    "message": "थीम"
+  },
+  "settings_transfer_language": {
+    "message": "भाषा"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQ बिंदुओं की संख्या"
+  },
+  "settings_transfer_spectrum": {
+    "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें"
+  },
+  "settings_transfer_compensation": {
+    "message": "स्वचालित वॉल्यूम क्षतिपूर्ति"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "दोबारा न दिखाएँ"
+  },
+  "settings_transfer_mute": {
+    "message": "म्यूट/अनम्यूट"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "सक्षम/अक्षम"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "डिफ़ॉल्ट प्रीसेट छिपाएं"
+  },
+  "settings_transfer_dark": {
+    "message": "गहरा"
+  },
+  "settings_transfer_light": {
+    "message": "हल्का"
+  },
+  "settings_transfer_import": {
+    "message": "आयात करें"
+  },
+  "settings_transfer_export": {
+    "message": "निर्यात करें"
   }
 }

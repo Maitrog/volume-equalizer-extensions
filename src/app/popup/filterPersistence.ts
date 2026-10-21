@@ -8,6 +8,7 @@ export const createFilterPersistence = (
   const pending = new Map<number, EqualizerFilter[]>();
   let timer: ReturnType<typeof setTimeout> | null = null;
   let draining: Promise<void> | null = null;
+  let writingTabId: number | null = null;
   let disposed = false;
 
   const drain = (): Promise<void> => {
@@ -16,7 +17,12 @@ export const createFilterPersistence = (
       while (pending.size > 0) {
         const [tabId, filters] = pending.entries().next().value as [number, EqualizerFilter[]];
         pending.delete(tabId);
-        await write(tabId, filters);
+        writingTabId = tabId;
+        try {
+          await write(tabId, filters);
+        } finally {
+          writingTabId = null;
+        }
       }
     })().finally(() => {
       draining = null;
@@ -31,6 +37,7 @@ export const createFilterPersistence = (
   };
 
   return {
+    hasPendingChanges: (tabId: number): boolean => pending.has(tabId) || writingTabId === tabId,
     schedule: (tabId: number, filters: EqualizerFilter[]): void => {
       if (disposed) return;
       pending.set(

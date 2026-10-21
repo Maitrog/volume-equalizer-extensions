@@ -155,8 +155,13 @@ export const validateShortcutConfig = (
   const muteShortcut = normalizeShortcut(shortcuts?.[SHORTCUT_ACTION_MUTE_NAME]);
   const toggleEqShortcut = normalizeShortcut(shortcuts?.[SHORTCUT_ACTION_TOGGLE_EQ_NAME]);
 
-  if (!muteShortcut || !toggleEqShortcut) return "invalid";
-  if (areShortcutsEqual(muteShortcut, toggleEqShortcut)) return "duplicate";
+  if (
+    (shortcuts?.[SHORTCUT_ACTION_MUTE_NAME] !== null && !muteShortcut) ||
+    (shortcuts?.[SHORTCUT_ACTION_TOGGLE_EQ_NAME] !== null && !toggleEqShortcut)
+  )
+    return "invalid";
+  if (muteShortcut && toggleEqShortcut && areShortcutsEqual(muteShortcut, toggleEqShortcut))
+    return "duplicate";
 
   return null;
 };

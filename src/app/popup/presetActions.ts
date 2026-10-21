@@ -7,7 +7,6 @@ import {
   resolvePresetFilters,
   type PresetStorage,
 } from "../../domains/presets/defaultPresets";
-import { parsePresetImport } from "../../domains/presets/presetImport";
 import { validatePresetName } from "../../domains/presets/presetNameValidation";
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
 
@@ -81,32 +80,6 @@ export const createPresetActions = (deps: {
     selectPreset: async (name: string): Promise<EqualizerFilter[] | null> => {
       const { presets } = await load();
       return resolvePresetFilters(name, presets) ?? null;
-    },
-    importPresets: async (text: string) => {
-      const parsed = parsePresetImport(text);
-      if (!parsed.ok) return parsed;
-      const current = await load();
-      const presets: PresetStorage = { ...current.presets };
-      const presetNames = [...current.presetNames];
-      const namesAdded = parsed.presetNames.filter(
-        (name) => !isDefaultPresetName(name) && !presetNames.includes(name),
-      );
-      namesAdded.forEach((name) => {
-        presetNames.push(name);
-        presets[name] = parsed.presets[name];
-      });
-      await chrome.storage.local.set({
-        [STORAGE_KEYS.PRESETS]: presets,
-        [STORAGE_KEYS.PRESET_NAMES]: presetNames,
-      });
-      return { ok: true as const, namesAdded, presetNames };
-    },
-    exportPresets: async (): Promise<string> => {
-      const current = await load();
-      return JSON.stringify({
-        [STORAGE_KEYS.PRESETS]: current.presets,
-        [STORAGE_KEYS.PRESET_NAMES]: current.presetNames,
-      });
     },
   };
 };

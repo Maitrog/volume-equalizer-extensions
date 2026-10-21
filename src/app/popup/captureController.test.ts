@@ -639,3 +639,13 @@ describe("capture controller commands", () => {
     expect(effects.renderCapturedTabs).toHaveBeenCalled();
   });
 });
+
+test("selection generation changes even after returning to the same tab", async () => {
+  const { controller } = setup();
+  await controller.init();
+  const generation = controller.getSelectionGeneration();
+  await controller.selectTab(13);
+  await controller.selectTab(12);
+  expect(controller.getSelectedTabId()).toBe(12);
+  expect(controller.getSelectionGeneration()).toBeGreaterThan(generation);
+});

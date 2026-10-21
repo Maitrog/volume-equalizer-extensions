@@ -44,12 +44,6 @@
   "source_code_label": {
     "message": "소스 코드:"
   },
-  "import_presets_button_label": {
-    "message": "프리셋 가져오기"
-  },
-  "export_presets_button_label": {
-    "message": "프리셋 내보내기"
-  },
   "enable_spectrum_setting_option": {
     "message": "스펙트럼 시각화 활성화"
   },
@@ -221,24 +215,6 @@
   "guide_spectrum_visualization_hint": {
     "message": "설정에서 스펙트럼 시각화를 활성화할 수도 있습니다."
   },
-  "preset_import_syntax_error": {
-    "message": "파일에 잘못된 JSON이 포함되어 있습니다."
-  },
-  "preset_import_structure_error": {
-    "message": "프리셋 파일의 구조가 잘못되었습니다."
-  },
-  "preset_import_name_error": {
-    "message": "프리셋 파일에 잘못된 이름이 포함되어 있습니다."
-  },
-  "preset_import_filter_error": {
-    "message": "프리셋 파일에 잘못된 필터가 포함되어 있습니다."
-  },
-  "preset_import_read_error": {
-    "message": "프리셋 파일을 읽을 수 없습니다."
-  },
-  "preset_import_save_error": {
-    "message": "가져온 프리셋을 저장할 수 없습니다."
-  },
   "close": {
     "message": "닫기"
   },
@@ -274,5 +250,215 @@
   },
   "tab_capture_stop_error": {
     "message": "탭 오디오 캡처를 중지할 수 없습니다."
+  },
+  "settings_transfer_title": {
+    "message": "설정 전송"
+  },
+  "settings_transfer_general": {
+    "message": "일반"
+  },
+  "settings_transfer_autostartRules": {
+    "message": "자동 시작 규칙"
+  },
+  "settings_transfer_absent": {
+    "message": "파일에 없음"
+  },
+  "settings_transfer_invalid": {
+    "message": "잘못된 설정"
+  },
+  "settings_transfer_current": {
+    "message": "현재"
+  },
+  "settings_transfer_incoming": {
+    "message": "파일에서"
+  },
+  "settings_transfer_keep_current": {
+    "message": "현재 설정 유지"
+  },
+  "settings_transfer_use_incoming": {
+    "message": "파일 설정 사용"
+  },
+  "settings_transfer_added": {
+    "message": "추가됨"
+  },
+  "settings_transfer_replaced": {
+    "message": "교체됨"
+  },
+  "settings_transfer_kept": {
+    "message": "유지됨"
+  },
+  "settings_transfer_identical": {
+    "message": "동일함"
+  },
+  "settings_transfer_skipped": {
+    "message": "건너뜀"
+  },
+  "settings_transfer_missing_preset": {
+    "message": "규칙 건너뜀: 프리셋이 없거나 비어 있음"
+  },
+  "settings_transfer_protected_preset": {
+    "message": "기본 프리셋 건너뜀"
+  },
+  "settings_transfer_dependency": {
+    "message": "유지된 규칙에 이 프리셋이 필요합니다. 다른 버전을 선택하세요"
+  },
+  "settings_transfer_ambiguous_rule": {
+    "message": "현재 규칙이 같은 주소에 서로 다른 프리셋을 지정합니다"
+  },
+  "settings_transfer_affected_rules": {
+    "message": "이 프리셋을 사용하는 기존 규칙"
+  },
+  "settings_transfer_frequency": {
+    "message": "주파수"
+  },
+  "settings_transfer_gain": {
+    "message": "게인"
+  },
+  "settings_transfer_q": {
+    "message": "Q"
+  },
+  "settings_transfer_type": {
+    "message": "유형"
+  },
+  "settings_transfer_enabled": {
+    "message": "활성화"
+  },
+  "settings_transfer_yes": {
+    "message": "예"
+  },
+  "settings_transfer_no": {
+    "message": "아니요"
+  },
+  "settings_transfer_empty_preset": {
+    "message": "빈 프리셋"
+  },
+  "settings_transfer_disabled": {
+    "message": "비활성화"
+  },
+  "settings_transfer_select_groups": {
+    "message": "가져올 설정 선택"
+  },
+  "settings_transfer_resolve_conflicts": {
+    "message": "충돌마다 버전 선택"
+  },
+  "settings_transfer_review": {
+    "message": "가져오기 검토"
+  },
+  "settings_transfer_reading": {
+    "message": "설정 읽는 중…"
+  },
+  "settings_transfer_saving": {
+    "message": "설정 저장 중…"
+  },
+  "settings_transfer_result": {
+    "message": "가져오기 결과"
+  },
+  "settings_transfer_privacy": {
+    "message": "파일에 사이트 주소와 개인 이름이 포함될 수 있습니다. 주의해서 공유하세요. 현재 곡선과 탭 상태는 전송되지 않습니다."
+  },
+  "settings_transfer_reset_warning": {
+    "message": "이 탭의 현재 곡선이 초기화됩니다"
+  },
+  "settings_transfer_reset_acknowledgement": {
+    "message": "현재 곡선이 초기화됨을 이해합니다"
+  },
+  "settings_transfer_fallback_only": {
+    "message": "선택한 탭 없음: 포인트 수만 변경되고 곡선은 유지됩니다"
+  },
+  "settings_transfer_fallback_reset": {
+    "message": "공유 대체 곡선도 초기화됩니다"
+  },
+  "settings_transfer_enable_eq": {
+    "message": "이 탭에서 이퀄라이저가 활성화됩니다"
+  },
+  "settings_transfer_stale": {
+    "message": "설정 또는 선택한 탭이 변경되었습니다. 다시 검토하고 선택하세요."
+  },
+  "settings_transfer_blocked": {
+    "message": "충돌을 해결하고 초기화를 확인하세요."
+  },
+  "settings_transfer_saved": {
+    "message": "설정을 가져왔습니다."
+  },
+  "settings_transfer_unchanged": {
+    "message": "적용할 변경 사항이 없습니다."
+  },
+  "settings_transfer_read_error": {
+    "message": "설정을 읽을 수 없습니다. 파일을 다시 선택하세요."
+  },
+  "settings_transfer_version_error": {
+    "message": "이 설정 파일 버전은 지원되지 않습니다."
+  },
+  "settings_transfer_file_error": {
+    "message": "유효한 설정 또는 이전 프리셋 파일이 아닙니다."
+  },
+  "settings_transfer_write_error": {
+    "message": "저장하지 못했습니다. 선택은 유지됩니다. 다시 시도하세요."
+  },
+  "settings_transfer_refresh_error": {
+    "message": "설정은 저장했지만 창을 새로 고치지 못했습니다. 다시 여세요."
+  },
+  "settings_transfer_export_error": {
+    "message": "설정을 내보내지 못했습니다. 다시 시도하세요."
+  },
+  "settings_transfer_apply": {
+    "message": "적용"
+  },
+  "settings_transfer_back": {
+    "message": "뒤로"
+  },
+  "settings_transfer_next": {
+    "message": "다음"
+  },
+  "settings_transfer_cancel": {
+    "message": "취소"
+  },
+  "settings_transfer_close": {
+    "message": "닫기"
+  },
+  "settings_transfer_presets": {
+    "message": "프리셋"
+  },
+  "settings_transfer_shortcuts": {
+    "message": "단축키"
+  },
+  "settings_transfer_theme": {
+    "message": "테마"
+  },
+  "settings_transfer_language": {
+    "message": "언어"
+  },
+  "settings_transfer_point_count": {
+    "message": "EQ 포인트 수"
+  },
+  "settings_transfer_spectrum": {
+    "message": "스펙트럼 시각화 활성화"
+  },
+  "settings_transfer_compensation": {
+    "message": "자동 볼륨 보정"
+  },
+  "settings_transfer_skip_reset": {
+    "message": "다시 표시하지 않기"
+  },
+  "settings_transfer_mute": {
+    "message": "음소거/음소거 해제"
+  },
+  "settings_transfer_toggle_eq": {
+    "message": "활성화/비활성화"
+  },
+  "settings_transfer_hide_defaults": {
+    "message": "기본 프리셋 숨기기"
+  },
+  "settings_transfer_dark": {
+    "message": "어둡게"
+  },
+  "settings_transfer_light": {
+    "message": "밝게"
+  },
+  "settings_transfer_import": {
+    "message": "가져오기"
+  },
+  "settings_transfer_export": {
+    "message": "내보내기"
   }
 }

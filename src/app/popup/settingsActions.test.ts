@@ -1,7 +1,8 @@
 import { afterEach, expect, test, vi } from "vitest";
 
 import { STORAGE_KEYS } from "../../infrastructure/chrome/storageKeys";
-import { createSettingsActions } from "./settingsActions";
+import { DEFAULT_SHORTCUTS } from "../../domains/shortcuts/shortcuts";
+import { createSettingsActions, resolveSettingsPreferences } from "./settingsActions";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -54,4 +55,30 @@ test("settings actions preserve an explicitly disabled volume compensation setti
   });
 
   expect((await createSettingsActions().load()).enableVolumeCompensation).toBe(false);
+});
+
+test("exports effective defaults including browser language", () => {
+  expect(resolveSettingsPreferences({}, "ru")).toEqual({
+    general: {
+      theme: "dark",
+      uiLanguage: "ru",
+      pointCount: 5,
+      enableSpectrum: true,
+      enableVolumeCompensation: false,
+      skipPointsResetConfirm: false,
+    },
+    shortcuts: DEFAULT_SHORTCUTS,
+    hideDefaultPresets: false,
+  });
+});
+
+test("resolves legacy skip flag", () => {
+  expect(
+    resolveSettingsPreferences({ [STORAGE_KEYS.SKIP_POINTS_CONFIRM]: "true" }, "en").general
+      .skipPointsResetConfirm,
+  ).toBe(true);
+  expect(
+    resolveSettingsPreferences({ [STORAGE_KEYS.SKIP_POINTS_CONFIRM]: "unknown" }, "en").general
+      .skipPointsResetConfirm,
+  ).toBe(false);
 });
