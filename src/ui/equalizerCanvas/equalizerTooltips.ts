@@ -1,4 +1,4 @@
-import { ensureQFactor, xToFrequency, yToDb } from "../../domains/equalizer/equalizerMath";
+import { ensureQFactor, yToDb } from "../../domains/equalizer/equalizerMath";
 import type {
   EqualizerCanvasDimensions,
   EqualizerCanvasPoint,
@@ -50,7 +50,7 @@ export const createEqualizerTooltips = ({
       return `Q ${ensureQFactor(point.q).toFixed(2)}`;
     }
 
-    const freq = Math.round(xToFrequency(point.x, dimensions.canvasWidth - 10));
+    const freq = Math.round(point.freq);
     const db = yToDb(point.y, dimensions.canvasHeight);
 
     return `${freq} Hz, ${formatDb(db)}`;

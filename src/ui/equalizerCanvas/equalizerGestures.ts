@@ -137,6 +137,8 @@ export const attachEqualizerGestures = ({
       nextPoint = {
         ...currentPoint,
         x: mx,
+        freq:
+          mx === currentPoint.x ? currentPoint.freq : xToFrequency(mx, dimensions.canvasWidth - 10),
         y: activeDragTarget?.type === "peaking" ? my : dimensions.canvasHeight / 2,
       };
     }
@@ -203,10 +205,8 @@ export const attachEqualizerGestures = ({
         if (qEdit) point.q = ensureQFactor(point.q * 2 ** (direction / 12));
         else if (horizontal) {
           const width = dimensions.canvasWidth - 10;
-          const freq = Math.max(
-            1,
-            Math.min(24000, xToFrequency(point.x, width) * 2 ** (direction / 12)),
-          );
+          const freq = Math.max(1, Math.min(24000, point.freq * 2 ** (direction / 12)));
+          point.freq = freq;
           point.x = frequencyToX(freq, width);
         } else {
           const step = (0.5 / 25) * (dimensions.canvasHeight / 2 - 20);

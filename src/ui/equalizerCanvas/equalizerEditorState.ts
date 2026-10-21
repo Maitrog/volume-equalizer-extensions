@@ -17,6 +17,7 @@ export interface EqualizerCanvasDimensions {
 
 export interface EqualizerCanvasPoint {
   x: number;
+  freq: number;
   y: number;
   q: number;
 }
@@ -72,8 +73,11 @@ const createPeakingFilterPoint = (
   const centerY = dimensions.canvasHeight / 2;
   const pointStep = dimensions.canvasWidth / (count + 1);
 
+  const x = pointStep * (index + 1);
+
   return {
-    x: pointStep * (index + 1),
+    x,
+    freq: xToFrequency(x, getFrequencyCanvasWidth(dimensions)),
     y: centerY,
     q: DEFAULT_FILTER_Q,
   };
@@ -86,6 +90,7 @@ const createCrossoverPoint = (
 ): EqualizerCanvasPoint => {
   return {
     x: frequencyToX(filter?.freq ?? freq, getFrequencyCanvasWidth(dimensions)),
+    freq: filter?.freq ?? freq,
     y: dimensions.canvasHeight / 2,
     q: ensureQFactor(filter?.q),
   };
@@ -183,6 +188,7 @@ export const createEqualizerState = (): EqualizerState => {
       points = peakingFilters.map((filter) => {
         return {
           x: frequencyToX(filter.freq, getFrequencyCanvasWidth(dimensions)),
+          freq: filter.freq,
           y: dimensions.canvasHeight / 2 - (filter.gain / 25) * (dimensions.canvasHeight / 2 - 20),
           q: ensureQFactor(filter.q),
         };
@@ -191,13 +197,12 @@ export const createEqualizerState = (): EqualizerState => {
 
     getFilters: (dimensions) => {
       const filters: EqualizerFilter[] = [];
-      const canvasWidth = getFrequencyCanvasWidth(dimensions);
 
       if (highpassPoint) {
         filters.push({
           type: "highpass",
           enabled: highpassEnabled,
-          freq: xToFrequency(highpassPoint.x, canvasWidth),
+          freq: highpassPoint.freq,
           gain: 0,
           q: ensureQFactor(highpassPoint.q),
         });
@@ -206,7 +211,7 @@ export const createEqualizerState = (): EqualizerState => {
       points.forEach((point) => {
         filters.push({
           type: "peaking",
-          freq: xToFrequency(point.x, canvasWidth),
+          freq: point.freq,
           gain: yToDb(point.y, dimensions.canvasHeight),
           q: ensureQFactor(point.q),
         });
@@ -216,7 +221,7 @@ export const createEqualizerState = (): EqualizerState => {
         filters.push({
           type: "lowpass",
           enabled: lowpassEnabled,
-          freq: xToFrequency(lowpassPoint.x, canvasWidth),
+          freq: lowpassPoint.freq,
           gain: 0,
           q: ensureQFactor(lowpassPoint.q),
         });

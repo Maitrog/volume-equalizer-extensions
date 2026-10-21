@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 
-import { frequencyToX } from "../../domains/equalizer/equalizerMath";
+import { frequencyToX, xToFrequency } from "../../domains/equalizer/equalizerMath";
 import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import { createEqualizerState } from "./equalizerEditorState";
 
@@ -10,6 +10,25 @@ const dimensions = {
 };
 
 describe("createEqualizerState", () => {
+  test.each(
+    [20001, 1000.4, 0.5].flatMap((freq) =>
+      (["highpass", "peaking", "lowpass"] as const).map((type) => ({ freq, type })),
+    ),
+  )("retains exact $type frequency $freq through loading and Q/gain edits", ({ freq, type }) => {
+    const state = createEqualizerState();
+    state.setPoints([{ type, freq, gain: 6, q: 0.5 }], dimensions);
+    const target = type === "peaking" ? { type, index: 0 } : { type };
+    state.setDragTarget(target, "q");
+    const point = state.getDraggedPoint()!;
+    expect(point).toMatchObject({ freq });
+    expect(state.getFilters(dimensions).find((filter) => filter.type === type)?.freq).toBe(freq);
+    state.setDraggedPoint({ ...point, q: 2, y: 80 });
+    point.q = 9;
+    point.freq = 999;
+    expect(state.getDraggedPoint()).toMatchObject({ freq, q: 2 });
+    expect(state.getFilters(dimensions).find((filter) => filter.type === type)?.freq).toBe(freq);
+  });
+
   test("projects persisted audio values for the current canvas size", () => {
     const loaded = readPersistedFilters([
       { type: "peaking", freq: 1000, gain: 6, q: 0.5, x: 10, y: 20 },
@@ -52,11 +71,13 @@ describe("createEqualizerState", () => {
       expect(point.q).toBe(0.5);
     });
     expect(state.getHighpassPoint()).toEqual({
+      freq: 20,
       x: frequencyToX(20, 490),
       y: 100,
       q: 0.5,
     });
     expect(state.getLowpassPoint()).toEqual({
+      freq: 20000,
       x: frequencyToX(20000, 490),
       y: 100,
       q: 0.5,
@@ -80,15 +101,17 @@ describe("createEqualizerState", () => {
 
     expect(onPointCountChange).toHaveBeenCalledWith(5);
     expect(state.getHighpassPoint()).toEqual({
+      freq: 40,
       x: frequencyToX(40, 490),
       y: 100,
       q: 0.1,
     });
     expect(state.getPoints()).toEqual([
-      { x: frequencyToX(1000, 490), y: 60, q: 2 },
-      { x: frequencyToX(2000, 490), y: 140, q: 10 },
+      { freq: 1000, x: frequencyToX(1000, 490), y: 60, q: 2 },
+      { freq: 2000, x: frequencyToX(2000, 490), y: 140, q: 10 },
     ]);
     expect(state.getLowpassPoint()).toEqual({
+      freq: 18000,
       x: frequencyToX(18000, 490),
       y: 100,
       q: 0.5,
@@ -145,12 +168,14 @@ describe("createEqualizerState", () => {
     state.setDragTarget({ type: "highpass" }, "point");
     state.setDraggedPoint({
       ...(state.getDraggedPoint() as NonNullable<ReturnType<typeof state.getDraggedPoint>>),
+      freq: xToFrequency(100, 490),
       x: 100,
     });
     expect(state.getFilters(dimensions)[0].enabled).toBe(true);
 
     state.resetPoint({ type: "highpass" }, dimensions);
     expect(state.getFilters(dimensions)[0].enabled).toBe(false);
+    expect(state.getFilters(dimensions)[0].freq).toBe(20);
   });
 
   test("tracks drag target, drag mode, and reset behavior", () => {
@@ -163,18 +188,56 @@ describe("createEqualizerState", () => {
 
     state.setDragTarget(target, "q");
     expect(state.getDragMode()).toBe("q");
-    expect(state.getDraggedPoint()).toEqual({ x: 500 / 6, y: 100, q: 0.5 });
+    expect(state.getDraggedPoint()).toEqual({
+      freq: xToFrequency(500 / 6, 490),
+      x: 500 / 6,
+      y: 100,
+      q: 0.5,
+    });
 
-    state.setDraggedPoint({ x: 111, y: 44, q: 3 });
-    expect(state.getDraggedPoint()).toEqual({ x: 111, y: 44, q: 3 });
+    state.setDraggedPoint({ freq: 1234.5, x: frequencyToX(1234.5, 490), y: 44, q: 3 });
+    expect(state.getDraggedPoint()).toEqual({
+      freq: 1234.5,
+      x: frequencyToX(1234.5, 490),
+      y: 44,
+      q: 3,
+    });
 
     state.resetPoint(target, dimensions);
-    expect(state.getDraggedPoint()).toEqual({ x: 500 / 6, y: 100, q: 0.5 });
+    expect(state.getDraggedPoint()).toEqual({
+      freq: xToFrequency(500 / 6, 490),
+      x: 500 / 6,
+      y: 100,
+      q: 0.5,
+    });
 
     state.clearDrag();
     expect(state.getDragMode()).toBeNull();
     expect(state.getDraggedPoint()).toBeNull();
   });
+
+  test.each(["highpass", "peaking", "lowpass"] as const)(
+    "reset restores the default %s frequency and crossover flag",
+    (type) => {
+      const state = createEqualizerState();
+      state.initPoints(5, dimensions);
+      const target = type === "peaking" ? { type, index: 0 } : { type };
+      state.setDragTarget(target, "point");
+      const initial = state.getDraggedPoint()!;
+      state.setDraggedPoint({
+        ...initial,
+        freq: 1234.5,
+        x: frequencyToX(1234.5, 490),
+        q: 2,
+        y: 80,
+      });
+      state.resetPoint(target, dimensions);
+      expect(state.getDraggedPoint()).toEqual(initial);
+      const filter = state.getFilters(dimensions).find((filter) => filter.type === type)!;
+      expect(filter.freq).toBe(initial.freq);
+      if (type !== "peaking") expect(filter.enabled).toBe(false);
+    },
+  );
 
   test("detects crossover filters only when both crossover types exist", () => {
     const state = createEqualizerState();

@@ -1,4 +1,4 @@
-import { ensureQFactor, xToFrequency, yToDb } from "../../../domains/equalizer/equalizerMath";
+import { ensureQFactor, yToDb } from "../../../domains/equalizer/equalizerMath";
 import { POINT_RADIUS, type EqualizerCanvasPoint } from "../equalizerEditorState";
 import type { ThemeColors } from "../../theme/themeColors";
 import type { EqualizerCanvasRenderOptions } from "../types";
@@ -76,7 +76,6 @@ export const drawFilter = ({
     ctx.stroke();
   }
 
-  const canvasWidth = canvas.clientWidth - 10;
   const highpassPoint = state.getHighpassPoint();
 
   if (highpassPoint) {
@@ -85,7 +84,7 @@ export const drawFilter = ({
       ctx,
       audioContext,
       type: "highpass",
-      freq: xToFrequency(highpassPoint.x, canvasWidth),
+      freq: highpassPoint.freq,
       q: ensureQFactor(highpassPoint.q),
       minDb: -80,
       strokeStyle: colors.highpassFilterColor,
@@ -103,7 +102,7 @@ export const drawFilter = ({
       ctx,
       audioContext,
       type: "peaking",
-      freq: xToFrequency(point.x, canvasWidth),
+      freq: point.freq,
       q: ensureQFactor(point.q),
       gain: yToDb(point.y, canvas.clientHeight),
       strokeStyle: gradient,
@@ -118,7 +117,7 @@ export const drawFilter = ({
       ctx,
       audioContext,
       type: "lowpass",
-      freq: xToFrequency(lowpassPoint.x, canvasWidth),
+      freq: lowpassPoint.freq,
       q: ensureQFactor(lowpassPoint.q),
       minDb: -80,
       strokeStyle: colors.lowpassFilterColor,

@@ -1,4 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
+import { xToFrequency } from "../../domains/equalizer/equalizerMath";
 import { createEqualizerState } from "./equalizerEditorState";
 import { attachEqualizerGestures } from "./equalizerGestures";
 
@@ -122,5 +123,52 @@ test("keyboard edits clamp frequency/Q and leave Tab and global shortcuts alone"
   state.setDragTarget({ type: "peaking", index: 0 }, "point");
   canvas.dispatchEvent(new Event("blur"));
   expect(state.getDragMode()).toBeNull();
+  cleanup();
+});
+
+test("ordinary movement keeps the clamped pointer X and derives its frequency", () => {
+  const { canvas, state, cleanup } = setup();
+  const point = state.getPoints()[0];
+  canvas.dispatchEvent(
+    Object.assign(new Event("mousedown"), { clientX: point.x, clientY: point.y }),
+  );
+  canvas.dispatchEvent(Object.assign(new Event("mousemove"), { clientX: 650, clientY: 80 }));
+  expect(state.getPoints()[0]).toMatchObject({ x: 600, y: 80, freq: xToFrequency(600, 590) });
+  cleanup();
+});
+
+test.each([0.5, 1000.4])("gain and Q gestures preserve loaded frequency %s", (freq) => {
+  const { canvas, state, key, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq, gain: 0, q: 0.5 }], dimensions);
+  key("Home");
+  key("PageDown");
+  key("ArrowUp");
+  key("ArrowUp", { shiftKey: true });
+  const point = state.getPoints()[0];
+  canvas.dispatchEvent(
+    Object.assign(new Event("mousedown"), { clientX: point.x, clientY: point.y }),
+  );
+  canvas.dispatchEvent(Object.assign(new Event("mousemove"), { clientX: point.x, clientY: 80 }));
+  expect(state.getFilters(dimensions)[1].freq).toBe(freq);
+  window.dispatchEvent(new Event("mouseup"));
+  canvas.dispatchEvent(
+    Object.assign(new Event("mousedown"), { clientX: point.x, clientY: 80, shiftKey: true }),
+  );
+  canvas.dispatchEvent(
+    Object.assign(new Event("mousemove"), { clientX: point.x + 20, clientY: 70 }),
+  );
+  expect(state.getFilters(dimensions)[1].freq).toBe(freq);
+  cleanup();
+});
+
+test("horizontal keys advance the exact loaded frequency and update X", () => {
+  const { state, key, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq: 1000.4, gain: 0, q: 0.5 }], dimensions);
+  key("Home");
+  key("PageDown");
+  key("ArrowRight");
+  const expectedFrequency = 1000.4 * 2 ** (1 / 12);
+  expect(state.getPoints()[0].freq).toBe(expectedFrequency);
+  expect(state.getFilters(dimensions)[1].freq).toBe(expectedFrequency);
   cleanup();
 });
