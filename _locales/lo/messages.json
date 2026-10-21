@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "ສົ່ງອອກ"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "ປັບຄວາມຖີ່ແບບລະອຽດ"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "ກົດ Ctrl ຄ້າງໄວ້ແລ້ວລາກຈຸດຕາມແນວນອນ: 1 ພິກເຊວ CSS = 1 Hz. ອັດຕາຂະຫຍາຍຄົງທີ່."
   }
 }

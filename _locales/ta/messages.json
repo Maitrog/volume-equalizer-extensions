@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "ஏற்றுமதி"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "அதிர்வெண்ணைத் துல்லியமாகச் சரிசெய்"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrl அழுத்தியபடி புள்ளிகளை கிடைமட்டமாக இழுக்கவும்: 1 CSS பிக்சல் = 1 Hz. கெயின் மாறாது."
   }
 }

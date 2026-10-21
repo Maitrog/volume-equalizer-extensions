@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "导出"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "精细调整频率"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "按住 Ctrl 水平拖动控制点：每 1 个 CSS 像素调整 1 Hz，增益保持不变。"
   }
 }

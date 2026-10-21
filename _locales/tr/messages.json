@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Dışa aktar"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Frekans ince ayarı"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrl tuşunu basılı tutup noktaları yatay sürükleyin: 1 CSS pikseli = 1 Hz. Kazanç sabit kalır."
   }
 }

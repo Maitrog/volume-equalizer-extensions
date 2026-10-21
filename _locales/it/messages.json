@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Esporta"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Regolazione fine frequenza"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Tieni premuto Ctrl e trascina i punti orizzontalmente: 1 pixel CSS = 1 Hz. Il guadagno resta fisso."
   }
 }

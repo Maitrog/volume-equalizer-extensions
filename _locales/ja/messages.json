@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "エクスポート"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "周波数の微調整"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrlを押しながらポイントを横にドラッグすると、1 CSSピクセルごとに1 Hz調整できます。ゲインは変わりません。"
   }
 }

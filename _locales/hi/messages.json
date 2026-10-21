@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "निर्यात करें"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "आवृत्ति का सूक्ष्म समायोजन"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrl दबाकर बिंदुओं को क्षैतिज रूप से खींचें: 1 CSS पिक्सेल = 1 Hz। गेन स्थिर रहता है।"
   }
 }

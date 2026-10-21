@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Xuất"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Tinh chỉnh tần số"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Giữ Ctrl và kéo các điểm theo chiều ngang: 1 pixel CSS = 1 Hz. Độ khuếch đại không đổi."
   }
 }

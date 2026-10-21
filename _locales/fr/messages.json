@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Exporter"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Réglage fin de la fréquence"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Maintenez Ctrl et faites glisser les points horizontalement : 1 pixel CSS = 1 Hz. Le gain reste fixe."
   }
 }

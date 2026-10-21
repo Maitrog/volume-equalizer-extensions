@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "রপ্তানি"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "ফ্রিকোয়েন্সি সূক্ষ্মভাবে সমন্বয়"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrl চেপে পয়েন্ট অনুভূমিকভাবে টানুন: ১ CSS পিক্সেল = ১ Hz। গেইন অপরিবর্তিত থাকে।"
   }
 }

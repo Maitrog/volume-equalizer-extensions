@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "ส่งออก"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "ปรับความถี่อย่างละเอียด"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "กด Ctrl ค้างแล้วลากจุดในแนวนอน: 1 พิกเซล CSS = 1 Hz อัตราขยายคงเดิม"
   }
 }

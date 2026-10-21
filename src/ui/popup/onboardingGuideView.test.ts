@@ -112,6 +112,7 @@ test("renders every equalizer hint and keeps them intact when the popup resizes"
   expect(content.children.map(({ textContent }) => textContent)).toEqual([
     "guide_canvas_hint",
     "q_factor_shift_hint",
+    "precise_frequency_ctrl_hint",
     "point_double_click_hint",
     "guide_spectrum_visualization_hint",
   ]);

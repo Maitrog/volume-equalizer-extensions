@@ -22,6 +22,7 @@ export const GUIDE_SHORTCUTS = [
   ["shortcut_mute_label", "Alt+M"],
   ["shortcut_toggle_eq_label", "Alt+K"],
   ["shortcut_q_factor_label", "Shift+Drag"],
+  ["shortcut_precise_frequency_label", "Ctrl+Drag"],
   ["shortcut_reset_point_label", "Double-click"],
 ] as const;
 
@@ -78,6 +79,7 @@ export const GUIDE_SCREENS: readonly GuideScreen[] = [
     messageKey: "guide_canvas_hint",
     additionalMessageKeys: [
       "q_factor_shift_hint",
+      "precise_frequency_ctrl_hint",
       "point_double_click_hint",
       "guide_spectrum_visualization_hint",
     ],

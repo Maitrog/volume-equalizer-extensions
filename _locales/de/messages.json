@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Exportieren"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Frequenz fein einstellen"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Strg gedrückt halten und Punkte horizontal ziehen: 1 CSS-Pixel = 1 Hz. Die Verstärkung bleibt gleich."
   }
 }

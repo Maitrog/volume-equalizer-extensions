@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "내보내기"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "주파수 미세 조정"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Ctrl을 누른 채 점을 가로로 드래그하세요. CSS 픽셀 1개당 1 Hz씩 조정되며 게인은 유지됩니다."
   }
 }

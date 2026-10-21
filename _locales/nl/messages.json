@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Exporteren"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Frequentie fijn afstellen"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Houd Ctrl ingedrukt en sleep punten horizontaal: 1 CSS-pixel = 1 Hz. De versterking blijft gelijk."
   }
 }

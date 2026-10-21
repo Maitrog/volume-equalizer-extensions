@@ -406,5 +406,11 @@
   },
   "settings_transfer_export": {
     "message": "Экспорт"
+  },
+  "shortcut_precise_frequency_label": {
+    "message": "Точная настройка частоты"
+  },
+  "precise_frequency_ctrl_hint": {
+    "message": "Перетаскивайте точки по горизонтали с зажатой Ctrl: 1 CSS-пиксель = 1 Гц. Усиление не меняется."
   }
 }
