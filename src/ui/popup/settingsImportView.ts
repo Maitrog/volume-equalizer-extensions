@@ -110,9 +110,9 @@ export const createSettingsImportView = (deps: Dependencies) => {
     for (const filter of filters) {
       const row = node("tr");
       for (const value of [
-        filter.freq,
-        filter.gain,
-        filter.q,
+        Math.round(filter.freq),
+        filter.gain.toFixed(2),
+        filter.q.toFixed(2),
         filter.type,
         message(isEqualizerFilterEnabled(filter) ? "yes" : "no"),
       ])
@@ -279,8 +279,6 @@ export const createSettingsImportView = (deps: Dependencies) => {
         });
         e.groups.append(label);
       }
-      for (const group of ["general", "shortcuts"] as const)
-        if (selected.includes(group)) showPreferences(e.groups, group);
       showIssues(e.groups, session.source.issues);
     }
     if (step === "conflicts" && prepared) {

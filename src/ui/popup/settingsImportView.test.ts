@@ -317,16 +317,19 @@ test("selects available groups and disables absent or invalid groups", async () 
 });
 
 test("requires explicit decisions and shows both preset versions", async () => {
+  const current = [{ ...filters[0], freq: 1000.49, gain: -2.34567, q: 0.5067 }];
+  const incoming = [{ ...filters[0], freq: 1000.51, gain: 5.6789, q: 1.23456 }];
   const {
     elements: e,
     load,
     inputs,
     change,
-  } = setup({ presets: { Voice: filters }, presetNames: ["Voice"] });
+    stored,
+  } = setup({ presets: { Voice: current }, presetNames: ["Voice"] });
   await load(
     file({
       presets: {
-        presets: { Voice: [{ ...filters[0], gain: 5 }] },
+        presets: { Voice: incoming },
         presetNames: ["Voice"],
         hideDefaultPresets: false,
       },
@@ -344,12 +347,12 @@ test("requires explicit decisions and shows both preset versions", async () => {
       ?.children[0].children.map((cell) => cell.textContent),
   );
   expect(rows).toEqual([
-    ["1000", "2", "0.5", "peaking", "settings_transfer_yes"],
-    ["1000", "5", "0.5", "peaking", "settings_transfer_yes"],
+    ["1000", "-2.35", "0.51", "peaking", "settings_transfer_yes"],
+    ["1001", "5.68", "1.23", "peaking", "settings_transfer_yes"],
   ]);
   for (const word of [
     "1000",
-    "0.5",
+    "0.51",
     "peaking",
     "settings_transfer_frequency",
     "settings_transfer_enabled",
@@ -358,6 +361,21 @@ test("requires explicit decisions and shows both preset versions", async () => {
   change(inputs(e.conflicts)[1], true);
   expect(e.next.disabled).toBe(false);
   expect(inputs(e.conflicts)[1].checked).toBe(true);
+  e.next.click();
+  e.apply.click();
+  await tick();
+  expect(stored.presets).toMatchObject({ Voice: incoming });
+});
+
+test("shows preference details only on the import review step", async () => {
+  const { elements: e, load } = setup();
+  await load(file({ general, shortcuts: DEFAULT_SHORTCUTS }));
+  expect(descendants(e.groups).some((element) => element.tagName === "H4")).toBe(false);
+  expect(e.groups.textContent).not.toContain("settings_transfer_point_count");
+  e.next.click();
+  expect(e.summary.hidden).toBe(false);
+  expect(e.summary.textContent).toContain("settings_transfer_point_count");
+  expect(e.summary.textContent).toContain("settings_transfer_toggle_eq");
 });
 
 test("recomputes decisions when groups or preset choices change", async () => {

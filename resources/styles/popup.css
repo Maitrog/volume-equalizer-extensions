@@ -747,7 +747,6 @@ button:focus-visible {
 }
 
 #settings-import-groups > p + label,
-#settings-import-groups > h4,
 #settings-import-summary > h4:not(:first-child),
 #settings-import-summary > section + section,
 #settings-import-summary:not(:empty) ~ #settings-import-status {
