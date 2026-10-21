@@ -308,3 +308,73 @@ test.each([
   expect(state.getPoints()[0].freq).toBe(expected);
   cleanup();
 });
+
+const preciseMovementCases = [
+  {
+    name: "individual signed steps",
+    moves: [
+      [1, 1001],
+      [2, 1002],
+      [-1, 999],
+    ],
+  },
+  { name: "batched steps", moves: [[8, 1008]] },
+  {
+    name: "positive fractional steps",
+    moves: [
+      [0.4, 1000],
+      [0.8, 1000],
+      [1.2, 1001],
+    ],
+  },
+  {
+    name: "negative fractional steps",
+    moves: [
+      [-0.4, 1000],
+      [-0.8, 1000],
+      [-1.2, 999],
+    ],
+  },
+  {
+    name: "fractional direction reversal",
+    moves: [
+      [0.6, 1000],
+      [0.2, 1000],
+      [-0.4, 1000],
+      [-0.8, 1000],
+      [-1.2, 999],
+    ],
+  },
+];
+
+test.each(
+  (["peaking", "highpass", "lowpass"] as const).flatMap((type) =>
+    preciseMovementCases.map((scenario) => ({ type, ...scenario })),
+  ),
+)("Ctrl edits $type with $name", ({ type, moves }) => {
+  const { state, mouse, filters, cleanup } = setup();
+  const gain = type === "peaking" ? 5 : 0;
+  state.setPoints([{ type, freq: 1000, gain, q: 0.5, enabled: false }], dimensions);
+  const getPoint = () =>
+    type === "peaking"
+      ? state.getPoints()[0]
+      : type === "highpass"
+        ? state.getHighpassPoint()!
+        : state.getLowpassPoint()!;
+  const { x, y } = getPoint();
+  mouse("mousedown", x, y, { ctrlKey: true });
+  let edited = false;
+  for (const [dx, expected] of moves) {
+    mouse("mousemove", x + dx, y + 60, { ctrlKey: true });
+    expect(getPoint().freq).toBe(expected);
+    expect(getPoint().x).toBe(frequencyToX(expected, 590));
+    expect(getPoint().y).toBe(type === "peaking" ? y : 150);
+    expect(getPoint().q).toBe(0.5);
+    const filter = filters().find((filter) => filter.type === type)!;
+    expect(filter.freq).toBe(expected);
+    expect(filter.gain).toBe(gain);
+    edited ||= expected !== 1000;
+    if (type !== "peaking") expect(filter.enabled).toBe(edited);
+  }
+  cleanup();
+});
