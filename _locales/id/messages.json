@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Tidak dapat menghentikan penangkapan audio tab."
   },
-  "settings_transfer_title": {
-    "message": "Transfer pengaturan"
-  },
   "settings_transfer_general": {
     "message": "Umum"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Terapkan"
-  },
-  "settings_transfer_back": {
-    "message": "Kembali"
-  },
-  "settings_transfer_next": {
-    "message": "Berikutnya"
-  },
-  "settings_transfer_cancel": {
-    "message": "Batal"
-  },
-  "settings_transfer_close": {
-    "message": "Tutup"
-  },
-  "settings_transfer_presets": {
-    "message": "Preset"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Pintasan"
-  },
-  "settings_transfer_theme": {
-    "message": "Tema"
-  },
-  "settings_transfer_language": {
-    "message": "Bahasa"
-  },
-  "settings_transfer_point_count": {
-    "message": "Jumlah titik EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Aktifkan visualisasi spektrum"
-  },
-  "settings_transfer_compensation": {
-    "message": "Kompensasi volume otomatis"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Jangan tampilkan lagi"
-  },
-  "settings_transfer_mute": {
-    "message": "Bisukan/suarakan"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Aktifkan/nonaktifkan"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Sembunyikan preset bawaan"
-  },
-  "settings_transfer_dark": {
-    "message": "Gelap"
-  },
-  "settings_transfer_light": {
-    "message": "Terang"
   },
   "settings_transfer_import": {
     "message": "Impor"

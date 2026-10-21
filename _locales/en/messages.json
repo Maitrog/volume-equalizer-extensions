@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Could not stop tab audio capture."
   },
-  "settings_transfer_title": {
-    "message": "Settings transfer"
-  },
   "settings_transfer_general": {
     "message": "General"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Apply"
-  },
-  "settings_transfer_back": {
-    "message": "Back"
-  },
-  "settings_transfer_next": {
-    "message": "Next"
-  },
-  "settings_transfer_cancel": {
-    "message": "Cancel"
-  },
-  "settings_transfer_close": {
-    "message": "Close"
-  },
-  "settings_transfer_presets": {
-    "message": "Presets"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Shortcuts"
-  },
-  "settings_transfer_theme": {
-    "message": "Theme"
-  },
-  "settings_transfer_language": {
-    "message": "Language"
-  },
-  "settings_transfer_point_count": {
-    "message": "Number of EQ points"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Enable spectrum visualisation"
-  },
-  "settings_transfer_compensation": {
-    "message": "Automatic volume compensation"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Don't show again"
-  },
-  "settings_transfer_mute": {
-    "message": "Mute/unmute"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Enable/disable"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Hide default presets"
-  },
-  "settings_transfer_dark": {
-    "message": "Dark"
-  },
-  "settings_transfer_light": {
-    "message": "Light"
   },
   "settings_transfer_import": {
     "message": "Import"

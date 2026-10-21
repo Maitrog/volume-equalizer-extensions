@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Не удалось остановить захват звука вкладки."
   },
-  "settings_transfer_title": {
-    "message": "Перенос настроек"
-  },
   "settings_transfer_general": {
     "message": "Основные"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Применить"
-  },
-  "settings_transfer_back": {
-    "message": "Назад"
-  },
-  "settings_transfer_next": {
-    "message": "Далее"
-  },
-  "settings_transfer_cancel": {
-    "message": "Отмена"
-  },
-  "settings_transfer_close": {
-    "message": "Закрыть"
-  },
-  "settings_transfer_presets": {
-    "message": "Пресеты"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Горячие клавиши"
-  },
-  "settings_transfer_theme": {
-    "message": "Тема"
-  },
-  "settings_transfer_language": {
-    "message": "Язык"
-  },
-  "settings_transfer_point_count": {
-    "message": "Количество точек эквалайзера"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Включить отображение АЧХ"
-  },
-  "settings_transfer_compensation": {
-    "message": "Автоматическая компенсация громкости"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Больше не показывать"
-  },
-  "settings_transfer_mute": {
-    "message": "Выключить/включить звук"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Включить/выключить"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Скрыть стандартные пресеты"
-  },
-  "settings_transfer_dark": {
-    "message": "Тёмная"
-  },
-  "settings_transfer_light": {
-    "message": "Светлая"
   },
   "settings_transfer_import": {
     "message": "Импорт"

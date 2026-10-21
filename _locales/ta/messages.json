@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "தாவல் ஆடியோ பிடிப்பை நிறுத்த முடியவில்லை."
   },
-  "settings_transfer_title": {
-    "message": "அமைப்புகள் பரிமாற்றம்"
-  },
   "settings_transfer_general": {
     "message": "பொது"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "பயன்படுத்து"
-  },
-  "settings_transfer_back": {
-    "message": "பின்செல்"
-  },
-  "settings_transfer_next": {
-    "message": "அடுத்து"
-  },
-  "settings_transfer_cancel": {
-    "message": "கைவிடு"
-  },
-  "settings_transfer_close": {
-    "message": "மூடு"
-  },
-  "settings_transfer_presets": {
-    "message": "முன்னமைவுகள்"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "குறுக்குவழிகள்"
-  },
-  "settings_transfer_theme": {
-    "message": "கருப்பொருள்"
-  },
-  "settings_transfer_language": {
-    "message": "மொழி"
-  },
-  "settings_transfer_point_count": {
-    "message": "சமனாக்கி புள்ளிகளின் எண்ணிக்கை"
-  },
-  "settings_transfer_spectrum": {
-    "message": "வானவில் காட்சிப்படுத்தலை இயக்கு"
-  },
-  "settings_transfer_compensation": {
-    "message": "தானியங்கி ஒலியளவு ஈடுசெய்தல்"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "மீண்டும் காட்டாதே"
-  },
-  "settings_transfer_mute": {
-    "message": "ஒலிமுடக்கு/இயக்கு"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "இயக்கு/முடக்கு"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "இயல்புநிலை முன்னமைவுகளை மறை"
-  },
-  "settings_transfer_dark": {
-    "message": "இருண்ட"
-  },
-  "settings_transfer_light": {
-    "message": "வெளிர்"
   },
   "settings_transfer_import": {
     "message": "இறக்குமதி"

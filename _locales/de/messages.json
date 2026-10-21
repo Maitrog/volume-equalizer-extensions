@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Tab-Audioaufnahme konnte nicht beendet werden."
   },
-  "settings_transfer_title": {
-    "message": "Einstellungen übertragen"
-  },
   "settings_transfer_general": {
     "message": "Allgemein"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Anwenden"
-  },
-  "settings_transfer_back": {
-    "message": "Zurück"
-  },
-  "settings_transfer_next": {
-    "message": "Weiter"
-  },
-  "settings_transfer_cancel": {
-    "message": "Abbrechen"
-  },
-  "settings_transfer_close": {
-    "message": "Schließen"
-  },
-  "settings_transfer_presets": {
-    "message": "Voreinstellungen"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Tastenkürzel"
-  },
-  "settings_transfer_theme": {
-    "message": "Design"
-  },
-  "settings_transfer_language": {
-    "message": "Sprache"
-  },
-  "settings_transfer_point_count": {
-    "message": "Anzahl der EQ-Punkte"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Spektrumvisualisierung aktivieren"
-  },
-  "settings_transfer_compensation": {
-    "message": "Automatische Lautstärkekompensation"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Nicht mehr anzeigen"
-  },
-  "settings_transfer_mute": {
-    "message": "Stummschalten/Stummschaltung aufheben"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Aktivieren/deaktivieren"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Standard-Presets ausblenden"
-  },
-  "settings_transfer_dark": {
-    "message": "Dunkel"
-  },
-  "settings_transfer_light": {
-    "message": "Hell"
   },
   "settings_transfer_import": {
     "message": "Importieren"
