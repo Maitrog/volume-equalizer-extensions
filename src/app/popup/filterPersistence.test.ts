@@ -1,4 +1,6 @@
 import { afterEach, expect, test, vi } from "vitest";
+import { createEqualizerState } from "../../ui/equalizerCanvas/equalizerEditorState";
+import { readPersistedFilters } from "../../domains/equalizer/persistedFilters";
 import { createFilterPersistence } from "./filterPersistence";
 import type { EqualizerFilter } from "../../domains/equalizer/types";
 
@@ -65,4 +67,30 @@ test("dispose flushes accepted work and ignores later schedules", async () => {
   await vi.runAllTimersAsync();
   expect(write).toHaveBeenCalledOnce();
   expect(write).toHaveBeenCalledWith(4, filter(4));
+});
+
+test("debounces exact editor snapshots and restores the persisted frequency", async () => {
+  vi.useFakeTimers();
+  const dimensions = { canvasWidth: 600, canvasHeight: 300 };
+  const state = createEqualizerState();
+  state.setPoints([{ type: "peaking", freq: 20000, gain: 2, q: 0.5 }], dimensions);
+  const write = vi.fn<(tabId: number, filters: EqualizerFilter[]) => Promise<void>>(
+    async () => undefined,
+  );
+  const persistence = createFilterPersistence(write);
+  const first = state.getFilters(dimensions);
+  persistence.schedule(7, first);
+  state.setDragTarget({ type: "peaking", index: 0 }, "point");
+  state.setDraggedPoint({ ...state.getPoints()[0], freq: 20001 });
+  expect(first[1].freq).toBe(20000);
+  persistence.schedule(7, state.getFilters(dimensions));
+  state.setDraggedPoint({ ...state.getPoints()[0], freq: 20002 });
+  await vi.advanceTimersByTimeAsync(99);
+  expect(write).not.toHaveBeenCalled();
+  await vi.advanceTimersByTimeAsync(1);
+  expect(write.mock.calls.at(-1)?.[1][1].freq).toBe(20001);
+  const restored = createEqualizerState();
+  restored.setPoints(readPersistedFilters(write.mock.calls.at(-1)?.[1])!, dimensions);
+  expect(restored.getFilters(dimensions)[1].freq).toBe(20001);
+  await persistence.dispose();
 });

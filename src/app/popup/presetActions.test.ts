@@ -76,3 +76,17 @@ describe("presetActions", () => {
     expect(storage.set).not.toHaveBeenCalled();
   });
 });
+
+test("saves exact and fractional preset frequencies to storage", async () => {
+  const filters = [20001, 1000.4].map((freq) => ({ type: "peaking", freq, gain: 2, q: 0.5 }));
+  const { actions, storage } = setup({
+    [STORAGE_KEYS.PRESET_NAMES]: [],
+    [STORAGE_KEYS.PRESETS]: {},
+    [STORAGE_KEYS.tabFilters(7)]: filters,
+  });
+  await expect(actions.savePreset("Precise")).resolves.toMatchObject({ ok: true });
+  expect(storage.set).toHaveBeenCalledWith({
+    [STORAGE_KEYS.PRESETS]: { Precise: filters },
+    [STORAGE_KEYS.PRESET_NAMES]: ["Precise"],
+  });
+});

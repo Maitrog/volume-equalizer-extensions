@@ -1,10 +1,12 @@
 import { afterEach, expect, test, vi } from "vitest";
+import { createFilterPersistence } from "../../app/popup/filterPersistence";
+import { createEqualizerTooltips } from "./equalizerTooltips";
 import { frequencyToX, xToFrequency } from "../../domains/equalizer/equalizerMath";
 import { createEqualizerState } from "./equalizerEditorState";
 import { attachEqualizerGestures } from "./equalizerGestures";
 
 const dimensions = { canvasWidth: 600, canvasHeight: 300 };
-const setup = () => {
+const setup = (persist = false) => {
   let frame: FrameRequestCallback | null = null;
   vi.stubGlobal(
     "window",
@@ -25,8 +27,14 @@ const setup = () => {
   });
   const state = createEqualizerState();
   state.initPoints(5, dimensions);
-  const save = vi.fn();
-  const flush = vi.fn();
+  const write = vi.fn<
+    (tabId: number, filters: ReturnType<typeof state.getFilters>) => Promise<void>
+  >(async () => undefined);
+  const persistence = createFilterPersistence(write);
+  const save = vi.fn(() => {
+    if (persist) persistence.schedule(7, state.getFilters(dimensions));
+  });
+  const flush = vi.fn(() => (persist ? persistence.flush() : undefined));
   const draw = vi.fn();
   const tooltips = { updateInfoTooltip: vi.fn(), hideInfoTooltip: vi.fn() };
   const mouse = (type: string, clientX: number, clientY: number, modifiers = {}) =>
@@ -54,6 +62,8 @@ const setup = () => {
   };
   return {
     canvas,
+    write,
+    persistence,
     mouse,
     tooltips,
     state,
@@ -423,3 +433,31 @@ test("resize during Q dragging preserves the new frequency projection", () => {
   expect(state.getPoints()[0]).toEqual({ ...point, x: frequencyToX(20001, 890), q: 4 });
   cleanup();
 });
+
+test.each(["mouseup", "blur", "cleanup"])(
+  "flushes the latest precise frequency before rAF on %s",
+  async (end) => {
+    const { canvas, state, mouse, draw, write, persistence, tooltips, cleanup } = setup(true);
+    state.setPoints([{ type: "peaking", freq: 20000, gain: 5, q: 0.5 }], dimensions);
+    const point = { ...state.getPoints()[0] };
+    mouse("mousedown", point.x, point.y, { ctrlKey: true });
+    mouse("mousemove", point.x + 1, point.y + 80, { ctrlKey: true });
+    expect(state.getPoints()[0].freq).toBe(20001);
+    mouse("mousemove", point.x + 2, point.y + 80, { ctrlKey: true });
+    expect(Math.abs(state.getPoints()[0].x - point.x)).toBeLessThan(1);
+    expect(draw).not.toHaveBeenCalled();
+    expect(write).not.toHaveBeenCalled();
+    expect(tooltips.updateInfoTooltip).toHaveBeenLastCalledWith(state.getPoints()[0], dimensions);
+    const tooltip = createEqualizerTooltips({
+      canvas: canvas as HTMLCanvasElement,
+      state,
+      infoTooltip: null,
+    });
+    expect(tooltip.getPointTooltipText(state.getPoints()[0], dimensions)).toBe("20002 Hz, +5.0 dB");
+    if (end === "cleanup") cleanup();
+    else (end === "mouseup" ? window : canvas).dispatchEvent(new Event(end));
+    expect(write.mock.calls.at(-1)?.[1][1]).toMatchObject({ freq: 20002, gain: 5 });
+    cleanup();
+    await persistence.dispose();
+  },
+);

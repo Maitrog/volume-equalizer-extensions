@@ -94,3 +94,13 @@ describe("biquadChain", () => {
     );
   });
 });
+
+test.each(["highpass", "peaking", "lowpass"] as const)(
+  "passes 20001 Hz unchanged to %s audio nodes",
+  (type) => {
+    const node = createFakeBiquadFilter();
+    applyBiquadSettings(node, { type, freq: 20001, gain: 2, q: 0.5 });
+    expect(node.frequency.value).toBe(20001);
+    expect(node.type).toBe(type);
+  },
+);

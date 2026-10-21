@@ -16,7 +16,9 @@ const general = {
   skipPointsResetConfirm: false,
 };
 const altM = { alt: true, ctrl: false, shift: false, meta: false, key: "M" };
-const presets = { Voice: [{ type: "peaking" as const, freq: 1000, gain: 2, q: 0.5 }] };
+const presets = {
+  Voice: [20001, 1000.4, 0.5].map((freq) => ({ type: "peaking" as const, freq, gain: 2, q: 0.5 })),
+};
 
 describe("settings transfer", () => {
   test("round trips four groups without derived ids or runtime keys", () => {
@@ -50,7 +52,7 @@ describe("settings transfer", () => {
         presets: {
           hideDefaultPresets: false,
           presetNames: ["Voice"],
-          presets: { Voice: [{ type: "peaking", freq: 1000, gain: 2, q: 0.5 }] },
+          presets,
         },
       },
     };
