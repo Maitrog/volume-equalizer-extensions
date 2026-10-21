@@ -431,7 +431,7 @@ test("shows skipped rules and required reset acknowledgement", async () => {
 });
 
 test("ignores a superseded file read and disposed view", async () => {
-  const { elements: e, load, view } = setup();
+  const { elements: e, load, view, stored } = setup();
   await load(JSON.stringify({ presets: { First: filters }, presetNames: ["First"] }), {
     defer: true,
   });
@@ -439,8 +439,12 @@ test("ignores a superseded file read and disposed view", async () => {
   Reader.pending[0].onload?.();
   await tick();
   e.next.click();
-  expect(e.summary.textContent).toContain("Second");
+  expect(e.summary.textContent).not.toContain("Second");
   expect(e.summary.textContent).not.toContain("First");
+  expect(e.summary.textContent).toContain("settings_transfer_added: 1");
+  e.apply.click();
+  await tick();
+  expect(stored.presetNames).toEqual(["Second"]);
   await load(file({ general }), { defer: true });
   view.dispose();
   Reader.pending[1].onload?.();

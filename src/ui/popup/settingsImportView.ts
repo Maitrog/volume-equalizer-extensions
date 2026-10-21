@@ -296,8 +296,6 @@ export const createSettingsImportView = (deps: Dependencies) => {
           for (const [key, count] of Object.entries(prepared.plan.counts[group]))
             e.summary.append(node("p", `${message(key)}: ${count}`));
           if (group === "presets") {
-            for (const name of session.source.groups.presets?.presetNames ?? [])
-              e.summary.append(node("p", name));
             const hidden = session.source.groups.presets?.hideDefaultPresets;
             if (hidden !== undefined)
               e.summary.append(
