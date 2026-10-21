@@ -59,6 +59,12 @@ export const attachEqualizerGestures = ({
   let activeDragTarget: EqualizerDragTarget | null = null;
   let keyboardIndex: number | null = null;
   let visualFrame: number | null = null;
+  let preciseDrag = false;
+  let previousClientX = 0;
+  let frequencyRemainder = 0;
+  let fixedY = 0;
+  let offsetX = 0;
+  let offsetY = 0;
   const getKeyboardTargets = (): EqualizerDragTarget[] => [
     ...(state.getHighpassPoint() ? [{ type: "highpass" as const }] : []),
     ...state.getPoints().map((_point, index) => ({ type: "peaking" as const, index })),
@@ -79,6 +85,10 @@ export const attachEqualizerGestures = ({
   };
 
   const handleMouseDown = (event: MouseEvent): void => {
+    preciseDrag = false;
+    frequencyRemainder = 0;
+    offsetX = 0;
+    offsetY = 0;
     keyboardIndex = null;
     onKeyboardSelection(null, 0);
     const { x, y } = getMousePosition(canvas, event);
@@ -98,6 +108,9 @@ export const attachEqualizerGestures = ({
       return;
     }
 
+    preciseDrag = !!event.ctrlKey && !event.shiftKey;
+    previousClientX = event.clientX;
+    fixedY = draggedPoint.y;
     qDragStartValue = ensureQFactor(draggedPoint.q);
     tooltips.updateInfoTooltip(draggedPoint, getDimensions());
   };
@@ -105,6 +118,12 @@ export const attachEqualizerGestures = ({
   const handleMouseUp = (): void => {
     const shouldFlush = activeDragTarget != null;
     activeDragTarget = null;
+    preciseDrag = false;
+    previousClientX = 0;
+    frequencyRemainder = 0;
+    fixedY = 0;
+    offsetX = 0;
+    offsetY = 0;
     state.clearDrag();
     tooltips.hideInfoTooltip();
     if (shouldFlush) void flushCurrentFilters();
@@ -116,8 +135,8 @@ export const attachEqualizerGestures = ({
     }
 
     const { x, y } = getMousePosition(canvas, event);
-    let mx = x;
-    let my = y;
+    let mx = x + offsetX;
+    let my = y + offsetY;
     const currentPoint = state.getDraggedPoint();
 
     if (!currentPoint) {
@@ -131,16 +150,52 @@ export const attachEqualizerGestures = ({
       const dy = qDragStartY - my;
       const nextQ = qDragStartValue * Math.pow(2, dy / 40);
       nextPoint = { ...currentPoint, q: ensureQFactor(nextQ) };
-    } else if (mx > 0) {
-      mx = Math.max(0, Math.min(canvas.clientWidth, mx));
-      my = Math.max(0, Math.min(canvas.clientHeight, my));
-      nextPoint = {
-        ...currentPoint,
-        x: mx,
-        freq:
-          mx === currentPoint.x ? currentPoint.freq : xToFrequency(mx, dimensions.canvasWidth - 10),
-        y: activeDragTarget?.type === "peaking" ? my : dimensions.canvasHeight / 2,
-      };
+    } else {
+      const ctrlKey = !!event.ctrlKey;
+      if (ctrlKey !== preciseDrag) {
+        preciseDrag = ctrlKey;
+        previousClientX = event.clientX;
+        frequencyRemainder = 0;
+        fixedY = currentPoint.y;
+        if (!ctrlKey) {
+          offsetX = currentPoint.x - x;
+          offsetY = currentPoint.y - y;
+        }
+        return;
+      }
+      if (preciseDrag) {
+        frequencyRemainder += event.clientX - previousClientX;
+        previousClientX = event.clientX;
+        if (
+          (currentPoint.freq === 1 && frequencyRemainder < 0) ||
+          (currentPoint.freq === 24000 && frequencyRemainder > 0)
+        )
+          frequencyRemainder = 0;
+        const steps = Math.trunc(frequencyRemainder);
+        frequencyRemainder -= steps;
+        if (steps === 0) return;
+        const freq = Math.max(1, Math.min(24000, Math.round(currentPoint.freq) + steps));
+        if (freq === 1 || freq === 24000) frequencyRemainder = 0;
+        if (freq === currentPoint.freq) return;
+        nextPoint = {
+          ...currentPoint,
+          freq,
+          x: frequencyToX(freq, dimensions.canvasWidth - 10),
+          y: fixedY,
+        };
+      } else if (mx > 0) {
+        mx = Math.max(0, Math.min(canvas.clientWidth, mx));
+        my = Math.max(0, Math.min(canvas.clientHeight, my));
+        nextPoint = {
+          ...currentPoint,
+          x: mx,
+          freq:
+            mx === currentPoint.x
+              ? currentPoint.freq
+              : xToFrequency(mx, dimensions.canvasWidth - 10),
+          y: activeDragTarget?.type === "peaking" ? my : dimensions.canvasHeight / 2,
+        };
+      }
     }
 
     if (!nextPoint) {

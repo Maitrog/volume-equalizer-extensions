@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { xToFrequency } from "../../domains/equalizer/equalizerMath";
+import { frequencyToX, xToFrequency } from "../../domains/equalizer/equalizerMath";
 import { createEqualizerState } from "./equalizerEditorState";
 import { attachEqualizerGestures } from "./equalizerGestures";
 
@@ -28,13 +28,24 @@ const setup = () => {
   const save = vi.fn();
   const flush = vi.fn();
   const draw = vi.fn();
+  const tooltips = { updateInfoTooltip: vi.fn(), hideInfoTooltip: vi.fn() };
+  const mouse = (type: string, clientX: number, clientY: number, modifiers = {}) =>
+    canvas.dispatchEvent(
+      Object.assign(new Event(type), {
+        clientX,
+        clientY,
+        ctrlKey: false,
+        shiftKey: false,
+        ...modifiers,
+      }),
+    );
   const cleanup = attachEqualizerGestures({
     canvas: canvas as HTMLCanvasElement,
     state,
     draw,
     saveCurrentFilters: save,
     flushCurrentFilters: flush,
-    tooltips: { updateInfoTooltip: vi.fn(), hideInfoTooltip: vi.fn() },
+    tooltips,
   });
   const key = (key: string, modifiers = {}) => {
     const event = Object.assign(new Event("keydown", { cancelable: true }), { key, ...modifiers });
@@ -43,6 +54,8 @@ const setup = () => {
   };
   return {
     canvas,
+    mouse,
+    tooltips,
     state,
     save,
     flush,
@@ -170,5 +183,128 @@ test("horizontal keys advance the exact loaded frequency and update X", () => {
   const expectedFrequency = 1000.4 * 2 ** (1 / 12);
   expect(state.getPoints()[0].freq).toBe(expectedFrequency);
   expect(state.getFilters(dimensions)[1].freq).toBe(expectedFrequency);
+  cleanup();
+});
+
+test.each([1, 2])("Ctrl uses CSS pixels at DPR %s and keeps gain fixed", (dpr) => {
+  vi.stubGlobal("devicePixelRatio", dpr);
+  const { state, mouse, save, tooltips, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq: 1000.4, gain: 5, q: 0.5 }], dimensions);
+  const point = { ...state.getPoints()[0] };
+  mouse("mousedown", point.x, point.y, { ctrlKey: true });
+  mouse("mousemove", point.x, point.y + 60, { ctrlKey: true });
+  mouse("mousemove", point.x + 0.4, point.y + 60, { ctrlKey: true });
+  expect(state.getPoints()[0]).toEqual(point);
+  expect(save).not.toHaveBeenCalled();
+  mouse("mousemove", point.x + 0.8, point.y + 60, { ctrlKey: true });
+  mouse("mousemove", point.x + 1.2, point.y + 60, { ctrlKey: true });
+  expect(state.getPoints()[0]).toEqual({ ...point, freq: 1001, x: frequencyToX(1001, 590) });
+  mouse("mousemove", point.x + 9.2, point.y - 60, { ctrlKey: true });
+  expect(state.getPoints()[0].freq).toBe(1009);
+  expect(state.getPoints()[0].y).toBe(point.y);
+  expect(tooltips.updateInfoTooltip).toHaveBeenLastCalledWith(state.getPoints()[0], dimensions);
+  cleanup();
+});
+
+test("Ctrl accumulates signed fractions and cancels movement when direction reverses", () => {
+  const { state, mouse, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq: 1000, gain: 0, q: 0.5 }], dimensions);
+  const { x, y } = state.getPoints()[0];
+  mouse("mousedown", x, y, { ctrlKey: true });
+  for (const dx of [0.6, 0.2, -0.4, -0.8]) mouse("mousemove", x + dx, y, { ctrlKey: true });
+  expect(state.getPoints()[0].freq).toBe(1000);
+  mouse("mousemove", x - 1.2, y, { ctrlKey: true });
+  expect(state.getPoints()[0].freq).toBe(999);
+  cleanup();
+});
+
+test.each([
+  [1, -1, 2],
+  [24000, 1, 23999],
+])("Ctrl discards outward movement at %s Hz", (freq, direction, expected) => {
+  const { state, mouse, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq, gain: 0, q: 0.5 }], dimensions);
+  const { x, y } = state.getPoints()[0];
+  mouse("mousedown", x, y, { ctrlKey: true });
+  for (const dx of [2, 5, 8.5]) mouse("mousemove", x + direction * dx, y, { ctrlKey: true });
+  mouse("mousemove", x + direction * 7.5, y, { ctrlKey: true });
+  expect(state.getPoints()[0].freq).toBe(expected);
+  cleanup();
+});
+
+test("Ctrl transitions preserve position and resume ordinary motion without a jump or lasting offset", () => {
+  const { state, mouse, save, cleanup } = setup();
+  const { x, y } = state.getPoints()[0];
+  mouse("mousedown", x, y);
+  mouse("mousemove", x + 5, y - 5);
+  const before = { ...state.getPoints()[0] };
+  save.mockClear();
+  mouse("mousemove", x + 80, y + 100, { ctrlKey: true });
+  expect(state.getPoints()[0]).toEqual(before);
+  mouse("mousemove", x + 81, y + 100, { ctrlKey: true });
+  const precise = { ...state.getPoints()[0] };
+  mouse("mousemove", x + 100, y + 120);
+  expect(state.getPoints()[0]).toEqual(precise);
+  expect(save).toHaveBeenCalledOnce();
+  mouse("mousemove", x + 100, y + 125);
+  expect(state.getPoints()[0].y).toBe(precise.y + 5);
+  const resumed = { ...state.getPoints()[0] };
+  mouse("mousemove", x + 110, y + 140, { ctrlKey: true });
+  mouse("mousemove", x + 111, y + 180, { ctrlKey: true });
+  expect(state.getPoints()[0].y).toBe(resumed.y);
+  window.dispatchEvent(new Event("mouseup"));
+  const next = { ...state.getPoints()[0] };
+  mouse("mousedown", next.x, next.y);
+  mouse("mousemove", next.x + 2, next.y + 3);
+  expect(state.getPoints()[0].y).toBe(next.y + 3);
+  expect(state.getPoints()[0].x).toBe(next.x + 2);
+  cleanup();
+});
+
+test("Shift takes precedence over Ctrl and precise vertical crossover motion does not enable it", () => {
+  const { state, mouse, save, cleanup } = setup();
+  const point = { ...state.getPoints()[0] };
+  mouse("mousedown", point.x, point.y, { ctrlKey: true, shiftKey: true });
+  mouse("mousemove", point.x + 8, point.y - 40, { ctrlKey: true });
+  expect(state.getPoints()[0]).toEqual({ ...point, q: point.q * 2 });
+  window.dispatchEvent(new Event("mouseup"));
+  const crossover = { ...state.getHighpassPoint()! };
+  const filters = state.getFilters(dimensions);
+  save.mockClear();
+  mouse("mousedown", crossover.x, crossover.y, { ctrlKey: true });
+  mouse("mousemove", crossover.x, crossover.y + 80, { ctrlKey: true });
+  expect(state.getFilters(dimensions)).toEqual(filters);
+  expect(save).not.toHaveBeenCalled();
+  cleanup();
+});
+
+test.each(["mouseup", "blur", "cleanup"])(
+  "%s ends Ctrl editing and flushes the last step",
+  (ending) => {
+    const { state, mouse, canvas, flush, cleanup } = setup();
+    const point = { ...state.getPoints()[0] };
+    mouse("mousedown", point.x, point.y, { ctrlKey: true });
+    mouse("mousemove", point.x + 1, point.y, { ctrlKey: true });
+    const edited = { ...state.getPoints()[0] };
+    if (ending === "cleanup") cleanup();
+    else (ending === "mouseup" ? window : canvas).dispatchEvent(new Event(ending));
+    expect(flush).toHaveBeenCalled();
+    mouse("mousemove", point.x + 10, point.y, { ctrlKey: true });
+    expect(state.getPoints()[0]).toEqual(edited);
+    if (ending !== "cleanup") cleanup();
+  },
+);
+
+test.each([
+  [1, -1, 2],
+  [24000, 1, 23999],
+])("Ctrl discards incomplete outward steps at %s Hz", (freq, direction, expected) => {
+  const { state, mouse, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq, gain: 0, q: 0.5 }], dimensions);
+  const { x, y } = state.getPoints()[0];
+  mouse("mousedown", x, y, { ctrlKey: true });
+  mouse("mousemove", x + direction * 0.4, y, { ctrlKey: true });
+  mouse("mousemove", x - direction * 0.6, y, { ctrlKey: true });
+  expect(state.getPoints()[0].freq).toBe(expected);
   cleanup();
 });
