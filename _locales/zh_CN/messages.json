@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "无法停止标签页音频捕获。"
   },
-  "settings_transfer_title": {
-    "message": "设置迁移"
-  },
   "settings_transfer_general": {
     "message": "常规"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "应用"
-  },
-  "settings_transfer_back": {
-    "message": "返回"
-  },
-  "settings_transfer_next": {
-    "message": "下一步"
-  },
-  "settings_transfer_cancel": {
-    "message": "取消"
-  },
-  "settings_transfer_close": {
-    "message": "关闭"
-  },
-  "settings_transfer_presets": {
-    "message": "预设"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "快捷键"
-  },
-  "settings_transfer_theme": {
-    "message": "主题"
-  },
-  "settings_transfer_language": {
-    "message": "语言"
-  },
-  "settings_transfer_point_count": {
-    "message": "EQ点数"
-  },
-  "settings_transfer_spectrum": {
-    "message": "启用频谱可视化"
-  },
-  "settings_transfer_compensation": {
-    "message": "自动音量补偿"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "不再显示"
-  },
-  "settings_transfer_mute": {
-    "message": "静音/取消静音"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "启用/禁用"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "隐藏默认预设"
-  },
-  "settings_transfer_dark": {
-    "message": "深色"
-  },
-  "settings_transfer_light": {
-    "message": "浅色"
   },
   "settings_transfer_import": {
     "message": "导入"

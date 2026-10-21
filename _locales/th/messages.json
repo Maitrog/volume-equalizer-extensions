@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "ไม่สามารถหยุดการบันทึกเสียงของแท็บได้"
   },
-  "settings_transfer_title": {
-    "message": "โอนย้ายการตั้งค่า"
-  },
   "settings_transfer_general": {
     "message": "ทั่วไป"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "ใช้"
-  },
-  "settings_transfer_back": {
-    "message": "ย้อนกลับ"
-  },
-  "settings_transfer_next": {
-    "message": "ถัดไป"
-  },
-  "settings_transfer_cancel": {
-    "message": "ยกเลิก"
-  },
-  "settings_transfer_close": {
-    "message": "ปิด"
-  },
-  "settings_transfer_presets": {
-    "message": "พรีเซ็ต"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "ปุ่มลัด"
-  },
-  "settings_transfer_theme": {
-    "message": "ธีม"
-  },
-  "settings_transfer_language": {
-    "message": "ภาษา"
-  },
-  "settings_transfer_point_count": {
-    "message": "จำนวนจุด EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "เปิดใช้งานการแสดงผลสเปกตรัม"
-  },
-  "settings_transfer_compensation": {
-    "message": "การชดเชยระดับเสียงอัตโนมัติ"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "ไม่ต้องแสดงอีก"
-  },
-  "settings_transfer_mute": {
-    "message": "ปิดเสียง/เปิดเสียง"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "เปิดใช้งาน/ปิดใช้งาน"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "ซ่อนพรีเซ็ตเริ่มต้น"
-  },
-  "settings_transfer_dark": {
-    "message": "มืด"
-  },
-  "settings_transfer_light": {
-    "message": "สว่าง"
   },
   "settings_transfer_import": {
     "message": "นำเข้า"

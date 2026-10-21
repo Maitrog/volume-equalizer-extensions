@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "タブの音声キャプチャを停止できませんでした。"
   },
-  "settings_transfer_title": {
-    "message": "設定の移行"
-  },
   "settings_transfer_general": {
     "message": "一般"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "適用"
-  },
-  "settings_transfer_back": {
-    "message": "戻る"
-  },
-  "settings_transfer_next": {
-    "message": "次へ"
-  },
-  "settings_transfer_cancel": {
-    "message": "キャンセル"
-  },
-  "settings_transfer_close": {
-    "message": "閉じる"
-  },
-  "settings_transfer_presets": {
-    "message": "プリセット"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "ホットキー"
-  },
-  "settings_transfer_theme": {
-    "message": "テーマ"
-  },
-  "settings_transfer_language": {
-    "message": "言語"
-  },
-  "settings_transfer_point_count": {
-    "message": "EQポイント数"
-  },
-  "settings_transfer_spectrum": {
-    "message": "スペクトラム可視化を有効にする"
-  },
-  "settings_transfer_compensation": {
-    "message": "音量を自動補正"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "次回から表示しない"
-  },
-  "settings_transfer_mute": {
-    "message": "ミュート/ミュート解除"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "有効/無効"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "デフォルトプリセットを非表示"
-  },
-  "settings_transfer_dark": {
-    "message": "ダーク"
-  },
-  "settings_transfer_light": {
-    "message": "ライト"
   },
   "settings_transfer_import": {
     "message": "インポート"

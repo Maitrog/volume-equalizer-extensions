@@ -219,8 +219,8 @@ test("preserves the close icon and uses OK only for the result stage", async () 
   expect(e.close.textContent).toBe("×");
   expect(e.close.attributes["aria-label"]).toBe("close");
   await load(JSON.stringify({ presets: { Voice: filters }, presetNames: ["Voice"] }));
-  expect(e.cancel.textContent).toBe("settings_transfer_cancel");
-  expect(e.cancel.dataset.i18n).toBe("settings_transfer_cancel");
+  expect(e.cancel.textContent).toBe("cancel");
+  expect(e.cancel.dataset.i18n).toBe("cancel");
   e.next.click();
   e.apply.click();
   await tick();
@@ -232,8 +232,8 @@ test("preserves the close icon and uses OK only for the result stage", async () 
   expect(e.cancel.dataset.i18n).toBe("ok");
   e.cancel.click();
   await load(JSON.stringify({ presets: { Second: filters }, presetNames: ["Second"] }));
-  expect(e.cancel.textContent).toBe("settings_transfer_cancel");
-  expect(e.cancel.dataset.i18n).toBe("settings_transfer_cancel");
+  expect(e.cancel.textContent).toBe("cancel");
+  expect(e.cancel.dataset.i18n).toBe("cancel");
 });
 
 test.each([0, 2])("group selection shows validated preset and rule counts: %s", async (count) => {
@@ -256,7 +256,7 @@ test.each([0, 2])("group selection shows validated preset and rule counts: %s", 
   );
   const labels = t.elements.groups.children.filter((child) => child.tagName === "LABEL");
   expect(labels.find((label) => label.children[0].value === "presets")?.textContent).toBe(
-    `settings_transfer_presets: ${count}`,
+    `presets_settings_title: ${count}`,
   );
   expect(labels.find((label) => label.children[0].value === "autostartRules")?.textContent).toBe(
     `settings_transfer_autostartRules: ${count}`,
@@ -371,11 +371,11 @@ test("shows preference details only on the import review step", async () => {
   const { elements: e, load } = setup();
   await load(file({ general, shortcuts: DEFAULT_SHORTCUTS }));
   expect(descendants(e.groups).some((element) => element.tagName === "H4")).toBe(false);
-  expect(e.groups.textContent).not.toContain("settings_transfer_point_count");
+  expect(e.groups.textContent).not.toContain("points_count_setting_option");
   e.next.click();
   expect(e.summary.hidden).toBe(false);
-  expect(e.summary.textContent).toContain("settings_transfer_point_count");
-  expect(e.summary.textContent).toContain("settings_transfer_toggle_eq");
+  expect(e.summary.textContent).toContain("points_count_setting_option");
+  expect(e.summary.textContent).toContain("shortcut_toggle_eq_label");
 });
 
 test("recomputes decisions when groups or preset choices change", async () => {

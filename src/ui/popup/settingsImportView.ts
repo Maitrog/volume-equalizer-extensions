@@ -34,6 +34,12 @@ type Dependencies = {
   applyCommitted(prepared: PreparedSettingsImport): Promise<void>;
 };
 const groups: SettingsGroup[] = ["general", "shortcuts", "autostartRules", "presets"];
+const groupMessageKeys: Record<SettingsGroup, string> = {
+  general: "settings_transfer_general",
+  shortcuts: "shortcuts_settings_title",
+  autostartRules: "settings_transfer_autostartRules",
+  presets: "presets_settings_title",
+};
 type Step = "reading" | "groups" | "conflicts" | "summary" | "saving" | "result";
 
 export const createSettingsImportView = (deps: Dependencies) => {
@@ -125,7 +131,9 @@ export const createSettingsImportView = (deps: Dependencies) => {
   };
   const showConflict = (conflict: ImportConflict): void => {
     const fieldset = node("fieldset");
-    fieldset.append(node("legend", `${message(conflict.group)}: ${conflict.key}`));
+    fieldset.append(
+      node("legend", `${deps.getMessage(groupMessageKeys[conflict.group])}: ${conflict.key}`),
+    );
     for (const choice of ["current", "incoming"] as const) {
       const version = node("section");
       version.append(node("h4", message(choice)));
@@ -173,7 +181,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
         .filter(Boolean)
         .join(" + ");
     }
-    if (value === "light" || value === "dark") return message(value);
+    if (value === "light" || value === "dark") return deps.getMessage(`guide_theme_${value}`);
     return String(value);
   };
   const showPreferences = (container: HTMLElement, group: "general" | "shortcuts"): void => {
@@ -182,23 +190,26 @@ export const createSettingsImportView = (deps: Dependencies) => {
     if (!incoming) return;
     const current = session.current[group];
     const fieldKeys: Record<string, string> = {
-      theme: "theme",
-      uiLanguage: "language",
-      pointCount: "point_count",
-      enableSpectrum: "spectrum",
-      enableVolumeCompensation: "compensation",
-      skipPointsResetConfirm: "skip_reset",
-      mute: "mute",
-      toggleEq: "toggle_eq",
+      theme: "theme_setting_option",
+      uiLanguage: "language_setting_option",
+      pointCount: "points_count_setting_option",
+      enableSpectrum: "enable_spectrum_setting_option",
+      enableVolumeCompensation: "enable_volume_compensation_setting_option",
+      skipPointsResetConfirm: "points_reset_skip",
+      mute: "shortcut_mute_label",
+      toggleEq: "shortcut_toggle_eq_label",
     };
     container.append(
-      node("h4", `${message(group)} — ${message("current")} → ${message("incoming")}`),
+      node(
+        "h4",
+        `${deps.getMessage(groupMessageKeys[group])} — ${message("current")} → ${message("incoming")}`,
+      ),
     );
     for (const key of Object.keys(incoming)) {
       container.append(
         node(
           "p",
-          `${message(fieldKeys[key])}: ${valueText(current[key as keyof typeof current])} → ${valueText(incoming[key as keyof typeof incoming])}`,
+          `${deps.getMessage(fieldKeys[key])}: ${valueText(current[key as keyof typeof current])} → ${valueText(incoming[key as keyof typeof incoming])}`,
         ),
       );
     }
@@ -230,7 +241,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
     e.next.hidden = step !== "groups" && step !== "conflicts";
     e.apply.hidden = step !== "summary";
     e.cancel.disabled = e.close.disabled = step === "saving";
-    e.cancel.dataset.i18n = step === "result" ? "ok" : "settings_transfer_cancel";
+    e.cancel.dataset.i18n = step === "result" ? "ok" : "cancel";
     e.cancel.textContent = deps.getMessage(e.cancel.dataset.i18n);
     e.modal.setAttribute("aria-busy", String(step === "reading" || step === "saving"));
     e.resetConfirm.checked = resetConfirmed;
@@ -265,7 +276,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
           input,
           node(
             "span",
-            `${message(group)}${input.disabled ? ` — ${message(invalid ? "invalid" : "absent")}` : count === undefined ? "" : `: ${count}`}`,
+            `${deps.getMessage(groupMessageKeys[group])}${input.disabled ? ` — ${message(invalid ? "invalid" : "absent")}` : count === undefined ? "" : `: ${count}`}`,
           ),
         );
         listenChange(input, () => {
@@ -292,7 +303,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
       for (const group of selected) {
         if (group === "general" || group === "shortcuts") showPreferences(e.summary, group);
         else {
-          e.summary.append(node("h4", message(group)));
+          e.summary.append(node("h4", deps.getMessage(groupMessageKeys[group])));
           for (const [key, count] of Object.entries(prepared.plan.counts[group]))
             e.summary.append(node("p", `${message(key)}: ${count}`));
           if (group === "presets") {
@@ -301,7 +312,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
               e.summary.append(
                 node(
                   "p",
-                  `${message("hide_defaults")}: ${valueText(session.current.presets.hideDefaultPresets)} → ${valueText(hidden)}`,
+                  `${deps.getMessage("hide_default_presets_label")}: ${valueText(session.current.presets.hideDefaultPresets)} → ${valueText(hidden)}`,
                 ),
               );
           }
@@ -326,7 +337,7 @@ export const createSettingsImportView = (deps: Dependencies) => {
       for (const group of selected) {
         if (group !== "presets" && group !== "autostartRules") continue;
         const section = node("section");
-        section.append(node("h4", message(group)));
+        section.append(node("h4", deps.getMessage(groupMessageKeys[group])));
         for (const [key, count] of Object.entries(prepared.plan.counts[group]))
           section.append(node("p", `${message(key)}: ${count}`));
         e.summary.append(section);
@@ -343,12 +354,12 @@ export const createSettingsImportView = (deps: Dependencies) => {
         ?.focus();
   };
   for (const [element, key] of [
-    [e.back, "back"],
-    [e.next, "next"],
-    [e.apply, "apply"],
+    [e.back, "guide_back"],
+    [e.next, "guide_next"],
+    [e.apply, "settings_transfer_apply"],
     [e.cancel, "cancel"],
   ] as const)
-    element.textContent = message(key);
+    element.textContent = deps.getMessage(key);
   e.close.setAttribute("aria-label", deps.getMessage("close"));
   e.resetConfirm.setAttribute("aria-label", message("reset_acknowledgement"));
   const resetLabel = e.resetConfirm.parentElement?.querySelector<HTMLElement>("[data-reset-label]");

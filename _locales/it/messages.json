@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Impossibile interrompere la cattura audio della scheda."
   },
-  "settings_transfer_title": {
-    "message": "Trasferimento impostazioni"
-  },
   "settings_transfer_general": {
     "message": "Generali"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Applica"
-  },
-  "settings_transfer_back": {
-    "message": "Indietro"
-  },
-  "settings_transfer_next": {
-    "message": "Avanti"
-  },
-  "settings_transfer_cancel": {
-    "message": "Annulla"
-  },
-  "settings_transfer_close": {
-    "message": "Chiudi"
-  },
-  "settings_transfer_presets": {
-    "message": "Presets"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Scorciatoie da tastiera"
-  },
-  "settings_transfer_theme": {
-    "message": "Tema"
-  },
-  "settings_transfer_language": {
-    "message": "Lingua"
-  },
-  "settings_transfer_point_count": {
-    "message": "Numero di punti EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Abilita la visualizzazione dello spettro"
-  },
-  "settings_transfer_compensation": {
-    "message": "Compensazione automatica del volume"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Non mostrare più"
-  },
-  "settings_transfer_mute": {
-    "message": "Disattiva/riattiva audio"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Attiva/disattiva"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Nascondi preset predefiniti"
-  },
-  "settings_transfer_dark": {
-    "message": "Scuro"
-  },
-  "settings_transfer_light": {
-    "message": "Chiaro"
   },
   "settings_transfer_import": {
     "message": "Importa"

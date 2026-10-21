@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "ট্যাব অডিও ক্যাপচার বন্ধ করা যায়নি।"
   },
-  "settings_transfer_title": {
-    "message": "সেটিংস স্থানান্তর"
-  },
   "settings_transfer_general": {
     "message": "সাধারণ"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "প্রয়োগ করুন"
-  },
-  "settings_transfer_back": {
-    "message": "পিছনে"
-  },
-  "settings_transfer_next": {
-    "message": "পরবর্তী"
-  },
-  "settings_transfer_cancel": {
-    "message": "বাতিল"
-  },
-  "settings_transfer_close": {
-    "message": "বন্ধ করুন"
-  },
-  "settings_transfer_presets": {
-    "message": "প্রিসেট"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "কীবোর্ড শর্টকাট"
-  },
-  "settings_transfer_theme": {
-    "message": "থিম"
-  },
-  "settings_transfer_language": {
-    "message": "ভাষা"
-  },
-  "settings_transfer_point_count": {
-    "message": "EQ পয়েন্টের সংখ্যা"
-  },
-  "settings_transfer_spectrum": {
-    "message": "স্পেকট্রাম ভিজুয়ালাইজেশন সক্রিয় করুন"
-  },
-  "settings_transfer_compensation": {
-    "message": "স্বয়ংক্রিয় ভলিউম ক্ষতিপূরণ"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "আবার দেখাবেন না"
-  },
-  "settings_transfer_mute": {
-    "message": "মিউট/আনমিউট"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "চালু/বন্ধ"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "ডিফল্ট প্রিসেট লুকান"
-  },
-  "settings_transfer_dark": {
-    "message": "গাঢ়"
-  },
-  "settings_transfer_light": {
-    "message": "হালকা"
   },
   "settings_transfer_import": {
     "message": "আমদানি"

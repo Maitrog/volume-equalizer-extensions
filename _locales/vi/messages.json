@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Không thể dừng ghi âm thanh của tab."
   },
-  "settings_transfer_title": {
-    "message": "Chuyển cài đặt"
-  },
   "settings_transfer_general": {
     "message": "Chung"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Áp dụng"
-  },
-  "settings_transfer_back": {
-    "message": "Quay lại"
-  },
-  "settings_transfer_next": {
-    "message": "Tiếp theo"
-  },
-  "settings_transfer_cancel": {
-    "message": "Hủy"
-  },
-  "settings_transfer_close": {
-    "message": "Đóng"
-  },
-  "settings_transfer_presets": {
-    "message": "Cấu hình sẵn"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Phím tắt"
-  },
-  "settings_transfer_theme": {
-    "message": "Giao diện"
-  },
-  "settings_transfer_language": {
-    "message": "Ngôn ngữ"
-  },
-  "settings_transfer_point_count": {
-    "message": "Số điểm EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Bật hiển thị phổ"
-  },
-  "settings_transfer_compensation": {
-    "message": "Tự động bù âm lượng"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Không hiển thị lại"
-  },
-  "settings_transfer_mute": {
-    "message": "Tắt/bật tiếng"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Bật/tắt"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Ẩn cấu hình sẵn mặc định"
-  },
-  "settings_transfer_dark": {
-    "message": "Tối"
-  },
-  "settings_transfer_light": {
-    "message": "Sáng"
   },
   "settings_transfer_import": {
     "message": "Nhập"

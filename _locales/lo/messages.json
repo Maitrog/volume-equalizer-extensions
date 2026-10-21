@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "ບໍ່ສາມາດຢຸດການຈັບສຽງຂອງແທັບໄດ້."
   },
-  "settings_transfer_title": {
-    "message": "ໂອນການຕັ້ງຄ່າ"
-  },
   "settings_transfer_general": {
     "message": "ທົ່ວໄປ"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "ນຳໃຊ້"
-  },
-  "settings_transfer_back": {
-    "message": "ກັບຄືນ"
-  },
-  "settings_transfer_next": {
-    "message": "ຕໍ່ໄປ"
-  },
-  "settings_transfer_cancel": {
-    "message": "ຍົກເລີກ"
-  },
-  "settings_transfer_close": {
-    "message": "ປິດ"
-  },
-  "settings_transfer_presets": {
-    "message": "ຄ່າທີ່ຕັ້ງໄວ້"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "ປຸ່ມລັດ"
-  },
-  "settings_transfer_theme": {
-    "message": "ຮູບແບບ (Theme)"
-  },
-  "settings_transfer_language": {
-    "message": "ພາສາ"
-  },
-  "settings_transfer_point_count": {
-    "message": "ຈຳນວນຈຸດ EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "ເປີດໃຊ້ການສະແດງພາບສະເປັກຕຣຳ (Spectrum)"
-  },
-  "settings_transfer_compensation": {
-    "message": "ການຊົດເຊີຍລະດັບສຽງອັດຕະໂນມັດ"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "ບໍ່ຕ້ອງສະແດງອີກ"
-  },
-  "settings_transfer_mute": {
-    "message": "ປິດ/ເປີດສຽງ"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "ເປີດ/ປິດການໃຊ້ງານ"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "ເຊື່ອງຄ່າທີ່ຕັ້ງໄວ້ເລີ່ມຕົ້ນ"
-  },
-  "settings_transfer_dark": {
-    "message": "ມືດ"
-  },
-  "settings_transfer_light": {
-    "message": "ສະຫວ່າງ"
   },
   "settings_transfer_import": {
     "message": "ນຳເຂົ້າ"

@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "Kan de audio-opname van het tabblad niet stoppen."
   },
-  "settings_transfer_title": {
-    "message": "Instellingen overdragen"
-  },
   "settings_transfer_general": {
     "message": "Algemeen"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Toepassen"
-  },
-  "settings_transfer_back": {
-    "message": "Terug"
-  },
-  "settings_transfer_next": {
-    "message": "Volgende"
-  },
-  "settings_transfer_cancel": {
-    "message": "Annuleren"
-  },
-  "settings_transfer_close": {
-    "message": "Sluiten"
-  },
-  "settings_transfer_presets": {
-    "message": "Voorinstellingen"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Sneltoetsen"
-  },
-  "settings_transfer_theme": {
-    "message": "Thema"
-  },
-  "settings_transfer_language": {
-    "message": "Taal"
-  },
-  "settings_transfer_point_count": {
-    "message": "Aantal EQ-punten"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Spectrumvisualisatie inschakelen"
-  },
-  "settings_transfer_compensation": {
-    "message": "Automatische volumecompensatie"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "Niet meer weergeven"
-  },
-  "settings_transfer_mute": {
-    "message": "Dempen/dempen opheffen"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Inschakelen/uitschakelen"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Standaardpresets verbergen"
-  },
-  "settings_transfer_dark": {
-    "message": "Donker"
-  },
-  "settings_transfer_light": {
-    "message": "Licht"
   },
   "settings_transfer_import": {
     "message": "Importeren"

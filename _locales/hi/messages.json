@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "टैब ऑडियो कैप्चर रोक नहीं सका।"
   },
-  "settings_transfer_title": {
-    "message": "सेटिंग स्थानांतरण"
-  },
   "settings_transfer_general": {
     "message": "सामान्य"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "लागू करें"
-  },
-  "settings_transfer_back": {
-    "message": "पीछे"
-  },
-  "settings_transfer_next": {
-    "message": "अगला"
-  },
-  "settings_transfer_cancel": {
-    "message": "रद्द करें"
-  },
-  "settings_transfer_close": {
-    "message": "बंद करें"
-  },
-  "settings_transfer_presets": {
-    "message": "प्रीसेट"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "कीबोर्ड शॉर्टकट"
-  },
-  "settings_transfer_theme": {
-    "message": "थीम"
-  },
-  "settings_transfer_language": {
-    "message": "भाषा"
-  },
-  "settings_transfer_point_count": {
-    "message": "EQ बिंदुओं की संख्या"
-  },
-  "settings_transfer_spectrum": {
-    "message": "स्पेक्ट्रम दृश्यांकन सक्षम करें"
-  },
-  "settings_transfer_compensation": {
-    "message": "स्वचालित वॉल्यूम क्षतिपूर्ति"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "दोबारा न दिखाएँ"
-  },
-  "settings_transfer_mute": {
-    "message": "म्यूट/अनम्यूट"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "सक्षम/अक्षम"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "डिफ़ॉल्ट प्रीसेट छिपाएं"
-  },
-  "settings_transfer_dark": {
-    "message": "गहरा"
-  },
-  "settings_transfer_light": {
-    "message": "हल्का"
   },
   "settings_transfer_import": {
     "message": "आयात करें"

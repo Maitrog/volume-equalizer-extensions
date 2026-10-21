@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "No se pudo detener la captura de audio de la pestaña."
   },
-  "settings_transfer_title": {
-    "message": "Transferir ajustes"
-  },
   "settings_transfer_general": {
     "message": "General"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "Aplicar"
-  },
-  "settings_transfer_back": {
-    "message": "Atrás"
-  },
-  "settings_transfer_next": {
-    "message": "Siguiente"
-  },
-  "settings_transfer_cancel": {
-    "message": "Cancelar"
-  },
-  "settings_transfer_close": {
-    "message": "Cerrar"
-  },
-  "settings_transfer_presets": {
-    "message": "Preajustes"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "Atajos de teclado"
-  },
-  "settings_transfer_theme": {
-    "message": "Tema"
-  },
-  "settings_transfer_language": {
-    "message": "Idioma"
-  },
-  "settings_transfer_point_count": {
-    "message": "Número de puntos de EQ"
-  },
-  "settings_transfer_spectrum": {
-    "message": "Activar la visualización del espectro"
-  },
-  "settings_transfer_compensation": {
-    "message": "Compensación automática de volumen"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "No volver a mostrar"
-  },
-  "settings_transfer_mute": {
-    "message": "Silenciar/activar sonido"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "Activar/desactivar"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "Ocultar preajustes predeterminados"
-  },
-  "settings_transfer_dark": {
-    "message": "Oscuro"
-  },
-  "settings_transfer_light": {
-    "message": "Claro"
   },
   "settings_transfer_import": {
     "message": "Importar"

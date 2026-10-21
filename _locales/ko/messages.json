@@ -251,9 +251,6 @@
   "tab_capture_stop_error": {
     "message": "탭 오디오 캡처를 중지할 수 없습니다."
   },
-  "settings_transfer_title": {
-    "message": "설정 전송"
-  },
   "settings_transfer_general": {
     "message": "일반"
   },
@@ -403,57 +400,6 @@
   },
   "settings_transfer_apply": {
     "message": "적용"
-  },
-  "settings_transfer_back": {
-    "message": "뒤로"
-  },
-  "settings_transfer_next": {
-    "message": "다음"
-  },
-  "settings_transfer_cancel": {
-    "message": "취소"
-  },
-  "settings_transfer_close": {
-    "message": "닫기"
-  },
-  "settings_transfer_presets": {
-    "message": "프리셋"
-  },
-  "settings_transfer_shortcuts": {
-    "message": "단축키"
-  },
-  "settings_transfer_theme": {
-    "message": "테마"
-  },
-  "settings_transfer_language": {
-    "message": "언어"
-  },
-  "settings_transfer_point_count": {
-    "message": "EQ 포인트 수"
-  },
-  "settings_transfer_spectrum": {
-    "message": "스펙트럼 시각화 활성화"
-  },
-  "settings_transfer_compensation": {
-    "message": "자동 볼륨 보정"
-  },
-  "settings_transfer_skip_reset": {
-    "message": "다시 표시하지 않기"
-  },
-  "settings_transfer_mute": {
-    "message": "음소거/음소거 해제"
-  },
-  "settings_transfer_toggle_eq": {
-    "message": "활성화/비활성화"
-  },
-  "settings_transfer_hide_defaults": {
-    "message": "기본 프리셋 숨기기"
-  },
-  "settings_transfer_dark": {
-    "message": "어둡게"
-  },
-  "settings_transfer_light": {
-    "message": "밝게"
   },
   "settings_transfer_import": {
     "message": "가져오기"

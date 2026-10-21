@@ -96,9 +96,7 @@ const validateLocale = async (page, locale) => {
 // Render the production wizard and planner; only the browser-storage boundary is in memory.
 const validateWizard = async (page, locale, theme) => {
   const messages = readMessages(locale);
-  const keys = Object.keys(readMessages("en")).filter((key) =>
-    key.startsWith("settings_transfer_"),
-  );
+  const keys = Object.keys(readMessages("en"));
   const errors = keys
     .filter((key) => !messages[key]?.message?.trim())
     .map((key) => `${locale}: missing ${key}`);
@@ -331,7 +329,8 @@ const validateWizard = async (page, locale, theme) => {
     const label = await page
       .locator(`#settings-import-groups input[value="${group}"]`)
       .evaluate((input) => input.labels[0].textContent);
-    if (label !== `${messages[`settings_transfer_${group}`].message}: ${count}`)
+    const key = group === "presets" ? "presets_settings_title" : "settings_transfer_autostartRules";
+    if (label !== `${messages[key].message}: ${count}`)
       errors.push(`${locale}/${theme}: ${group} selection count missing`);
   }
   await page.locator("#settings-import-next").focus();
@@ -410,10 +409,7 @@ const validateWizard = async (page, locale, theme) => {
     mimeType: "application/json",
     buffer: Buffer.from(skippedFile),
   });
-  if (
-    (await page.locator("#settings-import-cancel").textContent()) !==
-    messages.settings_transfer_cancel.message
-  )
+  if ((await page.locator("#settings-import-cancel").textContent()) !== messages.cancel.message)
     errors.push(`${locale}/${theme}: reopening did not restore Cancel`);
   await page.locator("#settings-import-next").click();
   await page.locator("#settings-import-apply").click();
