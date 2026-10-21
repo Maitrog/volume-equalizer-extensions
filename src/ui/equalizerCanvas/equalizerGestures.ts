@@ -85,6 +85,7 @@ export const attachEqualizerGestures = ({
   };
 
   const handleMouseDown = (event: MouseEvent): void => {
+    state.syncFrequencyPositions(getDimensions());
     preciseDrag = false;
     frequencyRemainder = 0;
     offsetX = 0;
@@ -134,6 +135,8 @@ export const attachEqualizerGestures = ({
       return;
     }
 
+    const dimensions = getDimensions();
+    state.syncFrequencyPositions(dimensions);
     const { x, y } = getMousePosition(canvas, event);
     let mx = x + offsetX;
     let my = y + offsetY;
@@ -143,7 +146,6 @@ export const attachEqualizerGestures = ({
       return;
     }
 
-    const dimensions = getDimensions();
     let nextPoint: EqualizerCanvasPoint | null = null;
 
     if (state.getDragMode() === "q") {
@@ -208,6 +210,7 @@ export const attachEqualizerGestures = ({
   };
 
   const handleDoubleClick = (event: MouseEvent): void => {
+    state.syncFrequencyPositions(getDimensions());
     const { x, y } = getMousePosition(canvas, event);
     const pointTarget = state.getPointIndexAtPosition(x, y);
 
@@ -235,6 +238,8 @@ export const attachEqualizerGestures = ({
       "Enter",
     ];
     if (!keys.includes(event.key)) return;
+    const dimensions = getDimensions();
+    state.syncFrequencyPositions(dimensions);
     const targets = getKeyboardTargets();
     if (!targets.length) return;
     event.preventDefault();
@@ -245,7 +250,6 @@ export const attachEqualizerGestures = ({
     if (event.key === "PageUp") keyboardIndex = Math.max(0, keyboardIndex - 1);
     if (event.key === "PageDown") keyboardIndex = Math.min(targets.length - 1, keyboardIndex + 1);
     const target = targets[keyboardIndex];
-    const dimensions = getDimensions();
     let changed = false;
     if (event.key === "Enter") {
       state.resetPoint(target, dimensions);

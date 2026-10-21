@@ -256,3 +256,35 @@ describe("createEqualizerState", () => {
     ).toBe(true);
   });
 });
+
+test.each(["highpass", "peaking", "lowpass"] as const)(
+  "resize reprojects %s without changing audio or drag state",
+  (type) => {
+    const state = createEqualizerState();
+    const small = { canvasWidth: 600, canvasHeight: 300 };
+    const wide = { canvasWidth: 900, canvasHeight: 300 };
+    state.setPoints([{ type, freq: 20001, gain: 6, q: 2, enabled: false }], small);
+    state.setDragTarget(type === "peaking" ? { type, index: 0 } : { type }, "q");
+    const before = state.getDraggedPoint()!;
+    const filters = state.getFilters(small);
+    state.syncFrequencyPositions(wide);
+    expect(state.getDraggedPoint()).toEqual({ ...before, x: frequencyToX(20001, 890) });
+    expect(state.getDragMode()).toBe("q");
+    expect(state.getFilters(wide)).toEqual(filters);
+    state.setDraggedPoint({ ...state.getDraggedPoint()!, x: 123 });
+    state.syncFrequencyPositions(wide);
+    expect(state.getDraggedPoint()?.x).toBe(123);
+  },
+);
+
+test("same-width synchronization preserves initialization and reset positions", () => {
+  const state = createEqualizerState();
+  state.syncFrequencyPositions(dimensions);
+  state.initPoints(5, dimensions);
+  const initial = state.getPoints();
+  state.syncFrequencyPositions(dimensions);
+  expect(state.getPoints()).toEqual(initial);
+  state.resetPoint({ type: "peaking", index: 0 }, dimensions);
+  state.syncFrequencyPositions(dimensions);
+  expect(state.getPoints()).toEqual(initial);
+});

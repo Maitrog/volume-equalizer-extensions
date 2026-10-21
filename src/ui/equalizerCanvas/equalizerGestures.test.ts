@@ -378,3 +378,48 @@ test.each(
   }
   cleanup();
 });
+
+test.each([1, 2])(
+  "resize before a frame preserves Ctrl hit testing and CSS steps at DPR %s",
+  (dpr) => {
+    const { canvas, state, mouse, cleanup } = setup();
+    Object.assign(window, { devicePixelRatio: dpr });
+    state.setPoints([{ type: "peaking", freq: 20001, gain: 6, q: 2 }], dimensions);
+    const y = state.getPoints()[0].y;
+    canvas.clientWidth = 900;
+    const x = frequencyToX(20001, 890);
+    mouse("mousedown", x, y, { ctrlKey: true });
+    expect(state.getDraggedPoint()?.freq).toBe(20001);
+    mouse("mousemove", x + 1, y + 50, { ctrlKey: true });
+    expect(state.getPoints()[0]).toMatchObject({ freq: 20002, y, x: frequencyToX(20002, 890) });
+    canvas.clientWidth = 700;
+    mouse("mousemove", x + 2, y + 80, { ctrlKey: true });
+    expect(state.getPoints()[0]).toMatchObject({ freq: 20003, y, x: frequencyToX(20003, 690) });
+    cleanup();
+  },
+);
+
+test("double click and keyboard gain edits use resized positions before drawing", () => {
+  const { canvas, state, mouse, key, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq: 20001, gain: 6, q: 2 }], dimensions);
+  canvas.clientWidth = 900;
+  key("Home");
+  key("PageDown");
+  key("ArrowUp");
+  expect(state.getPoints()[0]).toMatchObject({ freq: 20001, x: frequencyToX(20001, 890) });
+  canvas.clientWidth = 700;
+  mouse("dblclick", frequencyToX(20001, 690), state.getPoints()[0].y);
+  expect(state.getPoints()[0].q).toBe(0.5);
+  cleanup();
+});
+
+test("resize during Q dragging preserves the new frequency projection", () => {
+  const { canvas, state, mouse, cleanup } = setup();
+  state.setPoints([{ type: "peaking", freq: 20001, gain: 6, q: 2 }], dimensions);
+  const point = state.getPoints()[0];
+  mouse("mousedown", point.x, point.y, { shiftKey: true });
+  canvas.clientWidth = 900;
+  mouse("mousemove", point.x, point.y - 40, { shiftKey: true });
+  expect(state.getPoints()[0]).toEqual({ ...point, x: frequencyToX(20001, 890), q: 4 });
+  cleanup();
+});

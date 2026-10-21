@@ -41,6 +41,7 @@ export interface EqualizerState {
     dimensions: EqualizerCanvasDimensions,
     options?: SetEqualizerPointsOptions,
   ) => void;
+  syncFrequencyPositions: (dimensions: EqualizerCanvasDimensions) => void;
   getFilters: (dimensions: EqualizerCanvasDimensions) => EqualizerFilter[];
   hasCrossoverFilters: (filters: EqualizerFilter[]) => boolean;
   getPointIndexAtPosition: (x: number, y: number) => EqualizerDragTarget | null;
@@ -131,6 +132,7 @@ export const createEqualizerState = (): EqualizerState => {
   let lowpassEnabled = false;
   let dragTarget: EqualizerDragTarget | null = null;
   let dragMode: EqualizerDragMode | null = null;
+  let canvasWidth: number | null = null;
 
   const getDraggedPoint = (): EqualizerCanvasPoint | null => {
     if (!dragTarget) {
@@ -164,6 +166,7 @@ export const createEqualizerState = (): EqualizerState => {
     },
 
     initPoints: (count, dimensions) => {
+      canvasWidth = dimensions.canvasWidth;
       const pointCount = clampPointCount(count);
       points = createPeakingFilterPoints(pointCount, dimensions);
       highpassPoint = createDefaultHighpassPoint(dimensions);
@@ -173,6 +176,7 @@ export const createEqualizerState = (): EqualizerState => {
     },
 
     setPoints: (filters, dimensions, options = {}) => {
+      canvasWidth = dimensions.canvasWidth;
       const peakingFilters = filters.filter((filter) => {
         return (filter.type ?? "peaking") === "peaking";
       });
@@ -193,6 +197,14 @@ export const createEqualizerState = (): EqualizerState => {
           q: ensureQFactor(filter.q),
         };
       });
+    },
+
+    syncFrequencyPositions: (dimensions) => {
+      if (canvasWidth === dimensions.canvasWidth) return;
+      canvasWidth = dimensions.canvasWidth;
+      for (const point of [...points, highpassPoint, lowpassPoint]) {
+        if (point) point.x = frequencyToX(point.freq, getFrequencyCanvasWidth(dimensions));
+      }
     },
 
     getFilters: (dimensions) => {

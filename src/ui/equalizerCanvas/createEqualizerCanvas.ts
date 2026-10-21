@@ -21,9 +21,11 @@ export const createEqualizerCanvas = (options: CreateEqualizerCanvasOptions) => 
     };
   };
   const draw = (): void => {
+    options.state.syncFrequencyPositions(getDimensions());
     drawEqualizer({ ...options, selectedTarget });
   };
   const resize = (): void => {
+    options.state.syncFrequencyPositions(getDimensions());
     resizeEqualizerCanvas({ ...options, selectedTarget });
   };
   const tooltips = createEqualizerTooltips({
