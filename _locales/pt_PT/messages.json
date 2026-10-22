@@ -411,6 +411,6 @@
     "message": "Ajuste fino da frequência"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Mantenha Ctrl premido e arraste os pontos na horizontal: 1 píxel CSS = 1 Hz. O ganho mantém-se fixo."
+    "message": "Mantenha premida a tecla Ctrl e arraste os pontos horizontalmente para ajustes precisos de 1 Hz."
   }
 }
