@@ -411,6 +411,6 @@
     "message": "Tinh chỉnh tần số"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Giữ Ctrl và kéo các điểm theo chiều ngang: 1 pixel CSS = 1 Hz. Độ khuếch đại không đổi."
+    "message": "Giữ phím Ctrl và kéo các điểm theo chiều ngang để điều chỉnh chính xác từng 1 Hz."
   }
 }
