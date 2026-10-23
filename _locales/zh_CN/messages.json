@@ -411,6 +411,6 @@
     "message": "精细调整频率"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "按住 Ctrl 水平拖动控制点：每 1 个 CSS 像素调整 1 Hz，增益保持不变。"
+    "message": "按住 Ctrl 键并水平拖动点，即可进行 1 Hz 的精确调整。"
   }
 }

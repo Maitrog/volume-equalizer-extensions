@@ -411,6 +411,6 @@
     "message": "Regolazione fine frequenza"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Tieni premuto Ctrl e trascina i punti orizzontalmente: 1 pixel CSS = 1 Hz. Il guadagno resta fisso."
+    "message": "Tieni premuto Ctrl e trascina i punti in orizzontale per effettuare regolazioni precise di 1 Hz."
   }
 }

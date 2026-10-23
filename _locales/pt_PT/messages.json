@@ -300,7 +300,7 @@
     "message": "Uma regra mantida precisa desta predefinição; escolha outra versão"
   },
   "settings_transfer_ambiguous_rule": {
-    "message": "As regras atuais atribuem predefinições diferentes ao mesmo endereço"
+    "message": "As regras atuais têm atribuições de predefinições em conflito"
   },
   "settings_transfer_affected_rules": {
     "message": "Regras existentes com esta predefinição"
@@ -351,7 +351,7 @@
     "message": "Resultado da importação"
   },
   "settings_transfer_privacy": {
-    "message": "Os ficheiros podem conter endereços de sites e nomes pessoais. Partilhe com cuidado. As curvas atuais e o estado dos separadores não são transferidos."
+    "message": "Os ficheiros podem conter endereços de sites e nomes de predefinições pessoais. Partilhe-os com cuidado. As curvas atuais e o estado dos separadores não são transferidos."
   },
   "settings_transfer_reset_warning": {
     "message": "A curva atual deste separador será reposta"
@@ -360,7 +360,7 @@
     "message": "Compreendo que a curva atual será reposta"
   },
   "settings_transfer_fallback_only": {
-    "message": "Nenhum separador selecionado: apenas muda o número de pontos; as curvas mantêm-se"
+    "message": "Nenhum separador selecionado: apenas muda o número de pontos; as curvas mantêm-se inalteradas"
   },
   "settings_transfer_fallback_reset": {
     "message": "A curva de recurso partilhada também será reposta"
@@ -369,34 +369,34 @@
     "message": "O equalizador será ativado neste separador"
   },
   "settings_transfer_stale": {
-    "message": "As definições ou o separador mudaram. Reveja a importação e escolha novamente."
+    "message": "As definições ou o separador mudaram. Reveja a importação atualizada e escolha novamente."
   },
   "settings_transfer_blocked": {
-    "message": "Resolva os conflitos e confirme a reposição."
+    "message": "Resolva todos os conflitos e confirme a reposição antes de aplicar."
   },
   "settings_transfer_saved": {
-    "message": "Definições importadas com êxito."
+    "message": "Definições importadas com sucesso."
   },
   "settings_transfer_unchanged": {
     "message": "Sem alterações a aplicar."
   },
   "settings_transfer_read_error": {
-    "message": "Não foi possível ler. Selecione o ficheiro novamente."
+    "message": "Não foi possível ler definições. Selecione o ficheiro para tentar novamente."
   },
   "settings_transfer_version_error": {
-    "message": "Esta versão do ficheiro não é suportada."
+    "message": "Esta versão do ficheiro de definições não é suportada."
   },
   "settings_transfer_file_error": {
     "message": "O ficheiro de definições ou de predefinições antigas é inválido."
   },
   "settings_transfer_write_error": {
-    "message": "Não foi possível guardar. As escolhas mantêm-se; tente novamente."
+    "message": "Não foi possível guardar as definições. As suas escolhas foram preservadas; tente novamente."
   },
   "settings_transfer_refresh_error": {
-    "message": "Definições guardadas, mas a janela não atualizou. Abra-a novamente."
+    "message": "Definições guardadas, mas a janela não atualizou. Abra-a novamente para ver as alterações."
   },
   "settings_transfer_export_error": {
-    "message": "Não foi possível exportar. Tente novamente."
+    "message": "Não foi possível exportar definições. Tente novamente."
   },
   "settings_transfer_apply": {
     "message": "Aplicar"
@@ -411,6 +411,6 @@
     "message": "Ajuste fino da frequência"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Mantenha Ctrl premido e arraste os pontos na horizontal: 1 píxel CSS = 1 Hz. O ganho mantém-se fixo."
+    "message": "Mantenha premida a tecla Ctrl e arraste os pontos horizontalmente para ajustes precisos de 1 Hz."
   }
 }
