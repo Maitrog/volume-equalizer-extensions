@@ -107,19 +107,18 @@ test("renders every equalizer hint and keeps them intact when the popup resizes"
   for (let index = 0; index < 8; index += 1) {
     nextButton.dispatchEvent(new Event("click"));
   }
-  const firstMessage = content.children[0];
-
-  expect(content.children.map(({ textContent }) => textContent)).toEqual([
+  const expectedMessages = [
     "guide_canvas_hint",
     "q_factor_shift_hint",
     "precise_frequency_ctrl_hint",
     "point_double_click_hint",
     "guide_spectrum_visualization_hint",
-  ]);
+  ];
+  expect(content.children.map(({ textContent }) => textContent)).toEqual(expectedMessages);
 
   fakeWindow.dispatchEvent(new Event("resize"));
 
-  expect(content.children[0]).toBe(firstMessage);
+  expect(content.children.map(({ textContent }) => textContent)).toEqual(expectedMessages);
 });
 
 test("moves backward from the dialog title to the last control", () => {

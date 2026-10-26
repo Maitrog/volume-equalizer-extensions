@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 
+import { AVAILABLE_LANGUAGE_CODES } from "../../domains/localization/languages";
 import { applyLocalization, populateLanguageSelect } from "./applyLocalization";
 
 class FakeElement {
@@ -61,7 +62,8 @@ describe("popup localization DOM", () => {
 
     populateLanguageSelect(root, "ru");
 
-    expect(select.options.length).toBe(19);
+    expect(select.options.map(({ value }) => value)).toEqual(AVAILABLE_LANGUAGE_CODES);
+    expect(select.options.find(({ value }) => value === "ru")?.textContent).toBe("Russian");
     expect(select.value).toBe("ru");
   });
 });

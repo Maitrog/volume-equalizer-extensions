@@ -592,15 +592,20 @@ describe("contentMain spectrum state", () => {
     expect(createSource.mock.contexts[0]).toBe(createSource.mock.contexts[1]);
   });
 
-  test("reuses a media source after pause and resume", async () => {
+  test.each([
+    { state: "connected", detach: false },
+    { state: "detached", detach: true },
+  ])("reuses a media source after $state media resumes", async ({ detach }) => {
     const media = new FakeHTMLMediaElement();
     const createSource = vi.spyOn(FakeAudioContext.prototype, "createMediaElementSource");
     await loadContentMain(new FakePort(), [media]);
     await Promise.resolve();
 
     media.paused = true;
+    media.isConnected = !detach;
     dispatchPause(media);
     media.paused = false;
+    media.isConnected = true;
     dispatchPlaying(media);
     await Promise.resolve();
 
@@ -613,23 +618,6 @@ describe("contentMain spectrum state", () => {
 
     const media = new window.Audio() as unknown as FakeHTMLMediaElement;
     media.isConnected = false;
-    await Promise.resolve();
-
-    expect(createSource).toHaveBeenCalledOnce();
-  });
-
-  test("reuses the source when a removed video returns", async () => {
-    const media = new FakeHTMLMediaElement();
-    const createSource = vi.spyOn(FakeAudioContext.prototype, "createMediaElementSource");
-    await loadContentMain(new FakePort(), [media]);
-    await Promise.resolve();
-
-    media.paused = true;
-    media.isConnected = false;
-    dispatchPause(media);
-    media.paused = false;
-    media.isConnected = true;
-    dispatchPlaying(media);
     await Promise.resolve();
 
     expect(createSource).toHaveBeenCalledOnce();

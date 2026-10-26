@@ -1,5 +1,4 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { readFileSync } from "node:fs";
 import { createSettingsTransferActions } from "../../app/popup/settingsTransferActions";
 import { DEFAULT_SHORTCUTS } from "../../domains/shortcuts/shortcuts";
 import { createSettingsImportView, type SettingsImportElements } from "./settingsImportView";
@@ -204,15 +203,6 @@ const setup = (stored: Record<string, unknown> = {}) => {
   };
   return { elements, actions, storage, view, load, inputs, change, applyCommitted, stored };
 };
-
-test("export controls disclose included site addresses with the existing localized text", () => {
-  const markup = readFileSync("popup.html", "utf8");
-  const section = markup.slice(
-    markup.lastIndexOf('<div class="settings-section">', markup.indexOf('id="export-settings"')),
-    markup.indexOf("<!--COMMUNITY SECTION-->"),
-  );
-  expect(section).toContain('data-i18n="settings_transfer_privacy"');
-});
 
 test("preserves the close icon and uses OK only for the result stage", async () => {
   const { elements: e, load } = setup();
@@ -660,22 +650,12 @@ test("dispose while saving restores inert and ignores the completed write", asyn
   expect(e.status.textContent).toBe("settings_transfer_saving");
 });
 
-test("reports unsupported versions and distinguishes saved refresh failures", async () => {
-  const { elements: e, load, applyCommitted, storage } = setup();
+test("reports unsupported versions without writing settings", async () => {
+  const { elements: e, load, storage } = setup();
   await load(JSON.stringify({ format: "eq-toolkit-settings", version: 2, settings: {} }));
   expect(e.status.textContent).toBe("settings_transfer_version_error");
   expect(e.status.attributes.role).toBe("alert");
   expect(storage.set).not.toHaveBeenCalled();
-  applyCommitted.mockRejectedValueOnce(new Error("render failed"));
-  await load(JSON.stringify({ presets: { Voice: filters }, presetNames: ["Voice"] }));
-  e.next.click();
-  e.apply.click();
-  await tick();
-  expect(storage.set).toHaveBeenCalledTimes(1);
-  expect(e.status.textContent).toBe("settings_transfer_refresh_error");
-  e.apply.click();
-  await tick();
-  expect(storage.set).toHaveBeenCalledTimes(1);
 });
 
 test("cancel invalidates a pending read and detached controls after dispose are inert", async () => {

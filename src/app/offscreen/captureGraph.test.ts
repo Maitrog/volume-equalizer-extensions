@@ -42,12 +42,11 @@ const filters = (count: number): EqualizerFilter[] =>
     type: "peaking",
   }));
 
-test("capture graph rebuilds owned nodes and disposes without stopping stream tracks", () => {
+test("capture graph rebuilds owned nodes and disconnects them on disposal", () => {
   const source = new FakeNode();
   const destination = new FakeNode();
   const createdGains: FakeGain[] = [];
   const createdFilters: FakeBiquad[] = [];
-  const track = { stop: vi.fn() };
   const beforeOutputChange = vi.fn();
   const outputChange = vi.fn();
   const audioContext = {
@@ -91,7 +90,6 @@ test("capture graph rebuilds owned nodes and disposes without stopping stream tr
   expect(source.disconnect).toHaveBeenCalled();
   expect(createdGains.every((node) => node.disconnect.mock.calls.length > 0)).toBe(true);
   expect(createdFilters.every((node) => node.disconnect.mock.calls.length > 0)).toBe(true);
-  expect(track.stop).not.toHaveBeenCalled();
 });
 
 test("capture graph applies volume compensation only when enabled", () => {

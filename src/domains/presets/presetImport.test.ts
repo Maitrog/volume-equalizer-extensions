@@ -39,7 +39,7 @@ describe("parsePresetImport", () => {
       presetNames: ["Current"],
       presets: {
         Current: [
-          { freq: 20, gain: 0, q: 0.5, type: "highpass", enabled: false },
+          { freq: 20, gain: 0, q: 0.1, type: "highpass", enabled: false },
           { freq: 1000, gain: 4, q: 1, type: "peaking" },
           { freq: 20000, gain: 0, q: 0.5, type: "lowpass", enabled: false },
         ],
@@ -70,39 +70,6 @@ describe("parsePresetImport", () => {
         Legacy: [
           { freq: 1000, gain: -18.5, q: 2.5, type: "peaking" },
           { freq: 2000, gain: 1000, q: 0.5, type: "peaking" },
-        ],
-      },
-    });
-  });
-
-  test("preserves disabled crossovers", () => {
-    const exported = JSON.stringify({
-      presetNames: ["Cross"],
-      presets: {
-        Cross: [
-          {
-            freq: 20,
-            gain: 0,
-            q: 0.1,
-            type: "highpass",
-            enabled: false,
-          },
-        ],
-      },
-    });
-
-    expect(parsePresetImport(exported)).toEqual({
-      ok: true,
-      presetNames: ["Cross"],
-      presets: {
-        Cross: [
-          {
-            freq: 20,
-            gain: 0,
-            q: 0.1,
-            type: "highpass",
-            enabled: false,
-          },
         ],
       },
     });

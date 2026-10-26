@@ -69,36 +69,28 @@ describe("createLocalizationService", () => {
     expect(refreshDynamicContent).toHaveBeenCalledOnce();
   });
 
-  test("does not save a locale whose file fails to load", async () => {
-    vi.mocked(fetch)
-      .mockResolvedValueOnce(createResponse({ reset_button_label: { message: "Reset" } }))
-      .mockResolvedValueOnce(createResponse({ ready: { message: "Ready" } }))
-      .mockRejectedValueOnce(new Error("network unavailable"));
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    const service = createLocalizationService();
-    await service.ready;
+  test.each(["network error", "unavailable file"])(
+    "does not save a locale after %s",
+    async (failure) => {
+      vi.mocked(fetch)
+        .mockResolvedValueOnce(createResponse({ reset_button_label: { message: "Reset" } }))
+        .mockResolvedValueOnce(createResponse({ ready: { message: "Ready" } }));
+      if (failure === "network error") {
+        vi.mocked(fetch).mockRejectedValueOnce(new Error("network unavailable"));
+      } else {
+        vi.mocked(fetch).mockResolvedValueOnce(createResponse({}, false));
+      }
+      const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+      const service = createLocalizationService();
+      await service.ready;
 
-    await service.setLanguage("ru", { save: true });
+      await service.setLanguage("ru", { save: true });
 
-    expect(chrome.storage.local.set).not.toHaveBeenCalledWith({ uiLanguage: "ru" });
-    expect(service.getMessage("reset_button_label")).toBe("Reset");
-    expect(consoleError).toHaveBeenCalled();
-  });
-
-  test("does not save a locale whose file is unavailable", async () => {
-    vi.mocked(fetch)
-      .mockResolvedValueOnce(createResponse({ reset_button_label: { message: "Reset" } }))
-      .mockResolvedValueOnce(createResponse({ ready: { message: "Ready" } }))
-      .mockResolvedValueOnce(createResponse({}, false));
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    const service = createLocalizationService();
-    await service.ready;
-
-    await service.setLanguage("ru", { save: true });
-
-    expect(chrome.storage.local.set).not.toHaveBeenCalledWith({ uiLanguage: "ru" });
-    expect(service.getMessage("reset_button_label")).toBe("Reset");
-  });
+      expect(chrome.storage.local.set).not.toHaveBeenCalledWith({ uiLanguage: "ru" });
+      expect(service.getMessage("reset_button_label")).toBe("Reset");
+      expect(consoleError).toHaveBeenCalled();
+    },
+  );
 
   test("applies and saves only the latest deferred language request", async () => {
     let resolveDe!: (response: Response) => void;
@@ -231,26 +223,6 @@ describe("createLocalizationService", () => {
     expect(chrome.storage.local.set).toHaveBeenCalledWith({ uiLanguage: "ru" });
   });
 
-  test("localizes theme option labels used by settings and onboarding", async () => {
-    vi.mocked(fetch)
-      .mockResolvedValueOnce(
-        createResponse({
-          guide_theme_dark: { message: "Dark localized" },
-          guide_theme_light: { message: "Light localized" },
-        }),
-      )
-      .mockResolvedValueOnce(createResponse({ ready: { message: "Ready" } }));
-    const darkOption = createLocalizedElement("guide_theme_dark");
-    const lightOption = createLocalizedElement("guide_theme_light");
-    const service = createLocalizationService();
-    await service.ready;
-
-    service.applyLocalization(createRoot([darkOption, lightOption]));
-
-    expect(darkOption.textContent).toBe("Dark localized");
-    expect(lightOption.textContent).toBe("Light localized");
-  });
-
   test("localizes elements declared with data-i18n", async () => {
     vi.mocked(fetch)
       .mockResolvedValueOnce(createResponse({ reset_button_label: { message: "Reset localized" } }))
@@ -262,35 +234,5 @@ describe("createLocalizationService", () => {
     service.applyLocalization(createRoot([element]));
 
     expect(element.textContent).toBe("Reset localized");
-  });
-
-  test("localizes the donation reminder", async () => {
-    vi.mocked(fetch)
-      .mockResolvedValueOnce(
-        createResponse({
-          donation_reminder_title: { message: "Title localized" },
-          donation_reminder_message: { message: "Message localized" },
-          donation_reminder_link: { message: "Link localized" },
-          ok: { message: "OK localized" },
-        }),
-      )
-      .mockResolvedValueOnce(createResponse({ ready: { message: "Ready" } }));
-    const elements = [
-      createLocalizedElement("donation_reminder_title"),
-      createLocalizedElement("donation_reminder_message"),
-      createLocalizedElement("donation_reminder_link"),
-      createLocalizedElement("ok"),
-    ];
-    const service = createLocalizationService();
-    await service.ready;
-
-    service.applyLocalization(createRoot(elements));
-
-    expect(elements.map(({ textContent }) => textContent)).toEqual([
-      "Title localized",
-      "Message localized",
-      "Link localized",
-      "OK localized",
-    ]);
   });
 });

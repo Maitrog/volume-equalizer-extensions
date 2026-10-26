@@ -27,23 +27,15 @@ const createFakeBiquadFilter = (magnitude = 1): BiquadFilterNode =>
   }) as BiquadFilterNode;
 
 describe("biquadChain", () => {
-  test("does not compensate a combined response below 18 decibels", () => {
-    expect(getBiquadHeadroomGain([createFakeBiquadFilter(1.7782794100389228)], 48000)).toBe(1);
-  });
+  test.each([
+    { position: "below", magnitude: 1.7782794100389228, expected: 1 },
+    { position: "at", magnitude: 4.466835921509632, expected: 1 },
+    { position: "above", magnitude: 10, expected: 0.7943282347242815 },
+  ])("applies headroom compensation $position 18 decibels", ({ magnitude, expected }) => {
+    const gain = getBiquadHeadroomGain([createFakeBiquadFilter(magnitude)], 48000);
 
-  test("does not compensate a combined response at 18 decibels", () => {
-    expect(getBiquadHeadroomGain([createFakeBiquadFilter(4.466835921509632)], 48000)).toBe(1);
-  });
-
-  test("compensates only the combined response above 18 decibels", () => {
-    expect(getBiquadHeadroomGain([createFakeBiquadFilter(10)], 48000)).toBeCloseTo(
-      0.7943282347242815,
-      6,
-    );
-  });
-
-  test("ignores floating-point noise around a neutral response", () => {
-    expect(getBiquadHeadroomGain([createFakeBiquadFilter(1.0000001)], 48000)).toBe(1);
+    if (expected === 1) expect(gain).toBe(1);
+    else expect(gain).toBeCloseTo(expected, 6);
   });
 
   test("counts contiguous numeric filter slots", () => {

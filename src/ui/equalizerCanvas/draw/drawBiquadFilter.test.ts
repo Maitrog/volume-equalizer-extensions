@@ -16,7 +16,7 @@ test("draws a configured biquad response", () => {
     sampleRate: 48000,
     createBiquadFilter: vi.fn(() => filter),
   } as unknown as BaseAudioContext;
-  const canvas = { width: 3, height: 60 } as HTMLCanvasElement;
+  const canvas = { clientWidth: 30, clientHeight: 100 } as HTMLCanvasElement;
   const ctx = {
     beginPath: vi.fn(),
     moveTo: vi.fn(),
@@ -42,5 +42,12 @@ test("draws a configured biquad response", () => {
   expect(filter.Q.value).toBe(2);
   expect(filter.gain.value).toBe(6);
   expect(ctx.strokeStyle).toBe("accent");
+  expect(filter.getFrequencyResponse).toHaveBeenCalledOnce();
+  const frequencies = filter.getFrequencyResponse.mock.calls[0][0];
+  expect(frequencies).toHaveLength(30);
+  expect(frequencies.every((frequency) => Number.isFinite(frequency) && frequency > 0)).toBe(true);
+  expect(ctx.moveTo).toHaveBeenCalledWith(0, 50);
+  expect(ctx.lineTo).toHaveBeenLastCalledWith(29, 50);
+  expect(vi.mocked(ctx.lineTo).mock.calls.flat().every(Number.isFinite)).toBe(true);
   expect(ctx.stroke).toHaveBeenCalledOnce();
 });

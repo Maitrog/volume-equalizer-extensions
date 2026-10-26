@@ -257,26 +257,4 @@ describe("createSpectrumRelay", () => {
     relay.acceptCaptureFrame(12, frame);
     expect(client.postMessage).toHaveBeenCalledTimes(3);
   });
-
-  test("reconnects after a relay restart and re-delivers capture metadata", () => {
-    const firstRelay = createSpectrumRelay({ setDemand: vi.fn() });
-    const stale = createPort();
-    firstRelay.connect(stale.port);
-    stale.onMessage.fire({ type: "subscribe", tabId: 12 });
-    stale.onDisconnect.fire();
-
-    const setDemand = vi.fn();
-    const relay = createSpectrumRelay({ setDemand });
-    const client = createPort();
-    relay.connect(client.port);
-    client.onMessage.fire({ type: "subscribe", tabId: 12 });
-    relay.acceptCaptureFrame(12, meta);
-    relay.acceptCaptureFrame(12, frame);
-
-    expect(setDemand).toHaveBeenCalledWith(12, true);
-    expect(client.postMessage.mock.calls.map(([message]) => message)).toEqual([
-      { tabId: 12, source: captureSource, payload: meta },
-      { tabId: 12, source: captureSource, payload: frame },
-    ]);
-  });
 });

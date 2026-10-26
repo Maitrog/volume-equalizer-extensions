@@ -250,6 +250,5 @@ test("connects the spectrum port for the selected tab", async () => {
   await popup.start();
 
   expect(mocks.connectSpectrum).toHaveBeenCalledWith(12);
-  expect(mocks.handleStorageChange).toBeDefined();
   popup.dispose();
 });

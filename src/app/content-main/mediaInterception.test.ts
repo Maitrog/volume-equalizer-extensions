@@ -98,13 +98,22 @@ test("reports existing, playing, inactive and detached Audio media", async () =>
     onMedia,
     onDestinationConnect: (_source, destination, connect) => connect(destination),
   });
-  const detached = new window.Audio() as unknown as FakeMediaElement;
-  await detached.play();
-  fakeWindow.dispatch("playing", existing as unknown as EventTarget);
-  fakeWindow.dispatch("pause", existing as unknown as EventTarget);
+  expect(onMedia).toHaveBeenCalledExactlyOnceWith(existing, "playing");
+  onMedia.mockClear();
 
-  expect(onMedia).toHaveBeenCalledWith(existing, "playing");
-  expect(onMedia).toHaveBeenCalledWith(detached, "playing");
-  expect(onMedia).toHaveBeenCalledWith(existing, "inactive");
+  fakeWindow.dispatch("playing", existing as unknown as EventTarget);
+  expect(onMedia).toHaveBeenCalledExactlyOnceWith(existing, "playing");
+  onMedia.mockClear();
+
+  const detached = new window.Audio() as unknown as FakeMediaElement;
+  expect(onMedia).toHaveBeenCalledExactlyOnceWith(detached, "playing");
+  onMedia.mockClear();
+
+  await detached.play();
+  expect(onMedia).toHaveBeenCalledExactlyOnceWith(detached, "playing");
+  onMedia.mockClear();
+
+  fakeWindow.dispatch("pause", existing as unknown as EventTarget);
+  expect(onMedia).toHaveBeenCalledExactlyOnceWith(existing, "inactive");
   dispose();
 });

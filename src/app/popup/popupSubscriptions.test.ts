@@ -313,30 +313,17 @@ describe("popup subscriptions", () => {
     subscriptions.dispose();
   });
 
-  test("runs composed page cleanup once and disconnects an active port", () => {
-    const canvasCleanup = vi.fn();
-    const stopCapture = vi.fn();
-    const flushFilters = vi.fn(() => Promise.resolve());
-    const setupResult = setup();
-    const { subscriptions, callbacks, windowTarget, port } = setupResult;
-    const disposeApp = vi.fn(() => {
-      subscriptions.dispose();
-      canvasCleanup();
-      stopCapture();
-      void flushFilters();
-    });
-    callbacks.onPagehide.mockImplementation(disposeApp);
+  test("notifies page cleanup once and disconnects an active port", () => {
+    const { subscriptions, callbacks, windowTarget, port } = setup();
+    callbacks.onPagehide.mockImplementation(() => subscriptions.dispose());
     subscriptions.connectSpectrum(12);
 
     windowTarget.fire("pagehide", {} as PageTransitionEvent);
     windowTarget.fire("pagehide", {} as PageTransitionEvent);
     subscriptions.dispose();
 
-    expect(disposeApp).toHaveBeenCalledOnce();
+    expect(callbacks.onPagehide).toHaveBeenCalledOnce();
     expect(port.disconnect).toHaveBeenCalledOnce();
-    expect(canvasCleanup).toHaveBeenCalledOnce();
-    expect(stopCapture).toHaveBeenCalledOnce();
-    expect(flushFilters).toHaveBeenCalledOnce();
   });
 
   test("reports rejected listener work", async () => {

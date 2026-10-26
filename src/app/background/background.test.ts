@@ -279,8 +279,8 @@ describe("background tab activation", () => {
     );
   });
 
-  test("resets spectrum sources when capture starts and stops", async () => {
-    createChromeMock(vi.fn());
+  test("resets spectrum sources and updates the badge when capture starts and stops", async () => {
+    const { setBadgeText } = createChromeMock(vi.fn());
     mocks.captureCoordinator.startCapture.mockResolvedValue({
       ok: true,
       captures: [{ tabId: 7, settings: captureSettings(true) }],
@@ -290,9 +290,11 @@ describe("background tab activation", () => {
 
     await mocks.messageRouterDeps?.startCapture(7);
     expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledWith(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 7 });
     await mocks.messageRouterDeps?.stopCapture(7);
     expect(mocks.spectrumRelay.resetSources).toHaveBeenCalledTimes(2);
     expect(mocks.spectrumRelay.resetSources).toHaveBeenLastCalledWith(7);
+    expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
   });
 
   test("routes spectrum demand to the page for an ordinary tab", async () => {
@@ -313,22 +315,6 @@ describe("background tab activation", () => {
       ),
     );
     expect(runtimeSendMessage).not.toHaveBeenCalled();
-  });
-
-  test("turns the tab badge ON when capture starts and OFF when it stops", async () => {
-    const { setBadgeText } = createChromeMock(vi.fn());
-    mocks.captureCoordinator.startCapture.mockResolvedValue({
-      ok: true,
-      captures: [{ tabId: 7, settings: captureSettings(true) }],
-    });
-    mocks.captureCoordinator.stopCapture.mockResolvedValue({ ok: true, captures: [] });
-    await import("./background");
-
-    await mocks.messageRouterDeps?.startCapture(7);
-    expect(setBadgeText).toHaveBeenCalledWith({ text: "ON", tabId: 7 });
-
-    await mocks.messageRouterDeps?.stopCapture(7);
-    expect(setBadgeText).toHaveBeenCalledWith({ text: "OFF", tabId: 7 });
   });
 
   test("uses the requested capture enabled state for the start badge", async () => {

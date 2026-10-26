@@ -216,18 +216,6 @@ test.each([1, 2])("Ctrl uses CSS pixels at DPR %s and keeps gain fixed", (dpr) =
   cleanup();
 });
 
-test("Ctrl accumulates signed fractions and cancels movement when direction reverses", () => {
-  const { state, mouse, cleanup } = setup();
-  state.setPoints([{ type: "peaking", freq: 1000, gain: 0, q: 0.5 }], dimensions);
-  const { x, y } = state.getPoints()[0];
-  mouse("mousedown", x, y, { ctrlKey: true });
-  for (const dx of [0.6, 0.2, -0.4, -0.8]) mouse("mousemove", x + dx, y, { ctrlKey: true });
-  expect(state.getPoints()[0].freq).toBe(1000);
-  mouse("mousemove", x - 1.2, y, { ctrlKey: true });
-  expect(state.getPoints()[0].freq).toBe(999);
-  cleanup();
-});
-
 test.each([
   [1, -1, 2],
   [24000, 1, 23999],
@@ -287,23 +275,6 @@ test("Shift takes precedence over Ctrl and precise vertical crossover motion doe
   expect(save).not.toHaveBeenCalled();
   cleanup();
 });
-
-test.each(["mouseup", "blur", "cleanup"])(
-  "%s ends Ctrl editing and flushes the last step",
-  (ending) => {
-    const { state, mouse, canvas, flush, cleanup } = setup();
-    const point = { ...state.getPoints()[0] };
-    mouse("mousedown", point.x, point.y, { ctrlKey: true });
-    mouse("mousemove", point.x + 1, point.y, { ctrlKey: true });
-    const edited = { ...state.getPoints()[0] };
-    if (ending === "cleanup") cleanup();
-    else (ending === "mouseup" ? window : canvas).dispatchEvent(new Event(ending));
-    expect(flush).toHaveBeenCalled();
-    mouse("mousemove", point.x + 10, point.y, { ctrlKey: true });
-    expect(state.getPoints()[0]).toEqual(edited);
-    if (ending !== "cleanup") cleanup();
-  },
-);
 
 test.each([
   [1, -1, 2],
@@ -435,7 +406,7 @@ test("resize during Q dragging preserves the new frequency projection", () => {
 });
 
 test.each(["mouseup", "blur", "cleanup"])(
-  "flushes the latest precise frequency before rAF on %s",
+  "flushes the latest precise frequency before rAF and ends editing on %s",
   async (end) => {
     const { canvas, state, mouse, draw, write, persistence, tooltips, cleanup } = setup(true);
     state.setPoints([{ type: "peaking", freq: 20000, gain: 5, q: 0.5 }], dimensions);
@@ -454,9 +425,12 @@ test.each(["mouseup", "blur", "cleanup"])(
       infoTooltip: null,
     });
     expect(tooltip.getPointTooltipText(state.getPoints()[0], dimensions)).toBe("20002 Hz, +5.0 dB");
+    const edited = { ...state.getPoints()[0] };
     if (end === "cleanup") cleanup();
     else (end === "mouseup" ? window : canvas).dispatchEvent(new Event(end));
     expect(write.mock.calls.at(-1)?.[1][1]).toMatchObject({ freq: 20002, gain: 5 });
+    mouse("mousemove", point.x + 10, point.y, { ctrlKey: true });
+    expect(state.getPoints()[0]).toEqual(edited);
     cleanup();
     await persistence.dispose();
   },

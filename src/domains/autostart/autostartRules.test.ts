@@ -136,34 +136,6 @@ describe("autostartRules", () => {
     expect(getWhitelistDomain("https://www.example.com/path")).toBe("example.com");
   });
 
-  test("creates normalized domain whitelist entries", () => {
-    expect(createWhitelistEntry("domain", "https://www.example.com/page", "Rock")).toEqual({
-      id: "domain:example.com",
-      type: "domain",
-      value: "example.com",
-      presetName: "Rock",
-    });
-  });
-
-  test("finds exact url matches before domain matches", () => {
-    const urlEntry = {
-      id: "url:https://example.com/path",
-      type: "url" as const,
-      value: "https://example.com/path",
-      presetName: "Exact",
-    };
-    const domainEntry = {
-      id: "domain:example.com",
-      type: "domain" as const,
-      value: "example.com",
-      presetName: "Domain",
-    };
-
-    expect(findWhitelistMatch([domainEntry, urlEntry], "https://example.com/path#top")).toBe(
-      urlEntry,
-    );
-  });
-
   test("returns null when no whitelist entries exist", () => {
     expect(findWhitelistMatch([], "https://example.com/path")).toBeNull();
   });

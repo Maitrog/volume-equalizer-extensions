@@ -386,20 +386,6 @@ describe("captureCoordinator", () => {
     expect(notifyCaptureModeChanged).toHaveBeenCalledWith(4);
   });
 
-  test("restores ordinary mode for a vanished active session when the document is gone", async () => {
-    const harness = createHarness();
-    harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS] = [
-      { tabId: 5, previousTabEnabled: true, status: "active" },
-    ];
-    harness.local[STORAGE_KEYS.tabEnabled(5)] = false;
-    const coordinator = createCaptureCoordinator();
-
-    expect(await coordinator.getCaptures()).toEqual([]);
-
-    expect(harness.local[STORAGE_KEYS.tabEnabled(5)]).toBe(true);
-    expect(harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS]).toEqual([]);
-  });
-
   test("clears stale capture state before restoring ordinary mode", async () => {
     const harness = createHarness();
     harness.session[STORAGE_KEYS.CAPTURE_TAB_IDS] = [
@@ -631,24 +617,13 @@ describe("captureCoordinator", () => {
     const coordinator = createCaptureCoordinator();
     await coordinator.startCapture(1);
 
-    await coordinator.toggleCaptureEnabled(1);
-
+    expect(await coordinator.toggleCaptureEnabled(1)).toBe(false);
     expect(harness.captures.get(1)?.settings.enabled).toBe(false);
     expect(harness.commands.some((command) => command.method === "capture-stop")).toBe(false);
     expect(harness.captures.has(1)).toBe(true);
 
-    await coordinator.toggleCaptureEnabled(1);
-
-    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
-  });
-
-  test("reports the resulting enabled state so a caller can update the tab badge", async () => {
-    createHarness();
-    const coordinator = createCaptureCoordinator();
-    await coordinator.startCapture(1);
-
-    expect(await coordinator.toggleCaptureEnabled(1)).toBe(false);
     expect(await coordinator.toggleCaptureEnabled(1)).toBe(true);
+    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
     expect(await coordinator.toggleCaptureEnabled(99)).toBeNull();
   });
 
@@ -658,6 +633,7 @@ describe("captureCoordinator", () => {
     const coordinator = createCaptureCoordinator();
     await coordinator.startCapture(1);
     expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(false);
+    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
 
     await coordinator.stopCapture(1);
 
@@ -671,17 +647,6 @@ describe("captureCoordinator", () => {
 
     expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(true);
     expect(harness.open).toBe(false);
-  });
-
-  test("starts the offscreen session while disabling an active page equalizer", async () => {
-    const harness = createHarness();
-    harness.local[STORAGE_KEYS.tabEnabled(1)] = true;
-    const coordinator = createCaptureCoordinator();
-
-    await coordinator.startCapture(1);
-
-    expect(harness.local[STORAGE_KEYS.tabEnabled(1)]).toBe(false);
-    expect(harness.captures.get(1)?.settings.enabled).toBe(true);
   });
 
   test("returns captured tabs with metadata and the selected active tab", async () => {

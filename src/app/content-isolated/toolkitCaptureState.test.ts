@@ -8,11 +8,6 @@ describe("resolveTabEnabled", () => {
     expect(resolveTabEnabled(true, true)).toBe(false);
   });
 
-  test("keeps a frame loaded during capture disabled without extra processing", () => {
-    // A newly loaded iframe requests the ordinary mode but must stay off for tab capture.
-    expect(resolveTabEnabled(true, true)).toBe(false);
-  });
-
   test("preserves the requested state outside toolkit capture", () => {
     expect(resolveTabEnabled(true, false)).toBe(true);
     expect(resolveTabEnabled(false, false)).toBe(false);
