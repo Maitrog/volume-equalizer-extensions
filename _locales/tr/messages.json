@@ -411,6 +411,6 @@
     "message": "Frekans ince ayarı"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Ctrl tuşunu basılı tutup noktaları yatay sürükleyin: 1 CSS pikseli = 1 Hz. Kazanç sabit kalır."
+    "message": "1 Hz'lik hassas ayarlamalar yapmak için Ctrl tuşunu basılı tutun ve noktaları yatay yönde sürükleyin."
   }
 }

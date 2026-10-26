@@ -411,6 +411,6 @@
     "message": "Fine-tune frequency"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Hold Ctrl and drag points horizontally: 1 CSS pixel = 1 Hz. Gain stays fixed."
+    "message": "Hold Ctrl and drag points horizontally for precise 1 Hz adjustments."
   }
 }

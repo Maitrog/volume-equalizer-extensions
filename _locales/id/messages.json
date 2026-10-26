@@ -411,6 +411,6 @@
     "message": "Atur frekuensi secara presisi"
   },
   "precise_frequency_ctrl_hint": {
-    "message": "Tahan Ctrl dan seret titik secara horizontal: 1 piksel CSS = 1 Hz. Gain tetap."
+    "message": "Tahan tombol Ctrl dan seret titik-titik secara horizontal untuk penyesuaian 1 Hz yang presisi."
   }
 }
